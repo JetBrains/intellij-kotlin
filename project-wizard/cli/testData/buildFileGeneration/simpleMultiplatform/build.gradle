@@ -1,0 +1,43 @@
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform' version '1.3.70'
+}
+group = 'testGroupId'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = '9'
+        }
+    }
+    js('a') {
+        browser {
+
+        }
+    }
+    sourceSets {
+        jvmMain {
+            dependencies {
+                implementation kotlin('stdlib-jdk8')
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation kotlin('test-junit')
+            }
+        }
+        aMain {
+            dependencies {
+                implementation kotlin('stdlib-js')
+            }
+        }
+        aTest {
+            dependencies {
+                implementation kotlin('test-js')
+            }
+        }
+    }
+}

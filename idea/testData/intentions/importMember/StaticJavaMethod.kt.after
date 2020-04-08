@@ -1,0 +1,27 @@
+// INTENTION_TEXT: "Add import for 'javax.swing.SwingUtilities.invokeLater'"
+// WITH_RUNTIME
+// ERROR: Unresolved reference: SomethingElse
+// ERROR: Unresolved reference: somethingElse
+// SKIP_ERRORS_AFTER
+
+import javax.swing.SwingUtilities
+import javax.swing.SwingUtilities.invokeLater
+
+fun foo() {
+    invokeLater {}
+}
+
+fun bar() {
+    invokeLater {
+    }
+
+    invokeLater(Runnable {
+        invokeLater { }
+    })
+
+    SwingUtilities.invokeAndWait { }
+
+    SomethingElse.invokeLater()
+
+    somethingElse.SwingUtilities.invokeLater()
+}

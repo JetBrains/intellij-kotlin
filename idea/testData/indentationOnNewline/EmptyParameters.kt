@@ -1,0 +1,2 @@
+fun testParam(<caret>) {
+}

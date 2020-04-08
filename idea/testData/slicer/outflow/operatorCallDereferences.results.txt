@@ -1,0 +1,9 @@
+17 var <bold>x = A()</bold>
+19 	DEREFERENCE: +<bold>x</bold>
+20 	DEREFERENCE: <bold>x</bold> + 1
+21 	DEREFERENCE: <bold>x</bold>++
+22 	DEREFERENCE: <bold>x</bold> += 1
+23 	DEREFERENCE: <bold>x</bold> *= 1
+25 	-<bold>x</bold>
+26 	<bold>x</bold> - 1
+29 	<bold>x</bold> /= 1

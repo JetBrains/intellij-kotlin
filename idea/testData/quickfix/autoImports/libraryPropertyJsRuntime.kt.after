@@ -1,0 +1,10 @@
+// "Import" "true"
+// JS
+
+package test
+
+import kotlin.browser.localStorage
+
+fun foo() {
+    localStorage
+}
