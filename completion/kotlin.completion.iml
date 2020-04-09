@@ -47,6 +47,5 @@
     <orderEntry type="module" module-name="kotlin.analysis" />
     <orderEntry type="module" module-name="kotlin.test-framework" scope="TEST" />
     <orderEntry type="module" module-name="intellij.java.impl" />
-    <orderEntry type="module" module-name="intellij.java.testFramework" scope="TEST" />
   </component>
 </module>
