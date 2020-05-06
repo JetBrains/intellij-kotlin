@@ -58,6 +58,6 @@ abstract class AbstractDataFlowValueRenderingTest: KotlinLightCodeInsightFixture
         val allValues = (info.completeTypeInfo.keySet() + info.completeNullabilityInfo.keySet()).toSet()
         val actual = allValues.mapNotNull { it.render() }.sorted().joinToString("\n")
 
-        KotlinTestUtils.assertEqualsToFile(File(FileUtil.getNameWithoutExtension(KotlinTestUtils.getHomeDirectory() + "/" + path) + ".txt"), actual)
+        KotlinTestUtils.assertEqualsToFile(File(FileUtil.getNameWithoutExtension(path) + ".txt"), actual)
     }
 }
