@@ -23,8 +23,8 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiMethod
 import com.intellij.refactoring.BaseRefactoringProcessor
-import com.intellij.refactoring.OverrideMethodsProcessor
 import com.intellij.refactoring.RefactoringBundle
 import com.intellij.refactoring.inline.GenericInlineHandler
 import com.intellij.usageView.UsageInfo
@@ -39,6 +39,7 @@ import org.jetbrains.kotlin.idea.codeInliner.replaceUsages
 import org.jetbrains.kotlin.idea.findUsages.ReferencesSearchScopeHelper
 import org.jetbrains.kotlin.idea.refactoring.fqName.getKotlinFqName
 import org.jetbrains.kotlin.idea.refactoring.pullUp.deleteWithCompanion
+import org.jetbrains.kotlin.idea.refactoring.safeDelete.removeOverrideModifier
 import org.jetbrains.kotlin.idea.references.KtSimpleNameReference
 import org.jetbrains.kotlin.idea.search.declarationsSearch.findSuperMethodsNoWrapping
 import org.jetbrains.kotlin.idea.search.declarationsSearch.forEachOverridingElement
@@ -105,7 +106,7 @@ class KotlinInlineCallableProcessor(
         declaration.forEachOverridingElement(scope = myRefactoringScope) { _, overridingMember ->
             val superMethods = findSuperMethodsNoWrapping(overridingMember)
             if (superMethods.singleOrNull()?.unwrapped == declaration) {
-                usages += OverrideUsageInfo(overridingMember)
+                usages += UsageInfo(overridingMember)
                 return@forEachOverridingElement true
             }
 
@@ -116,21 +117,18 @@ class KotlinInlineCallableProcessor(
     }
 
     override fun performRefactoring(usages: Array<out UsageInfo>) {
-        val (kotlinReferenceUsages, nonKotlinReferenceUsages) = usages.partition { it !is OverrideUsageInfo && it.element is KtReferenceExpression }
-        for (usage in nonKotlinReferenceUsages) {
+        val (kotlinUsages, nonKotlinUsages) = usages.partition { it.element is KtReferenceExpression }
+        for (usage in nonKotlinUsages) {
             val element = usage.element ?: continue
             when {
-                usage is OverrideUsageInfo -> for (processor in OverrideMethodsProcessor.EP_NAME.extensionList) {
-                    if (processor.removeOverrideAttribute(element)) break
-                }
-
+                element is KtNamedFunction || element is KtProperty || element is PsiMethod -> element.removeOverrideModifier()
                 element.language == KotlinLanguage.INSTANCE -> LOG.error("Found unexpected Kotlin usage $element")
                 else -> GenericInlineHandler.inlineReference(usage, declaration, inliners)
             }
         }
 
         replacementStrategy.replaceUsages(
-            kotlinReferenceUsages.mapNotNull { it.element as? KtReferenceExpression },
+            kotlinUsages.mapNotNull { it.element as? KtReferenceExpression },
             myProject,
             commandName
         ) {
@@ -161,5 +159,3 @@ class KotlinInlineCallableProcessor(
         override fun getProcessedElementsHeader() = KotlinBundle.message("text.0.to.inline", kind.capitalize())
     }
 }
-
-private class OverrideUsageInfo(element: PsiElement) : UsageInfo(element)
