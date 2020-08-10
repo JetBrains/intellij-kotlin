@@ -33,8 +33,8 @@ import com.intellij.openapi.projectRoots.ProjectJdkTable
 import com.intellij.openapi.projectRoots.Sdk
 import com.intellij.openapi.projectRoots.impl.SdkConfigurationUtil
 import com.intellij.openapi.roots.ProjectRootManager
+import com.intellij.openapi.ui.Messages
 import com.intellij.openapi.ui.TestDialog
-import com.intellij.openapi.ui.TestDialogManager
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
@@ -55,6 +55,7 @@ import org.gradle.wrapper.PathAssembler
 import org.intellij.lang.annotations.Language
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.kotlin.idea.test.KotlinSdkCreationChecker
+import org.jetbrains.kotlin.idea.test.PluginTestCaseBase
 import org.jetbrains.kotlin.idea.test.PluginTestCaseBase.IDEA_TEST_DATA_DIR
 import org.jetbrains.kotlin.idea.util.getProjectJdkTableSafe
 import org.jetbrains.kotlin.test.KotlinTestUtils
@@ -85,7 +86,7 @@ import java.util.zip.ZipFile
 @RunWith(value = Parameterized::class)
 abstract class GradleImportingTestCase : ExternalSystemImportingTestCase() {
 
-    protected var sdkCreationChecker: KotlinSdkCreationChecker? = null
+    protected var sdkCreationChecker : KotlinSdkCreationChecker? = null
 
     private val removedSdks: MutableList<Sdk> = SmartList()
 
@@ -110,7 +111,7 @@ abstract class GradleImportingTestCase : ExternalSystemImportingTestCase() {
 
     open fun isApplicableTest(): Boolean = true
 
-    open fun jvmHeapArgsByGradleVersion(version: String): String = when {
+    open fun jvmHeapArgsByGradleVersion(version: String) : String = when {
         version.startsWith("4.") ->
             // work-around due to memory leak in class loaders in gradle. The amount of used memory in the gradle daemon
             // is drammatically increased on every reimport of project due to sequential compilation of build scripts.
@@ -179,7 +180,7 @@ abstract class GradleImportingTestCase : ExternalSystemImportingTestCase() {
                 }
             },
             ThrowableRunnable {
-                TestDialogManager.setTestDialog(TestDialog.DEFAULT)
+                Messages.setTestDialog(TestDialog.DEFAULT)
                 deleteBuildSystemDirectory()
                 // was FileUtil.delete(BuildManager.getInstance().buildSystemDirectory.toFile())
                 sdkCreationChecker?.removeNewKotlinSdk()
