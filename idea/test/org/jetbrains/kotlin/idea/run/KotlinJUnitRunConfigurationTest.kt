@@ -31,7 +31,7 @@ class KotlinJUnitRunConfigurationTest : AbstractRunConfigurationTest() {
             return
         }
 
-        val projectBaseDir = PlatformTestUtil.getOrCreateProjectBaseDir(project)
+        val projectBaseDir = PlatformTestUtil.getOrCreateProjectTestBaseDir(project)
         val createResult = configureModule(moduleDirPath("module"), projectBaseDir)
         val testDir = createResult.testDir!!
 
