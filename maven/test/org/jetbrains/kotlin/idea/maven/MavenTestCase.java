@@ -33,7 +33,6 @@ import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
-import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.ui.UIUtil;
 import gnu.trove.THashSet;
 import org.intellij.lang.annotations.Language;
@@ -214,18 +213,18 @@ public abstract class MavenTestCase extends UsefulTestCase {
     }
 
     @Override
-    protected void runTestRunnable(@NotNull ThrowableRunnable<Throwable> testRunnable) throws Throwable {
+    protected void runTest() throws Throwable {
         try {
             if (runInWriteAction()) {
                 new WriteAction() {
                     @Override
                     protected void run(@NotNull Result result) throws Throwable {
-                        MavenTestCase.super.runTestRunnable(testRunnable);
+                        MavenTestCase.super.runTest();
                     }
                 }.executeSilently().throwException();
             }
             else {
-                MavenTestCase.super.runTestRunnable(testRunnable);
+                MavenTestCase.super.runTest();
             }
         }
         catch (Exception throwable) {
@@ -239,6 +238,11 @@ public abstract class MavenTestCase extends UsefulTestCase {
             while ((each = each.getCause()) != null);
             throw throwable;
         }
+    }
+
+    @Override
+    protected void invokeTestRunnable(@NotNull Runnable runnable) throws Exception {
+        runnable.run();
     }
 
     protected boolean runInWriteAction() {

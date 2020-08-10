@@ -168,7 +168,7 @@ class GradleInspectionTest : GradleImportingTestCase() {
     private fun getInspectionResult(tool: LocalInspectionTool, file: VirtualFile): List<String> {
         val resultRef = Ref<List<String>>()
         runInEdtAndWait {
-            runTestRunnable {
+            invokeTestRunnable {
                 val presentation = runInspection(tool, myProject, listOf(file))
 
                 val foundProblems = presentation.problemElements

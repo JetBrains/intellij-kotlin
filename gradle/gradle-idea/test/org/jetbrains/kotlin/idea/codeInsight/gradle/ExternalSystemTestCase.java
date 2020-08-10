@@ -47,7 +47,10 @@ import com.intellij.task.ProjectTaskManager;
 import com.intellij.testFramework.*;
 import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
-import com.intellij.util.*;
+import com.intellij.util.ArrayUtilRt;
+import com.intellij.util.ExceptionUtil;
+import com.intellij.util.PathUtil;
+import com.intellij.util.SmartList;
 import com.intellij.util.io.PathKt;
 import com.intellij.util.io.TestFileSystemItem;
 import gnu.trove.THashSet;
@@ -220,18 +223,18 @@ public abstract class ExternalSystemTestCase extends UsefulTestCase {
     }
 
     @Override
-    protected void runTestRunnable(@NotNull ThrowableRunnable<Throwable> testRunnable) throws Throwable {
+    protected void runTest() throws Throwable {
         try {
             if (runInWriteAction()) {
                 try {
-                    WriteAction.runAndWait(() -> super.runTestRunnable(testRunnable));
+                    WriteAction.runAndWait(() -> super.runTest());
                 }
                 catch (Throwable throwable) {
                     ExceptionUtil.rethrowAllAsUnchecked(throwable);
                 }
             }
             else {
-                super.runTestRunnable(testRunnable);
+                super.runTest();
             }
         }
         catch (Exception throwable) {
@@ -245,6 +248,11 @@ public abstract class ExternalSystemTestCase extends UsefulTestCase {
             while ((each = each.getCause()) != null);
             throw throwable;
         }
+    }
+
+    @Override
+    protected void invokeTestRunnable(@NotNull Runnable runnable) {
+        runnable.run();
     }
 
     protected boolean runInWriteAction() {
