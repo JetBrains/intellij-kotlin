@@ -91,6 +91,7 @@ public abstract class ExternalSystemTestCase extends UsefulTestCase {
     protected List<VirtualFile> myAllConfigs = new ArrayList<>();
     protected boolean useProjectTaskManager;
 
+    @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -172,6 +173,7 @@ public abstract class ExternalSystemTestCase extends UsefulTestCase {
         myProjectRoot = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(projectDir);
     }
 
+    @After
     @Override
     public void tearDown() throws Exception {
         new RunAll(
