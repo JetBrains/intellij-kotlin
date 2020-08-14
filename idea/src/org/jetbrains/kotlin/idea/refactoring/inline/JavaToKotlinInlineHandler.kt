@@ -33,6 +33,9 @@ private val LOG = Logger.getInstance(JavaToKotlinInlineHandler::class.java)
 
 class JavaToKotlinInlineHandler : AbstractCrossLanguageInlineHandler() {
     override fun prepareReference(reference: PsiReference, referenced: PsiElement): MultiMap<PsiElement, String> {
+        // disallow j2k inline refactoring in 202 branch
+        return super.prepareReference(reference, referenced)
+
         val javaMemberToInline = referenced.javaMemberToInline ?: return super.prepareReference(reference, referenced)
         javaMemberToInline.validate()?.let { error ->
             return createMultiMapWithSingleConflict(
