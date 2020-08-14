@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.idea.refactoring.inline
 
 import com.intellij.psi.PsiElement
-import com.intellij.refactoring.OverrideMethodsProcessor
 import org.jetbrains.kotlin.asJava.unwrapped
 import org.jetbrains.kotlin.idea.search.declarationsSearch.hasOverridingElement
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -14,18 +13,20 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
-class KotlinOverrideMethodsProcessor : OverrideMethodsProcessor {
-    override fun removeOverrideAttribute(element: PsiElement): Boolean {
-        val kotlinElement = element.unwrapped ?: return false
-        if (kotlinElement !is KtNamedFunction && kotlinElement !is KtProperty) return false
-        kotlinElement as KtNamedDeclaration
+class KotlinOverrideMethodsProcessor {
+    companion object {
+        fun removeOverrideAttribute(element: PsiElement): Boolean {
+            val kotlinElement = element.unwrapped ?: return false
+            if (kotlinElement !is KtNamedFunction && kotlinElement !is KtProperty) return false
+            kotlinElement as KtNamedDeclaration
 
-        if (!kotlinElement.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return false
+            if (!kotlinElement.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return false
 
-        kotlinElement.addOpenModifierIfNeeded()
-        kotlinElement.removeModifier(KtTokens.OVERRIDE_KEYWORD)
+            kotlinElement.addOpenModifierIfNeeded()
+            kotlinElement.removeModifier(KtTokens.OVERRIDE_KEYWORD)
 
-        return true
+            return true
+        }
     }
 }
 

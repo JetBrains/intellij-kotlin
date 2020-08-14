@@ -24,7 +24,6 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.PsiElement
 import com.intellij.refactoring.BaseRefactoringProcessor
-import com.intellij.refactoring.OverrideMethodsProcessor
 import com.intellij.refactoring.RefactoringBundle
 import com.intellij.refactoring.inline.GenericInlineHandler
 import com.intellij.refactoring.util.CommonRefactoringUtil
@@ -149,15 +148,11 @@ abstract class AbstractKotlinInlineDeclarationProcessor<TDeclaration : KtNamedDe
         }
 
         val replacementStrategy = createReplacementStrategy() ?: return
-
         val (kotlinReferenceUsages, nonKotlinReferenceUsages) = usages.partition { it !is OverrideUsageInfo && it.element is KtReferenceExpression }
         for (usage in nonKotlinReferenceUsages) {
             val element = usage.element ?: continue
             when {
-                usage is OverrideUsageInfo -> for (processor in OverrideMethodsProcessor.EP_NAME.extensionList) {
-                    if (processor.removeOverrideAttribute(element)) break
-                }
-
+                usage is OverrideUsageInfo -> KotlinOverrideMethodsProcessor.removeOverrideAttribute(element)
                 element.language == KotlinLanguage.INSTANCE -> LOG.error("Found unexpected Kotlin usage $element")
                 else -> GenericInlineHandler.inlineReference(usage, declaration, inliners)
             }

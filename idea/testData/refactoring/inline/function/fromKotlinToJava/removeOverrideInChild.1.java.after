@@ -1,10 +1,12 @@
 public class JavaClass extends A {
+    @Override
     public void a() {
 
     }
 }
 
 class JavaClass2 extends A {
+    @Override
     public void a() {
 
     }
