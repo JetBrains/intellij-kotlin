@@ -32,6 +32,11 @@
       <option name="url" value="https://cache-redirector.jetbrains.com/dl.bintray.com/groovy/maven/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="jitpack" />
+      <option name="name" value="jitpack" />
+      <option name="url" value="https://cache-redirector.jetbrains.com/jitpack.io" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="8e0b07ff-f7c3-4a77-a62b-ab464737b720" />
       <option name="name" value="8e0b07ff-f7c3-4a77-a62b-ab464737b720" />
       <option name="url" value="https://cache-redirector.jetbrains.com/jetbrains.bintray.com/jediterm/" />
@@ -60,11 +65,6 @@
       <option name="id" value="b7513459-458a-4892-b2b4-eca932d3c82a" />
       <option name="name" value="b7513459-458a-4892-b2b4-eca932d3c82a" />
       <option name="url" value="https://cache-redirector.jetbrains.com/kotlin.bintray.com/kotlin-plugin/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="905ce807-c0fe-49c0-822b-33d31d6616e4" />
-      <option name="name" value="905ce807-c0fe-49c0-822b-33d31d6616e4" />
-      <option name="url" value="https://cache-redirector.jetbrains.com/jetbrains.bintray.com/space" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="caeb020e-2153-45d1-b752-f56d66968d08" />
