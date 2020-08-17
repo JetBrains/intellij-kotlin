@@ -6,7 +6,7 @@
 package org.jetbrains.kotlin.idea.navigation
 
 import com.intellij.ide.util.gotoByName.FilteringGotoByModel
-import com.intellij.ide.util.gotoByName.LanguageRef
+import com.intellij.lang.Language
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.UsefulTestCase
@@ -19,7 +19,7 @@ object GotoCheck {
     @JvmStatic
     @JvmOverloads
     fun checkGotoDirectives(
-        model: FilteringGotoByModel<LanguageRef>,
+        model: FilteringGotoByModel<Language>,
         editor: Editor,
         nonProjectSymbols: Boolean = false,
         checkNavigation: Boolean = false
