@@ -60,11 +60,11 @@ abstract class AbstractImportsTest : KotlinLightCodeInsightFixtureTestCase() {
             ) ?: false
 
             InTextDirectivesUtils.findLinesWithPrefixesRemoved(fileText, "// PACKAGE_TO_USE_STAR_IMPORTS:").forEach {
-                codeStyleSettings.PACKAGES_TO_USE_STAR_IMPORTS.addEntry(KotlinPackageEntry(it.trim(), false))
+                codeStyleSettings.PACKAGES_TO_USE_IMPORT_ON_DEMAND.addEntry(KotlinPackageEntry(it.trim(), false))
             }
 
             InTextDirectivesUtils.findLinesWithPrefixesRemoved(fileText, "// PACKAGES_TO_USE_STAR_IMPORTS:").forEach {
-                codeStyleSettings.PACKAGES_TO_USE_STAR_IMPORTS.addEntry(KotlinPackageEntry(it.trim(), true))
+                codeStyleSettings.PACKAGES_TO_USE_IMPORT_ON_DEMAND.addEntry(KotlinPackageEntry(it.trim(), true))
             }
 
             val log = project.executeWriteCommand<String?>("") { doTest(file) }
