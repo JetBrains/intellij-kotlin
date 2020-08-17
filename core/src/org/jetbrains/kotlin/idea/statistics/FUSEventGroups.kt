@@ -16,6 +16,7 @@ enum class FUSEventGroups(groupIdSuffix: String, val events: Set<String> = setOf
 
     GradleTarget("gradle.target", gradleTargetEvents),
     Refactoring("ide.refactoring", refactoringEvents),
+    NewFileTemplate("ide.newFileTempl", newFileTemplateEvents),
     NPWizards("ide.npwizards"),
     Debug("ide.debugger"),
     J2K("ide.j2k"),
@@ -85,4 +86,13 @@ val refactoringEvents = setOf(
     "JavaMemberByKotlinReferenceInplaceRenameHandler",
     "KotlinPushDownHandler",
     "KotlinPullUpHandler"
+)
+val newFileTemplateEvents = setOf(
+    "Kotlin File",
+    "Kotlin Class",
+    "Kotlin Interface",
+    "Kotlin Object",
+    "Kotlin Enum",
+    "Kotlin Scratch",
+    "Kotlin Script"
 )

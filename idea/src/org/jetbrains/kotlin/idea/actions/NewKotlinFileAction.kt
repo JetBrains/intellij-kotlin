@@ -32,7 +32,8 @@ import org.jetbrains.annotations.TestOnly
 import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.idea.KotlinIcons
-import org.jetbrains.kotlin.idea.statistics.KotlinCreateActionsFUSCollector
+import org.jetbrains.kotlin.idea.statistics.FUSEventGroups
+import org.jetbrains.kotlin.idea.statistics.KotlinFUSLogger
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.parsing.KotlinParserDefinition.Companion.STD_SCRIPT_SUFFIX
@@ -220,7 +221,7 @@ class NewKotlinFileAction : CreateFileFromTemplateAction(
         private val FQNAME_SEPARATORS = charArrayOf('/', '\\', '.')
 
         fun createFileFromTemplateWithStat(name: String, template: FileTemplate, dir: PsiDirectory): PsiFile? {
-            KotlinCreateActionsFUSCollector.logTemplate(template.name)
+            KotlinFUSLogger.log(FUSEventGroups.NewFileTemplate, template.name)
             return createFileFromTemplate(name, template, dir)
         }
 
