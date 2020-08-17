@@ -93,14 +93,14 @@ class KotlinFormatterUsageCollector : ProjectUsagesCollector() {
                 return paired(IDEA_KOTLIN, isProject)
             }
 
-            val isKotlinOfficialLikeSettings = settings == CodeStyleSettingsManager.getInstance(project).cloneSettings(settings).also {
+            val isKotlinOfficialLikeSettings = settings == settings.clone().also {
                 KotlinStyleGuideCodeStyle.apply(it)
             }
             if (isKotlinOfficialLikeSettings) {
                 return paired(IDEA_OFFICIAL_KOTLIN_WITH_CUSTOM, isProject)
             }
 
-            val isKotlinObsoleteLikeSettings = settings == CodeStyleSettingsManager.getInstance(project).cloneSettings(settings).also {
+            val isKotlinObsoleteLikeSettings = settings == settings.clone().also {
                 KotlinObsoleteCodeStyle.apply(it)
             }
             if (isKotlinObsoleteLikeSettings) {
