@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.idea.core.formatter;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.util.Comparing;
 import com.intellij.openapi.util.InvalidDataException;
 import com.intellij.openapi.util.WriteExternalException;
 import com.intellij.psi.codeStyle.CodeStyleSettings;
@@ -17,12 +16,7 @@ import org.jetbrains.kotlin.idea.util.FormatterUtilKt;
 import org.jetbrains.kotlin.idea.util.ReflectionUtil;
 
 public class KotlinCodeStyleSettings extends CustomCodeStyleSettings {
-    @ReflectionUtil.SkipInEquals
-    @NotNull
     public KotlinPackageEntryTable PACKAGES_TO_USE_IMPORT_ON_DEMAND = new KotlinPackageEntryTable();
-
-    @ReflectionUtil.SkipInEquals
-    @NotNull
     public KotlinPackageEntryTable IMPORTS_LAYOUT = new KotlinPackageEntryTable();
 
     public static final int DEFAULT_NAME_COUNT_TO_USE_STAR_IMPORT = ApplicationManager.getApplication().isUnitTestMode() ? Integer.MAX_VALUE : 5;
@@ -104,12 +98,7 @@ public class KotlinCodeStyleSettings extends CustomCodeStyleSettings {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof KotlinCodeStyleSettings)) return false;
-
-        KotlinCodeStyleSettings that = (KotlinCodeStyleSettings)obj;
-
-        if (!Comparing.equal(PACKAGES_TO_USE_IMPORT_ON_DEMAND, that.PACKAGES_TO_USE_IMPORT_ON_DEMAND)) return false;
-        if (!Comparing.equal(IMPORTS_LAYOUT, that.IMPORTS_LAYOUT)) return false;
-        if (!ReflectionUtil.comparePublicNonFinalFieldsWithSkip(this, that)) return false;
+        if (!ReflectionUtil.comparePublicNonFinalFieldsWithSkip(this, obj)) return false;
         return true;
     }
 
