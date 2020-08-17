@@ -12,7 +12,6 @@ import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiDocumentManager
-import com.intellij.psi.PsiFile
 import com.intellij.rt.execution.junit.FileComparisonFailure
 import com.intellij.testFramework.ExpectedHighlightingData
 import com.intellij.testFramework.LightProjectDescriptor
@@ -40,14 +39,14 @@ abstract class AbstractLineMarkersTest : KotlinLightCodeInsightFixtureTestCase()
     fun doTest(path: String) = doTest(path) {}
 
     protected fun doAndCheckHighlighting(
-        psiFile: PsiFile,
+        project: Project,
         documentToAnalyze: Document,
         expectedHighlighting: ExpectedHighlightingData,
         expectedFile: File
     ): List<LineMarkerInfo<*>> {
         myFixture.doHighlighting()
 
-        return checkHighlighting(psiFile, documentToAnalyze, expectedHighlighting, expectedFile)
+        return checkHighlighting(project, documentToAnalyze, expectedHighlighting, expectedFile)
     }
 
     fun doTest(unused: String, additionalCheck: () -> Unit) {
@@ -62,12 +61,12 @@ abstract class AbstractLineMarkersTest : KotlinLightCodeInsightFixtureTestCase()
             val project = myFixture.project
             val document = myFixture.editor.document
 
-            val data = ExpectedHighlightingData(document, false, false, false)
+            val data = ExpectedHighlightingData(document, false, false, false, myFixture.file)
             data.init()
 
             PsiDocumentManager.getInstance(project).commitAllDocuments()
 
-            val markers = doAndCheckHighlighting(myFixture.file, document, data, testDataFile())
+            val markers = doAndCheckHighlighting(myFixture.project, document, data, testDataFile())
 
             assertNavigationElements(myFixture.project, myFixture.file as KtFile, markers)
             additionalCheck()
@@ -150,15 +149,15 @@ abstract class AbstractLineMarkersTest : KotlinLightCodeInsightFixtureTestCase()
         }
 
         fun checkHighlighting(
-            psiFile: PsiFile,
+            project: Project,
             documentToAnalyze: Document,
             expectedHighlighting: ExpectedHighlightingData,
             expectedFile: File
         ): MutableList<LineMarkerInfo<*>> {
-            val markers = DaemonCodeAnalyzerImpl.getLineMarkers(documentToAnalyze, psiFile.project)
+            val markers = DaemonCodeAnalyzerImpl.getLineMarkers(documentToAnalyze, project)
 
             try {
-                expectedHighlighting.checkLineMarkers(psiFile, markers, documentToAnalyze.text)
+                expectedHighlighting.checkLineMarkers(markers, documentToAnalyze.text)
 
                 // This is a workaround for sad bug in ExpectedHighlightingData:
                 // the latter doesn't throw assertion error when some line markers are expected, but none are present.

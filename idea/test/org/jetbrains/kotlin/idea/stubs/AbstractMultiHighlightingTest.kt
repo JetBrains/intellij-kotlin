@@ -40,10 +40,10 @@ abstract class AbstractMultiHighlightingTest : AbstractMultiModuleTest() {
 
         val text = myEditor.document.text
         if (shouldCheckLineMarkers) {
-            data.checkLineMarkers(myFile, DaemonCodeAnalyzerImpl.getLineMarkers(getDocument(file), project), text)
+            data.checkLineMarkers(DaemonCodeAnalyzerImpl.getLineMarkers(getDocument(file), project), text)
         }
         if (shouldCheckResult) {
-            data.checkResult(myFile, infos, text)
+            data.checkResult(infos, text)
         }
         return infos
     }
