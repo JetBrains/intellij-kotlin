@@ -157,8 +157,7 @@ private fun resolveArtifact(groupId: String, artifactId: String, version: String
     val repositoryManager = ArtifactRepositoryManager(
             JarRepositoryManager.getLocalRepositoryPath(),
             remoteMavenRepositories,
-            ProgressConsumer.DEAF,
-            false
+            ProgressConsumer.DEAF
     )
 
     val artifacts = repositoryManager.resolveDependencyAsArtifact(

@@ -167,7 +167,7 @@ class TrailingCommaInspection(
             override fun applyFix(project: Project, problemDescriptor: ProblemDescriptor) {
                 val element = commaOwnerPointer.element ?: return
                 val range = createFormatterTextRange(element)
-                val settings = CodeStyleSettingsManager.getInstance(project).cloneSettings(CodeStyle.getSettings(element.containingKtFile))
+                val settings = CodeStyle.getSettings(project).clone()
                 settings.kotlinCustomSettings.ALLOW_TRAILING_COMMA = true
                 settings.kotlinCustomSettings.ALLOW_TRAILING_COMMA_ON_CALL_SITE = true
                 CodeStyle.doWithTemporarySettings(project, settings, Runnable {

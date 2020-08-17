@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstance
 import org.junit.internal.runners.JUnit38ClassRunner
 import org.junit.runner.RunWith
+import java.io.File
 import java.nio.file.Path
 
 @RunWith(JUnit38ClassRunner::class)
@@ -31,7 +32,7 @@ class MoveKotlinDeclarationsHandlerTest : KotlinMultiFileTestCase() {
     override fun getTestRoot() = "/refactoring/moveHandler/declarations"
 
     private fun doTest(action: (rootDir: VirtualFile, handler: MoveKotlinDeclarationsHandler) -> Unit) {
-        val filesToDelete = mutableListOf<Path>()
+        val filesToDelete = mutableListOf<File>()
 
         try {
             val path = "$testDataPath$testRoot/${getTestName(true)}"
@@ -40,7 +41,7 @@ class MoveKotlinDeclarationsHandlerTest : KotlinMultiFileTestCase() {
             PsiDocumentManager.getInstance(myProject).commitAllDocuments()
             action(rootDir, MoveKotlinDeclarationsHandler())
         } finally {
-            filesToDelete.forEach { it.toFile().deleteRecursively() }
+            filesToDelete.forEach { it.deleteRecursively() }
         }
     }
 

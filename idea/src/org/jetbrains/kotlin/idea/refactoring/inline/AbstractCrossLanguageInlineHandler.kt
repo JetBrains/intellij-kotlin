@@ -47,7 +47,7 @@ abstract class AbstractCrossLanguageInlineHandler : InlineHandler {
         fun createMultiMapWithSingleConflict(
             element: PsiElement,
             message: String
-        ): MultiMap<PsiElement, String> = MultiMap<PsiElement, String>(1).apply {
+        ): MultiMap<PsiElement, String> = MultiMap<PsiElement, String>().apply {
             putValue(element, message)
         }
     }

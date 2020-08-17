@@ -81,7 +81,7 @@ class KotlinLineMarkerProvider : LineMarkerProviderDescriptor() {
         return info
     }
 
-    override fun collectSlowLineMarkers(elements: List<PsiElement>, result: LineMarkerInfos) {
+    override fun collectSlowLineMarkers(elements: List<PsiElement>, result: MutableCollection<LineMarkerInfo<*>>) {
         if (elements.isEmpty()) return
         if (KotlinLineMarkerOptions.options.none { option -> option.isEnabled }) return
 

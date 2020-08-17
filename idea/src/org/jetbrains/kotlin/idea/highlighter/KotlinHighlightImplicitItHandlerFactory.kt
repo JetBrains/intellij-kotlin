@@ -38,8 +38,8 @@ class KotlinHighlightImplicitItHandlerFactory : HighlightUsagesHandlerFactoryBas
             override fun getTargets() = listOf(refExpr)
 
             override fun selectTargets(
-                targets: MutableList<out KtNameReferenceExpression>,
-                selectionConsumer: Consumer<in MutableList<out KtNameReferenceExpression>>
+                    targets: MutableList<KtNameReferenceExpression>,
+                    selectionConsumer: Consumer<MutableList<KtNameReferenceExpression>>
             ) = selectionConsumer.consume(targets)
 
             override fun computeUsages(targets: MutableList<out KtNameReferenceExpression>) {

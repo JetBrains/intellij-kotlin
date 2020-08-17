@@ -324,17 +324,17 @@ fun configureCodeStyleAndRun(
     configurator: (CodeStyleSettings) -> Unit = { },
     body: () -> Unit
 ) {
-    val testSettings = CodeStyle.createTestSettings(CodeStyle.getSettings(project))
-    CodeStyle.doWithTemporarySettings(project, testSettings, Runnable {
-        configurator(testSettings)
+    val codeStyleSettings = CodeStyle.getSettings(project)
+    try {
+        configurator(codeStyleSettings)
         body()
-    })
+    } finally {
+        codeStyleSettings.clearCodeStyleSettings()
+    }
 }
 
 fun enableKotlinOfficialCodeStyle(project: Project) {
-    val settings = CodeStyleSettingsManager.getInstance(project).createTemporarySettings()
-    KotlinStyleGuideCodeStyle.apply(settings)
-    CodeStyle.setTemporarySettings(project, settings)
+    KotlinStyleGuideCodeStyle.apply(CodeStyle.getSettings(project))
 }
 
 fun disableKotlinOfficialCodeStyle(project: Project) {
