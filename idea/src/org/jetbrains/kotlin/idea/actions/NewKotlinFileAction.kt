@@ -220,7 +220,7 @@ class NewKotlinFileAction : CreateFileFromTemplateAction(
         private val FQNAME_SEPARATORS = charArrayOf('/', '\\', '.')
 
         fun createFileFromTemplateWithStat(name: String, template: FileTemplate, dir: PsiDirectory): PsiFile? {
-            KotlinCreateActionsFUSCollector.logFileTemplate(template.name)
+            KotlinCreateActionsFUSCollector.logTemplate(template.name)
             return createFileFromTemplate(name, template, dir)
         }
 
