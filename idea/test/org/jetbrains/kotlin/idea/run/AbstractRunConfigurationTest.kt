@@ -81,11 +81,11 @@ abstract class AbstractRunConfigurationTest : @Suppress("DEPRECATION") KotlinCod
     override fun getTestProjectJdk() = mockJdk()
 
     protected class TestFileContext {
-        val filesToDelete: MutableList<Path> = mutableListOf()
+        val filesToDelete: MutableList<File> = mutableListOf()
     }
 
     protected inline fun withTestFiles(block: TestFileContext.() -> Unit) {
         val context = TestFileContext().apply(block)
-        context.filesToDelete.forEach { it.toFile().deleteRecursively() }
+        context.filesToDelete.forEach { it.deleteRecursively() }
     }
 }
