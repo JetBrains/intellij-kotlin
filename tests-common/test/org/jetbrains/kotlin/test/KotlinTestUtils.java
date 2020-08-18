@@ -114,7 +114,10 @@ public class KotlinTestUtils {
 
     @NotNull
     public static Ref<Disposable> allowRootAccess(@NotNull UsefulTestCase testCase, String ... roots) {
-        Disposable disposable = Disposer.newDisposable(testCase.getTestRootDisposable(), testCase.getClass().getName());
+        Disposable parentDisposable = testCase.getTestRootDisposable();
+        Disposable disposable = Disposer.newDisposable(testCase.getClass().getName());
+        Disposer.register(parentDisposable, disposable);
+
         VfsRootAccess.allowRootAccess(disposable, roots);
         return new Ref<>(disposable);
     }

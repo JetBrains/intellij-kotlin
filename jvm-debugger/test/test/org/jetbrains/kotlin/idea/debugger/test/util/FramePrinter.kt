@@ -93,7 +93,6 @@ class FramePrinter(private val debugProcess: DebugProcessImpl, private val stack
 
         val renderer = debugProcess
             .invokeInManagerThread { debuggerContext -> valueDescriptor.getRenderer(debuggerContext.debugProcess) }
-            ?.get(XDebuggerTestUtil.TIMEOUT_MS.toLong(), TimeUnit.MILLISECONDS)
             ?: return null
 
         val semaphore = Semaphore()

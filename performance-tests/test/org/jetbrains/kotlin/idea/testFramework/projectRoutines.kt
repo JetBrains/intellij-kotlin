@@ -69,7 +69,7 @@ fun dispatchAllInvocationEvents() {
 }
 
 fun loadProjectWithName(path: String, name: String): Project? =
-    ProjectManagerEx.getInstanceEx().openProject(Paths.get(path), OpenProjectTask(projectName = name))
+    ProjectManagerEx.getInstanceEx().loadProject(Paths.get(path), name)
 
 fun TestApplicationManager.closeProject(project: Project) {
     val name = project.name
