@@ -21,7 +21,7 @@ Clone the Kotlin IDE plugin repository:
 git clone https://github.com/JetBrains/intellij-kotlin.git
 ```
 
-Clone the IDEA Community repository to the `intellij/` subdirectory:
+Clone the IDEA Community repository to the `intellij/` subfolder:
 
 ```bash
 cd intellij-kotlin
