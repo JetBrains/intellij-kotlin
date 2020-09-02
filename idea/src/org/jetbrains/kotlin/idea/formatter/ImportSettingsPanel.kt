@@ -8,7 +8,6 @@ package org.jetbrains.kotlin.idea.formatter
 import com.intellij.application.options.CodeStyleAbstractPanel
 import com.intellij.openapi.application.ApplicationBundle
 import com.intellij.openapi.editor.colors.EditorColorsScheme
-import com.intellij.openapi.util.NlsContexts
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.ui.OptionGroup
 import com.intellij.ui.components.JBScrollPane
@@ -169,7 +168,7 @@ class ImportSettingsPanel : JPanel() {
         }
     }
 
-    private class NameCountToUseStarImportSelector(@NlsContexts.BorderTitle title: String, default: Int) : OptionGroup(title) {
+    private class NameCountToUseStarImportSelector(title: String, default: Int) : OptionGroup(title) {
         private val rbUseSingleImports = JRadioButton(KotlinBundle.message("formatter.button.text.use.single.name.import"))
         private val rbUseStarImports = JRadioButton(KotlinBundle.message("formatter.button.text.use.import.with"))
         private val rbUseStarImportsIfAtLeast = JRadioButton(KotlinBundle.message("formatter.button.text.use.import.with.when.at.least"))
