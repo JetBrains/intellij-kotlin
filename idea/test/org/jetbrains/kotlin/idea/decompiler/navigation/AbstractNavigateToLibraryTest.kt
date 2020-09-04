@@ -35,19 +35,17 @@ abstract class AbstractNavigateToLibraryTest : KotlinLightCodeInsightFixtureTest
 abstract class AbstractNavigateToDecompiledLibraryTest : AbstractNavigateToLibraryTest() {
     override val expectedFileExt: String get() = ".decompiled.expected"
 
-    private val mockLibraryFacility = MockLibraryFacility(
-        source = IDEA_TEST_DATA_DIR.resolve("decompiler/navigation/library"),
-        attachSources = false,
-    )
-
-    override fun setUp() {
-        super.setUp()
-        mockLibraryFacility.setUp(module)
-    }
+    override fun getProjectDescriptor(): KotlinLightProjectDescriptor = PROJECT_DESCRIPTOR
 
     override fun tearDown() {
-        mockLibraryFacility.tearDown(module)
+        SdkAndMockLibraryProjectDescriptor.tearDown(module)
         super.tearDown()
+    }
+
+    companion object {
+        private val PROJECT_DESCRIPTOR = SdkAndMockLibraryProjectDescriptor(
+            IDEA_TEST_DATA_DIR.resolve("decompiler/navigation/library").path, false
+        )
     }
 }
 
