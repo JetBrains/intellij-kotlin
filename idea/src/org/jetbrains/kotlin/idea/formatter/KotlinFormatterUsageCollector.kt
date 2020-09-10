@@ -12,6 +12,7 @@ import com.intellij.internal.statistic.eventLog.FeatureUsageData
 import com.intellij.internal.statistic.service.fus.collectors.ProjectUsagesCollector
 import com.intellij.openapi.project.Project
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager
+import org.jetbrains.kotlin.idea.PlatformVersion
 import org.jetbrains.kotlin.idea.formatter.KotlinFormatterUsageCollector.KotlinFormatterKind.*
 import org.jetbrains.kotlin.idea.util.isDefaultIntellijOrObsoleteCodeStyle
 
@@ -21,6 +22,9 @@ class KotlinFormatterUsageCollector : ProjectUsagesCollector() {
     override fun getVersion(): Int = 1
 
     override fun getMetrics(project: Project): Set<MetricEvent> {
+        if (PlatformVersion.isAndroidStudio()) {
+            return emptySet()
+        }
         val usedFormatter = getKotlinFormatterKind(project)
 
         val data = FeatureUsageData()
