@@ -145,8 +145,6 @@ fun findScriptsWithUsages(declaration: KtNamedDeclaration, processor:(KtFile) ->
 }
 
 
-inline fun <T> Boolean.ifTrue(body: () -> T?): T? = if (this) body() else null
-
 data class ReceiverTypeSearcherInfo(
     val psiClass: PsiClass?,
     val containsTypeOrDerivedInside: ((KtDeclaration) -> Boolean)
