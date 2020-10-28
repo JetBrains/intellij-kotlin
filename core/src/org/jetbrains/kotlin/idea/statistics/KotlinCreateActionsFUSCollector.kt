@@ -6,14 +6,14 @@ import com.intellij.internal.statistic.service.fus.collectors.CounterUsagesColle
 import com.intellij.internal.statistic.utils.getPluginInfoById
 import org.jetbrains.kotlin.idea.KotlinPluginUtil
 
-class KotlinCreateFileFUSCollector : CounterUsagesCollector() {
+class KotlinCreateActionsFUSCollector : CounterUsagesCollector() {
     override fun getGroup(): EventLogGroup = GROUP
 
     companion object {
         private val GROUP = EventLogGroup("kotlin.ide.new.file", 1)
 
         val newFileEvent = GROUP.registerEvent(
-            "Created",
+            "NewFile",
             EventFields.Enum("FileTemplate", NewFileTemplates::class.java),
             EventFields.PluginInfo
         )
