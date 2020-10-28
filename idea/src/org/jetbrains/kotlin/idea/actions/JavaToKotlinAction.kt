@@ -53,8 +53,6 @@ import org.jetbrains.kotlin.idea.core.util.toPsiFile
 import org.jetbrains.kotlin.idea.formatter.commitAndUnblockDocument
 import org.jetbrains.kotlin.idea.j2k.IdeaJavaToKotlinServices
 import org.jetbrains.kotlin.idea.j2k.J2kPostProcessor
-import org.jetbrains.kotlin.idea.statistics.ConversionType
-import org.jetbrains.kotlin.idea.statistics.J2KFusCollector
 import org.jetbrains.kotlin.idea.util.application.executeWriteCommand
 import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.idea.util.isRunningInCidrIde
@@ -155,7 +153,7 @@ class JavaToKotlinAction : AnAction() {
                     javaFiles.sumBy { StringUtil.getLineBreakCount(it.text) }
                 }
 
-                J2KFusCollector.log(
+                logJ2kConversionStatistics(
                     ConversionType.FILES,
                     ExperimentalFeatures.NewJ2k.isEnabled,
                     conversionTime,
