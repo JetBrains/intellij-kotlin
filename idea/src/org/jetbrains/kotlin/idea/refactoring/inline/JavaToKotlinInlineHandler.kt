@@ -14,7 +14,6 @@ import com.intellij.psi.*
 import com.intellij.usageView.UsageInfo
 import com.intellij.util.containers.MultiMap
 import org.jetbrains.kotlin.idea.KotlinBundle
-import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.idea.caches.resolve.resolveToCall
 import org.jetbrains.kotlin.idea.codeInliner.UsageReplacementStrategy
 import org.jetbrains.kotlin.idea.codeInliner.unwrapSpecialUsageOrNull
@@ -40,12 +39,8 @@ import org.jetbrains.kotlin.resolve.calls.tower.isSynthesized
 
 class JavaToKotlinInlineHandler : AbstractCrossLanguageInlineHandler() {
     override fun prepareReference(reference: PsiReference, referenced: PsiElement): MultiMap<PsiElement, String> {
-        val referenceElement = reference.element
-        if (referenceElement.language == KotlinLanguage.INSTANCE) {
-            KotlinInlineRefactoringFUSCollector.log(elementFrom = referenced, languageTo = KotlinLanguage.INSTANCE, isCrossLanguage = true)
-        }
-
         val javaMemberToInline = referenced.javaMemberToInline ?: return super.prepareReference(reference, referenced)
+        val referenceElement = reference.element
         validate(javaMemberToInline, referenceElement)?.let { error ->
             return createMultiMapWithSingleConflict(referenceElement, error)
         }

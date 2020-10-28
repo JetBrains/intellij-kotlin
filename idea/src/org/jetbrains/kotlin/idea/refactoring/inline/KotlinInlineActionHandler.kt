@@ -27,7 +27,6 @@ abstract class KotlinInlineActionHandler : InlineActionHandler() {
 
     final override fun inlineElement(project: Project, editor: Editor?, element: PsiElement) {
         val kotlinElement = unwrapKotlinElement(element) ?: error("Kotlin element not found")
-        KotlinInlineRefactoringFUSCollector.log(elementFrom = kotlinElement, languageTo = KotlinLanguage.INSTANCE, isCrossLanguage = false)
         inlineKotlinElement(project, editor, kotlinElement)
     }
 
