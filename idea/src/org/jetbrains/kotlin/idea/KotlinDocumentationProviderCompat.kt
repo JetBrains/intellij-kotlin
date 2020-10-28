@@ -17,7 +17,7 @@ import java.util.function.Consumer
 // FIX ME WHEN BUNCH 201 REMOVED
 class KotlinDocumentationProvider : KotlinDocumentationProviderCompatBase() {
 
-    override fun collectDocComments(file: PsiFile, sink: Consumer<in PsiDocCommentBase>) {
+    override fun collectDocComments(file: PsiFile, sink: Consumer<PsiDocCommentBase>) {
         if (file !is KtFile) return
 
         PsiTreeUtil.processElements(file) {
