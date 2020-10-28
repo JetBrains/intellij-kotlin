@@ -824,8 +824,8 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("codeInsight/postfix")
         }
 
-        testClass<AbstractKotlinLambdasHintsProvider> {
-            model("codeInsight/hints/lambda")
+        testClass<AbstractKotlinReferenceTypeHintsProviderTest> {
+            model("codeInsight/hints/types")
         }
 
         testClass<AbstractKotlinCodeVisionProviderTest> {
