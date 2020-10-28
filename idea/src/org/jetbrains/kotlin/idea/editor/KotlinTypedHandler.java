@@ -21,6 +21,7 @@ import com.intellij.codeInsight.CodeInsightSettings;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.codeInsight.highlighting.BraceMatcher;
 import com.intellij.codeInsight.highlighting.BraceMatchingUtil;
+import com.intellij.ide.PowerSaveMode;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Document;
@@ -84,7 +85,7 @@ public class KotlinTypedHandler extends TypedHandlerDelegate {
 
         switch (c) {
             case ')':
-                dataClassValParameterInsert(project, editor, file, /*beforeType = */ true);
+                dataClassValParameterInsert(project, editor, file, /*beforeType = */ true, c);
                 break;
             case '<':
                 kotlinLTTyped = CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET &&
@@ -268,7 +269,7 @@ public class KotlinTypedHandler extends TypedHandlerDelegate {
             return Result.STOP;
         }
         else if (c == ',' || c == ')') {
-            dataClassValParameterInsert(project, editor, file, /*beforeType = */ false);
+            dataClassValParameterInsert(project, editor, file, /*beforeType = */ false, c);
         }
         else if (c == '{' && CodeInsightSettings.getInstance().AUTOINSERT_PAIR_BRACKET) {
             PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
@@ -335,12 +336,7 @@ public class KotlinTypedHandler extends TypedHandlerDelegate {
         return Result.CONTINUE;
     }
 
-    private static void dataClassValParameterInsert(
-            @NotNull Project project,
-            @NotNull Editor editor,
-            @NotNull PsiFile file,
-            boolean beforeType
-    ) {
+    private static void dataClassValParameterInsert(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file, boolean beforeType, char character) {
 
         if (!KotlinEditorOptions.getInstance().isAutoAddValKeywordToDataClassParameters()) return;
 
