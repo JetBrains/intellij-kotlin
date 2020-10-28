@@ -15,6 +15,7 @@ package org.jetbrains.kotlin.idea.statistics
 enum class FUSEventGroups(groupIdSuffix: String, val events: Set<String> = setOf()) {
 
     GradleTarget("gradle.target", gradleTargetEvents),
+    Refactoring("ide.refactoring", refactoringEvents),
     Debug("ide.debugger"),
     J2K("ide.j2k"),
     Editor("ide.editor"),
