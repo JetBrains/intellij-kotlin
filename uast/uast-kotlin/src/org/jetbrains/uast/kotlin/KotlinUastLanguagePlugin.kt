@@ -54,8 +54,6 @@ import org.jetbrains.uast.kotlin.declarations.KotlinUMethod
 import org.jetbrains.uast.kotlin.declarations.KotlinUMethodWithFakeLightDelegate
 import org.jetbrains.uast.kotlin.expressions.*
 import org.jetbrains.uast.kotlin.psi.*
-import org.jetbrains.uast.util.ClassSet
-import org.jetbrains.uast.util.ClassSetsWrapper
 
 interface KotlinUastResolveProviderService {
     fun getBindingContext(element: KtElement): BindingContext
@@ -173,7 +171,7 @@ class KotlinUastLanguagePlugin : UastLanguagePlugin {
             else -> sequenceOf(convertElementWithParent(element, requiredTypes.nonEmptyOr(DEFAULT_TYPES_LIST)) as? T).filterNotNull()
         }
 
-    override fun getPossiblePsiSourceTypes(vararg uastTypes: Class<out UElement>): ClassSet<PsiElement> =
+    fun getPossiblePsiSourceTypes(vararg uastTypes: Class<out UElement>): ClassSet<PsiElement> =
         when (uastTypes.size) {
             0 -> getPossibleSourceTypes(UElement::class.java)
             1 -> getPossibleSourceTypes(uastTypes.single())

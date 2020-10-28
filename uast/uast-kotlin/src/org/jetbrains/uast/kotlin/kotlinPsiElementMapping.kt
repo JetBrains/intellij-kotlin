@@ -17,9 +17,6 @@ import org.jetbrains.uast.*
 import org.jetbrains.uast.expressions.UInjectionHost
 import org.jetbrains.uast.kotlin.psi.*
 import org.jetbrains.uast.psi.UElementWithLocation
-import org.jetbrains.uast.util.ClassSet
-import org.jetbrains.uast.util.classSetOf
-import org.jetbrains.uast.util.emptyClassSet
 
 private val checkCanConvert = Registry.`is`("kotlin.uast.use.psi.type.precheck", true)
 
