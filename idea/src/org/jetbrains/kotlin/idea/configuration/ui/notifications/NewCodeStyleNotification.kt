@@ -72,7 +72,8 @@ private fun createNotification(): Notification = Notification(
         }
     }
 
-    addActions(listOf(notificationAction, disableAction))
+    addAction(notificationAction)
+    addAction(disableAction)
     isImportant = true
 }
 
