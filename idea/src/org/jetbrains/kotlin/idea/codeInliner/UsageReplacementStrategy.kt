@@ -46,7 +46,7 @@ private val LOG = Logger.getInstance(UsageReplacementStrategy::class.java)
 
 fun UsageReplacementStrategy.replaceUsagesInWholeProject(
     targetPsiElement: PsiElement,
-    @NlsContexts.DialogTitle progressTitle: String,
+    progressTitle: @NlsContexts.DialogTitle String,
     commandName: String
 ) {
     val project = targetPsiElement.project

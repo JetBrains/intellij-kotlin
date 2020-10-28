@@ -682,7 +682,7 @@ internal abstract class CompositeRefactoringRunner(
 }
 
 @Throws(ConfigurationException::class)
-fun KtElement?.validateElement(@NlsContexts.DialogMessage errorMessage: String) {
+fun KtElement?.validateElement(errorMessage: @NlsContexts.DialogMessage String) {
     if (this == null) throw ConfigurationException(errorMessage)
 
     try {

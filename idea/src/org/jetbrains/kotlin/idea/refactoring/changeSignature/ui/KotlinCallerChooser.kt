@@ -41,7 +41,7 @@ import java.util.*
 class KotlinCallerChooser(
     declaration: PsiElement,
     project: Project,
-    @NlsContexts.DialogTitle title: String,
+    title: @NlsContexts.DialogTitle String,
     previousTree: Tree?,
     callback: Consumer<Set<PsiElement>>
 ) : CallerChooserBase<PsiElement>(declaration, project, title, previousTree, "dummy." + KotlinFileType.EXTENSION, callback) {

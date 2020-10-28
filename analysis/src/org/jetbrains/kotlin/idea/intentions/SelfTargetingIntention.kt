@@ -41,7 +41,7 @@ abstract class SelfTargetingIntention<TElement : PsiElement>(
     protected val defaultTextGetter: () -> @IntentionName String = textGetter
 
     @Deprecated("Replace with `setTextGetter`", ReplaceWith("setTextGetter { text }"))
-    protected fun setText(@IntentionName text: String) {
+    protected fun setText(text: @IntentionName String) {
         this.textGetter = { text }
     }
 

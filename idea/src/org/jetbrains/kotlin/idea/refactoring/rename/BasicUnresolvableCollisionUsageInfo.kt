@@ -12,7 +12,7 @@ import com.intellij.refactoring.rename.UnresolvableCollisionUsageInfo
 class BasicUnresolvableCollisionUsageInfo(
     element: PsiElement,
     referencedElement: PsiElement,
-    @NlsContexts.DialogMessage private val _description: String
+    private val _description: @NlsContexts.DialogMessage String
 ) : UnresolvableCollisionUsageInfo(element, referencedElement) {
     override fun getDescription() = _description
 }

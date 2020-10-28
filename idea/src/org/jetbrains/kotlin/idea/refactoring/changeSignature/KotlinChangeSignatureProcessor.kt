@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 class KotlinChangeSignatureProcessor(
     project: Project,
     changeInfo: KotlinChangeInfo,
-    @NlsContexts.Command private val commandName: String
+    private val commandName: @NlsContexts.Command String
 ) : ChangeSignatureProcessorBase(project, KotlinChangeInfoWrapper(changeInfo)) {
     init {
         // we must force collecting references to other parameters now before the signature is changed

@@ -716,7 +716,7 @@ internal fun logFusForMoveRefactoring(
 
 internal fun <T> List<KtNamedDeclaration>.mapWithReadActionInProcess(
     project: Project,
-    @NlsContexts.DialogTitle title: String,
+    title: @NlsContexts.DialogTitle String,
     body: (KtNamedDeclaration) -> T
 ): List<T> = let { declarations ->
     val result = mutableListOf<T>()

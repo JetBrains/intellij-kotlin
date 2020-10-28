@@ -50,7 +50,7 @@ import org.jetbrains.kotlin.resolve.scopes.utils.memberScopeAsImportingScope
 abstract class CallableRefactoring<out T : CallableDescriptor>(
     val project: Project,
     val callableDescriptor: T,
-    @NlsContexts.Command val commandName: String
+    val commandName: @NlsContexts.Command String
 ) {
     private val LOG = Logger.getInstance(CallableRefactoring::class.java)
 

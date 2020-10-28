@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import java.awt.BorderLayout
 
 class KotlinMemberSelectionPanel(
-    @NlsContexts.DialogTitle title: String,
+    title: @NlsContexts.DialogTitle String,
     memberInfo: List<KotlinMemberInfo>,
     abstractColumnHeader: String?
 ) : AbstractMemberSelectionPanel<KtNamedDeclaration, KotlinMemberInfo>() {

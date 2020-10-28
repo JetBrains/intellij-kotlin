@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import javax.swing.tree.DefaultMutableTreeNode
 
 class KotlinFileChooserDialog(
-    @NlsContexts.DialogTitle title: String,
+    title: @NlsContexts.DialogTitle String,
     project: Project
 ) : AbstractTreeClassChooserDialog<KtFile>(
     title,

@@ -65,7 +65,7 @@ class ModulesComboBoxAction(private val scratchFile: ScratchFile) :
         return !scratchFile.file.isKotlinWorksheet
     }
 
-    private inner class ModuleIsNotSelectedAction(@NlsActions.ActionText placeholder: String) : DumbAwareAction(placeholder) {
+    private inner class ModuleIsNotSelectedAction(placeholder: @NlsActions.ActionText String) : DumbAwareAction(placeholder) {
         override fun actionPerformed(e: AnActionEvent) {
             scratchFile.setModule(null)
         }

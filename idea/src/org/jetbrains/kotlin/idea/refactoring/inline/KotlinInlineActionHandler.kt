@@ -39,7 +39,7 @@ abstract class KotlinInlineActionHandler : InlineActionHandler() {
 
     open val helpId: String? = null
 
-    fun showErrorHint(project: Project, editor: Editor?, @NlsContexts.DialogMessage message: String) {
+    fun showErrorHint(project: Project, editor: Editor?, message: @NlsContexts.DialogMessage String) {
         CommonRefactoringUtil.showErrorHint(project, editor, message, refactoringName, helpId)
     }
 

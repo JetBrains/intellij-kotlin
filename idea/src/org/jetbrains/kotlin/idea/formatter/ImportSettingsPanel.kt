@@ -169,7 +169,7 @@ class ImportSettingsPanel : JPanel() {
         }
     }
 
-    private class NameCountToUseStarImportSelector(@NlsContexts.BorderTitle title: String, default: Int) : OptionGroup(title) {
+    private class NameCountToUseStarImportSelector(title: @NlsContexts.BorderTitle String, default: Int) : OptionGroup(title) {
         private val rbUseSingleImports = JRadioButton(KotlinBundle.message("formatter.button.text.use.single.name.import"))
         private val rbUseStarImports = JRadioButton(KotlinBundle.message("formatter.button.text.use.import.with"))
         private val rbUseStarImportsIfAtLeast = JRadioButton(KotlinBundle.message("formatter.button.text.use.import.with.when.at.least"))

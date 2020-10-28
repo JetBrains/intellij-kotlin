@@ -52,8 +52,8 @@ private val defaultHandlerActions = object : MoveKotlinDeclarationsHandlerAction
     override fun showErrorHint(
         project: Project,
         editor: Editor?,
-        @NlsContexts.DialogMessage message: String,
-        @NlsContexts.DialogTitle title: String,
+        message: @NlsContexts.DialogMessage String,
+        title: @NlsContexts.DialogTitle String,
         helpId: String?
     ) {
         CommonRefactoringUtil.showErrorHint(project, editor, message, title, helpId)

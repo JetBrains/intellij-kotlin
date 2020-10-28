@@ -69,7 +69,7 @@ class KotlinChangeSignatureDialog(
     project: Project,
     methodDescriptor: KotlinMethodDescriptor,
     context: PsiElement,
-    @NlsContexts.Command private val commandName: String?
+    private val commandName: @NlsContexts.Command String?
 ) : ChangeSignatureDialogBase<
         KotlinParameterInfo,
         PsiElement,
@@ -453,7 +453,7 @@ class KotlinChangeSignatureDialog(
 
         fun createRefactoringProcessorForSilentChangeSignature(
             project: Project,
-            @NlsContexts.Command commandName: String,
+            commandName: @NlsContexts.Command String,
             method: KotlinMethodDescriptor,
             defaultValueContext: PsiElement
         ): BaseRefactoringProcessor {

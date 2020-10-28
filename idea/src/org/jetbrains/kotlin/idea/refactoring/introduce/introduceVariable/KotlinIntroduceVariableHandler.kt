@@ -392,7 +392,7 @@ object KotlinIntroduceVariableHandler : RefactoringActionHandler {
         return null
     }
 
-    private fun showErrorHint(project: Project, editor: Editor?, @NlsContexts.DialogMessage message: String) {
+    private fun showErrorHint(project: Project, editor: Editor?, message: @NlsContexts.DialogMessage String) {
         CommonRefactoringUtil.showErrorHint(project, editor, message, INTRODUCE_VARIABLE, HelpID.INTRODUCE_VARIABLE)
     }
 

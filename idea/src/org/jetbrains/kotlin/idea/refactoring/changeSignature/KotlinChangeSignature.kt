@@ -71,7 +71,7 @@ class KotlinChangeSignature(
     callableDescriptor: CallableDescriptor,
     val configuration: KotlinChangeSignatureConfiguration,
     val defaultValueContext: PsiElement,
-    @NlsContexts.Command commandName: String?
+    commandName: @NlsContexts.Command String?
 ) : CallableRefactoring<CallableDescriptor>(
     project,
     callableDescriptor,

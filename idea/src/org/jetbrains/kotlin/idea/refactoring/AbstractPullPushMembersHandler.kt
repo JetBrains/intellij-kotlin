@@ -27,7 +27,7 @@ import java.util.*
 abstract class AbstractPullPushMembersHandler(
     @Nls private val refactoringName: String,
     private val helpId: String,
-    @NlsContexts.DialogMessage private val wrongPositionMessage: String
+    private val wrongPositionMessage: @NlsContexts.DialogMessage String
 ) : RefactoringActionHandler, ElementsHandler {
     private fun reportWrongPosition(project: Project, editor: Editor?) {
         val message = RefactoringBundle.getCannotRefactorMessage(wrongPositionMessage)
