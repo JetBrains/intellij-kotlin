@@ -15,10 +15,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.externalSystem.service.execution.ExternalSystemRunConfiguration
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.projectRoots.JdkUtil
 import com.intellij.openapi.util.Disposer
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.openapi.vfs.newvfs.ArchiveFileSystem
 import com.intellij.ui.content.Content
 import com.intellij.util.messages.MessageBusConnection
 import com.intellij.xdebugger.XDebugProcess
@@ -74,17 +71,6 @@ class DebuggerConnection(
 
     private fun initializeCoroutineAgent(params: JavaParameters, it: String?) {
         params.vmParametersList?.add("-javaagent:$it")
-        // Fix for NoClassDefFoundError: kotlin/collections/AbstractMutableMap via CommandLineWrapper.
-        // If classpathFile used in run configuration - kotlin-stdlib should be included in the -classpath
-        if (params.isClasspathFile) {
-            params.classPath.rootDirs.filter { it.isKotlinStdlib() }.forEach {
-                val path = when (val fs = it.fileSystem) {
-                    is ArchiveFileSystem -> fs.getLocalByEntry(it)?.path
-                    else -> it.path
-                }
-                it.putUserData(JdkUtil.AGENT_RUNTIME_CLASSPATH, path)
-            }
-        }
     }
 
     private fun connect() {
@@ -133,9 +119,6 @@ class DebuggerConnection(
         connection = null
     }
 }
-
-fun VirtualFile.isKotlinStdlib() =
-        this.path.contains("kotlin-stdlib")
 
 enum class CoroutineDebuggerMode {
     DISABLED,
