@@ -16,6 +16,7 @@
 
 package org.jetbrains.kotlin.idea.highlighter.markers
 
+import com.intellij.codeInsight.daemon.impl.GutterIconTooltipHelper
 import com.intellij.ide.util.DefaultPsiElementCellRenderer
 import com.intellij.ide.util.PsiClassListCellRenderer
 import com.intellij.openapi.progress.ProgressManager
@@ -43,7 +44,7 @@ fun getOverriddenPropertyTooltip(property: KtNamedDeclaration): String? {
     val overriddenInClassesProcessor = PsiElementProcessor.CollectElementsWithLimit<PsiClass>(5)
 
     val consumer = AdapterProcessor<PsiMethod, PsiClass>(
-        CommonProcessors.UniqueProcessor(PsiElementProcessorAdapter(overriddenInClassesProcessor)),
+        CommonProcessors.UniqueProcessor<PsiClass>(PsiElementProcessorAdapter(overriddenInClassesProcessor)),
         Function { method: PsiMethod? -> method?.containingClass }
     )
 
@@ -70,11 +71,7 @@ fun getOverriddenPropertyTooltip(property: KtNamedDeclaration): String? {
         KotlinBundle.message("overridden.marker.overrides")
 
     val pattern = "&nbsp;&nbsp;&nbsp;&nbsp;{0}"
-    return com.intellij.codeInsight.daemon.impl.GutterIconTooltipHelper.composeText(
-        collectedClasses.sortedWith(PsiClassListCellRenderer().comparator),
-        start,
-        pattern
-    )
+    return GutterIconTooltipHelper.composeText(collectedClasses.sortedWith(PsiClassListCellRenderer().comparator), start, pattern)
 }
 
 fun buildNavigateToPropertyOverriddenDeclarationsPopup(e: MouseEvent?, element: PsiElement?): NavigationPopupDescriptor? {
@@ -83,8 +80,7 @@ fun buildNavigateToPropertyOverriddenDeclarationsPopup(e: MouseEvent?, element: 
 
     if (DumbService.isDumb(project)) {
         DumbService.getInstance(project)?.showDumbModeNotification(
-            KotlinBundle.message("highlighter.notification.text.navigation.to.overriding.classes.is.not.possible.during.index.update")
-        )
+            KotlinBundle.message("highlighter.notification.text.navigation.to.overriding.classes.is.not.possible.during.index.update"))
         return null
     }
 
@@ -117,8 +113,7 @@ fun buildNavigateToPropertyOverriddenDeclarationsPopup(e: MouseEvent?, element: 
     return NavigationPopupDescriptor(
         navigatingOverrides,
         KotlinBundle.message("overridden.marker.implementations.choose.implementation.title", propertyOrParameter.name.toString()),
-        KotlinBundle.message("overridden.marker.implementations.choose.implementation.find.usages", propertyOrParameter.name.toString()),
-        renderer
+        KotlinBundle.message("overridden.marker.implementations.choose.implementation.find.usages", propertyOrParameter.name.toString()), renderer
     )
 }
 

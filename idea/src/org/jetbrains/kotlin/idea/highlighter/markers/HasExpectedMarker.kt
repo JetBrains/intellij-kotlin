@@ -16,7 +16,6 @@
 
 package org.jetbrains.kotlin.idea.highlighter.markers
 
-import com.intellij.openapi.util.NlsContexts
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.idea.caches.project.implementedDescriptors
