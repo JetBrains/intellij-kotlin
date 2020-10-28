@@ -5,26 +5,27 @@
 
 package org.jetbrains.kotlin.idea
 
-import com.intellij.openapi.application.PathMacroContributor
+import com.intellij.ide.ApplicationInitializedListener
+import com.intellij.openapi.application.PathMacros
 import org.jetbrains.kotlin.idea.artifacts.KotlinArtifacts
-import org.jetbrains.kotlin.utils.PathUtil
 
 /**
  * Some actions have to be performed before loading and opening any project.
  *
  * E.g. path variables have to be registered in advance as modules could rely on some path variables.
  */
-class KotlinPluginMacros : PathMacroContributor {
-    override fun registerPathMacros(macros: MutableMap<String, String>, legacyMacros: MutableMap<String, String>) {
+class PluginStartupListener : ApplicationInitializedListener {
 
+    override fun componentsInitialized() {
+        registerPathVariable()
     }
 
-    override fun forceRegisterPathMacros(macros: MutableMap<String, String>) {
-        macros[KOTLIN_BUNDLED_PATH_VARIABLE] = KotlinArtifacts.instance.kotlincDirectory.path
+    private fun registerPathVariable() {
+        val macros = PathMacros.getInstance()
+        macros.setMacro(KOTLIN_BUNDLED_PATH_VARIABLE, KotlinArtifacts.instance.kotlincDirectory.absolutePath)
     }
 
     companion object {
         const val KOTLIN_BUNDLED_PATH_VARIABLE = "KOTLIN_BUNDLED"
     }
-
 }
