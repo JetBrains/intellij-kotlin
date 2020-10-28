@@ -1,9 +1,10 @@
 // FIR_COMPARISON
-import java.sql.Date as SqlDate
+import kotlin.collections.List as KotlinList
 
 /**
- * [Sql<caret>]
+ * [Kotlin<caret>]
  */
-fun foo(){}
+fun foo() {}
 
-// ELEMENT: SqlDate
+// ELEMENT: KotlinList
+// TAIL_TEXT: "(size: Int, init: (Int) -> T) (kotlin.collections.List)"
