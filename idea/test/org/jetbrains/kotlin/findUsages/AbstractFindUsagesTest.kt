@@ -57,6 +57,7 @@ import org.jetbrains.kotlin.test.InTextDirectivesUtils
 import org.jetbrains.kotlin.test.KotlinTestUtils
 import java.io.File
 import java.util.*
+import java.util.function.Supplier
 import kotlin.collections.LinkedHashSet
 
 abstract class AbstractFindUsagesWithDisableComponentSearchTest : AbstractFindUsagesTest() {
@@ -207,7 +208,7 @@ abstract class AbstractFindUsagesTest : KotlinLightCodeInsightFixtureTestCase() 
                     it.getUsageType(element)
                 }
                 .firstOrNull()
-                ?: UsageType.UNCLASSIFIED
+                ?: UsageType(Supplier { "Unclassified" })
         }
 
         internal fun <T> instantiateClasses(mainFileText: String, directive: String): Collection<T> {
