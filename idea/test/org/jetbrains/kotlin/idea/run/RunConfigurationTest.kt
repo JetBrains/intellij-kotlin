@@ -129,8 +129,8 @@ class RunConfigurationTest : AbstractRunConfigurationTest() {
         assertEquals("afterRenameTest.Foo", runConfiguration.MAIN_CLASS_NAME)
     }
 
-    fun testWithModuleForJdk6() {
-        checkModuleInfoName(null, Platform.Jvm(IdeaTestUtil.getMockJdk16()))
+    fun testWithModuleForJdk7() {
+        checkModuleInfoName(null, Platform.Jvm(IdeaTestUtil.getMockJdk17()))
     }
 
     fun testWithModuleForJdk9() {

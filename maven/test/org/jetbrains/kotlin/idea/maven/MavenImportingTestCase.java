@@ -27,8 +27,8 @@ import com.intellij.openapi.projectRoots.impl.JavaAwareProjectJdkTableImpl;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.impl.libraries.ProjectLibraryTable;
 import com.intellij.openapi.roots.libraries.Library;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TestDialog;
-import com.intellij.openapi.ui.TestDialogManager;
 import com.intellij.openapi.util.AsyncResult;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
@@ -88,7 +88,7 @@ public abstract class MavenImportingTestCase extends MavenTestCase {
     protected void tearDown() throws Exception {
         RunAll.runAll(
                 () -> JavaAwareProjectJdkTableImpl.removeInternalJdkInTests(),
-                () -> TestDialogManager.setTestDialog(TestDialog.DEFAULT),
+                () -> Messages.setTestDialog(TestDialog.DEFAULT),
                 () -> removeFromLocalRepository("test"),
                 () -> FileUtil.delete(BuildManager.getInstance().getBuildSystemDirectory().toFile()),
                 () -> sdkCreationChecker.removeNewKotlinSdk(),
@@ -552,7 +552,7 @@ public abstract class MavenImportingTestCase extends MavenTestCase {
 
     protected static AtomicInteger configConfirmationForYesAnswer() {
         final AtomicInteger counter = new AtomicInteger();
-        TestDialogManager.setTestDialog(new TestDialog() {
+        Messages.setTestDialog(new TestDialog() {
             @Override
             public int show(String message) {
                 counter.set(counter.get() + 1);
@@ -564,7 +564,7 @@ public abstract class MavenImportingTestCase extends MavenTestCase {
 
     protected static AtomicInteger configConfirmationForNoAnswer() {
         final AtomicInteger counter = new AtomicInteger();
-        TestDialogManager.setTestDialog(new TestDialog() {
+        Messages.setTestDialog(new TestDialog() {
             @Override
             public int show(String message) {
                 counter.set(counter.get() + 1);

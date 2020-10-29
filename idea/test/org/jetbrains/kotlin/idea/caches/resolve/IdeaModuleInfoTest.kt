@@ -357,7 +357,7 @@ class IdeaModuleInfoTest : ModuleTestCase() {
     fun testSdkForScript() {
         // The first known jdk will be used for scripting if there is no jdk in the project
         runWriteAction {
-            addJdk(testRootDisposable, IdeaTestUtil::getMockJdk16)
+            addJdk(testRootDisposable, IdeaTestUtil::getMockJdk17)
             addJdk(testRootDisposable, IdeaTestUtil::getMockJdk9)
 
             ProjectRootManager.getInstance(project).projectSdk = null
@@ -371,11 +371,11 @@ class IdeaModuleInfoTest : ModuleTestCase() {
     }
 
     fun testSdkForScriptProjectSdk() {
-        val mockJdk16 = IdeaTestUtil.getMockJdk16()
+        val mockJdk17 = IdeaTestUtil.getMockJdk17()
         val mockJdk9 = IdeaTestUtil.getMockJdk9()
 
         runWriteAction {
-            addJdk(testRootDisposable) { mockJdk16 }
+            addJdk(testRootDisposable) { mockJdk17 }
             addJdk(testRootDisposable) { mockJdk9 }
 
             ProjectRootManager.getInstance(project).projectSdk = mockJdk9
@@ -387,16 +387,16 @@ class IdeaModuleInfoTest : ModuleTestCase() {
     }
 
     fun testSdkForScriptModuleSdk() {
-        val mockJdk16 = IdeaTestUtil.getMockJdk16()
+        val mockJdk17 = IdeaTestUtil.getMockJdk17()
         val mockJdk9 = IdeaTestUtil.getMockJdk9()
 
         val a = module("a")
 
         runWriteAction {
-            addJdk(testRootDisposable) { mockJdk16 }
+            addJdk(testRootDisposable) { mockJdk17 }
             addJdk(testRootDisposable) { mockJdk9 }
 
-            ProjectRootManager.getInstance(project).projectSdk = mockJdk16
+            ProjectRootManager.getInstance(project).projectSdk = mockJdk17
             with(ModuleRootManager.getInstance(a).modifiableModel) {
                 sdk = mockJdk9
                 commit()

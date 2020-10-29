@@ -62,21 +62,21 @@ abstract class KotlinDescriptorTestCase : DescriptorTestCase() {
 
     private var oldValues: OldValuesStorage? = null
 
-    override fun runBare(testRunnable: ThrowableRunnable<Throwable>) {
+    override fun setUp() {
+        super.setUp()
+
+        KotlinDebuggerCaches.LOG_COMPILATIONS = true
+        logPropagator = LogPropagator(::systemLogger).apply { attach() }
+    }
+
+    override fun runBare() {
         testAppDirectory = tmpDir("debuggerTestSources")
         sourcesOutputDirectory = File(testAppDirectory, "src").apply { mkdirs() }
 
         librarySrcDirectory = File(testAppDirectory, "libSrc").apply { mkdirs() }
         libraryOutputDirectory = File(testAppDirectory, "lib").apply { mkdirs() }
 
-        super.runBare(testRunnable)
-    }
-
-    override fun setUp() {
-        super.setUp()
-
-        KotlinDebuggerCaches.LOG_COMPILATIONS = true
-        logPropagator = LogPropagator(::systemLogger).apply { attach() }
+        super.runBare()
     }
 
     override fun tearDown() {

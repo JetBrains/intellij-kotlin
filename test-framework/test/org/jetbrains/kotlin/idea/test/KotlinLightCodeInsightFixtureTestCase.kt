@@ -233,7 +233,7 @@ abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFix
 
     private fun sdk(javaVersion: Int): Sdk {
         return when (javaVersion) {
-            6 -> IdeaTestUtil.getMockJdk16()
+            6, 7 -> IdeaTestUtil.getMockJdk17()
             8 -> IdeaTestUtil.getMockJdk18()
             9 -> IdeaTestUtil.getMockJdk9()
             11 -> {

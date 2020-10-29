@@ -125,7 +125,7 @@ abstract class AbstractScriptTemplatesFromDependenciesTest : HeavyPlatformTestCa
     }
 
     private fun createTestModule(dir: File): Module {
-        val newModule = createModuleAt(name, project, JavaModuleType.getModuleType(), dir.toPath())
+        val newModule = createModuleAt(name, project, JavaModuleType.getModuleType(), dir.path)
 
         dir.listFiles()?.forEach {
             val root = VfsUtil.findFileByIoFile(it, true) ?: return@forEach

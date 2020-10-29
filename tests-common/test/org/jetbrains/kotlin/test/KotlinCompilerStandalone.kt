@@ -253,6 +253,6 @@ object KotlinCliCompilerFacade {
         }
 
         val urls = artifacts.map { it.toURI().toURL() }.toTypedArray()
-        return URLClassLoader(urls, ClassLoader.getPlatformClassLoader())
+        return URLClassLoader(urls, ArrayList::class.java.classLoader ?: ClassLoader.getSystemClassLoader())
     }
 }

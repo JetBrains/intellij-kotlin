@@ -14,9 +14,9 @@ import com.intellij.openapi.roots.CompilerModuleExtension
 import com.intellij.openapi.roots.ModuleRootModificationUtil
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VfsUtil
+import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.testFramework.IdeaTestUtil
-import com.intellij.testFramework.PlatformTestUtil
 import com.intellij.testFramework.PsiTestUtil
 import com.intellij.util.ThrowableRunnable
 import org.jetbrains.kotlin.idea.test.ConfigLibraryUtil
@@ -25,7 +25,6 @@ import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import org.jetbrains.kotlin.idea.test.PluginTestCaseBase.addJdk
 import org.jetbrains.kotlin.idea.test.runAll
 import org.jetbrains.kotlin.idea.util.projectStructure.sdk
-import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import java.io.File
 
 abstract class AbstractRunConfigurationTest : KotlinCodeInsightTestCase() {
@@ -113,7 +112,7 @@ abstract class AbstractRunConfigurationTest : KotlinCodeInsightTestCase() {
     protected fun configureProject(platform: Platform = Platform.Jvm()) {
         runWriteAction {
             val projectBaseDir = testDataDirectory.resolve(getTestName(false))
-            val projectDir = PlatformTestUtil.getOrCreateProjectBaseDir(project)
+            val projectDir = project.baseDir
 
             val projectBaseVirtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(projectBaseDir)
                 ?: error("Can't find VirtualFile for $projectBaseDir")
@@ -148,8 +147,8 @@ abstract class AbstractRunConfigurationTest : KotlinCodeInsightTestCase() {
 
     private fun createModule(projectDir: VirtualFile, name: String): Module {
         val moduleDir = projectDir.findFileByRelativePath(name) ?: error("Directory for module $name not found")
-        val moduleImlPath = moduleDir.toNioPath().resolve("$name.iml")
-        return ModuleManager.getInstance(project).newModule(moduleImlPath, StdModuleTypes.JAVA.id)
+        val moduleImlPath = VfsUtilCore.virtualToIoFile(moduleDir).resolve("$name.iml")
+        return ModuleManager.getInstance(project).newModule(moduleImlPath.absolutePath, StdModuleTypes.JAVA.id)
     }
 
     private fun configureModule(

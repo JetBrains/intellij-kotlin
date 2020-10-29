@@ -70,12 +70,12 @@ public class PluginTargetVersionsRule implements MethodRule {
 
     private static boolean shouldRun(PluginTargetVersions targetVersions, MultiplePluginVersionGradleImportingTestCase testCase) {
         boolean isLatestPluginVersion = testCase.gradleKotlinPluginVersionType == LATEST_SUPPORTED_VERSION;
-        var pluginVersion = testCase.getGradleKotlinPluginVersion();
-        var gradleVersion = testCase.gradleVersion;
+        String pluginVersion = testCase.getGradleKotlinPluginVersion();
+        String gradleVersion = testCase.gradleVersion;
 
-        var gradleVersionMatcher = createMatcher("Gradle", targetVersions.gradleVersion());
-        var pluginVersionMatcher = createMatcher("Plugin", targetVersions.pluginVersion());
-        var gradleVersionMatcherForLatestPlugin = createMatcher("Gradle for latest plugin", targetVersions.gradleVersionForLatestPlugin());
+        CustomMatcher<String> gradleVersionMatcher = createMatcher("Gradle", targetVersions.gradleVersion());
+        CustomMatcher<String> pluginVersionMatcher = createMatcher("Plugin", targetVersions.pluginVersion());
+        CustomMatcher<String> gradleVersionMatcherForLatestPlugin = createMatcher("Gradle for latest plugin", targetVersions.gradleVersionForLatestPlugin());
 
         boolean matchGradleVersion = gradleVersionMatcher == null || gradleVersionMatcher.matches(gradleVersion);
 
@@ -98,7 +98,7 @@ public class PluginTargetVersionsRule implements MethodRule {
 
         TargetVersions targetVersions = new TargetVersionsImpl(version);
 
-        return new CustomMatcher<>(caption + " version '" + targetVersions.value() + "'") {
+        return new CustomMatcher<String>(caption + " version '" + targetVersions.value() + "'") {
             @Override
             public boolean matches(Object item) {
                 return item instanceof String && new VersionMatcher(GradleVersion.version(item.toString())).isVersionMatch(targetVersions);

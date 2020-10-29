@@ -17,7 +17,7 @@ abstract class AbstractJvmBasicCompletionTest : KotlinFixtureCompletionBaseTestC
         libraryFiles = KotlinWithJdkAndRuntimeLightProjectDescriptor.INSTANCE.libraryFiles,
         librarySourceFiles = KotlinWithJdkAndRuntimeLightProjectDescriptor.INSTANCE.librarySourceFiles,
     ) {
-        override fun getSdk(): Sdk = IdeaTestUtil.getMockJdk16()
+        override fun getSdk(): Sdk = IdeaTestUtil.getMockJdk17()
     }
 
     override fun getPlatform() = JvmPlatforms.jvm16

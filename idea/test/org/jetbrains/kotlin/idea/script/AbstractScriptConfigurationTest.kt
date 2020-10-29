@@ -190,7 +190,7 @@ abstract class AbstractScriptConfigurationTest : KotlinCompletionTestCase() {
     private fun createTestModuleByName(name: String): Module {
         val path = File(project.basePath, name).path
         val newModuleDir = runWriteAction { VfsUtil.createDirectoryIfMissing(path) ?: error("unable to create $path") }
-        val newModule = createModuleAt(name, project, JavaModuleType.getModuleType(), Paths.get(newModuleDir.path))
+        val newModule = createModuleAt(name, project, JavaModuleType.getModuleType(), newModuleDir.path)
 
         PsiTestUtil.addSourceContentToRoots(newModule, newModuleDir)
         return newModule

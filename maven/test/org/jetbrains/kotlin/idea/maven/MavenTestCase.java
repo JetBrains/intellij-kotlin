@@ -210,18 +210,18 @@ public abstract class MavenTestCase extends UsefulTestCase {
     }
 
     @Override
-    protected void runTestRunnable(@NotNull ThrowableRunnable<Throwable> testRunnable) throws Throwable {
+    protected void runTest() throws Throwable {
         try {
             if (runInWriteAction()) {
                 new WriteAction() {
                     @Override
                     protected void run(@NotNull Result result) throws Throwable {
-                        MavenTestCase.super.runTestRunnable(testRunnable);
+                        MavenTestCase.super.runTest();
                     }
                 }.executeSilently().throwException();
             }
             else {
-                MavenTestCase.super.runTestRunnable(testRunnable);
+                MavenTestCase.super.runTest();
             }
         }
         catch (Exception throwable) {
@@ -235,6 +235,11 @@ public abstract class MavenTestCase extends UsefulTestCase {
             while ((each = each.getCause()) != null);
             throw throwable;
         }
+    }
+
+    @Override
+    protected void invokeTestRunnable(@NotNull Runnable runnable) throws Exception {
+        runnable.run();
     }
 
     protected boolean runInWriteAction() {

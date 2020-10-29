@@ -46,13 +46,13 @@ abstract class AbstractConfigureKotlinTestBase : HeavyPlatformTestCase() {
         KotlinSdkType.setUpIfNeeded(testRootDisposable)
 
         ApplicationManager.getApplication().runWriteAction {
-            addJdk(testRootDisposable, IdeaTestUtil::getMockJdk16)
+            addJdk(testRootDisposable, IdeaTestUtil::getMockJdk17)
             addJdk(testRootDisposable, IdeaTestUtil::getMockJdk18)
             addJdk(testRootDisposable, IdeaTestUtil::getMockJdk9)
         }
     }
 
-    override fun getProjectDirOrFile(isDirectoryBasedProject: Boolean): Path {
+    override fun getProjectDirOrFile(): Path {
         val projectFile = projectRoot.resolve("projectFile.ipr")
         return (if (projectFile.exists()) projectFile else projectRoot).toPath()
     }

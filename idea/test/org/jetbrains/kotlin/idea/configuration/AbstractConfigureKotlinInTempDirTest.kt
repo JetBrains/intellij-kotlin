@@ -33,7 +33,7 @@ abstract class AbstractConfigureKotlinInTempDirTest : AbstractConfigureKotlinTes
         )
     }
 
-    override fun getProjectDirOrFile(isDirectoryBasedProject: Boolean): Path {
+    override fun getProjectDirOrFile(): Path {
         val originalDir = KotlinRoot.DIR.resolve("idea/testData/configuration").resolve(projectName)
         originalDir.copyRecursively(projectRoot)
         val projectFile = projectRoot.resolve("projectFile.ipr")

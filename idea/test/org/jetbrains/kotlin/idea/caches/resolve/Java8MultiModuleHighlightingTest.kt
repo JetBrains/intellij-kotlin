@@ -16,7 +16,7 @@ class Java8MultiModuleHighlightingTest : AbstractMultiModuleHighlightingTest() {
 
     fun testDifferentJdk() {
         val module1 = module("jdk8") { IdeaTestUtil.getMockJdk18() }
-        val module2 = module("jdk6") { IdeaTestUtil.getMockJdk16() }
+        val module2 = module("jdk7") { IdeaTestUtil.getMockJdk17() }
 
         module1.addDependency(module2)
 

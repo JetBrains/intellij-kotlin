@@ -119,7 +119,7 @@ public abstract class CodegenTestCase extends KotlinBaseTest<KotlinBaseTest.Test
             boolean parseDirectivesPerFiles,
             @NotNull TargetBackend backend
     ) {
-        List<TestFile> testFiles = TestFiles.createTestFiles(file.getName(), expectedText, new TestFiles.TestFileFactoryNoModules<>() {
+        List<TestFile> testFiles = TestFiles.createTestFiles(file.getName(), expectedText, new TestFiles.TestFileFactoryNoModules<TestFile>() {
             @NotNull
             @Override
             public TestFile create(@NotNull String fileName, @NotNull String text, @NotNull Directives directives) {

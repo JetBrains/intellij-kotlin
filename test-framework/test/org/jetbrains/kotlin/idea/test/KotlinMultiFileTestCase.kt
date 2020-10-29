@@ -32,9 +32,9 @@ abstract class KotlinMultiFileTestCase : MultiFileTestCase() {
         vfsDisposable = allowProjectRootAccess(this)
 
         runWriteAction {
-            val mockJdk16 = IdeaTestUtil.getMockJdk16()
-            PluginTestCaseBase.addJdk(testRootDisposable) { mockJdk16 }
-            ProjectRootManager.getInstance(project).projectSdk = mockJdk16
+            val mockJdk17 = IdeaTestUtil.getMockJdk17()
+            PluginTestCaseBase.addJdk(testRootDisposable) { mockJdk17 }
+            ProjectRootManager.getInstance(project).projectSdk = mockJdk17
         }
     }
 
