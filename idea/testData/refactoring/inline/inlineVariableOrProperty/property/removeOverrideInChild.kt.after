@@ -6,13 +6,13 @@ open class B : A() {
 }
 
 class B2 : A() {
-    val prop = 4
+    final val prop = 4
 }
 
 class C : B()
 
 open class D : A() {
-    open val prop = 4
+    val prop = 4
 }
 
 open class E : D() {

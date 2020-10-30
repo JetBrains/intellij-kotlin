@@ -1,4 +1,4 @@
-// ERROR: A constructor call is not yet supported
+// ERROR: Inline of Java method is not supported for Kotlin
 
 class KotlinClass : JavaClass<caret>() {
 

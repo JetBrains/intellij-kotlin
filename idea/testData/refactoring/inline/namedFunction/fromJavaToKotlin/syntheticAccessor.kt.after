@@ -1,5 +1,5 @@
 fun reproduceAccessorsBug() {
     val accessorsBug = AccessorsBug()
-    val smth = 42
+    val smth = accessorsBug.smth
     val smth1 = 42
 }

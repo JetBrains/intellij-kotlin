@@ -1,13 +1,13 @@
 open class B: A() {
-    open fun a() = Unit
+    override fun a() = Unit
 }
 
 open class B2: A() {
-    fun a() = Unit
+    override fun a() = Unit
 }
 
 class B3: A() {
-    fun a() = Unit
+    final override fun a() = Unit
 }
 
 class C : B() {
@@ -33,7 +33,7 @@ open class B4: A(), NextKotlinInterface {
 }
 
 abstract class B5 : A() {
-    abstract fun a()
+    abstract override fun a()
 }
 
 class C3 : B5() {

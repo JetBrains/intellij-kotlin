@@ -1,4 +1,4 @@
-// ERROR: The reference cannot be converted to a lambda
+// ERROR: Inline of Java method is not supported for Kotlin
 
 import kotlin.reflect.KFunction
 

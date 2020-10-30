@@ -6,7 +6,7 @@ class B : A() {
 }
 
 open class C : A() {
-    open val b: Int get() = 24
+    val b: Int get() = 24
 }
 
 class D : C() {

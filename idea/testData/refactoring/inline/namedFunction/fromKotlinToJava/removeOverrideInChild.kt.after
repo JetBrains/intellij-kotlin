@@ -3,7 +3,7 @@ open class A {
 }
 
 open class B: A() {
-    open fun a() = Unit
+    fun a() = Unit
     fun c() = a()
 }
 
@@ -13,7 +13,7 @@ open class B2: A() {
 }
 
 class B3 : A() {
-    fun a() = Unit
+    final fun a() = Unit
 }
 
 class C : B() {

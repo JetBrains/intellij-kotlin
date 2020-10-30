@@ -2,12 +2,14 @@ public class A {
 }
 
 class JavaClass2 extends A {
+    @Override
     public void a() {
 
     }
 }
 
 class M extends A {
+    @Override
     public void a() {
 
     }
