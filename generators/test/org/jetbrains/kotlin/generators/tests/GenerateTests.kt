@@ -984,6 +984,9 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             testClass<AbstractFirLazyDeclarationResolveTest> {
                 model("lazyResolve")
             }
+            testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
+                model("outOfBlockProjectWide")
+            }
             testClass<AbstractFileStructureTest> {
                 model("fileStructure")
             }
