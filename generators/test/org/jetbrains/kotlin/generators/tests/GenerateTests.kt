@@ -980,6 +980,9 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
                 model("outOfBlockProjectWide")
             }
+            testClass<AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest> {
+                model("outOfBlockProjectWide")
+            }
             testClass<AbstractFileStructureTest> {
                 model("fileStructure")
             }
