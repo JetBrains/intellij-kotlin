@@ -69,6 +69,26 @@ class KotlinLambdasHintsProvider : KotlinAbstractHintsProvider<KotlinLambdasHint
         }
     }
 
+    override fun handleAfterLineEndHintsRemoval(editor: Editor, resolved: HintType, element: PsiElement) {
+        invokeLater {
+            val offset = when (resolved) {
+                HintType.LAMBDA_IMPLICIT_PARAMETER_RECEIVER -> {
+                    val lambdaExpression = (element as? KtFunctionLiteral)?.parent as? KtLambdaExpression
+                    lambdaExpression?.leftCurlyBrace?.textRange?.endOffset
+                }
+                HintType.LAMBDA_RETURN_EXPRESSION -> (element as? KtExpression)?.endOffset
+                else -> null
+            }
+
+            offset?.let {
+                val logicalLine = editor.offsetToLogicalPosition(offset).line
+                editor.inlayModel.getAfterLineEndElementsForLogicalLine(logicalLine)
+                    .filter { it.renderer is LambdaHintsRenderer }
+                    .forEach { it.dispose() }
+            }
+        }
+    }
+
     override fun createConfigurable(settings: Settings): ImmediateConfigurable {
         return createLambdaHintsImmediateConfigurable(settings)
     }
