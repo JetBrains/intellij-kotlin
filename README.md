@@ -1,6 +1,6 @@
 # Kotlin plugin [![official JetBrains project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 
-Kotlin plugin is an IntelliJ IDEA plugin for the [Kotlin programming language](https://kotlinlang.org/).
+Kotlin plugin is an IntelliJ IDEA plugin for the [Kotlin programming language](https://kotlinlang.org/). Test PR
 
 ## Contents
 
