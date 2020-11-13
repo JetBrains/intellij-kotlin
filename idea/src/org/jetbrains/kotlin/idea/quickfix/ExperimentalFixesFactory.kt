@@ -72,12 +72,12 @@ object ExperimentalFixesFactory : KotlinIntentionActionsFactory() {
             if (isApplicableTo(containingDeclaration, applicableTargets)) {
                 result.add(AddAnnotationFix(containingDeclaration, annotationFqName, kind))
             }
-            result.add(
+            result.add(QuickFixWithDelegateFactory(IntentionActionPriority.HIGH) {
                 AddAnnotationFix(
                     containingDeclaration, moduleDescriptor.OPT_IN_FQ_NAME, kind, annotationFqName,
                     containingDeclaration.findAnnotation(moduleDescriptor.OPT_IN_FQ_NAME)?.createSmartPointer()
                 )
-            )
+            })
         }
         if (containingDeclaration is KtCallableDeclaration) {
             val containingClassOrObject = containingDeclaration.containingClassOrObject
@@ -86,21 +86,21 @@ object ExperimentalFixesFactory : KotlinIntentionActionsFactory() {
                 if (isApplicableTo(containingClassOrObject, applicableTargets)) {
                     result.add(AddAnnotationFix(containingClassOrObject, annotationFqName, kind))
                 } else {
-                    result.add(
+                    result.add(QuickFixWithDelegateFactory(IntentionActionPriority.HIGH) {
                         AddAnnotationFix(
                             containingClassOrObject, moduleDescriptor.OPT_IN_FQ_NAME, kind, annotationFqName,
                             containingDeclaration.findAnnotation(moduleDescriptor.OPT_IN_FQ_NAME)?.createSmartPointer()
                         )
-                    )
+                    })
                 }
             }
         }
         val containingFile = containingDeclaration.containingKtFile
         val module = containingFile.module
         if (module != null) {
-            result.add(
+            result.add(QuickFixWithDelegateFactory(IntentionActionPriority.LOW) {
                 MakeModuleExperimentalFix(containingFile, module, annotationFqName)
-            )
+            })
         }
 
         return result
