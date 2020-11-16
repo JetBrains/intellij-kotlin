@@ -13574,9 +13574,8 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         }
     }
 
-    @TestMetadata("idea/testData/intentions/removeExplicitTypeWithApiMode")
-    @TestDataPath("$PROJECT_ROOT")
     @RunWith(JUnit3RunnerWithInners.class)
+    @TestMetadata("testData/intentions/removeExplicitTypeWithApiMode")
     public static class RemoveExplicitTypeWithApiMode extends AbstractIntentionTest {
         private void runTest(String testDataFilePath) throws Exception {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
@@ -13584,12 +13583,12 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
 
         @TestMetadata("nonPublicFunction.kt")
         public void testNonPublicFunction() throws Exception {
-            runTest("idea/testData/intentions/removeExplicitTypeWithApiMode/nonPublicFunction.kt");
+            runTest("testData/intentions/removeExplicitTypeWithApiMode/nonPublicFunction.kt");
         }
 
         @TestMetadata("publicFunction.kt")
         public void testPublicFunction() throws Exception {
-            runTest("idea/testData/intentions/removeExplicitTypeWithApiMode/publicFunction.kt");
+            runTest("testData/intentions/removeExplicitTypeWithApiMode/publicFunction.kt");
         }
     }
 
