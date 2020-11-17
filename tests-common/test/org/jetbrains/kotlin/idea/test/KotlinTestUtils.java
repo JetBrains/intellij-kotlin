@@ -67,7 +67,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
@@ -291,11 +290,8 @@ public class KotlinTestUtils {
             JvmContentRootsKt.addJvmClasspathRoot(configuration, findMockJdkRtJar());
             configuration.put(JVMConfigurationKeys.NO_JDK, true);
         }
-        else if (jdkKind == TestJdkKind.FULL_JDK_9) {
-            configuration.put(JVMConfigurationKeys.JDK_HOME, getJdk9Home());
-        }
         else if (SystemInfo.IS_AT_LEAST_JAVA9) {
-            configuration.put(JVMConfigurationKeys.JDK_HOME, new File(System.getProperty("java.home")));
+            configuration.put(JVMConfigurationKeys.JDK_HOME, getAtLeastJdk9Home());
         }
 
         KotlinArtifacts artifacts = KotlinArtifacts.getInstance();
@@ -317,8 +313,8 @@ public class KotlinTestUtils {
     }
 
     @NotNull
-    public static File getJdk9Home() {
-        return IdeaTestUtil.getMockJdk9Path();
+    public static File getAtLeastJdk9Home() {
+        return new File(System.getProperty("java.home"));
     }
 
     public static void assertEqualsToFile(@NotNull File expectedFile, @NotNull Editor editor) {
@@ -526,7 +522,7 @@ public class KotlinTestUtils {
     }
 
     public static boolean compileJavaFilesExternallyWithJava9(@NotNull Collection<File> files, @NotNull List<String> options) {
-        return compileJavaFilesExternally(files, options, getJdk9Home());
+        return compileJavaFilesExternally(files, options, getAtLeastJdk9Home());
     }
 
     public static boolean compileJavaFilesExternally(@NotNull Collection<File> files, @NotNull List<String> options, @NotNull File jdkHome) {

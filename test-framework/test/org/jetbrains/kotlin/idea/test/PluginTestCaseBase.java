@@ -72,7 +72,8 @@ public class PluginTestCaseBase {
             case MOCK_JDK:
                 return IdeaTestUtil.getMockJdk18();
             case FULL_JDK_9:
-                return jdkByVersion("9", KotlinTestUtils.getJdk9Home());
+                String jre9 = KotlinTestUtils.getAtLeastJdk9Home().getPath();
+                return getSdk(jre9, "Full JDK 9");
             case FULL_JDK:
                 return fullJdk();
             default:
