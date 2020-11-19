@@ -11,9 +11,10 @@ import org.jetbrains.kotlin.checkers.AbstractPsiCheckerTest
 import org.jetbrains.kotlin.idea.artifacts.AdditionalKotlinArtifacts
 import org.jetbrains.kotlin.idea.test.ConfigLibraryUtil
 import org.jetbrains.kotlin.idea.test.addRoot
+import org.jetbrains.kotlin.checkers.AbstractKotlinHighlightingPassTest
 import java.io.File
 
-abstract class AbstractParcelizeCheckerTest : AbstractPsiCheckerTest() {
+abstract class AbstractParcelizeCheckerTest : AbstractKotlinHighlightingPassTest() {
     override fun setUp() {
         super.setUp()
         addParcelizeLibraries(module)

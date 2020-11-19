@@ -260,7 +260,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("resolve/resolveModeComparison")
         }
 
-        testClass<AbstractPsiCheckerTest> {
+        testClass<AbstractKotlinHighlightingPassTest> {
             model("checker", isRecursive = false)
             model("checker/regression")
             model("checker/recovery")
@@ -1029,7 +1029,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("resolve/references", pattern = KT_WITHOUT_DOTS)
         }
 
-        testClass<AbstractFirPsiCheckerTest> {
+        testClass<AbstractFirKotlinHighlightingPassTest> {
             model("checker", isRecursive = false)
             model("checker/regression")
             model("checker/recovery")
@@ -1324,7 +1324,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("incremental/multiModule/common", pattern = DIRECTORY, targetBackend = TargetBackend.JVM_IR)
             model("incremental/multiModule/jvm", pattern = DIRECTORY)
             model(
-                "incremental/multiModule/multiplatform/custom", pattern = DIRECTORY, 
+                "incremental/multiModule/multiplatform/custom", pattern = DIRECTORY,
                 targetBackend = TargetBackend.JVM_IR
             )
             model("incremental/pureKotlin", pattern = DIRECTORY, isRecursive = false, targetBackend = TargetBackend.JVM_IR)
