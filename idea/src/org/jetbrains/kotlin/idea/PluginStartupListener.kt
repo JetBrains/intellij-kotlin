@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.idea
 import com.intellij.ide.ApplicationInitializedListener
 import com.intellij.openapi.application.PathMacros
 import org.jetbrains.kotlin.idea.artifacts.KotlinArtifacts
+import org.jetbrains.kotlin.idea.util.application.isUnitTestMode
 
 /**
  * Some actions have to be performed before loading and opening any project.
@@ -21,8 +22,10 @@ class PluginStartupListener : ApplicationInitializedListener {
     }
 
     private fun registerPathVariable() {
-        val macros = PathMacros.getInstance()
-        macros.setMacro(KOTLIN_BUNDLED_PATH_VARIABLE, KotlinArtifacts.instance.kotlincDirectory.absolutePath)
+        if (!isUnitTestMode()) {
+            val macros = PathMacros.getInstance()
+            macros.setMacro(KOTLIN_BUNDLED_PATH_VARIABLE, KotlinArtifacts.instance.kotlincDirectory.absolutePath)
+        }
     }
 
     companion object {
