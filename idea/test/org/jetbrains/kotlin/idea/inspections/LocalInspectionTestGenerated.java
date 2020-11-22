@@ -12973,6 +12973,11 @@ public abstract class LocalInspectionTestGenerated extends AbstractLocalInspecti
             runTest("testData/inspectionsLocal/throwableNotThrown/property5.kt");
         }
 
+        @TestMetadata("propertyWithDifferentType.kt")
+        public void testPropertyWithDifferentType() throws Exception {
+            runTest("testData/inspectionsLocal/throwableNotThrown/propertyWithDifferentType.kt");
+        }
+
         @TestMetadata("return.kt")
         public void testReturn() throws Exception {
             runTest("testData/inspectionsLocal/throwableNotThrown/return.kt");
