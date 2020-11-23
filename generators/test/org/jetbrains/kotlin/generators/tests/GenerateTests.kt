@@ -133,7 +133,6 @@ import org.jetbrains.kotlin.nj2k.inference.nullability.AbstractNullabilityInfere
 import org.jetbrains.kotlin.psi.patternMatching.AbstractPsiUnifierTest
 import org.jetbrains.kotlin.search.AbstractAnnotatedMembersSearchTest
 import org.jetbrains.kotlin.idea.navigationToolbar.AbstractKotlinNavBarTest
-import org.jetbrains.kotlin.idea.refactoring.inline.AbstractInlineMultiFileTest
 import org.jetbrains.kotlin.idea.refactoring.inline.AbstractInlineTestWithSomeDescriptors
 import org.jetbrains.kotlin.nj2k.*
 import org.jetbrains.kotlin.search.AbstractInheritorsSearchTest
@@ -447,10 +446,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
 
         testClass<AbstractInlineTestWithSomeDescriptors> {
             model("refactoring/inline/withFullJdk", pattern = KT_WITHOUT_DOTS)
-        }
-
-        testClass<AbstractInlineMultiFileTest> {
-            model("refactoring/inlineMultiFile", pattern = TEST, flatten = true)
         }
 
         testClass<AbstractUnwrapRemoveTest> {
