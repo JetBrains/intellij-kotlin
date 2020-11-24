@@ -593,6 +593,11 @@ public abstract class KotlinEvaluateExpressionTestGenerated extends AbstractKotl
                 runTest("testData/evaluation/singleBreakpoint/coroutines/anyUpdateVariable.kt");
             }
 
+            @TestMetadata("capturedReceiverName.kt")
+            public void testCapturedReceiverName() throws Exception {
+                runTest("idea/jvm-debugger/jvm-debugger-test/testData/evaluation/singleBreakpoint/coroutines/capturedReceiverName.kt");
+            }
+
             @TestMetadata("primitivesCoertion.kt")
             public void testPrimitivesCoertion() throws Exception {
                 runTest("testData/evaluation/singleBreakpoint/coroutines/primitivesCoertion.kt");
