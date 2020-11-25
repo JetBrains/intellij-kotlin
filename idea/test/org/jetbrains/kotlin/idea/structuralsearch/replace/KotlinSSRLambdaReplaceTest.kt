@@ -65,4 +65,59 @@ class KotlinSSRLambdaReplaceTest : KotlinSSRReplaceTest() {
             """.trimIndent()
         )
     }
+
+    fun testLambdaFullTypedTemplate() {
+        doTest(
+            searchPattern = "{ '_LAMBDA }",
+            replacePattern = "{ '_LAMBDA }",
+            match = """
+                fun foo(bar: (Int) -> Unit)
+                
+                fun main() {
+                    foo { i: Int -> println(i) }
+                }
+            """.trimIndent(),
+            """
+                fun foo(bar: (Int) -> Unit)
+                
+                fun main() {
+                    foo { i: Int -> println(i) }
+                }
+            """.trimIndent()
+        )
+    }
+
+    fun testLambdaCallArgument() {
+        doTest(
+            searchPattern = "'_FUNCTION.map { '_LAMBDA }",
+            replacePattern = "'_FUNCTION.map { '_LAMBDA }",
+            match = """
+                fun main() {
+                    listOf().map { i -> 4*i }
+                }
+            """.trimIndent(),
+            """
+                fun main() {
+                    listOf().map { i -> 4*i }
+                }
+            """.trimIndent()
+        )
+    }
+
+    fun testLambdaTypedArgument() {
+        doTest(
+            searchPattern = "{ '_PARAM -> '_BODY }",
+            replacePattern = "{ '_PARAM -> '_BODY }",
+            match = """
+                fun main() {
+                    val f = { one: Int -> one.toShort() }
+                }
+            """.trimIndent(),
+            """
+                fun main() {
+                    val f = { one: Int -> one.toShort() }
+                }
+            """.trimIndent()
+        )
+    }
 }
