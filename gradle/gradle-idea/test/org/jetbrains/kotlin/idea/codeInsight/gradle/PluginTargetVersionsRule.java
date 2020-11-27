@@ -18,7 +18,6 @@ import org.junit.runners.model.Statement;
 
 import java.lang.annotation.Annotation;
 
-import static org.jetbrains.kotlin.idea.codeInsight.gradle.MultiplePluginVersionGradleImportingTestCase.LATEST_SUPPORTED_VERSION;
 
 public class PluginTargetVersionsRule implements MethodRule {
     @SuppressWarnings("ClassExplicitlyAnnotation")
@@ -69,22 +68,13 @@ public class PluginTargetVersionsRule implements MethodRule {
     }
 
     private static boolean shouldRun(PluginTargetVersions targetVersions, MultiplePluginVersionGradleImportingTestCase testCase) {
-        boolean isLatestPluginVersion = testCase.gradleKotlinPluginVersionType == LATEST_SUPPORTED_VERSION;
-        String pluginVersion = testCase.getGradleKotlinPluginVersion();
         String gradleVersion = testCase.gradleVersion;
+        String pluginVersion = testCase.gradleKotlinPluginVersion;
 
         CustomMatcher<String> gradleVersionMatcher = createMatcher("Gradle", targetVersions.gradleVersion());
         CustomMatcher<String> pluginVersionMatcher = createMatcher("Plugin", targetVersions.pluginVersion());
-        CustomMatcher<String> gradleVersionMatcherForLatestPlugin = createMatcher("Gradle for latest plugin", targetVersions.gradleVersionForLatestPlugin());
 
         boolean matchGradleVersion = gradleVersionMatcher == null || gradleVersionMatcher.matches(gradleVersion);
-
-        if (isLatestPluginVersion) {
-            if (gradleVersionMatcherForLatestPlugin != null) {
-                return gradleVersionMatcherForLatestPlugin.matches(gradleVersion);
-            }
-            return matchGradleVersion;
-        }
 
         boolean pluginVersionMatches = pluginVersionMatcher == null || pluginVersionMatcher.matches(pluginVersion);
         return matchGradleVersion && pluginVersionMatches;
