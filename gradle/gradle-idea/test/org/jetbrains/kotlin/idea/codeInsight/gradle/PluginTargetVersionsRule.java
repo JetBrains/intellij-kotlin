@@ -69,7 +69,7 @@ public class PluginTargetVersionsRule implements MethodRule {
 
     private static boolean shouldRun(PluginTargetVersions targetVersions, MultiplePluginVersionGradleImportingTestCase testCase) {
         String gradleVersion = testCase.gradleVersion;
-        String pluginVersion = testCase.gradleKotlinPluginVersion;
+        String pluginVersion = testCase.pluginVersion;
 
         CustomMatcher<String> gradleVersionMatcher = createMatcher("Gradle", targetVersions.gradleVersion());
         CustomMatcher<String> pluginVersionMatcher = createMatcher("Plugin", targetVersions.pluginVersion());
