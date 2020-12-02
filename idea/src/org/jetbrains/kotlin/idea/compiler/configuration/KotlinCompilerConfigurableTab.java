@@ -100,7 +100,6 @@ public class KotlinCompilerConfigurableTab implements SearchableConfigurable, Di
     private JPanel k2jsPanel;
     private JComboBox jvmVersionComboBox;
     private JComboBox<VersionView> languageVersionComboBox;
-    private JComboBox coroutineSupportComboBox;
     private JComboBox<VersionView> apiVersionComboBox;
     private JPanel scriptPanel;
     private JLabel labelForOutputPrefixFile;
@@ -138,7 +137,6 @@ public class KotlinCompilerConfigurableTab implements SearchableConfigurable, Di
         additionalArgsOptionsField.attachLabel(additionalArgsLabel);
 
         fillLanguageAndAPIVersionList();
-        fillCoroutineSupportList();
 
         if (CidrUtil.isRunningInCidrIde()) {
             keepAliveCheckBox.setVisible(false);
@@ -384,14 +382,6 @@ public class KotlinCompilerConfigurableTab implements SearchableConfigurable, Di
         apiVersionComboBox.setRenderer(new DescriptionListCellRenderer());
     }
 
-    @SuppressWarnings("unchecked")
-    private void fillCoroutineSupportList() {
-        for (LanguageFeature.State coroutineSupport : languageFeatureStates) {
-            coroutineSupportComboBox.addItem(coroutineSupport);
-        }
-        coroutineSupportComboBox.setRenderer(new DescriptionListCellRenderer());
-    }
-
     public void setTargetPlatform(@Nullable IdePlatformKind<?> targetPlatform) {
         k2jsPanel.setVisible(JsIdePlatformUtil.isJavaScript(targetPlatform));
         scriptPanel.setVisible(JvmIdePlatformUtil.isJvm(targetPlatform));
@@ -446,7 +436,6 @@ public class KotlinCompilerConfigurableTab implements SearchableConfigurable, Di
         return isModified(reportWarningsCheckBox, !commonCompilerArguments.getSuppressWarnings()) ||
                !getSelectedLanguageVersionView().equals(KotlinFacetSettingsKt.getLanguageVersionView(commonCompilerArguments)) ||
                !getSelectedAPIVersionView().equals(KotlinFacetSettingsKt.getApiVersionView(commonCompilerArguments)) ||
-               !getSelectedCoroutineState().equals(commonCompilerArguments.getCoroutinesState()) ||
                !additionalArgsOptionsField.getText().equals(compilerSettings.getAdditionalArguments()) ||
                isModified(scriptTemplatesField, compilerSettings.getScriptTemplates()) ||
                isModified(scriptTemplatesClasspathField, compilerSettings.getScriptTemplatesClasspath()) ||
@@ -494,26 +483,6 @@ public class KotlinCompilerConfigurableTab implements SearchableConfigurable, Di
         return item != null ? (VersionView) item : VersionView.LatestStable.INSTANCE;
     }
 
-    @NotNull
-    private String getSelectedCoroutineState() {
-        if (getSelectedLanguageVersionView().getVersion().compareTo(LanguageVersion.KOTLIN_1_3) >= 0) {
-            return CommonCompilerArguments.DEFAULT;
-        }
-
-        LanguageFeature.State state = (LanguageFeature.State) coroutineSupportComboBox.getSelectedItem();
-        if (state == null) return CommonCompilerArguments.DEFAULT;
-        switch (state) {
-            case ENABLED:
-                return CommonCompilerArguments.ENABLE;
-            case ENABLED_WITH_WARNING:
-                return CommonCompilerArguments.WARN;
-            case ENABLED_WITH_ERROR:
-                return CommonCompilerArguments.ERROR;
-            default:
-                return CommonCompilerArguments.DEFAULT;
-        }
-    }
-
     public void applyTo(
             CommonCompilerArguments commonCompilerArguments,
             K2JVMCompilerArguments k2jvmCompilerArguments,
@@ -524,7 +493,6 @@ public class KotlinCompilerConfigurableTab implements SearchableConfigurable, Di
             boolean shouldInvalidateCaches =
                     !getSelectedLanguageVersionView().equals(KotlinFacetSettingsKt.getLanguageVersionView(commonCompilerArguments)) ||
                     !getSelectedAPIVersionView().equals(KotlinFacetSettingsKt.getApiVersionView(commonCompilerArguments)) ||
-                    !getSelectedCoroutineState().equals(commonCompilerArguments.getCoroutinesState()) ||
                     !additionalArgsOptionsField.getText().equals(compilerSettings.getAdditionalArguments());
 
             if (shouldInvalidateCaches) {
@@ -543,8 +511,6 @@ public class KotlinCompilerConfigurableTab implements SearchableConfigurable, Di
         commonCompilerArguments.setSuppressWarnings(!reportWarningsCheckBox.isSelected());
         KotlinFacetSettingsKt.setLanguageVersionView(commonCompilerArguments, getSelectedLanguageVersionView());
         KotlinFacetSettingsKt.setApiVersionView(commonCompilerArguments, getSelectedAPIVersionView());
-
-        commonCompilerArguments.setCoroutinesState(getSelectedCoroutineState());
 
         compilerSettings.setAdditionalArguments(additionalArgsOptionsField.getText());
         compilerSettings.setScriptTemplates(scriptTemplatesField.getText());
@@ -597,7 +563,6 @@ public class KotlinCompilerConfigurableTab implements SearchableConfigurable, Di
         setSelectedItem(languageVersionComboBox, KotlinFacetSettingsKt.getLanguageVersionView(commonCompilerArguments));
         onLanguageLevelChanged((VersionView) languageVersionComboBox.getSelectedItem()); // getSelectedLanguageVersionView() replaces null
         setSelectedItem(apiVersionComboBox, KotlinFacetSettingsKt.getApiVersionView(commonCompilerArguments));
-        coroutineSupportComboBox.setSelectedItem(CoroutineSupport.byCompilerArguments(commonCompilerArguments));
         additionalArgsOptionsField.setText(compilerSettings.getAdditionalArguments());
         scriptTemplatesField.setText(compilerSettings.getScriptTemplates());
         scriptTemplatesClasspathField.setText(compilerSettings.getScriptTemplatesClasspath());
@@ -702,10 +667,6 @@ public class KotlinCompilerConfigurableTab implements SearchableConfigurable, Di
 
     public JComboBox getApiVersionComboBox() {
         return apiVersionComboBox;
-    }
-
-    public JComboBox getCoroutineSupportComboBox() {
-        return coroutineSupportComboBox;
     }
 
     public void setEnabled(boolean value) {
