@@ -34,6 +34,8 @@ import java.util.zip.ZipOutputStream
 import kotlin.reflect.KClass
 import org.jetbrains.kotlin.test.KotlinCompilerStandalone.Platform.Jvm
 import org.jetbrains.kotlin.test.KotlinCompilerStandalone.Platform.JavaScript
+import java.util.*
+import kotlin.collections.ArrayList
 
 class KotlinCompilerStandalone @JvmOverloads constructor(
     private val sources: List<File>,
@@ -252,7 +254,12 @@ object KotlinCliCompilerFacade {
             )
         }
 
+        val parentClassLoader =
+            ArrayList::class.java.classLoader
+                ?: ClassLoader.getSystemClassLoader().parent
+                ?: ClassLoader.getSystemClassLoader()
+
         val urls = artifacts.map { it.toURI().toURL() }.toTypedArray()
-        return URLClassLoader(urls, ArrayList::class.java.classLoader ?: ClassLoader.getSystemClassLoader())
+        return URLClassLoader(urls, parentClassLoader)
     }
 }
