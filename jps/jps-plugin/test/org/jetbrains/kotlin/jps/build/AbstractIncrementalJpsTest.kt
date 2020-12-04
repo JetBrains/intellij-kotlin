@@ -147,7 +147,6 @@ abstract class AbstractIncrementalJpsTest(
 
         enableICFixture.setUp()
         lookupsDuringTest = hashSetOf()
-        System.setProperty(KOTLIN_COMPILER_ENVIRONMENT_KEEPALIVE_PROPERTY, "true")
 
         if (DEBUG_LOGGING_ENABLED) {
             enableDebugLogging()
