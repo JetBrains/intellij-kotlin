@@ -19,9 +19,9 @@ object LightClassTestCommon {
     private const val NOT_GENERATED_DIRECTIVE = "// NOT_GENERATED"
 
     fun getActualLightClassText(
-            testDataFile: File,
-            findLightClass: (String) -> PsiClass?,
-            normalizeText: (String) -> String
+        testDataFile: File,
+        findLightClass: (String) -> PsiClass?,
+        normalizeText: (String) -> String,
     ): String {
         val text = FileUtil.loadFile(testDataFile, true)
         val matcher = SUBJECT_FQ_NAME_PATTERN.matcher(text)
