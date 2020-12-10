@@ -21,7 +21,7 @@ import org.jetbrains.jps.builders.JpsBuildTestCase
 import org.jetbrains.jps.model.library.JpsLibrary
 import org.jetbrains.kotlin.compilerRunner.JpsKotlinCompilerRunner
 import org.jetbrains.kotlin.idea.test.runAll
-import org.jetbrains.kotlin.test.TestPlatform
+import org.jetbrains.kotlin.test.AndroidStudioTestUtils
 
 abstract class BaseKotlinJpsBuildTestCase : JpsBuildTestCase() {
     override fun setUp() {
@@ -30,7 +30,7 @@ abstract class BaseKotlinJpsBuildTestCase : JpsBuildTestCase() {
     }
 
     override fun shouldRunTest(): Boolean {
-        return super.shouldRunTest() && !TestPlatform.checkIsAndroidStudio()
+        return super.shouldRunTest() && !AndroidStudioTestUtils.checkIsAndroidStudio()
     }
 
     override fun tearDown() {
