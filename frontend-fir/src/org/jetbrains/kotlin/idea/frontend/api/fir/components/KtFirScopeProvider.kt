@@ -6,15 +6,14 @@
 package org.jetbrains.kotlin.idea.frontend.api.fir.components
 
 import com.intellij.openapi.project.Project
+import org.jetbrains.kotlin.fir.FirSession
 import org.jetbrains.kotlin.fir.declarations.FirAnonymousObject
 import org.jetbrains.kotlin.fir.declarations.FirClass
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
+import org.jetbrains.kotlin.fir.resolve.calls.FirSyntheticPropertiesScope
 import org.jetbrains.kotlin.fir.resolve.scope
-import org.jetbrains.kotlin.fir.scopes.FakeOverrideTypeCalculator
-import org.jetbrains.kotlin.fir.scopes.FirContainingNamesAwareScope
-import org.jetbrains.kotlin.fir.scopes.FirScope
+import org.jetbrains.kotlin.fir.scopes.*
 import org.jetbrains.kotlin.fir.scopes.impl.*
-import org.jetbrains.kotlin.fir.scopes.unsubstitutedScope
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.FirModuleResolveState
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.LowLevelFirApiFacadeForCompletion
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.getFirFile
@@ -117,18 +116,21 @@ internal class KtFirScopeProvider(
     override fun getTypeScope(type: KtType): KtScope? {
         check(type is KtFirType) { "KtFirScopeProvider can only work with KtFirType, but ${type::class} was provided" }
         val firSession = firResolveState.rootModuleSession
-<<<<<<< HEAD
         val firTypeScope = type.coneType.scope(
             firSession,
             firResolveState.firTransformerProvider.getScopeSession(firSession),
             FakeOverrideTypeCalculator.Forced
         ) ?: return null
-=======
-        val firTypeScope = type.coneType.scope(firSession, firResolveState.firTransformerProvider.getScopeSession(firSession))
-            ?: return null
->>>>>>> 1323a6ca02c... FIR IDE: do not resolve symbols by transitive module dependencies
-        return convertToKtScope(firTypeScope)
+        return getCompositeScope(
+            listOf(
+                convertToKtScope(firTypeScope),
+                firTypeScope.getSyntheticPropertiesScope(firSession)
+            )
+        )
     }
+
+    private fun FirTypeScope.getSyntheticPropertiesScope(firSession: FirSession): KtScope =
+        convertToKtScope(FirSyntheticPropertiesScope(firSession, this))
 
     override fun getScopeContextForPosition(
         originalFile: KtFile,
