@@ -987,10 +987,7 @@ fun computeSourceSetsDeferredInfo(
 
         sourceSet.isTestModule = allSourceSetToCompilations[sourceSet]?.all { it.isTestModule } ?: false
 
-        val platforms = if (isHMPPEnabled)
-            allSourceSetToCompilations[sourceSet]?.map { it.platform }
-        else
-            compiledSourceSetToCompilations[sourceSet]?.map { it.platform }
+        val platforms = allSourceSetToCompilations[sourceSet]?.map { it.platform }
 
         platforms?.let { sourceSet.actualPlatforms.addSimplePlatforms(it) }
 
