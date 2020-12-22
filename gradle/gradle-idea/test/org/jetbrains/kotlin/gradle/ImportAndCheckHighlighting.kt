@@ -18,27 +18,9 @@ import java.io.File
 
 class ImportAndCheckHighlighting : MultiplePluginVersionGradleImportingTestCase() {
     @Test
-    @PluginTargetVersions(pluginVersion = "1.3.40+")
-    fun testMultiplatformLibrary() {
-        importAndCheckHighlighting(checkLineMarkers = true)
-    }
-
-    @Test
-    @PluginTargetVersions(pluginVersion = "1.3.40+")
-    fun testUnresolvedInMultiplatformLibrary() {
-        importAndCheckHighlighting(checkWarnings = true)
-    }
-
-    @Test
     @PluginTargetVersions(pluginVersion = "1.4.0+")
     fun testConsumingKotlinXDatetimeInNativeMain() {
         importAndCheckHighlighting()
-    }
-
-    @Test
-    @PluginTargetVersions(pluginVersion = "1.3.40+")
-    fun testMacosTargets() {
-        importAndCheckHighlighting(checkLineMarkers = true)
     }
 
     private fun importAndCheckHighlighting(checkLineMarkers: Boolean = false, checkWarnings: Boolean = false) {
