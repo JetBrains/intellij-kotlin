@@ -12,19 +12,17 @@ import com.siyeh.ig.psiutils.TestUtils
 import org.jetbrains.kotlin.builtins.DefaultBuiltIns
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
-import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.idea.caches.resolve.resolveToCall
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
+import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsResultOfLambda
 import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.types.isNullable
 import org.jetbrains.kotlin.types.typeUtil.isNothing
-import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 class KotlinThrowableNotThrownInspection : AbstractKotlinInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean) = callExpressionVisitor(fun(callExpression) {
@@ -36,7 +34,7 @@ class KotlinThrowableNotThrownInspection : AbstractKotlinInspection() {
         if (type.isNothing() || type.isNullable()) return
         val classDescriptor = type.constructor.declarationDescriptor as? ClassDescriptor ?: return
         if (!classDescriptor.isSubclassOf(DefaultBuiltIns.Instance.throwable)) return
-        if (callExpression.isUsed(classDescriptor)) return
+        if (callExpression.isUsed()) return
 
         val description = if (resultingDescriptor is ConstructorDescriptor) {
             KotlinBundle.message("throwable.instance.0.is.not.thrown", calleeExpression.text)
@@ -46,21 +44,16 @@ class KotlinThrowableNotThrownInspection : AbstractKotlinInspection() {
         holder.registerProblem(calleeExpression, description, ProblemHighlightType.GENERIC_ERROR_OR_WARNING)
     })
 
-    private fun KtExpression.isUsed(throwableClassDescriptor: ClassDescriptor): Boolean {
+    private fun KtExpression.isUsed(): Boolean {
         val context = analyze(BodyResolveMode.PARTIAL_WITH_CFA)
         if (!isUsedAsExpression(context)) return false
+        if (isUsedAsResultOfLambda(context)) return true
         val property = getParentOfTypes(
             true,
             KtThrowExpression::class.java,
             KtReturnExpression::class.java,
             KtProperty::class.java
         ) as? KtProperty ?: return true
-        return !property.isLocal ||
-               property.typeDeclarationDescriptor(context) != throwableClassDescriptor ||
-               ReferencesSearch.search(property).any()
+        return !property.isLocal || ReferencesSearch.search(property).any()
     }
-
-    private fun KtProperty.typeDeclarationDescriptor(context: BindingContext) =
-            context.get(BindingContext.DECLARATION_TO_DESCRIPTOR, this)
-                    ?.safeAs<VariableDescriptor>()?.type?.constructor?.declarationDescriptor
 }
