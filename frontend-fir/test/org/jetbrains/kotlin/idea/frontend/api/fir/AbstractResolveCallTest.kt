@@ -8,27 +8,33 @@ package org.jetbrains.kotlin.idea.frontend.api.fir
 import com.intellij.openapi.editor.CaretState
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
+import com.intellij.testFramework.LightCodeInsightTestCase
 import org.jetbrains.kotlin.idea.addExternalTestFiles
 import org.jetbrains.kotlin.idea.executeOnPooledThreadInReadAction
-import org.jetbrains.kotlin.idea.frontend.api.CallInfo
 import org.jetbrains.kotlin.idea.frontend.api.analyze
-import org.jetbrains.kotlin.idea.frontend.api.types.KtType
+import org.jetbrains.kotlin.idea.frontend.api.calls.KtCall
+import org.jetbrains.kotlin.idea.frontend.api.calls.KtErrorCallTarget
+import org.jetbrains.kotlin.idea.frontend.api.calls.KtSuccessCallTarget
 import org.jetbrains.kotlin.idea.frontend.api.symbols.KtFunctionLikeSymbol
 import org.jetbrains.kotlin.idea.frontend.api.symbols.KtFunctionSymbol
 import org.jetbrains.kotlin.idea.frontend.api.symbols.KtParameterSymbol
-import org.jetbrains.kotlin.idea.test.KotlinLightCodeInsightTestCase
+import org.jetbrains.kotlin.idea.frontend.api.types.KtType
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
+import org.jetbrains.kotlin.test.KotlinRoot
 import org.jetbrains.kotlin.test.KotlinTestUtils
+import org.jetbrains.kotlin.test.util.slashedPath
 import java.io.File
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.javaGetter
 
-abstract class AbstractResolveCallTest : @Suppress("DEPRECATION") KotlinLightCodeInsightTestCase() {
+abstract class AbstractResolveCallTest : @Suppress("DEPRECATION") LightCodeInsightTestCase() {
+    override fun getTestDataPath(): String = KotlinRoot.DIR.slashedPath
+
     protected fun doTest(path: String) {
         addExternalTestFiles(path)
         configureByFile(path)
@@ -83,14 +89,14 @@ abstract class AbstractResolveCallTest : @Suppress("DEPRECATION") KotlinLightCod
     )
 }
 
-private fun CallInfo.stringRepresentation(): String {
+private fun KtCall.stringRepresentation(): String {
     fun KtType.render() = asStringForDebugging().replace('/', '.')
-    fun Any.stringValue(): String? = when (this) {
+    fun Any.stringValue(): String = when (this) {
         is KtFunctionLikeSymbol -> buildString {
             append(if (this@stringValue is KtFunctionSymbol) callableIdIfNonLocal ?: name else "<constructor>")
             append("(")
-            (this@stringValue as? KtFunctionSymbol)?.receiverType?.let { receiver ->
-                append("<receiver>: ${receiver.render()}")
+            (this@stringValue as? KtFunctionSymbol)?.receiverTypeAndAnnotations?.let { receiver ->
+                append("<receiver>: ${receiver.type.render()}")
                 if (valueParameters.isNotEmpty()) append(", ")
             }
             valueParameters.joinTo(this) { parameter ->
@@ -100,6 +106,8 @@ private fun CallInfo.stringRepresentation(): String {
             append(": ${type.render()}")
         }
         is KtParameterSymbol -> "$name: ${type.render()}"
+        is KtSuccessCallTarget -> symbol.stringValue()
+        is KtErrorCallTarget -> "ERR<${this.diagnostic.message}, [${candidates.joinToString { it.stringValue() }}]>"
         is Boolean -> toString()
         else -> error("unexpected parameter type ${this::class}")
     }
@@ -115,4 +123,3 @@ private fun CallInfo.stringRepresentation(): String {
         }
     }
 }
-
