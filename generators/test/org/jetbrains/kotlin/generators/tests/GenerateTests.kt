@@ -30,7 +30,6 @@ import org.jetbrains.kotlin.idea.codeInsight.generate.AbstractCodeInsightActionT
 import org.jetbrains.kotlin.idea.codeInsight.generate.AbstractGenerateHashCodeAndEqualsActionTest
 import org.jetbrains.kotlin.idea.codeInsight.generate.AbstractGenerateTestSupportMethodActionTest
 import org.jetbrains.kotlin.idea.codeInsight.generate.AbstractGenerateToStringActionTest
-import org.jetbrains.kotlin.idea.codeInsight.hints.AbstractKotlinLambdasHintsProvider
 import org.jetbrains.kotlin.idea.codeInsight.hints.AbstractKotlinReferenceTypeHintsProviderTest
 import org.jetbrains.kotlin.idea.codeInsight.moveUpDown.AbstractMoveLeftRightTest
 import org.jetbrains.kotlin.idea.codeInsight.moveUpDown.AbstractMoveStatementTest
@@ -40,8 +39,6 @@ import org.jetbrains.kotlin.idea.codeInsight.unwrap.AbstractUnwrapRemoveTest
 import org.jetbrains.kotlin.idea.completion.test.*
 import org.jetbrains.kotlin.idea.completion.test.handlers.*
 import org.jetbrains.kotlin.idea.completion.test.weighers.AbstractBasicCompletionWeigherTest
-import org.jetbrains.kotlin.idea.completion.test.weighers.AbstractSmartCompletionWeigherTest
-import org.jetbrains.kotlin.idea.completion.wheigher.AbstractHighLevelWeigherTest
 import org.jetbrains.kotlin.idea.configuration.AbstractGradleConfigureProjectByChangingFileTest
 import org.jetbrains.kotlin.idea.conversion.copy.AbstractJavaToKotlinCopyPasteConversionTest
 import org.jetbrains.kotlin.idea.conversion.copy.AbstractLiteralKotlinToKotlinCopyPasteTest
@@ -70,9 +67,6 @@ import org.jetbrains.kotlin.idea.editor.quickDoc.AbstractQuickDocProviderTest
 import org.jetbrains.kotlin.idea.externalAnnotations.AbstractExternalAnnotationTest
 import org.jetbrains.kotlin.idea.filters.AbstractKotlinExceptionFilterTest
 import org.jetbrains.kotlin.idea.folding.AbstractKotlinFoldingTest
-import org.jetbrains.kotlin.idea.frontend.api.components.AbstractExpectedExpressionTypeTest
-import org.jetbrains.kotlin.idea.frontend.api.components.AbstractReturnExpressionTargetTest
-import org.jetbrains.kotlin.idea.frontend.api.scopes.AbstractFileScopeTest
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyTest
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyWithLibTest
 import org.jetbrains.kotlin.idea.highlighter.*
