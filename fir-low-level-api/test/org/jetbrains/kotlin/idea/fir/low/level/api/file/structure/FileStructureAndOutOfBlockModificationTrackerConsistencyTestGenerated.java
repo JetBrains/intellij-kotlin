@@ -24,8 +24,9 @@ public class FileStructureAndOutOfBlockModificationTrackerConsistencyTestGenerat
         KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
     }
 
-    public void testAllFilesPresentInOutOfBlockProjectWide() throws Exception {
-        KotlinTestUtils.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/outOfBlockProjectWide"), Pattern.compile("^(.+)\\.kt$"), null, true);
+    @TestMetadata("funInCompanionObject.kt")
+    public void testFunInCompanionObject() throws Exception {
+        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/outOfBlockProjectWide/funInCompanionObject.kt");
     }
 
     @TestMetadata("localFun.kt")
