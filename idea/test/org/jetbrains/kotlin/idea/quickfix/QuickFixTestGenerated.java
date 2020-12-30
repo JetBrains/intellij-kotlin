@@ -7621,7 +7621,7 @@ public abstract class QuickFixTestGenerated extends AbstractQuickFixTest {
 
         @TestMetadata("sealedAfter15.kt")
         public void testSealedAfter15() throws Exception {
-            runTest("idea/testData/quickfix/implement/sealedAfter15.kt");
+            runTest("testData/quickfix/implement/sealedAfter15.kt");
         }
 
         @TestMetadata("sealedEmpty.kt")
@@ -7631,7 +7631,7 @@ public abstract class QuickFixTestGenerated extends AbstractQuickFixTest {
 
         @TestMetadata("sealedEmptyAfter15.kt")
         public void testSealedEmptyAfter15() throws Exception {
-            runTest("idea/testData/quickfix/implement/sealedEmptyAfter15.kt");
+            runTest("testData/quickfix/implement/sealedEmptyAfter15.kt");
         }
 
         @TestMetadata("sealedWithConflict.kt")
@@ -7641,7 +7641,7 @@ public abstract class QuickFixTestGenerated extends AbstractQuickFixTest {
 
         @TestMetadata("sealedWithConflictAfter15.kt")
         public void testSealedWithConflictAfter15() throws Exception {
-            runTest("idea/testData/quickfix/implement/sealedWithConflictAfter15.kt");
+            runTest("testData/quickfix/implement/sealedWithConflictAfter15.kt");
         }
 
         @TestMetadata("typeParameter.kt")
