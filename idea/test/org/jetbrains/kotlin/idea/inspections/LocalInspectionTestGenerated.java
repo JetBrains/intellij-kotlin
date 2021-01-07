@@ -12708,6 +12708,11 @@ public abstract class LocalInspectionTestGenerated extends AbstractLocalInspecti
             runTest("testData/inspectionsLocal/simplifyNestedEachInScope/applyFunctionReference.kt");
         }
 
+        @TestMetadata("applyFunctionReferenceWithParentheses.kt")
+        public void testApplyFunctionReferenceWithParentheses() throws Exception {
+            runTest("testData/inspectionsLocal/simplifyNestedEachInScope/applyFunctionReferenceWithParentheses.kt");
+        }
+
         @TestMetadata("applyLabel.kt")
         public void testApplyLabel() throws Exception {
             runTest("testData/inspectionsLocal/simplifyNestedEachInScope/applyLabel.kt");

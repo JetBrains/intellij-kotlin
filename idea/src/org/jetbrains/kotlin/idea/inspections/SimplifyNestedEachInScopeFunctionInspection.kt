@@ -232,7 +232,7 @@ class SimplifyNestedEachInScopeFunctionInspection : AbstractKotlinInspection() {
                 innerBlock.accept(ReplaceLabelVisitor(factory))
             }
             val innerBlockExpression = innerBlock.getArgumentExpression()
-            if (innerBlockExpression is KtCallableReferenceExpression) {
+            if (innerBlockExpression != null && KtPsiUtil.deparenthesize(innerBlockExpression) is KtCallableReferenceExpression) {
                 callExpression.replace(factory.createExpressionByPattern("onEach($0)", innerBlockExpression))
             } else {
                 outerBlock.replace(innerBlock)
