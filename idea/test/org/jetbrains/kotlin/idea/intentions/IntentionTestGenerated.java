@@ -731,6 +731,49 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
     }
 
     @RunWith(JUnit3RunnerWithInners.class)
+    @TestMetadata("testData/intentions/addBracesToAllBranches")
+    public static class AddBracesToAllBranches extends AbstractIntentionTest {
+        private void runTest(String testDataFilePath) throws Exception {
+            KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+        }
+
+        @TestMetadata("elseIf.kt")
+        public void testElseIf() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/elseIf.kt");
+        }
+
+        @TestMetadata("if.kt")
+        public void testIf() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/if.kt");
+        }
+
+        @TestMetadata("if2.kt")
+        public void testIf2() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/if2.kt");
+        }
+
+        @TestMetadata("if3.kt")
+        public void testIf3() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/if3.kt");
+        }
+
+        @TestMetadata("when.kt")
+        public void testWhen() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/when.kt");
+        }
+
+        @TestMetadata("when2.kt")
+        public void testWhen2() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/when2.kt");
+        }
+
+        @TestMetadata("when3.kt")
+        public void testWhen3() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/when3.kt");
+        }
+    }
+
+    @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("testData/intentions/addConstModifier")
     public static class AddConstModifier extends AbstractIntentionTest {
         private void runTest(String testDataFilePath) throws Exception {
@@ -13430,6 +13473,49 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("whileWithTwoStatements.kt")
         public void testWhileWithTwoStatements() throws Exception {
             runTest("testData/intentions/removeBraces/whileWithTwoStatements.kt");
+        }
+    }
+
+    @RunWith(JUnit3RunnerWithInners.class)
+    @TestMetadata("testData/intentions/removeBracesFromAllBranches")
+    public static class RemoveBracesFromAllBranches extends AbstractIntentionTest {
+        private void runTest(String testDataFilePath) throws Exception {
+            KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+        }
+
+        @TestMetadata("elseIf.kt")
+        public void testElseIf() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/elseIf.kt");
+        }
+
+        @TestMetadata("if.kt")
+        public void testIf() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/if.kt");
+        }
+
+        @TestMetadata("if2.kt")
+        public void testIf2() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/if2.kt");
+        }
+
+        @TestMetadata("if3.kt")
+        public void testIf3() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/if3.kt");
+        }
+
+        @TestMetadata("when.kt")
+        public void testWhen() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/when.kt");
+        }
+
+        @TestMetadata("when2.kt")
+        public void testWhen2() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/when2.kt");
+        }
+
+        @TestMetadata("when3.kt")
+        public void testWhen3() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/when3.kt");
         }
     }
 
