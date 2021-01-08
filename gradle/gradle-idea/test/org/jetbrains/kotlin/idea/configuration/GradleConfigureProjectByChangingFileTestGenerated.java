@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 @TestRoot("gradle/gradle-idea")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-public class GradleConfigureProjectByChangingFileTestGenerated extends AbstractGradleConfigureProjectByChangingFileTest {
+public abstract class GradleConfigureProjectByChangingFileTestGenerated extends AbstractGradleConfigureProjectByChangingFileTest {
     @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("../../idea/tests/testData/configuration/gradle")
     public static class Gradle extends AbstractGradleConfigureProjectByChangingFileTest {

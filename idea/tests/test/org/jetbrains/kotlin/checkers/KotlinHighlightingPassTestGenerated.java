@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 @TestRoot("idea/tests")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-public class KotlinHighlightingPassTestGenerated extends AbstractKotlinHighlightingPassTest {
+public abstract class KotlinHighlightingPassTestGenerated extends AbstractKotlinHighlightingPassTest {
     @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("testData/checker")
     public static class Checker extends AbstractKotlinHighlightingPassTest {

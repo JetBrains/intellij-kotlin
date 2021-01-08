@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.test.TargetBackend;
 @TestRoot("jvm-debugger/test")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-public class IrKotlinEvaluateExpressionWithIRFragmentCompilerTestGenerated extends AbstractIrKotlinEvaluateExpressionWithIRFragmentCompilerTest {
+public abstract class IrKotlinEvaluateExpressionWithIRFragmentCompilerTestGenerated extends AbstractIrKotlinEvaluateExpressionWithIRFragmentCompilerTest {
     @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("testData/evaluation/singleBreakpoint")
     public static class SingleBreakpoint extends AbstractIrKotlinEvaluateExpressionWithIRFragmentCompilerTest {
