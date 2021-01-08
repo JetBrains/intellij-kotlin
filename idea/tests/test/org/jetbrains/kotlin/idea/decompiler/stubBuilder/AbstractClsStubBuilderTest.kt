@@ -11,10 +11,13 @@ import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.stubs.StubElement
-import com.intellij.testFramework.fixtures.LightJavaCodeInsightFixtureTestCase
+import com.intellij.testFramework.LightProjectDescriptor
 import com.intellij.util.indexing.FileContentImpl
+import org.jetbrains.kotlin.idea.artifacts.KotlinArtifacts
 import org.jetbrains.kotlin.idea.decompiler.classFile.KotlinClsStubBuilder
 import org.jetbrains.kotlin.idea.stubs.AbstractStubBuilderTest
+import org.jetbrains.kotlin.idea.test.KotlinJdkAndLibraryProjectDescriptor
+import org.jetbrains.kotlin.idea.test.KotlinLightCodeInsightFixtureTestCase
 import org.jetbrains.kotlin.psi.stubs.elements.KtFileStubBuilder
 import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils
 import org.jetbrains.kotlin.idea.test.KotlinCompilerStandalone
@@ -24,7 +27,12 @@ import org.junit.Assert
 import java.io.File
 import java.util.*
 
-abstract class AbstractClsStubBuilderTest : LightJavaCodeInsightFixtureTestCase() {
+abstract class AbstractClsStubBuilderTest : KotlinLightCodeInsightFixtureTestCase() {
+    override fun getProjectDescriptor(): LightProjectDescriptor = KotlinJdkAndLibraryProjectDescriptor(
+        listOf(KotlinArtifacts.instance.kotlinAnnotationsJvm),
+        emptyList()
+    )
+
     fun doTest(sourcePath: String) {
         val ktFile = File("$sourcePath/${lastSegment(sourcePath)}.kt")
         val jvmFileName = if (ktFile.exists()) {
@@ -66,7 +74,7 @@ abstract class AbstractClsStubBuilderTest : LightJavaCodeInsightFixtureTestCase(
     }
 
     private fun getClassFileToDecompile(sourcePath: String, isUseStringTable: Boolean, classFileName: String?): VirtualFile {
-        val outDir = KotlinTestUtils.tmpDir("libForStubTest-" + sourcePath)
+        val outDir = KotlinTestUtils.tmpDir("libForStubTest-$sourcePath")
 
         val extraOptions = ArrayList<String>()
         extraOptions.add("-Xallow-kotlin-package")
@@ -74,8 +82,12 @@ abstract class AbstractClsStubBuilderTest : LightJavaCodeInsightFixtureTestCase(
             extraOptions.add("-Xuse-type-table")
         }
 
-        val sources = listOf(File(sourcePath))
-        KotlinCompilerStandalone(sources, outDir, options = extraOptions).compile()
+        KotlinCompilerStandalone(
+            sources = listOf(File(sourcePath)),
+            target = outDir,
+            options = extraOptions,
+            classpath = listOf(KotlinArtifacts.instance.kotlinAnnotationsJvm)
+        ).compile()
 
         val root = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(outDir)!!
         return root.findClassFileByName(classFileName ?: lastSegment(sourcePath))
