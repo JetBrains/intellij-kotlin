@@ -12960,6 +12960,16 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/operatorToFunction/binaryRangeTo.kt");
         }
 
+        @TestMetadata("binaryTimesEquals.kt")
+        public void testBinaryTimesEquals() throws Exception {
+            runTest("testData/intentions/operatorToFunction/binaryTimesEquals.kt");
+        }
+
+        @TestMetadata("binaryTimesEqualsNotResolved.kt")
+        public void testBinaryTimesEqualsNotResolved() throws Exception {
+            runTest("testData/intentions/operatorToFunction/binaryTimesEqualsNotResolved.kt");
+        }
+
         @TestMetadata("compoundAssignment.kt")
         public void testCompoundAssignment() throws Exception {
             runTest("testData/intentions/operatorToFunction/compoundAssignment.kt");
