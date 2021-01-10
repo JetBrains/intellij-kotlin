@@ -737,6 +737,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
         }
 
+        @TestMetadata("else.kt")
+        public void testElse() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/else.kt");
+        }
+
         @TestMetadata("elseIf.kt")
         public void testElseIf() throws Exception {
             runTest("testData/intentions/addBracesToAllBranches/elseIf.kt");
@@ -757,6 +762,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/addBracesToAllBranches/if3.kt");
         }
 
+        @TestMetadata("ifThen.kt")
+        public void testIfThen() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/ifThen.kt");
+        }
+
         @TestMetadata("when.kt")
         public void testWhen() throws Exception {
             runTest("testData/intentions/addBracesToAllBranches/when.kt");
@@ -770,6 +780,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("when3.kt")
         public void testWhen3() throws Exception {
             runTest("testData/intentions/addBracesToAllBranches/when3.kt");
+        }
+
+        @TestMetadata("whenEntry.kt")
+        public void testWhenEntry() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/whenEntry.kt");
         }
     }
 
@@ -13483,6 +13498,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
         }
 
+        @TestMetadata("else.kt")
+        public void testElse() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/else.kt");
+        }
+
         @TestMetadata("elseIf.kt")
         public void testElseIf() throws Exception {
             runTest("testData/intentions/removeBracesFromAllBranches/elseIf.kt");
@@ -13503,6 +13523,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/removeBracesFromAllBranches/if3.kt");
         }
 
+        @TestMetadata("ifThen.kt")
+        public void testIfThen() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/ifThen.kt");
+        }
+
         @TestMetadata("when.kt")
         public void testWhen() throws Exception {
             runTest("testData/intentions/removeBracesFromAllBranches/when.kt");
@@ -13516,6 +13541,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("when3.kt")
         public void testWhen3() throws Exception {
             runTest("testData/intentions/removeBracesFromAllBranches/when3.kt");
+        }
+
+        @TestMetadata("whenEntry.kt")
+        public void testWhenEntry() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/whenEntry.kt");
         }
     }
 

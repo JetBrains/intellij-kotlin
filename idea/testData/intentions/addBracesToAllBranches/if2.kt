@@ -1,5 +1,5 @@
 fun test(i: Int) {
-    <caret>if (i == 1) println(1) else if (i == 2) {
+    if (i == 1) println(1) else if (i == 2) {<caret>
         println(2)
     } else println(3)
 }

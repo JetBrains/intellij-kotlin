@@ -1,7 +1,9 @@
 fun test(i: Int) {
     if (i == 1) {
-        println(1)
-    } else if (i == 2) <caret>println(2) else {
+        prin<caret>tln(1)
+    } else if (i == 2) {
+        println(2)
+    } else {
         println(3)
     }
 }

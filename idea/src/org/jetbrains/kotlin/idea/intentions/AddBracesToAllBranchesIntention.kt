@@ -15,9 +15,9 @@ class AddBracesToAllBranchesIntention : SelfTargetingIntention<KtExpression>(
     KotlinBundle.lazyMessage("add.braces.to.all.branches")
 ) {
     override fun isApplicableTo(element: KtExpression, caretOffset: Int): Boolean {
-        if (!isCaretOnIfOrWhenKeyword(element, caretOffset)) return false
-        if (element.targetBranchExpressions().isEmpty()) return false
-        when (element) {
+        val targetIfOrWhenExpression = targetIfOrWhenExpression(element) ?: return false
+        if (targetIfOrWhenExpression.targetBranchExpressions().isEmpty()) return false
+        when (targetIfOrWhenExpression) {
             is KtIfExpression -> setTextGetter(KotlinBundle.lazyMessage("add.braces.to.if.all.statements"))
             is KtWhenExpression -> setTextGetter(KotlinBundle.lazyMessage("add.braces.to.when.all.entries"))
         }
@@ -25,8 +25,9 @@ class AddBracesToAllBranchesIntention : SelfTargetingIntention<KtExpression>(
     }
 
     override fun applyTo(element: KtExpression, editor: Editor?) {
-        element.targetBranchExpressions().forEach {
-            AddBracesIntention.addBraces(element, it)
+        val targetIfOrWhenExpression = targetIfOrWhenExpression(element) ?: return
+        targetIfOrWhenExpression.targetBranchExpressions().forEach {
+            AddBracesIntention.addBraces(targetIfOrWhenExpression, it)
         }
     }
 
@@ -35,13 +36,22 @@ class AddBracesToAllBranchesIntention : SelfTargetingIntention<KtExpression>(
     }
 
     companion object {
-        fun isCaretOnIfOrWhenKeyword(element: KtExpression, caretOffset: Int): Boolean = when (element) {
-            is KtIfExpression ->
-                element.ifKeyword.textRange.containsOffset(caretOffset) && element.parent !is KtContainerNodeForControlStructureBody
-            is KtWhenExpression ->
-                element.whenKeyword.textRange.containsOffset(caretOffset)
-            else ->
-                false
+        fun targetIfOrWhenExpression(element: KtExpression): KtExpression? {
+            return when (element) {
+                is KtIfExpression -> {
+                    var target = element
+                    while (true) {
+                        val container = target.parent as? KtContainerNodeForControlStructureBody ?: break
+                        val parent = container.parent as? KtIfExpression ?: break
+                        if (parent.`else` != target) break
+                        target = parent
+                    }
+                    target
+                }
+                is KtWhenExpression -> element
+                is KtBlockExpression -> (element.parent.parent as? KtExpression)?.let { targetIfOrWhenExpression(it) }
+                else -> null
+            }
         }
 
         fun KtExpression.allBranchExpressions(): List<KtExpression> = when (this) {

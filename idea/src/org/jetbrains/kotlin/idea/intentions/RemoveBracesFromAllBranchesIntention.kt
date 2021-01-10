@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.idea.intentions
 import com.intellij.openapi.editor.Editor
 import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.intentions.AddBracesToAllBranchesIntention.Companion.allBranchExpressions
+import org.jetbrains.kotlin.idea.intentions.AddBracesToAllBranchesIntention.Companion.targetIfOrWhenExpression
 import org.jetbrains.kotlin.psi.*
 
 class RemoveBracesFromAllBranchesIntention : SelfTargetingIntention<KtExpression>(
@@ -15,10 +16,10 @@ class RemoveBracesFromAllBranchesIntention : SelfTargetingIntention<KtExpression
     KotlinBundle.lazyMessage("remove.braces.from.all.branches")
 ) {
     override fun isApplicableTo(element: KtExpression, caretOffset: Int): Boolean {
-        if (!AddBracesToAllBranchesIntention.isCaretOnIfOrWhenKeyword(element, caretOffset)) return false
-        val targetBranchExpressions = element.targetBranchExpressions()
+        val targetIfOrWhenExpression = targetIfOrWhenExpression(element) ?: return false
+        val targetBranchExpressions = targetIfOrWhenExpression.targetBranchExpressions()
         if (targetBranchExpressions.isEmpty() || targetBranchExpressions.any { !RemoveBracesIntention.isApplicableTo(it) }) return false
-        when (element) {
+        when (targetIfOrWhenExpression) {
             is KtIfExpression -> setTextGetter(KotlinBundle.lazyMessage("remove.braces.from.if.all.statements"))
             is KtWhenExpression -> setTextGetter(KotlinBundle.lazyMessage("remove.braces.from.when.all.entries"))
         }
@@ -26,8 +27,9 @@ class RemoveBracesFromAllBranchesIntention : SelfTargetingIntention<KtExpression
     }
 
     override fun applyTo(element: KtExpression, editor: Editor?) {
-        element.targetBranchExpressions().forEach {
-            RemoveBracesIntention.removeBraces(element, it)
+        val targetIfOrWhenExpression = targetIfOrWhenExpression(element) ?: return
+        targetIfOrWhenExpression.targetBranchExpressions().forEach {
+            RemoveBracesIntention.removeBraces(targetIfOrWhenExpression, it)
         }
     }
 
