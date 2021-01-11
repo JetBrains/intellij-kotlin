@@ -20,7 +20,6 @@ object ScriptDefinitionMarkerFileType: FakeFileType() {
 
     override fun isMyFileType(file: VirtualFile): Boolean {
         val parent = file.parent ?: return false
-        return file.nameSequence.endsWith(SCRIPT_DEFINITION_MARKERS_EXTENSION_WITH_DOT) &&
-                parent.path.endsWith(SCRIPT_DEFINITION_MARKERS_PATH)
+        return parent.path.endsWith(SCRIPT_DEFINITION_MARKERS_PATH)
     }
 }
