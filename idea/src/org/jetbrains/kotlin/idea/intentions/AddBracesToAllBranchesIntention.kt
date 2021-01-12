@@ -32,7 +32,9 @@ class AddBracesToAllBranchesIntention : SelfTargetingIntention<KtExpression>(
     }
 
     private fun KtExpression.targetBranchExpressions(): List<KtExpression> {
-        return allBranchExpressions().filter { it !is KtBlockExpression }
+        val branchExpressions = allBranchExpressions()
+        if (branchExpressions.size <= 1) return emptyList()
+        return branchExpressions.filter { it !is KtBlockExpression }
     }
 
     companion object {

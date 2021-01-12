@@ -34,6 +34,8 @@ class RemoveBracesFromAllBranchesIntention : SelfTargetingIntention<KtExpression
     }
 
     private fun KtExpression.targetBranchExpressions(): List<KtBlockExpression> {
-        return allBranchExpressions().filterIsInstance<KtBlockExpression>()
+        val branchExpressions = allBranchExpressions()
+        if (branchExpressions.size <= 1) return emptyList()
+        return branchExpressions.filterIsInstance<KtBlockExpression>()
     }
 }

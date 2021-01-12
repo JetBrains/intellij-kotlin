@@ -767,6 +767,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/addBracesToAllBranches/ifThen.kt");
         }
 
+        @TestMetadata("ifWithNoElse.kt")
+        public void testIfWithNoElse() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/ifWithNoElse.kt");
+        }
+
         @TestMetadata("when.kt")
         public void testWhen() throws Exception {
             runTest("testData/intentions/addBracesToAllBranches/when.kt");
@@ -785,6 +790,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("whenEntry.kt")
         public void testWhenEntry() throws Exception {
             runTest("testData/intentions/addBracesToAllBranches/whenEntry.kt");
+        }
+
+        @TestMetadata("whenWithOneEntry.kt")
+        public void testWhenWithOneEntry() throws Exception {
+            runTest("testData/intentions/addBracesToAllBranches/whenWithOneEntry.kt");
         }
     }
 
@@ -13528,6 +13538,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/removeBracesFromAllBranches/ifThen.kt");
         }
 
+        @TestMetadata("ifWithNoElse.kt")
+        public void testIfWithNoElse() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/ifWithNoElse.kt");
+        }
+
         @TestMetadata("when.kt")
         public void testWhen() throws Exception {
             runTest("testData/intentions/removeBracesFromAllBranches/when.kt");
@@ -13546,6 +13561,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("whenEntry.kt")
         public void testWhenEntry() throws Exception {
             runTest("testData/intentions/removeBracesFromAllBranches/whenEntry.kt");
+        }
+
+        @TestMetadata("whenWithOneEntry.kt")
+        public void testWhenWithOneEntry() throws Exception {
+            runTest("testData/intentions/removeBracesFromAllBranches/whenWithOneEntry.kt");
         }
     }
 
