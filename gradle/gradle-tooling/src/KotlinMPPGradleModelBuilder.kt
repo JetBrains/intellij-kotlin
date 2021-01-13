@@ -388,16 +388,10 @@ class KotlinMPPGradleModelBuilder : ModelBuilderService {
     ): KotlinCompilationImpl {
         val dependsOnSourceSets = this.sourceSets.flatMap { it.dependsOnSourceSets }.mapNotNull { importingContext.sourceSetByName(it) }
 
-        if (!importingContext.getProperty(IS_HMPP_ENABLED)) {
-            // intermediate source sets should be common if HMPP is disabled
-            dependsOnSourceSets.subtract(this.sourceSets).forEach {
-                it.actualPlatforms.addSimplePlatforms(listOf(KotlinPlatform.COMMON))
-            }
-        }
-
         return KotlinCompilationImpl(
             this.name,
             this.sourceSets.union(dependsOnSourceSets),
+            this.sourceSets,
             this.dependencies,
             this.output,
             this.arguments,
@@ -545,6 +539,7 @@ class KotlinMPPGradleModelBuilder : ModelBuilderService {
 
         return KotlinCompilationImpl(
             gradleCompilation.name,
+            kotlinSourceSets, // In fact, it's only default source-sets. It will be corrected later, see [addDependsOnSourceSetsToCompilation]
             kotlinSourceSets,
             dependencies.map { dependencyMapper.getId(it) }.distinct().toTypedArray(),
             output,
@@ -912,20 +907,46 @@ fun computeSourceSetsDeferredInfo(importingContext: MultiplatformModelImportingC
 
         sourceSet.isTestModule = importingContext.compilationsBySourceSet(sourceSet)?.all { it.isTestModule } ?: false
 
-        val platforms = importingContext.compilationsBySourceSet(sourceSet)?.map { it.platform }
+        importingContext.computeSourceSetPlatforms(sourceSet)
+    }
+}
 
-        platforms?.let { sourceSet.actualPlatforms.addSimplePlatforms(it) }
+private fun MultiplatformModelImportingContext.computeSourceSetPlatforms(sourceSet: KotlinSourceSetImpl) {
+    if (shouldCoerceToCommon(sourceSet)) {
+        sourceSet.actualPlatforms.addSimplePlatforms(listOf(KotlinPlatform.COMMON))
+        return
+    }
 
-        // never makes sense to coerce single-targeted source-sets
-        if (sourceSet.actualPlatforms.platforms.size != 1) {
-            // pre-HMPP has only single-targeted source sets and COMMON
-            // in HMPP, we might want to coerce source sets to common, but only root ones,
-            // and only when the corresponding setting is turned on
-            // in all other cases, in HMPP we shouldn't coerce anything
-            if (!isHMPPEnabled || (isRoot && importingContext.getProperty(COERCE_ROOT_SOURCE_SETS_TO_COMMON))) {
-                sourceSet.actualPlatforms.addSimplePlatforms(listOf(KotlinPlatform.COMMON))
-            }
-        }
+    if (!getProperty(IS_HMPP_ENABLED) && !isDefaultSourceSet(sourceSet)) {
+        // intermediate source sets should be common if HMPP is disabled
+        sourceSet.actualPlatforms.addSimplePlatforms(listOf(KotlinPlatform.COMMON))
+        return
+    }
+
+    compilationsBySourceSet(sourceSet)?.let { compilations ->
+        val platforms = compilations.map { it.platform }
+        sourceSet.actualPlatforms.addSimplePlatforms(platforms)
+    }
+}
+
+private fun MultiplatformModelImportingContext.shouldCoerceToCommon(sourceSet: KotlinSourceSetImpl): Boolean {
+    val isHMPPEnabled = getProperty(IS_HMPP_ENABLED)
+    val coerceRootSourceSetsToCommon = getProperty(COERCE_ROOT_SOURCE_SETS_TO_COMMON)
+    val isRoot = sourceSet.name == COMMON_MAIN_SOURCE_SET_NAME || sourceSet.name == COMMON_TEST_SOURCE_SET_NAME
+
+    // never makes sense to coerce single-targeted source-sets
+    if (sourceSet.actualPlatforms.platforms.size == 1) return false
+
+    return when {
+        // pre-HMPP has only single-targeted source sets and COMMON
+        !isHMPPEnabled -> true
+
+        // in HMPP, we might want to coerce source sets to common, but only root ones, and only
+        // when the corresponding setting is turned on
+        isHMPPEnabled && isRoot && coerceRootSourceSetsToCommon -> true
+
+        // in all other cases, in HMPP we shouldn't coerce anything
+        else -> false
     }
 }
 
