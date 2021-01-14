@@ -950,13 +950,6 @@ fun computeSourceSetsDeferredInfo(importingContext: MultiplatformModelImportingC
             continue
         }
 
-        // TODO DISCUSS AT REVIEW: can we simplify it to:
-        //      sourceSet.isTestModule = importingContext.compilationsBySourceSet(sourceSet)?.all { it.isTestModule} ?: false
-        //                                                                                                           ^
-        //                                                                                                           |
-        //                                                                                                          sic!
-        //  The difference from the current behaviour would be in case if source set is not included into any compilation AND
-        //  KotlinSourceSetImpl.defaultIsTestModule is set to 'true'. Though I don't know who and why would do that.
         sourceSet.isTestModule = importingContext.compilationsBySourceSet(sourceSet)?.all { it.isTestModule } ?: false
 
         val platforms = importingContext.compilationsBySourceSet(sourceSet)?.map { it.platform }
