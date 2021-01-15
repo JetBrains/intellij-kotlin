@@ -13,6 +13,7 @@ import com.intellij.internal.statistic.eventLog.validator.rules.EventContext
 import com.intellij.internal.statistic.eventLog.validator.rules.impl.CustomValidationRule
 import com.intellij.internal.statistic.service.fus.collectors.CounterUsagesCollector
 import com.intellij.internal.statistic.utils.getPluginInfoById
+import com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.idea.KotlinPluginUtil
 
 interface WizardStats {
@@ -23,12 +24,12 @@ class WizardStatsService : CounterUsagesCollector() {
     override fun getGroup(): EventLogGroup = GROUP
 
     companion object {
-        private val GROUP = EventLogGroup("kotlin.ide.new.project", 2)
 
-        private const val eventProjectCreated = "project_created"
-        private const val eventProjectOpenedByHyperlink = "wizard_opened_by_hyperlink"
+        // Collector ID
+        private val GROUP = EventLogGroup("kotlin.ide.new.project", 4)
 
-        private val allowedTemplates = listOf( // Modules
+        // Whitelisted values for the events fields
+        private val allowedProjectTemplates = listOf( // Modules
             "JVM_|_IDEA",
             "JS_|_IDEA",
             // Java and Gradle groups
@@ -50,9 +51,26 @@ class WizardStatsService : CounterUsagesCollector() {
             "frontendApplication",
             "fullStackWebApplication",
             "nodejsApplication",
+            "reactApplication",
+            "composeDesktopApplication",
+            "composeMultiplatformApplication",
             "none"
         )
-        private val allowedGroups = listOf("Java", "Kotlin", "Gradle")
+        private val allowedModuleTemplates = listOf(
+            "composeAndroid",
+            "composeDesktopTemplate",
+            "composeMppModule",
+            "consoleJvmApp",
+            "ktorServer",
+            "mobileMppModule",
+            "nativeConsoleApp",
+            "reactJsClient",
+            "simpleJsClient",
+            "simpleNodeJs",
+            "none",
+        )
+
+        private val allowedWizardsGroups = listOf("Java", "Kotlin", "Gradle")
         private val allowedBuildSystems = listOf(
             "gradleKotlin",
             "gradleGroovy",
@@ -60,18 +78,22 @@ class WizardStatsService : CounterUsagesCollector() {
             "maven"
         )
 
-        val groupField = EventFields.String("group", allowedGroups)
-        val projectTemplateField = EventFields.String("project_template", allowedTemplates)
+        // Event fields
+        val groupField = EventFields.String("group", allowedWizardsGroups)
+        val projectTemplateField = EventFields.String("project_template", allowedProjectTemplates)
         val buildSystemField = EventFields.String("build_system", allowedBuildSystems)
 
         val modulesCreatedField = EventFields.Int("modules_created")
         val modulesRemovedField = EventFields.Int("modules_removed")
         val moduleTemplateChangedField = EventFields.Int("module_template_changed")
 
-        private val pluginInfo = EventFields.PluginInfo.with(getPluginInfoById(KotlinPluginUtil.KOTLIN_PLUGIN_ID))
+        val moduleTemplateField = EventFields.String("module_template", allowedModuleTemplates)
 
+        private val pluginInfoField = EventFields.PluginInfo.with(getPluginInfoById(KotlinPluginUtil.KOTLIN_PLUGIN_ID))
+
+        // Events
         private val projectCreatedEvent = GROUP.registerVarargEvent(
-            eventProjectCreated,
+            "project_created",
             groupField,
             projectTemplateField,
             buildSystemField,
@@ -81,31 +103,58 @@ class WizardStatsService : CounterUsagesCollector() {
             EventFields.PluginInfo
         )
 
-        private val projectOpenedByHyperlink = GROUP.registerVarargEvent(
-            eventProjectOpenedByHyperlink,
+        private val projectOpenedByHyperlinkEvent = GROUP.registerVarargEvent(
+            "wizard_opened_by_hyperlink",
             projectTemplateField,
             EventFields.PluginInfo
         )
 
-        fun logDataOnProjectGenerated(projectCreationStats: ProjectCreationStats) {
+        private val moduleTemplateCreatedEvent = GROUP.registerVarargEvent(
+            "module_template_created",
+            projectTemplateField,
+            moduleTemplateField,
+            EventFields.PluginInfo
+        )
+
+        // Log functions
+        fun logDataOnProjectGenerated(project: Project?, projectCreationStats: ProjectCreationStats) {
             projectCreatedEvent.log(
+                project,
                 *projectCreationStats.toPairs().toTypedArray(),
-                pluginInfo
+                pluginInfoField
             )
+
         }
 
-        fun logDataOnProjectGenerated(projectCreationStats: ProjectCreationStats, uiEditorUsageStats: UiEditorUsageStats) {
+        fun logDataOnProjectGenerated(project: Project?, projectCreationStats: ProjectCreationStats, uiEditorUsageStats: UiEditorUsageStats) {
             projectCreatedEvent.log(
+                project,
                 *projectCreationStats.toPairs().toTypedArray(),
                 *uiEditorUsageStats.toPairs().toTypedArray(),
-                pluginInfo
+                pluginInfoField
             )
         }
 
-        fun logWizardOpenByHyperlink(templateId: String?) {
-            projectOpenedByHyperlink.log(
+        fun logUsedModuleTemplatesOnNewWizardProjectCreated(project: Project?, projectTemplateId: String, moduleTemplates: List<String>) {
+            moduleTemplates.forEach { moduleTemplateId ->
+                logModuleTemplateCreation(project, projectTemplateId, moduleTemplateId)
+            }
+        }
+
+        fun logWizardOpenByHyperlink(project: Project?, templateId: String?) {
+            projectOpenedByHyperlinkEvent.log(
+                project,
                 projectTemplateField.with(templateId ?: "none"),
-                pluginInfo
+                pluginInfoField
+            )
+        }
+
+        private fun logModuleTemplateCreation(project: Project?, projectTemplateId: String, moduleTemplateId: String) {
+            moduleTemplateCreatedEvent.log(
+                project,
+                projectTemplateField.with(projectTemplateId),
+                moduleTemplateField.with(moduleTemplateId),
+                pluginInfoField
             )
         }
     }
@@ -113,7 +162,7 @@ class WizardStatsService : CounterUsagesCollector() {
     data class ProjectCreationStats(
         val group: String,
         val projectTemplateId: String,
-        val buildSystemType: String
+        val buildSystemType: String,
     ) : WizardStats {
         override fun toPairs(): ArrayList<EventPair<*>> = arrayListOf(
             groupField.with(group),
