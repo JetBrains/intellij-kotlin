@@ -6,19 +6,20 @@
 package org.jetbrains.kotlin.gradle
 
 import org.jetbrains.kotlin.idea.codeInsight.gradle.MultiplePluginVersionGradleImportingTestCase
+import org.jetbrains.kotlin.idea.codeInsight.gradle.mppImportTestMinVersionForMaster
 import org.jetbrains.plugins.gradle.tooling.annotation.PluginTargetVersions
 import org.junit.Test
 
 
 class ImportAndCheckHighlighting : MultiplePluginVersionGradleImportingTestCase() {
     @Test
-    @PluginTargetVersions(pluginVersion = "1.3.40+")
+    @PluginTargetVersions(pluginVersion = "1.3.40+", gradleVersionForLatestPlugin = mppImportTestMinVersionForMaster)
     fun testMultiplatformLibrary() {
         importAndCheckHighlighting()
     }
 
     @Test
-    @PluginTargetVersions(pluginVersion = "1.3.40+")
+    @PluginTargetVersions(pluginVersion = "1.3.40+", gradleVersionForLatestPlugin = mppImportTestMinVersionForMaster)
     fun testUnresolvedInMultiplatformLibrary() {
         importAndCheckHighlighting(false, false)
     }
