@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.idea.core.moveCaret
 import org.jetbrains.kotlin.idea.core.replaced
 import org.jetbrains.kotlin.idea.core.unblockDocument
 import org.jetbrains.kotlin.idea.inspections.IntentionBasedInspection
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.*
@@ -26,6 +27,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.TypeUtils
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 @Suppress("DEPRECATION")
 class JoinDeclarationAndAssignmentInspection : IntentionBasedInspection<KtProperty>(
@@ -140,6 +142,10 @@ class JoinDeclarationAndAssignmentIntention : SelfTargetingRangeIntention<KtProp
 
         val firstAssignment = assignments.firstOrNull() ?: return null
         if (assignments.any { it !== firstAssignment && it.parent.parent is KtSecondaryConstructor }) return null
+        if (!property.isLocal &&
+            firstAssignment.parent != propertyContainer &&
+            firstAssignment.right.safeAs<KtNameReferenceExpression>()?.mainReference?.resolve() is KtParameter
+        ) return null
 
         val context = firstAssignment.analyze()
         val propertyDescriptor = context[BindingContext.DECLARATION_TO_DESCRIPTOR, property] ?: return null

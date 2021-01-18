@@ -10683,6 +10683,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/joinDeclarationAndAssignment/notFirstSecondaryConstructorLine.kt");
         }
 
+        @TestMetadata("propertyAssignmentWithConstructorParameter.kt")
+        public void testPropertyAssignmentWithConstructorParameter() throws Exception {
+            runTest("testData/intentions/joinDeclarationAndAssignment/propertyAssignmentWithConstructorParameter.kt");
+        }
+
         @TestMetadata("propertyReassignment.kt")
         public void testPropertyReassignment() throws Exception {
             runTest("testData/intentions/joinDeclarationAndAssignment/propertyReassignment.kt");
