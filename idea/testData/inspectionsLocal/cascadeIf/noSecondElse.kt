@@ -2,11 +2,11 @@
 
 fun println(s: String) {}
 
-fun test(a: Boolean, b: Boolean) {
-    <caret>if (a) {
+fun test(i: Int) {
+    <caret>if (i == 1) {
         println("a")
     }
-    else if (b) {
+    else if (i == 2) {
         println("b")
     }
 }
