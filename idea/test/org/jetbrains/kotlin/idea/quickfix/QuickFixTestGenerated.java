@@ -2407,6 +2407,11 @@ public abstract class QuickFixTestGenerated extends AbstractQuickFixTest {
             runTest("testData/quickfix/changeSignature/removeUnusedParameterOfPropertySetter.kt");
         }
 
+        @TestMetadata("removeUnusedParameterWithCommentsBetweenArgs.kt")
+        public void testRemoveUnusedParameterWithCommentsBetweenArgs() throws Exception {
+            runTest("testData/quickfix/changeSignature/removeUnusedParameterWithCommentsBetweenArgs.kt");
+        }
+
         @TestMetadata("removeUnusedParameterWithLongQualifier.kt")
         public void testRemoveUnusedParameterWithLongQualifier() throws Exception {
             runTest("testData/quickfix/changeSignature/removeUnusedParameterWithLongQualifier.kt");

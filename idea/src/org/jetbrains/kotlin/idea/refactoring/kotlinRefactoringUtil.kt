@@ -750,7 +750,15 @@ fun <ListType : KtElement> replaceListPsiAndKeepDelimiters(
     val lastOriginalParameter = oldParameters.last()
 
     if (oldCount > commonCount) {
-        originalList.deleteChildRange(oldParameters[commonCount - 1].nextSibling, lastOriginalParameter)
+        oldParameters[commonCount - 1]
+            .siblings(forward = true, withItself = false)
+            .takeWhile { it !== lastOriginalParameter }
+            .firstOrNull { it.node.elementType == KtTokens.COMMA }
+            ?.delete()
+        originalList.deleteChildRange(
+            lastOriginalParameter.prevSibling?.takeIf { it is PsiWhileStatement } ?: lastOriginalParameter,
+            lastOriginalParameter
+        )
     } else if (newCount > commonCount) {
         val psiBeforeLastParameter = lastOriginalParameter.prevSibling
         val withMultiline =
