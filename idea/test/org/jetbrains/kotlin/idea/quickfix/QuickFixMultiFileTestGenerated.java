@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -311,6 +311,11 @@ public abstract class QuickFixMultiFileTestGenerated extends AbstractQuickFixMul
         @TestMetadata("importKotlinStaticPropertyOverloadedSetterFromJava.test")
         public void testImportKotlinStaticPropertyOverloadedSetterFromJava() throws Exception {
             runTest("testData/quickfix/autoImports/importKotlinStaticPropertyOverloadedSetterFromJava.test");
+        }
+
+        @TestMetadata("ImportOperatorInvokeWithConvention.before.Main.kt")
+        public void testImportOperatorInvokeWithConvention() throws Exception {
+            runTest("testData/quickfix/autoImports/ImportOperatorInvokeWithConvention.before.Main.kt");
         }
 
         @TestMetadata("importTrait.before.Main.kt")
