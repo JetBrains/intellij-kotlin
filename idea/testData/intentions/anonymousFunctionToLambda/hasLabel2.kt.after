@@ -1,0 +1,11 @@
+inline fun a(block: () -> String) = block()
+
+val test = lBlock2@{ i: Int, s: String ->
+    if (i == 42) return@lBlock2 s
+    a lBlock@{
+        a lBlock1@{
+            return@lBlock2 "42"
+        }
+    }
+    if (s == "test") "$s" else "$i"
+}
