@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.tools.projectWizard.phases.GenerationPhase
 import org.jetbrains.kotlin.tools.projectWizard.plugins.Plugins
 import org.jetbrains.kotlin.tools.projectWizard.plugins.StructurePlugin
 import org.jetbrains.kotlin.tools.projectWizard.plugins.buildSystem.BuildSystemType
+import org.jetbrains.kotlin.tools.projectWizard.plugins.kotlin.KotlinPlugin
 import org.jetbrains.kotlin.tools.projectWizard.projectTemplates.ProjectTemplate
 import org.jetbrains.kotlin.tools.projectWizard.wizard.service.IdeaJpsWizardService
 import org.jetbrains.kotlin.tools.projectWizard.wizard.service.IdeaServices
@@ -102,15 +103,7 @@ class NewProjectWizardModuleBuilder : EmptyModuleBuilder() {
             Messages.showErrorDialog(project, errorMessages, KotlinNewProjectWizardUIBundle.message("error.generation"))
         }.isSuccess
         if (success) {
-            val projectCreationStats = ProjectCreationStats(
-                KotlinTemplatesFactory.KOTLIN_GROUP_NAME,
-                wizard.projectTemplate!!.id,
-                wizard.buildSystemType!!.id
-            )
-            WizardStatsService.logDataOnProjectGenerated(
-                projectCreationStats,
-                uiEditorUsagesStats
-            )
+            logToFUS(project)
         }
         return when {
             !success -> null
@@ -119,6 +112,30 @@ class NewProjectWizardModuleBuilder : EmptyModuleBuilder() {
             }
             else -> emptyList()
         }
+    }
+
+    private fun logToFUS(project: Project?) {
+        val projectCreationStats = ProjectCreationStats(
+            KotlinTemplatesFactory.KOTLIN_GROUP_NAME,
+            wizard.projectTemplate!!.id,
+            wizard.buildSystemType!!.id,
+        )
+        WizardStatsService.logDataOnProjectGenerated(
+            project,
+            projectCreationStats,
+            uiEditorUsagesStats
+        )
+
+        val moduleTemplates = wizard.context.read {
+            KotlinPlugin.modules.reference.settingValue.map { module ->
+                module.template?.id ?: "none"
+            }
+        }
+        WizardStatsService.logUsedModuleTemplatesOnNewWizardProjectCreated(
+            project,
+            wizard.projectTemplate!!.id,
+            moduleTemplates,
+        )
     }
 
     private fun clickFinishButton() {
