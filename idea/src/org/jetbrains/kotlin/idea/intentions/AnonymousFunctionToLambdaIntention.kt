@@ -67,7 +67,7 @@ class AnonymousFunctionToLambdaIntention : SelfTargetingRangeIntention<KtNamedFu
                     .orEmpty()
                 val calleeText = callElement?.calleeExpression?.text
                 if (callElement == null || calleeText in returnLabels) {
-                    val label = KotlinNameSuggester.suggestNameByName(calleeText ?: "lBlock") { it !in returnLabels }
+                    val label = KotlinNameSuggester.suggestNameByName(calleeText ?: "block") { it !in returnLabels }
                     appendFixedText("$label@")
                 }
             }
