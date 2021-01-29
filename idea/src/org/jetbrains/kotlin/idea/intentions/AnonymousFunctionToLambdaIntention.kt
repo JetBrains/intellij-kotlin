@@ -62,8 +62,14 @@ class AnonymousFunctionToLambdaIntention : SelfTargetingRangeIntention<KtNamedFu
         val newExpression = KtPsiFactory(element).buildExpression {
             if (!returnSaver.isEmpty) {
                 val returnLabels = element.bodyExpression
-                    ?.collectDescendantsOfType<KtLabeledExpression>()
-                    ?.mapNotNull { it.getLabelName() }
+                    ?.collectDescendantsOfType<KtExpression>()
+                    ?.mapNotNull {
+                        when (it) {
+                            is KtLabeledExpression -> it.getLabelName()
+                            is KtCallExpression -> it.calleeExpression?.text
+                            else -> null
+                        }
+                    }
                     .orEmpty()
                 val calleeText = callElement?.calleeExpression?.text
                 if (callElement == null || calleeText in returnLabels) {

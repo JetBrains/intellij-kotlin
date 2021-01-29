@@ -2255,6 +2255,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/anonymousFunctionToLambda/hasLabel2.kt");
         }
 
+        @TestMetadata("hasLabel3.kt")
+        public void testHasLabel3() throws Exception {
+            runTest("testData/intentions/anonymousFunctionToLambda/hasLabel3.kt");
+        }
+
         @TestMetadata("moveOut.kt")
         public void testMoveOut() throws Exception {
             runTest("testData/intentions/anonymousFunctionToLambda/moveOut.kt");
