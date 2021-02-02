@@ -98,6 +98,8 @@ import org.jetbrains.kotlin.idea.maven.AbstractKotlinMavenInspectionTest
 import org.jetbrains.kotlin.idea.maven.configuration.AbstractMavenConfigureProjectByChangingFileTest
 import org.jetbrains.kotlin.idea.navigation.*
 import org.jetbrains.kotlin.idea.parameterInfo.AbstractParameterInfoTest
+import org.jetbrains.kotlin.idea.perf.*
+import org.jetbrains.kotlin.idea.quickfix.AbstractHighLevelQuickFixTest
 import org.jetbrains.kotlin.idea.quickfix.AbstractQuickFixMultiFileTest
 import org.jetbrains.kotlin.idea.quickfix.AbstractQuickFixMultiModuleTest
 import org.jetbrains.kotlin.idea.quickfix.AbstractQuickFixTest
@@ -735,6 +737,20 @@ private fun assembleWorkspace(): TWorkspace = workspace {
 
         testClass<AbstractCommonDecompiledTextTest> {
             model("decompiler/decompiledText", pattern = """^([^\.]+)$""".toRegex())
+            testClass<AbstractFirKotlinHighlightingPassTest> {
+                model("checker", recursive = false)
+                model("checker/regression")
+                model("checker/recovery")
+                model("checker/rendering")
+                model("checker/infos")
+                model("checker/diagnosticsMessage")
+            }
+
+
+            testClass<AbstractHighLevelQuickFixTest> {
+                val pattern = "^([\\w\\-_]+)\\.kt$"
+                model("quickfix/modifiers", pattern = pattern, filenameStartsLowerCase = true, recursive = false)
+            }
         }
 
         testClass<AbstractJvmDecompiledTextTest> {
@@ -1344,7 +1360,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("incremental/multiModule/common", pattern = DIRECTORY, targetBackend = TargetBackend.JVM_IR)
             model("incremental/multiModule/jvm", pattern = DIRECTORY)
             model(
-                "incremental/multiModule/multiplatform/custom", pattern = DIRECTORY, 
+                "incremental/multiModule/multiplatform/custom", pattern = DIRECTORY,
                 targetBackend = TargetBackend.JVM_IR
             )
             model("incremental/pureKotlin", pattern = DIRECTORY, isRecursive = false, targetBackend = TargetBackend.JVM_IR)
