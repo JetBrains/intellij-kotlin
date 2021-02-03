@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.idea.core.util.CachedValue
 import org.jetbrains.kotlin.idea.core.util.getValue
 import org.jetbrains.kotlin.idea.klib.AbstractKlibLibraryInfo
 import org.jetbrains.kotlin.platform.SimplePlatform
+import org.jetbrains.kotlin.idea.project.isHMPPEnabled
 import org.jetbrains.kotlin.platform.TargetPlatform
 import org.jetbrains.kotlin.platform.konan.NativePlatformUnspecifiedTarget
 import org.jetbrains.kotlin.platform.konan.NativePlatformWithTarget
@@ -101,7 +102,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
     }
 
     private inner class LibraryUsageIndex {
-        val modulesLibraryIsUsedIn: MultiMap<LibraryWrapper, Module> = MultiMap.createSet()
+        private val modulesLibraryIsUsedIn: MultiMap<LibraryWrapper, Module> = MultiMap.createSet()
 
         init {
             for (module in ModuleManager.getInstance(project).modules) {
@@ -112,6 +113,16 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
                             modulesLibraryIsUsedIn.putValue(library.wrap(), module)
                         }
                     }
+                }
+            }
+        }
+
+        fun getModulesLibraryIsUsedIn(libraryInfo: LibraryInfo) = sequence<Module> {
+            val ideaModelInfosCache = getIdeaModelInfosCache(project)
+            for (module in modulesLibraryIsUsedIn[libraryInfo.library]) {
+                val mappedModuleInfos = ideaModelInfosCache.getModuleInfosForModule(module)
+                if (mappedModuleInfos.any { it.platform.canDependOn(libraryInfo, module.isHMPPEnabled) }) {
+                    yield(module)
                 }
             }
         }
