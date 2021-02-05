@@ -12,6 +12,7 @@
       <file url="file://$PROJECT_DIR$/intellij/android/uitest-framework/testSrc/com/android/tools/idea/tests/gui/framework/fixture/TestClassNameInputDialogFixture.java" />
       <file url="file://$PROJECT_DIR$/intellij/android/android-uitests/testSrc/com/android/tools/idea/tests/gui/espresso/EspressoRecorderTest.java" />
       <file url="file://$PROJECT_DIR$/intellij/plugins/javaFX/javaFX-CE/testSrc/org/jetbrains/plugins/javaFX/fxml/JavaFxGenerateDefaultPropertyValuesScript.java" />
+      <directory url="file://$PROJECT_DIR$/intellij/fleet" includeSubdirectories="true" />
     </excludeFromCompile>
     <resourceExtensions>
       <entry name=".+\.(properties|gif|png|jpeg|jpg|xml|dtd|tld|xsd|ft|html|template)" />
