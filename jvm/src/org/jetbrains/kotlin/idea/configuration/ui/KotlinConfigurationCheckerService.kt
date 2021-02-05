@@ -30,6 +30,8 @@ import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.idea.KotlinJvmBundle
 import org.jetbrains.kotlin.idea.configuration.notifyOutdatedBundledCompilerIfNecessary
+import org.jetbrains.kotlin.idea.configuration.ui.notifications.notifyKotlinStyleUpdateIfNeeded
+import org.jetbrains.kotlin.idea.configuration.ui.notifications.notifyNewJVMBackendIfNeeded
 import org.jetbrains.kotlin.idea.project.getAndCacheLanguageLevelByDependencies
 import org.jetbrains.kotlin.idea.util.application.getServiceSafe
 import org.jetbrains.kotlin.idea.util.projectStructure.allModules
@@ -49,6 +51,7 @@ class KotlinConfigurationCheckerStartupActivity : StartupActivity {
             notifyOutdatedBundledCompilerIfNecessary(project)
         })
 
+        notifyNewJVMBackendIfNeeded(project)
         KotlinConfigurationCheckerService.getInstance(project).performProjectPostOpenActions()
     }
 }
