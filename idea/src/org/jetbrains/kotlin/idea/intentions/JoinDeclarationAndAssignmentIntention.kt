@@ -144,7 +144,7 @@ class JoinDeclarationAndAssignmentIntention : SelfTargetingRangeIntention<KtProp
         if (assignments.any { it !== firstAssignment && it.parent.parent is KtSecondaryConstructor }) return null
         if (!property.isLocal &&
             firstAssignment.parent != propertyContainer &&
-            firstAssignment.right.safeAs<KtNameReferenceExpression>()?.mainReference?.resolve() is KtParameter
+            firstAssignment.right?.anyDescendantOfType<KtNameReferenceExpression> { it.mainReference.resolve() is KtParameter } == true
         ) return null
 
         val context = firstAssignment.analyze()
