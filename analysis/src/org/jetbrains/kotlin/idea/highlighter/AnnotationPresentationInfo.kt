@@ -66,15 +66,11 @@ class AnnotationPresentationInfo(
             QuickFixAction.registerQuickFixAction(info, it)
         }
 
-                    if (diagnostic.severity == Severity.WARNING) {
-                        annotation.problemGroup(KotlinSuppressableWarningProblemGroup(diagnostic.factory))
-
-                        if (fixes.isEmpty()) {
-                            // if there are no quick fixes we need to register an EmptyIntentionAction to enable 'suppress' actions
-                            annotation.newFix(EmptyIntentionAction(diagnostic.factory.name!!)).registerFix()
-                        }
-                    }
-                }
+        if (diagnostic.severity == Severity.WARNING) {
+            if (fixes.isEmpty()) {
+                // if there are no quick fixes we need to register an EmptyIntentionAction to enable 'suppress' actions
+                //annotation.newFix(EmptyIntentionAction(diagnostic.factory.name)).registerFix()
+                annotation.registerFix(EmptyIntentionAction(diagnostic.factory.name), textRange)
             }
         }
     }
