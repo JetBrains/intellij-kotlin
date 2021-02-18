@@ -58,12 +58,14 @@ class JoinDeclarationAndAssignmentIntention : SelfTargetingRangeIntention<KtProp
 
         val assignment = findAssignment(element) ?: return null
         val assignmentRight = assignment.right ?: return null
-        if (assignmentRight.anyDescendantOfType<KtNameReferenceExpression> { it.mainReference.resolve() == element }) return null
+        val context = assignment.analyze()
+        val propertyDescriptor = context[BindingContext.DECLARATION_TO_DESCRIPTOR, element]
+        if (assignmentRight.anyDescendantOfType<KtNameReferenceExpression> {
+                context[BindingContext.REFERENCE_TARGET, it] == propertyDescriptor
+            }) return null
         if (!assignmentRight.let {
-                hasNoLocalDependencies(it, element) && assignment.analyze().let { context ->
-                    (element.isVar && !element.isLocal) ||
-                            equalNullableTypes(it.getType(context), context[BindingContext.TYPE, element.typeReference])
-                }
+                hasNoLocalDependencies(it, element) && ((element.isVar && !element.isLocal) ||
+                        equalNullableTypes(it.getType(context), context[BindingContext.TYPE, element.typeReference]))
             }) return null
 
         return TextRange((element.modifierList ?: element.valOrVarKeyword).startOffset, (element.typeReference ?: element).endOffset)
