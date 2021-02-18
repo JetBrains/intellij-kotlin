@@ -82,8 +82,8 @@ fun KtExpression?.getWhenConditionSubjectCandidate(checkConstants: Boolean): KtE
     }
     return getCandidate()?.takeIf {
         it is KtNameReferenceExpression
-                || (it as? KtQualifiedExpression)?.selectorExpression !is KtNameReferenceExpression
-                || it !is KtThisExpression
+                || (it as? KtQualifiedExpression)?.selectorExpression is KtNameReferenceExpression
+                || it is KtThisExpression
     }
 }
 
