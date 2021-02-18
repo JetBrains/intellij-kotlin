@@ -999,6 +999,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractExpectedExpressionTypeTest> {
             model("components/expectedExpressionType")
         }
+
+        testClass<AbstractOverriddenDeclarationProviderTest> {
+            model("components/overridenDeclarations")
+        }
     }
 
     testGroup("idea/idea-fir/tests", "compiler/testData") {
