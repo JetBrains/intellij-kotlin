@@ -11,6 +11,8 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceService
 import com.intellij.psi.util.PsiTreeUtil
+import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
+import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.idea.core.canOmitDeclaredType
@@ -142,12 +144,15 @@ class JoinDeclarationAndAssignmentIntention : SelfTargetingRangeIntention<KtProp
 
         val firstAssignment = assignments.firstOrNull() ?: return null
         if (assignments.any { it !== firstAssignment && it.parent.parent is KtSecondaryConstructor }) return null
-        if (!property.isLocal &&
-            firstAssignment.parent != propertyContainer &&
-            firstAssignment.right?.anyDescendantOfType<KtNameReferenceExpression> { it.mainReference.resolve() is KtParameter } == true
-        ) return null
 
         val context = firstAssignment.analyze()
+        if (!property.isLocal &&
+            firstAssignment.parent != propertyContainer &&
+            firstAssignment.right?.anyDescendantOfType<KtNameReferenceExpression> {
+                val descriptor = context[BindingContext.REFERENCE_TARGET, it]
+                descriptor is ValueParameterDescriptor && descriptor.containingDeclaration is ClassConstructorDescriptor
+            } == true
+        ) return null
         val propertyDescriptor = context[BindingContext.DECLARATION_TO_DESCRIPTOR, property] ?: return null
         val assignedDescriptor = firstAssignment.left.getResolvedCall(context)?.candidateDescriptor ?: return null
         if (propertyDescriptor != assignedDescriptor) return null
