@@ -275,6 +275,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("checker/diagnosticsMessage")
         }
 
+        testClass<AbstractKotlinHighlightWolfPassTest> {
+            model("checker/wolf")
+        }
+
         testClass<AbstractJavaAgainstKotlinSourceCheckerTest> {
             model("kotlinAndJavaChecker/javaAgainstKotlin")
             model("kotlinAndJavaChecker/javaWithKotlin")
