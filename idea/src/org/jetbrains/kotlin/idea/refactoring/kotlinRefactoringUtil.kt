@@ -755,10 +755,7 @@ fun <ListType : KtElement> replaceListPsiAndKeepDelimiters(
             .takeWhile { it !== lastOriginalParameter }
             .firstOrNull { it.node.elementType == KtTokens.COMMA }
             ?.delete()
-        originalList.deleteChildRange(
-            lastOriginalParameter.prevSibling?.takeIf { it is PsiWhileStatement } ?: lastOriginalParameter,
-            lastOriginalParameter
-        )
+        lastOriginalParameter.delete()
     } else if (newCount > commonCount) {
         val psiBeforeLastParameter = lastOriginalParameter.prevSibling
         val withMultiline =
