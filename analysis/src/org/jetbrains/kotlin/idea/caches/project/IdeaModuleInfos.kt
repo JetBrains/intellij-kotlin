@@ -393,7 +393,7 @@ abstract class LibraryInfo(override val project: Project, val library: Library) 
     }
 
     private val lazyHashCode: Int by lazy {
-        43 * library.hashCode()
+        library.asLibraryEx().rootBasedHashCode()
     }
 
     override fun hashCode(): Int = lazyHashCode
