@@ -12,15 +12,14 @@ repositories {
 
 kotlin {
     js("nodeJs", LEGACY) {
-        binaries.executable()
         nodejs {
-
+            binaries.executable()
         }
     }
     js("browser", LEGACY) {
-        binaries.executable()
         browser {
-            commonWebpackConfig {
+            binaries.executable()
+            webpackTask {
                 cssSupport.enabled = true
             }
             runTask {

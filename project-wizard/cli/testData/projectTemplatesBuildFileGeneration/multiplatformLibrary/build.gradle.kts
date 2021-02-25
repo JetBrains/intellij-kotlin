@@ -21,8 +21,11 @@ kotlin {
     }
     js(LEGACY) {
         browser {
-            commonWebpackConfig {
-                cssSupport.enabled = true
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                    webpackConfig.cssSupport.enabled = true
+                }
             }
         }
     }
