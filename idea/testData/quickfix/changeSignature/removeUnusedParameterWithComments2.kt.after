@@ -3,8 +3,8 @@ private fun foo(bar: String, baz: String = "") {}
 
 private fun test() {
     foo(
-        "bar", // foo comment
-        "baz" // bar comment
-        // baz comment
+        // foo comment
+        "bar", // bar comment
+        "baz" // baz comment
     )
 }

@@ -4,7 +4,7 @@ private fun foo(foo: String, baz: String = "") {}
 private fun test() {
     foo(
         "foo", // foo comment
-        "baz" // bar comment
-        // baz comment
+        // bar comment
+        "baz" // baz comment
     )
 }
