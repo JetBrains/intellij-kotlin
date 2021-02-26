@@ -1,5 +1,5 @@
 // PROBLEM: none
 
-fun foo(i: Int): Int {
-    return <caret>if (i == 1) 42 else if (i == 2) 13 else 0
+fun foo(a: Boolean, b: Boolean): Int {
+    return <caret>if (a) 42 else if (b) 13 else 0
 }

@@ -1,13 +1,13 @@
 // PROBLEM: none
 
-fun foo(a: Boolean, i: Int) {
-    if (i == 1) {
+fun foo(a: Boolean, b: Boolean, c: Boolean) {
+    if (a) {
 
     }
-    else <caret>if (i == 2) {
+    else <caret>if (b) {
 
     }
-    else if (i == 3) {
+    else if (c) {
 
     }
     else {

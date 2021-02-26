@@ -2,12 +2,12 @@
 
 fun println(s: String) {}
 
-fun foo(i: Int, b: Boolean) {
-    <caret>if (i == 1) {
+fun foo(a: Boolean, b: Boolean) {
+    <caret>if (a) {
         if (b) println("ab")
         else println("a")
     }
-    else if (i == 2) {
+    else if (b) {
         println("b")
     }
     else {
