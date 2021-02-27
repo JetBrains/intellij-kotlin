@@ -64,9 +64,7 @@ import org.jetbrains.kotlin.idea.editor.quickDoc.AbstractQuickDocProviderTest
 import org.jetbrains.kotlin.idea.externalAnnotations.AbstractExternalAnnotationTest
 import org.jetbrains.kotlin.idea.filters.AbstractKotlinExceptionFilterTest
 import org.jetbrains.kotlin.idea.fir.AbstractKtDeclarationAndFirDeclarationEqualityChecker
-import org.jetbrains.kotlin.idea.fir.low.level.api.AbstractFirLazyDeclarationResolveTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.AbstractFirLazyResolveTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.AbstractFirMultiModuleLazyResolveTest
+import org.jetbrains.kotlin.idea.fir.low.level.api.*
 import org.jetbrains.kotlin.idea.fir.low.level.api.file.structure.AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest
 import org.jetbrains.kotlin.idea.fir.low.level.api.file.structure.AbstractFileStructureTest
 import org.jetbrains.kotlin.idea.fir.low.level.api.sessions.AbstractSessionsInvalidationTest
@@ -1021,6 +1019,9 @@ private fun assembleWorkspace(): TWorkspace = workspace {
     testGroup("fir-low-level-api", testDataPath = "testdata") {
         testClass<AbstractFirMultiModuleLazyResolveTest> {
             model("multiModuleLazyResolve", pattern = DIRECTORY, isRecursive = false)
+        }
+        testClass<AbstractFirSealedInheritorsTest> {
+            model("resolveSealed", recursive = false, extension = null)
         }
         testClass<AbstractFirLazyDeclarationResolveTest> {
             model("lazyResolve")
