@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.tools.projectWizard.settings.version.Version
 object Versions {
     val KOTLIN = version("1.4.10") // used as fallback version
     val GRADLE = version("6.6.1")
-    val KTOR = version("1.5.1")
+    val KTOR = version("1.5.2")
     val JUNIT = version("4.13")
     val JUNIT5 = version("5.6.0")
 
@@ -37,11 +37,11 @@ object Versions {
         val KOTLIN_REACT_DOM = KOTLIN_REACT
         val KOTLIN_STYLED = wrapperVersion("5.2.1")
         val KOTLIN_REACT_ROUTER_DOM = wrapperVersion("5.2.0")
-        val KOTLIN_REDUX = wrapperVersion("7.2.2")
+        val KOTLIN_REDUX = wrapperVersion("4.0.5")
         val KOTLIN_REACT_REDUX = wrapperVersion("7.2.2")
 
         private fun wrapperVersion(version: String): Version =
-            version("$version-pre.148-kotlin-1.4.21")
+            version("$version-pre.148-kotlin-1.4.30")
     }
 
     object GRADLE_PLUGINS {
