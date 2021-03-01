@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.gradle.GradleImpo
 import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.gradle.irsList
 import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.gradle.multiplatform.TargetConfigurationIR
 import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.gradle.multiplatform.addWithJavaIntoJvmTarget
+import org.jetbrains.kotlin.tools.projectWizard.library.MavenArtifact
 import org.jetbrains.kotlin.tools.projectWizard.moduleConfigurators.AndroidModuleConfigurator
 import org.jetbrains.kotlin.tools.projectWizard.moduleConfigurators.AndroidSinglePlatformModuleConfigurator
 import org.jetbrains.kotlin.tools.projectWizard.moduleConfigurators.inContextOfModuleConfigurator
@@ -53,7 +54,9 @@ class ComposeAndroidTemplate : Template() {
         +RepositoryIR(Repositories.JETBRAINS_COMPOSE_DEV)
         +RepositoryIR(DefaultRepository.JCENTER)
         +RepositoryIR(DefaultRepository.GOOGLE)
+        +Dependencies.ACTIVITY_COMPOSE
     }
+
 
     override fun Reader.updateBuildFileIRs(irs: List<BuildSystemIR>): List<BuildSystemIR> = irs.filterNot {
         it.safeAs<GradleOnlyPluginByNameIR>()?.pluginId == AndroidModuleConfigurator.DEPENDENCIES.KOTLIN_ANDROID_EXTENSIONS_NAME
@@ -101,6 +104,14 @@ class ComposeAndroidTemplate : Template() {
         val manifestXml = FileTemplateDescriptor(
             templateId = "composeAndroid/AndroidManifest.xml.vm",
             relativePath = "src" / "main" / "AndroidManifest.xml",
+        )
+    }
+
+    object Dependencies {
+        val ACTIVITY_COMPOSE = ArtifactBasedLibraryDependencyIR(
+            MavenArtifact(Repositories.JETBRAINS_COMPOSE_DEV, "androidx.activity", "activity-compose"),
+            version = Versions.COMPOSE.ANDROID_ACTIVITY_COMPOSE,
+            dependencyType = DependencyType.MAIN,
         )
     }
 }
