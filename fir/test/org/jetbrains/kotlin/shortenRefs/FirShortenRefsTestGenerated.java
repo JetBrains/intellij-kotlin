@@ -89,6 +89,11 @@ public abstract class FirShortenRefsTestGenerated extends AbstractFirShortenRefs
             runTest("../idea/testData/shortenRefsFir/calls/notImportedTopLevelFunctionNoArgs.kt");
         }
 
+        @TestMetadata("notImportedTopLevelProperty.kt")
+        public void testNotImportedTopLevelProperty() throws Exception {
+            runTest("idea/testData/shortenRefsFir/calls/notImportedTopLevelProperty.kt");
+        }
+
         @TestMetadata("notImportedTopLevelTypeConstructorNoArgs.kt")
         public void testNotImportedTopLevelTypeConstructorNoArgs() throws Exception {
             runTest("../idea/testData/shortenRefsFir/calls/notImportedTopLevelTypeConstructorNoArgs.kt");
