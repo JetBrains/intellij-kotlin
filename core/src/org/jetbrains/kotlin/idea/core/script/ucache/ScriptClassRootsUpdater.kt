@@ -147,11 +147,9 @@ abstract class ScriptClassRootsUpdater(
     @Synchronized
     private fun ensureUpdateScheduled() {
         scheduledUpdate?.cancel()
-        runReadAction {
-            if (!Disposer.isDisposing(project)) {
-                scheduledUpdate = BackgroundTaskUtil.executeOnPooledThread(project) {
-                    doUpdate()
-                }
+        if (!Disposer.isDisposing(project)) {
+            scheduledUpdate = BackgroundTaskUtil.executeOnPooledThread(project) {
+                doUpdate()
             }
         }
     }
