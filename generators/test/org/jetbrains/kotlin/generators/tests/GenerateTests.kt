@@ -969,6 +969,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractHLExpressionTypeTest> {
             model("components/expressionType")
         }
+
+        testClass<AbstractRendererTest> {
+            model("components/declarationRenderer")
+        }
     }
 
     testGroup("idea/idea-fir/tests", "compiler/testData") {
