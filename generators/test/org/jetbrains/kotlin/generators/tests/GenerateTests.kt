@@ -73,8 +73,6 @@ import org.jetbrains.kotlin.idea.highlighter.*
 import org.jetbrains.kotlin.idea.imports.AbstractJsOptimizeImportsTest
 import org.jetbrains.kotlin.idea.imports.AbstractJvmOptimizeImportsTest
 import org.jetbrains.kotlin.idea.index.AbstractKotlinTypeAliasByExpansionShortNameIndexTest
-import org.jetbrains.kotlin.idea.inspections.AbstractHLInspectionTest
-import org.jetbrains.kotlin.idea.inspections.AbstractHLLocalInspectionTest
 import org.jetbrains.kotlin.idea.inspections.AbstractLocalInspectionTest
 import org.jetbrains.kotlin.idea.inspections.AbstractMultiFileLocalInspectionTest
 import org.jetbrains.kotlin.idea.intentions.*
@@ -87,7 +85,6 @@ import org.jetbrains.kotlin.idea.maven.configuration.AbstractMavenConfigureProje
 import org.jetbrains.kotlin.idea.navigation.*
 import org.jetbrains.kotlin.idea.parameterInfo.AbstractParameterInfoTest
 import org.jetbrains.kotlin.idea.perf.*
-import org.jetbrains.kotlin.idea.quickfix.AbstractHighLevelQuickFixTest
 import org.jetbrains.kotlin.idea.quickfix.AbstractQuickFixMultiFileTest
 import org.jetbrains.kotlin.idea.quickfix.AbstractQuickFixMultiModuleTest
 import org.jetbrains.kotlin.idea.quickfix.AbstractQuickFixTest
@@ -133,7 +130,6 @@ import org.jetbrains.kotlin.idea.navigationToolbar.AbstractKotlinNavBarTest
 import org.jetbrains.kotlin.idea.refactoring.inline.AbstractInlineTestWithSomeDescriptors
 import org.jetbrains.kotlin.nj2k.*
 import org.jetbrains.kotlin.search.AbstractInheritorsSearchTest
-import org.jetbrains.kotlin.shortenRefs.AbstractFirShortenRefsTest
 import org.jetbrains.kotlin.shortenRefs.AbstractShortenRefsTest
 import org.jetbrains.kotlin.test.TargetBackend
 import org.jetbrains.kotlin.testGenerator.generator.TestGenerator
