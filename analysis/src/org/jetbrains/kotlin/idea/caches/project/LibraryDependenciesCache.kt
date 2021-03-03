@@ -21,12 +21,13 @@ import org.jetbrains.kotlin.idea.configuration.IdeBuiltInsLoadingState
 import org.jetbrains.kotlin.idea.core.util.CachedValue
 import org.jetbrains.kotlin.idea.core.util.getValue
 import org.jetbrains.kotlin.idea.klib.AbstractKlibLibraryInfo
+import org.jetbrains.kotlin.library.isInterop
 import org.jetbrains.kotlin.idea.project.isHMPPEnabled
 import org.jetbrains.kotlin.platform.SimplePlatform
-import org.jetbrains.kotlin.idea.project.isHMPPEnabled
 import org.jetbrains.kotlin.platform.TargetPlatform
 import org.jetbrains.kotlin.platform.konan.NativePlatformUnspecifiedTarget
 import org.jetbrains.kotlin.platform.konan.NativePlatformWithTarget
+import org.jetbrains.kotlin.platform.konan.isNative
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 internal typealias LibrariesAndSdks = Pair<List<LibraryInfo>, List<SdkInfo>>
@@ -187,6 +188,7 @@ internal data class DependencyCandidate(
      * `null` if the dependency itself is a library, not a fragment (e.g. Java libraries do not have fragments)
      */
     val containingLibraryId: String?,
+    val isInteropLibrary: Boolean,
     val platform: TargetPlatform,
     val libraries: List<LibraryInfo>
 ) {
@@ -195,7 +197,8 @@ internal data class DependencyCandidate(
             val libraryInfos = createLibraryInfo(project, library)
             val libraryInfo = libraryInfos.firstOrNull() ?: return null
             return DependencyCandidate(
-                containingLibraryIdOrNull(libraryInfo),
+                containingLibraryId = containingLibraryIdOrNull(libraryInfo),
+                isInteropLibrary = isInteropLibrary(libraryInfo),
                 platform = libraryInfo.platform,
                 libraries = libraryInfos
             )
@@ -203,6 +206,10 @@ internal data class DependencyCandidate(
 
         private fun containingLibraryIdOrNull(libraryInfo: LibraryInfo): String? {
             return (libraryInfo as? AbstractKlibLibraryInfo)?.uniqueName
+        }
+
+        private fun isInteropLibrary(libraryInfo: LibraryInfo): Boolean {
+            return (libraryInfo as? AbstractKlibLibraryInfo)?.resolvedKotlinLibrary?.isInterop == true
         }
     }
 }
@@ -217,8 +224,10 @@ internal fun chooseCompatibleDependencies(
         if (containingLibraryId == null) {
             return@map candidates.filter { candidate -> platform isSubsetCompatibleTo candidate.platform }
         }
-
-        val chosenPlatforms = chooseTargetPlatformsForDependencyCompatibility(platform, candidates.map { it.platform }.toSet())
+        val chosenPlatforms = chooseTargetPlatformsForDependencyCompatibility(
+            platform, candidates.map { it.platform }.toSet(),
+            allowSupersetCompatibility = platform.isNative() && platform.size > 1 && candidates.all { it.isInteropLibrary }
+        )
         candidates.filter { candidate -> candidate.platform in chosenPlatforms }
     }.flatten().toSet()
 }
@@ -234,7 +243,7 @@ internal fun chooseCompatibleDependencies(
  * abc && abcd -> abcd
  */
 private fun chooseTargetPlatformsForDependencyCompatibility(
-    from: TargetPlatform, platforms: Set<TargetPlatform>
+    from: TargetPlatform, platforms: Set<TargetPlatform>, allowSupersetCompatibility: Boolean = false
 ): Set<TargetPlatform> {
     val compatiblePlatforms = platforms.filter { platform -> from isSubsetCompatibleTo platform }.toSet()
     val isComplete = compatiblePlatforms.any { platform -> from isSupersetCompatibleTo platform }
@@ -243,7 +252,7 @@ private fun chooseTargetPlatformsForDependencyCompatibility(
     Contains a TargetPlatform that represents the same set of SimplePlatform's
     The set of "TargetPlatforms" is considered complete
     */
-    if (isComplete) {
+    if (isComplete || !allowSupersetCompatibility) {
         return compatiblePlatforms
     }
 
