@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 JetBrains s.r.o.
+ * Copyright 2010-2021 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package org.jetbrains.kotlin.idea.refactoring.changeSignature.usages
 
-import com.intellij.openapi.util.Key
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.util.PsiTreeUtil
@@ -24,8 +23,6 @@ import com.intellij.usageView.UsageInfo
 import com.intellij.util.containers.ContainerUtil
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
-import org.jetbrains.kotlin.idea.codeInsight.shorten.addToShorteningWaitSet
-import org.jetbrains.kotlin.idea.core.ShortenReferences
 import org.jetbrains.kotlin.idea.core.moveFunctionLiteralOutsideParentheses
 import org.jetbrains.kotlin.idea.core.replaced
 import org.jetbrains.kotlin.idea.refactoring.changeSignature.KotlinChangeInfo
@@ -289,9 +286,6 @@ class KotlinFunctionCallUsage(
         return resolvedCall.valueArguments[parameterDescriptor]
     }
 
-    private var KtValueArgument.generatedArgumentValue: Boolean
-            by NotNullablePsiCopyableUserDataProperty(Key.create("GENERATED_ARGUMENT_VALUE"), false)
-
     private fun ArgumentInfo.getArgumentByDefaultValue(
         element: KtCallElement,
         allUsages: Array<out UsageInfo>,
@@ -301,7 +295,12 @@ class KotlinFunctionCallUsage(
         val defaultValueForCall = parameter.defaultValueForCall
         val argValue = when {
             isInsideOfCallerBody -> psiFactory.createExpression(parameter.name)
-            defaultValueForCall != null -> substituteReferences(defaultValueForCall, parameter.defaultValueParameterReferences, psiFactory)
+            defaultValueForCall != null -> substituteReferences(
+                defaultValueForCall,
+                parameter.defaultValueParameterReferences,
+                psiFactory,
+            ).asMarkedForShortening()
+
             else -> null
         }
 
@@ -309,16 +308,12 @@ class KotlinFunctionCallUsage(
         return psiFactory.createArgument(argValue ?: psiFactory.createExpression("0"), argName).apply {
             if (argValue == null) {
                 getArgumentExpression()?.delete()
-            } else {
-                generatedArgumentValue = true
             }
         }
     }
 
-    private fun ExpressionReceiver.wrapInvalidated(element: KtCallElement): ExpressionReceiver {
-        return object : ExpressionReceiver by this {
-            override val expression = element.getQualifiedExpressionForSelector()!!.receiverExpression
-        }
+    private fun ExpressionReceiver.wrapInvalidated(element: KtCallElement): ExpressionReceiver = object : ExpressionReceiver by this {
+        override val expression = element.getQualifiedExpressionForSelector()!!.receiverExpression
     }
 
     private fun updateArgumentsAndReceiver(
@@ -442,17 +437,6 @@ class KotlinFunctionCallUsage(
             if (argument.getArgumentExpression() == null) argument.delete()
         }
 
-        element.accept(
-            object : KtTreeVisitorVoid() {
-                override fun visitArgument(argument: KtValueArgument) {
-                    if (argument.generatedArgumentValue) {
-                        argument.generatedArgumentValue = false
-                        argument.addToShorteningWaitSet(SHORTEN_ARGUMENTS_OPTIONS)
-                    }
-                }
-            }
-        )
-
         var newElement: KtElement = element
         if (newReceiverInfo != originalReceiverInfo) {
             val replacingElement: PsiElement = if (newReceiverInfo != null) {
@@ -460,12 +444,12 @@ class KotlinFunctionCallUsage(
                 val extensionReceiverExpression = receiverArgument?.getArgumentExpression()
                 val defaultValueForCall = newReceiverInfo.defaultValueForCall
                 val receiver = extensionReceiverExpression?.let { psiFactory.createExpression(it.text) }
-                    ?: defaultValueForCall
+                    ?: defaultValueForCall?.asMarkedForShortening()
                     ?: psiFactory.createExpression("_")
 
                 psiFactory.createExpressionByPattern("$0.$1", receiver, element)
             } else {
-                psiFactory.createExpression(element.text)
+                element.copy()
             }
 
             newElement = fullCallElement.replace(replacingElement) as KtElement
@@ -476,6 +460,7 @@ class KotlinFunctionCallUsage(
             newCallExpression.moveFunctionLiteralOutsideParentheses()
         }
 
+        newElement.flushElementsForShorteningToWaitList()
         return newElement
     }
 
@@ -506,8 +491,6 @@ class KotlinFunctionCallUsage(
                 else -> 0
             }
         }
-
-        private val SHORTEN_ARGUMENTS_OPTIONS = ShortenReferences.Options(removeThisLabels = true, removeThis = true)
 
         private fun updateJavaPropertyCall(changeInfo: KotlinChangeInfo, element: KtCallElement): KtElement {
             val newReceiverInfo = changeInfo.receiverParameterInfo
