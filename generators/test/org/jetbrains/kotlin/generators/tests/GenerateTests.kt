@@ -66,27 +66,6 @@ import org.jetbrains.kotlin.idea.editor.backspaceHandler.AbstractBackspaceHandle
 import org.jetbrains.kotlin.idea.editor.quickDoc.AbstractQuickDocProviderTest
 import org.jetbrains.kotlin.idea.externalAnnotations.AbstractExternalAnnotationTest
 import org.jetbrains.kotlin.idea.filters.AbstractKotlinExceptionFilterTest
-<<<<<<< HEAD
-||||||| parent of c249b172dba (FIR IDE: add test which check that every declaration is visited single time during diagnostic collection)
-import org.jetbrains.kotlin.idea.fir.AbstractKtDeclarationAndFirDeclarationEqualityChecker
-import org.jetbrains.kotlin.idea.fir.low.level.api.AbstractFirLazyDeclarationResolveTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.AbstractFirLazyResolveTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.AbstractFirMultiModuleLazyResolveTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.file.structure.AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.file.structure.AbstractFileStructureTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.sessions.AbstractSessionsInvalidationTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.trackers.AbstractProjectWideOutOfBlockKotlinModificationTrackerTest
-=======
-import org.jetbrains.kotlin.idea.fir.AbstractKtDeclarationAndFirDeclarationEqualityChecker
-import org.jetbrains.kotlin.idea.fir.low.level.api.AbstractFirLazyDeclarationResolveTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.AbstractFirLazyResolveTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.AbstractFirMultiModuleLazyResolveTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.file.structure.AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.file.structure.AbstractFileStructureTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.sessions.AbstractSessionsInvalidationTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.trackers.AbstractProjectWideOutOfBlockKotlinModificationTrackerTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.diagnostic.AbstractDiagnosticTraversalCounterTest
->>>>>>> c249b172dba (FIR IDE: add test which check that every declaration is visited single time during diagnostic collection)
 import org.jetbrains.kotlin.idea.folding.AbstractKotlinFoldingTest
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyTest
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyWithLibTest
@@ -744,39 +723,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
 
         testClass<AbstractCommonDecompiledTextTest> {
             model("decompiler/decompiledText", pattern = """^([^\.]+)$""".toRegex())
-            testClass<AbstractFirKotlinHighlightingPassTest> {
-                model("checker", isRecursive = false)
-                model("checker/regression")
-                model("checker/recovery")
-                model("checker/rendering")
-                model("checker/infos")
-                model("checker/diagnosticsMessage")
-            }
-
-
-            testClass<AbstractHighLevelQuickFixTest> {
-                val pattern = "^([\\w\\-_]+)\\.kt$".toRegex()
-                model("quickfix/abstract", pattern = pattern)
-                model("quickfix/lateinit", pattern = pattern)
-                model("quickfix/modifiers", pattern = pattern, isRecursive = false)
-                model("quickfix/override/typeMismatchOnOverride", pattern = pattern, isRecursive = false)
-                model("quickfix/variables/changeMutability", pattern = pattern, isRecursive = false)
-            }
-
-            testClass<AbstractHLInspectionTest> {
-                val pattern = "^(inspections\\.test)$".toRegex()
-                model("inspections/redundantUnitReturnType", pattern = pattern)
-            }
-
-
-            testClass<AbstractHLIntentionTest> {
-                val pattern = "^([\\w\\-_]+)\\.(kt|kts)$".toRegex()
-                model("intentions/specifyTypeExplicitly", pattern = pattern)
-            }
-
-            testClass<AbstractFirShortenRefsTest> {
-                model("shortenRefsFir", pattern = KT_WITHOUT_DOTS, testMethodName = "doTestWithMuting")
-            }
         }
 
         testClass<AbstractJvmDecompiledTextTest> {
@@ -1076,6 +1022,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
 
     testGroup("idea/idea-fir/tests", "idea") {
+        testClass<AbstractFirReferenceResolveTest> {
+            model("resolve/references", pattern = KT_WITHOUT_DOTS)
+        }
+
         testClass<AbstractFirHighlightingTest> {
             model("testData/highlighter")
             model("idea-fir/testData/highlighterFir", pattern = KT_WITHOUT_DOTS_IN_NAME)
@@ -1095,10 +1045,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
     }
 
     testGroup("idea/idea-fir/tests", "idea/testData") {
-        testClass<AbstractFirReferenceResolveTest> {
-            model("resolve/references", pattern = KT_WITHOUT_DOTS)
-        }
-
         testClass<AbstractFirKotlinHighlightingPassTest> {
             model("checker", isRecursive = false)
             model("checker/regression")
@@ -1106,6 +1052,29 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("checker/rendering")
             model("checker/infos")
             model("checker/diagnosticsMessage")
+        }
+
+        testClass<AbstractHighLevelQuickFixTest> {
+            val pattern = "^([\\w\\-_]+)\\.kt$".toRegex()
+            model("quickfix/abstract", pattern = pattern)
+            model("quickfix/lateinit", pattern = pattern)
+            model("quickfix/modifiers", pattern = pattern, isRecursive = false)
+            model("quickfix/override/typeMismatchOnOverride", pattern = pattern, isRecursive = false)
+            model("quickfix/variables/changeMutability", pattern = pattern, isRecursive = false)
+        }
+
+        testClass<AbstractHLInspectionTest> {
+            val pattern = "^(inspections\\.test)$".toRegex()
+            model("inspections/redundantUnitReturnType", pattern = pattern)
+        }
+
+        testClass<AbstractHLIntentionTest> {
+            val pattern = "^([\\w\\-_]+)\\.(kt|kts)$".toRegex()
+            model("intentions/specifyTypeExplicitly", pattern = pattern)
+        }
+
+        testClass<AbstractFirShortenRefsTest> {
+            model("shortenRefsFir", pattern = KT_WITHOUT_DOTS, testMethodName = "doTestWithMuting")
         }
     }
 
