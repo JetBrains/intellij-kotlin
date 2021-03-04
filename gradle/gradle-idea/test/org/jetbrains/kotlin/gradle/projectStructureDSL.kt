@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.idea.project.platform
 import org.jetbrains.kotlin.platform.TargetPlatform
 import org.jetbrains.kotlin.utils.addToStdlib.filterIsInstanceWithChecker
 import org.jetbrains.plugins.gradle.util.GradleUtil
+import kotlin.test.assertEquals
 import kotlin.test.fail
 
 class MessageCollector {

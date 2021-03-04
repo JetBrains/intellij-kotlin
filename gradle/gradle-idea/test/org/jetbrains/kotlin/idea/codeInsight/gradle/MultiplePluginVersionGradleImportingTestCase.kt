@@ -24,7 +24,7 @@ abstract class MultiplePluginVersionGradleImportingTestCase : KotlinGradleImport
 
     @JvmField
     @Parameterized.Parameter(1)
-    var pluginVersion: String = ""
+    var gradleKotlinPluginVersion: String = ""
 
     private val orgGradleNativePropertyKey: String = "org.gradle.native"
     private var initialOrgGradleNativePropertyValue: String? = null
@@ -47,6 +47,7 @@ abstract class MultiplePluginVersionGradleImportingTestCase : KotlinGradleImport
     }
 
     companion object {
+
         @JvmStatic
         @Suppress("ACCIDENTAL_OVERRIDE")
         @Parameterized.Parameters(name = "{index}: Gradle-{0}, KotlinGradlePlugin-{1}")
@@ -81,7 +82,7 @@ abstract class MultiplePluginVersionGradleImportingTestCase : KotlinGradleImport
 
     override fun configureByFiles(properties: Map<String, String>?): List<VirtualFile> {
         val unitedProperties = HashMap(properties ?: emptyMap())
-        unitedProperties["kotlin_plugin_version"] = pluginVersion
+        unitedProperties["kotlin_plugin_version"] = gradleKotlinPluginVersion
 
         unitedProperties["kotlin_plugin_repositories"] = repositories(false)
         unitedProperties["kts_kotlin_plugin_repositories"] = repositories(true)
@@ -107,10 +108,3 @@ abstract class MultiplePluginVersionGradleImportingTestCase : KotlinGradleImport
     }
 }
 
-fun MultiplePluginVersionGradleImportingTestCase.pluginVersionMatches(version: String): Boolean {
-    return VersionMatcher(GradleVersion.version(pluginVersion)).isVersionMatch(version, true);
-}
-
-fun MultiplePluginVersionGradleImportingTestCase.gradleVersionMatches(version: String): Boolean {
-    return VersionMatcher(GradleVersion.version(gradleVersion)).isVersionMatch(version, true);
-}
