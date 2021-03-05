@@ -7768,6 +7768,16 @@ public abstract class LocalInspectionTestGenerated extends AbstractLocalInspecti
             runTest("testData/inspectionsLocal/redundantInnerClassModifier/hasOuterClassMemberReference5.kt");
         }
 
+        @TestMetadata("hasOuterClassMemberReferenceFromNotThis.kt")
+        public void testHasOuterClassMemberReferenceFromNotThis() throws Exception {
+            runTest("testData/inspectionsLocal/redundantInnerClassModifier/hasOuterClassMemberReferenceFromNotThis.kt");
+        }
+
+        @TestMetadata("hasOuterClassMemberReferenceFromNotThis2.kt")
+        public void testHasOuterClassMemberReferenceFromNotThis2() throws Exception {
+            runTest("testData/inspectionsLocal/redundantInnerClassModifier/hasOuterClassMemberReferenceFromNotThis2.kt");
+        }
+
         @TestMetadata("hasOuterClassMemberReferenceInSuperTypeConstructorCall.kt")
         public void testHasOuterClassMemberReferenceInSuperTypeConstructorCall() throws Exception {
             runTest("testData/inspectionsLocal/redundantInnerClassModifier/hasOuterClassMemberReferenceInSuperTypeConstructorCall.kt");
