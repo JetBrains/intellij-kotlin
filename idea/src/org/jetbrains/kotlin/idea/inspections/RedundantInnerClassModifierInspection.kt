@@ -9,6 +9,7 @@ import com.intellij.codeInspection.IntentionWrapper
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentsOfType
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
@@ -29,6 +30,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.synthetic.SyntheticJavaPropertyDescriptor
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 class RedundantInnerClassModifierInspection : AbstractKotlinInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean) = classVisitor(fun(targetClass) {
@@ -57,10 +59,6 @@ class RedundantInnerClassModifierInspection : AbstractKotlinInspection() {
         return anyDescendantOfType<KtExpression> { expression ->
             when (expression) {
                 is KtNameReferenceExpression -> {
-                    val parentQualified = (expression.parent as? KtCallExpression ?: expression).getQualifiedExpressionForSelector()
-                    if (parentQualified != null && !parentQualified.hasThisReceiverOfOuterClass(outerClassDescriptors)) {
-                        return@anyDescendantOfType false
-                    }
                     val reference = expression.mainReference.resolve()?.let {
                         (it as? KtConstructor<*>)?.containingClass() ?: it
                     }
@@ -71,6 +69,13 @@ class RedundantInnerClassModifierInspection : AbstractKotlinInspection() {
                     if (referenceContainingClass != null) {
                         if (referenceContainingClass == targetClass) return@anyDescendantOfType false
                         if (referenceContainingClass in outerClasses) {
+                            if (!reference.hasReceiverTypeReference()) {
+                                val parentQualified =
+                                    (expression.parent as? KtCallExpression ?: expression).getQualifiedExpressionForSelector()
+                                if (parentQualified != null && !parentQualified.hasThisReceiverOfOuterClass(outerClassDescriptors)) {
+                                    return@anyDescendantOfType false
+                                }
+                            }
                             return@anyDescendantOfType reference !is KtClass || reference.isInner()
                         }
                     }
@@ -96,5 +101,9 @@ class RedundantInnerClassModifierInspection : AbstractKotlinInspection() {
 
     private fun KtExpression.referenceClassDescriptor(): ClassifierDescriptor? {
         return resolveToCall()?.resultingDescriptor?.returnType?.constructor?.declarationDescriptor
+    }
+
+    private fun PsiElement.hasReceiverTypeReference(): Boolean {
+        return safeAs<KtNamedFunction>()?.receiverTypeReference != null || safeAs<KtProperty>()?.receiverTypeReference != null
     }
 }
