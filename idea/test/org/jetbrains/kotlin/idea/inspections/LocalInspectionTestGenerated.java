@@ -7808,6 +7808,11 @@ public abstract class LocalInspectionTestGenerated extends AbstractLocalInspecti
             runTest("testData/inspectionsLocal/redundantInnerClassModifier/hasSuperJavaClassMemberReference2.kt");
         }
 
+        @TestMetadata("inAnonymousObject.kt")
+        public void testInAnonymousObject() throws Exception {
+            runTest("testData/inspectionsLocal/redundantInnerClassModifier/inAnonymousObject.kt");
+        }
+
         @TestMetadata("inInnerClass.kt")
         public void testInInnerClass() throws Exception {
             runTest("testData/inspectionsLocal/redundantInnerClassModifier/inInnerClass.kt");
