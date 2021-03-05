@@ -1,0 +1,7 @@
+class Test {
+    class Inner
+
+    fun foo() {
+        Inner()
+    }
+}

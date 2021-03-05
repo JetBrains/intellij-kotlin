@@ -9,6 +9,7 @@ import com.intellij.codeInspection.IntentionWrapper
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiClass
+import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.parentsOfType
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.idea.KotlinBundle
@@ -22,6 +23,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
@@ -33,7 +35,15 @@ class RedundantInnerClassModifierInspection : AbstractKotlinInspection() {
         val innerModifier = targetClass.modifierList?.getModifier(KtTokens.INNER_KEYWORD) ?: return
         val outerClasses = targetClass.parentsOfType<KtClass>().dropWhile { it == targetClass }.toSet()
         if (outerClasses.isEmpty() || outerClasses.any { it.isLocal || it.isInner() }) return
+
         if (targetClass.hasOuterClassMemberReference(outerClasses)) return
+
+        val containingClass = outerClasses.first()
+        if (ReferencesSearch.search(targetClass, targetClass.useScope).any {
+                val call = it.element.parent as? KtCallExpression ?: return@any false
+                call.getQualifiedExpressionForSelector() != null || call.getStrictParentOfType<KtClass>() != containingClass
+            }) return
+
         holder.registerProblem(
             innerModifier,
             KotlinBundle.message("inspection.redundant.inner.class.modifier.descriptor"),
