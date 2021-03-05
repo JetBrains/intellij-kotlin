@@ -72,6 +72,8 @@ import org.jetbrains.kotlin.idea.fir.low.level.api.trackers.AbstractProjectWideO
 import org.jetbrains.kotlin.idea.fir.low.level.api.diagnostic.AbstractDiagnosticTraversalCounterTest
 import org.jetbrains.kotlin.idea.folding.AbstractKotlinFoldingTest
 import org.jetbrains.kotlin.idea.frontend.api.components.AbstractExpectedExpressionTypeTest
+import org.jetbrains.kotlin.idea.frontend.api.components.AbstractHLExpressionTypeTest
+import org.jetbrains.kotlin.idea.frontend.api.components.AbstractOverriddenDeclarationProviderTest
 import org.jetbrains.kotlin.idea.frontend.api.components.AbstractReturnExpressionTargetTest
 import org.jetbrains.kotlin.idea.frontend.api.fir.AbstractResolveCallTest
 import org.jetbrains.kotlin.idea.frontend.api.scopes.AbstractFileScopeTest
@@ -987,6 +989,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
 
         testClass<AbstractOverriddenDeclarationProviderTest> {
             model("components/overridenDeclarations")
+        }
+
+        testClass<AbstractHLExpressionTypeTest> {
+            model("components/expressionType")
         }
     }
 
