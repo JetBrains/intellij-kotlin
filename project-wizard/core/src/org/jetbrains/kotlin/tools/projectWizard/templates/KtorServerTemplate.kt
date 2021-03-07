@@ -7,11 +7,6 @@ package org.jetbrains.kotlin.tools.projectWizard.templates
 
 
 import org.jetbrains.annotations.NonNls
-import org.jetbrains.kotlin.tools.projectWizard.KotlinNewProjectWizardBundle
-import org.jetbrains.kotlin.tools.projectWizard.Versions
-import org.jetbrains.kotlin.tools.projectWizard.WizardGradleRunConfiguration
-import org.jetbrains.kotlin.tools.projectWizard.WizardRunConfiguration
-import org.jetbrains.kotlin.tools.projectWizard.core.Reader
 import org.jetbrains.kotlin.tools.projectWizard.core.Writer
 import org.jetbrains.kotlin.tools.projectWizard.core.asPath
 import org.jetbrains.kotlin.tools.projectWizard.core.buildList
@@ -20,19 +15,19 @@ import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.*
 import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.gradle.multiplatform.TargetConfigurationIR
 import org.jetbrains.kotlin.tools.projectWizard.ir.buildsystem.gradle.multiplatform.addWithJavaIntoJvmTarget
 import org.jetbrains.kotlin.tools.projectWizard.library.MavenArtifact
-import org.jetbrains.kotlin.tools.projectWizard.moduleConfigurators.moduleType
 import org.jetbrains.kotlin.tools.projectWizard.phases.GenerationPhase
-import org.jetbrains.kotlin.tools.projectWizard.plugins.kotlin.KotlinPlugin
 import org.jetbrains.kotlin.tools.projectWizard.plugins.kotlin.ModuleType
-import org.jetbrains.kotlin.tools.projectWizard.plugins.kotlin.ProjectKind
 import org.jetbrains.kotlin.tools.projectWizard.settings.DisplayableSettingItem
-import org.jetbrains.kotlin.tools.projectWizard.settings.buildsystem.DefaultRepository
-import org.jetbrains.kotlin.tools.projectWizard.settings.buildsystem.Module
-import org.jetbrains.kotlin.tools.projectWizard.settings.buildsystem.Repositories
-import org.jetbrains.kotlin.tools.projectWizard.settings.buildsystem.SourcesetType
-import org.jetbrains.kotlin.tools.projectWizard.settings.version.Version
 import org.jetbrains.kotlin.tools.projectWizard.transformers.interceptors.InterceptionPoint
-import java.util.*
+import org.jetbrains.kotlin.tools.projectWizard.KotlinNewProjectWizardBundle
+import org.jetbrains.kotlin.tools.projectWizard.Versions
+import org.jetbrains.kotlin.tools.projectWizard.WizardGradleRunConfiguration
+import org.jetbrains.kotlin.tools.projectWizard.WizardRunConfiguration
+import org.jetbrains.kotlin.tools.projectWizard.core.Reader
+import org.jetbrains.kotlin.tools.projectWizard.moduleConfigurators.moduleType
+import org.jetbrains.kotlin.tools.projectWizard.plugins.kotlin.KotlinPlugin
+import org.jetbrains.kotlin.tools.projectWizard.plugins.kotlin.ProjectKind
+import org.jetbrains.kotlin.tools.projectWizard.settings.buildsystem.*
 
 class KtorServerTemplate : Template() {
     override val title: String = KotlinNewProjectWizardBundle.message("module.template.ktor.server.title")
@@ -46,10 +41,9 @@ class KtorServerTemplate : Template() {
 
     override fun Writer.getRequiredLibraries(module: ModuleIR): List<DependencyIR> =
         withSettingsOf(module.originalModule) {
-            val kotlinVersion = KotlinPlugin.version.propertyValue.version
             buildList {
-                +ktorArtifactDependency(serverEngine.reference.settingValue.dependencyName, kotlinVersion)
-                +ktorArtifactDependency("ktor-html-builder", kotlinVersion)
+                +DEPENDENCIES.KTOR_SERVER_NETTY
+                +ktorArtifactDependency("ktor-html-builder")
                 +ArtifactBasedLibraryDependencyIR(
                     MavenArtifact(Repositories.KOTLINX, "org.jetbrains.kotlinx", "kotlinx-html-jvm"),
                     Versions.KOTLINX.KOTLINX_HTML,
@@ -75,44 +69,20 @@ class KtorServerTemplate : Template() {
         FileTemplateDescriptor("$id/server.kt.vm", "server.kt".asPath()) asSrcOf SourcesetType.main
     )
 
-    val serverEngine by enumSetting<KtorServerEngine>(
-        KotlinNewProjectWizardBundle.message("module.template.ktor.server.setting.engine"),
-        GenerationPhase.PROJECT_GENERATION
-    )
-
     val imports = InterceptionPoint("imports", emptyList<String>())
     val routes = InterceptionPoint("routes", emptyList<String>())
     val elements = InterceptionPoint("elements", emptyList<String>())
 
     override val interceptionPoints: List<InterceptionPoint<Any>> = listOf(imports, routes, elements)
-    override val settings: List<TemplateSetting<*, *>> = listOf(serverEngine)
+    override val settings: List<TemplateSetting<*, *>> = listOf()
+
+    private object DEPENDENCIES {
+        val KTOR_SERVER_NETTY = ktorArtifactDependency("ktor-server-netty")
+    }
 }
 
-private fun ktorArtifactDependency(@NonNls name: String, kotlinVersion: Version) = ArtifactBasedLibraryDependencyIR(
+private fun ktorArtifactDependency(@NonNls name: String) = ArtifactBasedLibraryDependencyIR(
     MavenArtifact(Repositories.KTOR, "io.ktor", name),
     Versions.KTOR,
     DependencyType.MAIN
 )
-
-
-@Suppress("MemberVisibilityCanBePrivate")
-enum class KtorServerEngine(val engineName: String, val dependencyName: String) : DisplayableSettingItem {
-    Netty(
-        KotlinNewProjectWizardBundle.message("module.template.ktor.server.setting.engine.netty"),
-        dependencyName = "ktor-server-netty"
-    ),
-    Tomcat(
-        KotlinNewProjectWizardBundle.message("module.template.ktor.server.setting.engine.tomcat"),
-        dependencyName = "ktor-server-tomcat"
-    ),
-    Jetty(
-        KotlinNewProjectWizardBundle.message("module.template.ktor.server.setting.engine.jetty"),
-        dependencyName = "ktor-server-jetty"
-    );
-
-    override val text: String
-        get() = engineName.capitalize()
-
-    val import: String
-        get() = "io.ktor.server.${engineName.decapitalize(Locale.US)}.${engineName.capitalize(Locale.US)}"
-}
