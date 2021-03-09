@@ -20,6 +20,69 @@ import org.junit.runner.RunWith;
 @TestRoot("fir")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
+public class FirClassLoadingTestGenerated extends AbstractFirClassLoadingTest {
+    private void runTest(String testDataFilePath) throws Exception {
+        KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+    }
+
+    public void testAllFilesPresentInUltraLightClasses() throws Exception {
+        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/asJava/ultraLightClasses"), Pattern.compile("^(.+)\\.(kt|kts)$"), null, true);
+    }
+
+    @TestMetadata("annotationTargets_1_6.kt")
+    public void testAnnotationTargets_1_6() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/annotationTargets_1_6.kt");
+    }
+
+    @TestMetadata("annotationWithSetParamPropertyModifier.kt")
+    public void testAnnotationWithSetParamPropertyModifier() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/annotationWithSetParamPropertyModifier.kt");
+    }
+
+    @TestMetadata("annotations.kt")
+    public void testAnnotations() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/annotations.kt");
+    }
+
+    @TestMetadata("classModifiers.kt")
+    public void testClassModifiers() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/classModifiers.kt");
+    }
+
+    @TestMetadata("constructors.kt")
+    public void testConstructors() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/constructors.kt");
+    }
+
+    @TestMetadata("coroutines.kt")
+    public void testCoroutines() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/coroutines.kt");
+    }
+
+    @TestMetadata("dataClasses.kt")
+    public void testDataClasses() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/dataClasses.kt");
+    }
+
+    @TestMetadata("defaultMethodInKotlinWithSettingAll.kt")
+    public void testDefaultMethodInKotlinWithSettingAll() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/defaultMethodInKotlinWithSettingAll.kt");
+    }
+
+    @TestMetadata("defaultMethodInKotlinWithSettingAllCompatibility.kt")
+    public void testDefaultMethodInKotlinWithSettingAllCompatibility() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/defaultMethodInKotlinWithSettingAllCompatibility.kt");
+    }
+
+    @TestMetadata("delegatesWithAnnotations.kt")
+    public void testDelegatesWithAnnotations() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/delegatesWithAnnotations.kt");
+    }
+
+    @TestMetadata("delegatingToInterfaces.kt")
+    public void testDelegatingToInterfaces() throws Exception {
+        runTest("compiler/testData/asJava/ultraLightClasses/delegatingToInterfaces.kt");
+    }
 @TestMetadata("../compiler/testData/compiler/asJava/ultraLightClasses")
 public abstract class FirClassLoadingTestGenerated extends AbstractFirClassLoadingTest {
 
