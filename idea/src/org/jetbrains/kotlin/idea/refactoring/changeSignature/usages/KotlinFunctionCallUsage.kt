@@ -280,7 +280,7 @@ class KotlinFunctionCallUsage(
             name = parameter.getInheritedName(callee)
         }
 
-        fun shouldSkip() = parameter.defaultValueForParameter != null && mainValueArgument == null
+        fun shouldSkip() = parameter.defaultValue != null && mainValueArgument == null
     }
 
     private fun getResolvedValueArgument(oldIndex: Int): ResolvedValueArgument? {
@@ -425,7 +425,7 @@ class KotlinFunctionCallUsage(
         val newLambdaArgumentAddedLast = lastNewParameter != null
                 && lastNewParameter.isNewParameter
                 && lastNewParameter.defaultValueForCall is KtLambdaExpression
-                && lastNewArgument != null
+                && lastNewArgument?.getArgumentExpression() is KtLambdaExpression
                 && !lastNewArgument.isNamed()
 
         if (lambdaArgumentNotTouched) {
