@@ -318,7 +318,7 @@ internal fun KotlinType.withoutRedundantAnnotations(): KotlinType {
         if (typeProjection.type === newType) return typeProjection
 
         argumentsWasChanged = true
-        return typeProjection.replaceType(newType)
+        return TypeProjectionImpl(typeProjection.projectionKind, newType)
     })
 
     val newAnnotations = FilteredAnnotations(
