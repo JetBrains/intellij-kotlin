@@ -951,6 +951,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("symbolsByFqName", extension = "txt")
         }
 
+        testClass<AbstractSymbolByReferenceTest> {
+            model("symbolByReference")
+        }
+
         testClass<AbstractMemberScopeByFqNameTest> {
             model("memberScopeByFqName", extension = "txt")
         }
