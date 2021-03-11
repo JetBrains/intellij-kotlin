@@ -1,3 +1,8 @@
+/*
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package org.jetbrains.kotlin.idea.configuration.mpp
 
 import com.google.common.graph.Graph
@@ -27,7 +32,7 @@ internal fun KotlinMPPGradleProjectResolver.Companion.populateModuleDependencies
 
         val visibleSourceSets = sourceSetVisibilityGraph.successors(sourceSet)
         val fromDataNode = getSiblingKotlinModuleData(sourceSet, gradleModule, ideModule, resolverCtx)?.cast<GradleSourceSetData>()
-            ?: continue
+            ?: return
 
 
         /* Add dependencies from current sourceSet to all visible source sets (dependsOn, test to production, ...)*/
@@ -60,7 +65,7 @@ private data class DependencyPopulationSettings(
 private fun dependencyPopulationSettings(mppModel: KotlinMPPGradleModel, sourceSet: KotlinSourceSet): DependencyPopulationSettings {
     val forceNativeDependencyPropagation: Boolean
     val excludeInheritedNativeDependencies: Boolean
-    if (mppModel.extraFeatures.isHMPPEnabled && sourceSet.actualPlatforms.getSinglePlatform() == KotlinPlatform.NATIVE) {
+    if (mppModel.extraFeatures.isHMPPEnabled && sourceSet.actualPlatforms.singleOrNull() == KotlinPlatform.NATIVE) {
         forceNativeDependencyPropagation = mppModel.extraFeatures.isNativeDependencyPropagationEnabled
         excludeInheritedNativeDependencies = !forceNativeDependencyPropagation
     } else {
@@ -207,7 +212,7 @@ private fun KotlinMPPGradleProjectResolver.Companion.populateSourceSetInfos(
     val dependeeSourceSets = closedSourceSetGraph.successors(sourceSet)
     val sourceSetInfos = if (isAndroid) {
         ideModule.kotlinAndroidSourceSets?.filter {
-            (it.kotlinModule as? KotlinCompilation)?.sourceSets?.contains(sourceSet) ?: false
+            (it.kotlinModule as? KotlinCompilation)?.declaredSourceSets?.contains(sourceSet) ?: false
         } ?: emptyList()
     } else {
         listOfNotNull(fromDataNode.kotlinSourceSet)
