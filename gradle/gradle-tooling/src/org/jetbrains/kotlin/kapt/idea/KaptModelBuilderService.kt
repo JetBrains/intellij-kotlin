@@ -99,8 +99,10 @@ class KaptModelBuilderService : AbstractKotlinGradleModelBuilder() {
                 val compileTasks = project.getTarget()?.compilations?.map { compilation -> compilation.getCompileKotlinTaskName(project) }
                     ?: project.getAllTasks(false)[project]
                 compileTasks?.forEach{ compileTask ->
-                    val sourceSetName = compileTask.getSourceSetName()
-                    handleCompileTask(sourceSetName, compileTask)
+                    if (compileTask != null) {
+                        val sourceSetName = compileTask.getSourceSetName()
+                        handleCompileTask(sourceSetName, compileTask)
+                    }
                 }
             }
         }
