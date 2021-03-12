@@ -79,7 +79,6 @@ import org.jetbrains.kotlin.idea.frontend.api.fir.AbstractResolveCallTest
 import org.jetbrains.kotlin.idea.frontend.api.scopes.AbstractFileScopeTest
 import org.jetbrains.kotlin.idea.frontend.api.scopes.AbstractMemberScopeByFqNameTest
 import org.jetbrains.kotlin.idea.frontend.api.symbols.*
-import org.jetbrains.kotlin.idea.frontend.api.components.AbstractOverriddenDeclarationProviderTest
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyTest
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyWithLibTest
 import org.jetbrains.kotlin.idea.highlighter.*
