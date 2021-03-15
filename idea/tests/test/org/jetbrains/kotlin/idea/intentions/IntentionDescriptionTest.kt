@@ -11,6 +11,7 @@ import com.intellij.openapi.extensions.Extensions
 import com.intellij.testFramework.LightPlatformTestCase
 import com.intellij.testFramework.UsefulTestCase
 import org.jetbrains.kotlin.idea.KotlinPluginUtil
+import org.jetbrains.kotlin.test.KotlinRoot
 import org.junit.internal.runners.JUnit38ClassRunner
 import org.junit.runner.RunWith
 import java.io.File
@@ -28,7 +29,7 @@ class IntentionDescriptionTest : LightPlatformTestCase() {
         for (tool in intentionTools) {
             val className = tool.className
             val shortName = className.substringAfterLast(".").replace("$", "")
-            val directory = File("idea/resources-en/intentionDescriptions/$shortName")
+            val directory = KotlinRoot.DIR.resolve("idea/resources-en/intentionDescriptions/$shortName")
             if (!directory.exists() || !directory.isDirectory) {
                 if (tool.categories != null) {
                     errors.append("No description directory for intention '").append(className).append("'\n")
