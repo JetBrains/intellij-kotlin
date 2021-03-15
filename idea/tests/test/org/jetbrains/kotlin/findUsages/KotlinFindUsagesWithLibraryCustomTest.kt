@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.findUsages
 
 import com.intellij.psi.search.FilenameIndex
+import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.junit.internal.runners.JUnit38ClassRunner
@@ -14,7 +15,7 @@ import org.junit.runner.RunWith
 @RunWith(JUnit38ClassRunner::class)
 class KotlinFindUsagesWithLibraryCustomTest : AbstractKotlinFindUsagesWithLibraryTest() {
     fun testFindUsagesForLocalClassProperty() {
-        val libraryFile = FilenameIndex.getFilesByName(project, "library.kt", myFixture.module.moduleWithDependenciesScope).first()
+        val libraryFile = FilenameIndex.getFilesByName(project, "library.kt", GlobalSearchScope.everythingScope(project)).first()
         val indexOf = libraryFile.text.indexOf("localClassProperty")
         val jetParameter = libraryFile.findElementAt(indexOf)!!.getStrictParentOfType<KtParameter>()!!
         val usages = findUsages(jetParameter.originalElement, null, false, project)
