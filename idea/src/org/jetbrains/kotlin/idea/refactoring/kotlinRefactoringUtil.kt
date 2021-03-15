@@ -744,8 +744,9 @@ fun <ListType : KtElement> replaceListPsiAndKeepDelimiters(
 
     val commonCount = min(oldCount, newCount)
     val originalIndexes = changeInfo.newParameters.map { it.originalIndex }
-    val isRemovingOnly = oldCount > commonCount && originalIndexes == originalIndexes.sorted()
-    if (!isRemovingOnly) {
+    val keepComments = originalList.allChildren.any { it is PsiComment } && changeInfo.receiverParameterInfo == null &&
+            oldCount > commonCount && originalIndexes == originalIndexes.sorted()
+    if (!keepComments) {
         for (i in 0 until commonCount) {
             oldParameters[i] = oldParameters[i].replace(newParameters[i]) as KtElement
         }
@@ -756,7 +757,7 @@ fun <ListType : KtElement> replaceListPsiAndKeepDelimiters(
     val lastOriginalParameter = oldParameters.last()
 
     if (oldCount > commonCount) {
-        if (isRemovingOnly) {
+        if (keepComments) {
             ((0 until oldParameters.size) - originalIndexes).forEach { index ->
                 val oldParameter = oldParameters[index]
                 val nextComma = oldParameter.getNextSiblingIgnoringWhitespaceAndComments()?.takeIf { it.node.elementType == KtTokens.COMMA }
