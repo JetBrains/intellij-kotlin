@@ -54,7 +54,6 @@ class ComposeAndroidTemplate : Template() {
         +RepositoryIR(Repositories.JETBRAINS_COMPOSE_DEV)
         +RepositoryIR(DefaultRepository.JCENTER)
         +RepositoryIR(DefaultRepository.GOOGLE)
-        +Dependencies.ACTIVITY_COMPOSE
     }
 
 
@@ -62,6 +61,9 @@ class ComposeAndroidTemplate : Template() {
         it.safeAs<GradleOnlyPluginByNameIR>()?.pluginId == AndroidModuleConfigurator.DEPENDENCIES.KOTLIN_ANDROID_EXTENSIONS_NAME
     }
 
+    override fun Writer.getRequiredLibraries(module: ModuleIR): List<DependencyIR> = buildList {
+        +Dependencies.ACTIVITY_COMPOSE
+    }
 
     override fun Reader.updateModuleIR(module: ModuleIR): ModuleIR {
         val irs = module.irs.filterNot { ir ->
