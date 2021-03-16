@@ -161,7 +161,7 @@ val Module.languageVersionSettings: LanguageVersionSettings
     }
 
 @TestOnly
-fun Module.withLanguageVersionSettings(value: LanguageVersionSettings, body: () -> Unit) {
+fun <T> Module.withLanguageVersionSettings(value: LanguageVersionSettings, body: () -> T): T {
     val previousLanguageVersionSettings = getUserData(LANGUAGE_VERSION_SETTINGS)
     try {
         putUserData(
@@ -176,7 +176,7 @@ fun Module.withLanguageVersionSettings(value: LanguageVersionSettings, body: () 
             )
         )
 
-        body()
+        return body()
     } finally {
         putUserData(LANGUAGE_VERSION_SETTINGS, previousLanguageVersionSettings)
     }
