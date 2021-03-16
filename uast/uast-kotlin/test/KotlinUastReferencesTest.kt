@@ -36,27 +36,32 @@ class KotlinUastReferencesTest : KotlinLightCodeInsightFixtureTestCase() {
 
     @Test
     fun `test original getter is visible when reference is under renaming`() {
-        registerReferenceContributor(testRootDisposable, MockPsiReferenceContributor::class.java)
+        val myDisposable = Disposer.newDisposable("MockPsiReferenceContributor")
+        try {
+            registerReferenceContributor(myDisposable, MockPsiReferenceContributor::class.java)
 
-        myFixture.configureByText(
-            "KotlinBean.kt", """
-                data class KotlinBean(val myF<caret>ield: String)
+            myFixture.configureByText(
+                "KotlinBean.kt", """
+                    data class KotlinBean(val myF<caret>ield: String)
+    
+                    val reference = "myField"
+    
+                    """.trimIndent()
+            )
 
-                val reference = "myField"
+            myFixture.renameElementAtCaret("myRenamedField")
 
-                """.trimIndent()
-        )
-
-        myFixture.renameElementAtCaret("myRenamedField")
-
-        myFixture.checkResult(
-            """
-                data class KotlinBean(val myRenamedField: String)
-
-                val reference = "myRenamedField"
-
-                """.trimIndent()
-        )
+            myFixture.checkResult(
+                """
+                    data class KotlinBean(val myRenamedField: String)
+    
+                    val reference = "myRenamedField"
+    
+                    """.trimIndent()
+            )
+        } finally {
+            Disposer.dispose(myDisposable)
+        }
     }
 
 }
