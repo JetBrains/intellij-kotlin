@@ -13470,6 +13470,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/removeBraces/doWhile.kt");
         }
 
+        @TestMetadata("doWhileWithLocalVariable.kt")
+        public void testDoWhileWithLocalVariable() throws Exception {
+            runTest("testData/intentions/removeBraces/doWhileWithLocalVariable.kt");
+        }
+
         @TestMetadata("doWhileWithTwoStatements.kt")
         public void testDoWhileWithTwoStatements() throws Exception {
             runTest("testData/intentions/removeBraces/doWhileWithTwoStatements.kt");
@@ -13575,6 +13580,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/removeBraces/ifWithComment.kt");
         }
 
+        @TestMetadata("ifWithLocalVariable.kt")
+        public void testIfWithLocalVariable() throws Exception {
+            runTest("testData/intentions/removeBraces/ifWithLocalVariable.kt");
+        }
+
         @TestMetadata("ifWithNoStatement.kt")
         public void testIfWithNoStatement() throws Exception {
             runTest("testData/intentions/removeBraces/ifWithNoStatement.kt");
@@ -13653,6 +13663,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("whileOutsideBlock.kt")
         public void testWhileOutsideBlock() throws Exception {
             runTest("testData/intentions/removeBraces/whileOutsideBlock.kt");
+        }
+
+        @TestMetadata("whileWithLocalVariable.kt")
+        public void testWhileWithLocalVariable() throws Exception {
+            runTest("testData/intentions/removeBraces/whileWithLocalVariable.kt");
         }
 
         @TestMetadata("whileWithTwoStatements.kt")
