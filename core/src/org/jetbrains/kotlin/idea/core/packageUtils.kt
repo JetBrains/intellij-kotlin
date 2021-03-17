@@ -214,7 +214,8 @@ fun findOrCreateDirectoryForPackage(module: Module, packageName: String): PsiDir
             val directory = PsiManager.getInstance(project).findDirectory(sourceRoot) ?: continue
             directoryList += directory
         }
-        val sourceDirectories = directoryList.toTypedArray()
+
+        val sourceDirectories = directoryList.sortedBy { it.name }.toTypedArray()
         DirectoryChooserUtil.selectDirectory(
             project, sourceDirectories, null,
             File.separatorChar + packageName.replace('.', File.separatorChar)
