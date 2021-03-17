@@ -83,5 +83,5 @@ class CompletionMultiFileHandlerTest : KotlinFixtureCompletionBaseTestCase() {
 
     override fun defaultCompletionType(): CompletionType = CompletionType.BASIC
     override fun getPlatform(): TargetPlatform = JvmPlatforms.unspecifiedJvmPlatform
-    override fun getProjectDescriptor() = LightJavaCodeInsightFixtureTestCase.JAVA_LATEST
+    override fun getProjectDescriptor() = LightJavaCodeInsightFixtureTestCase.JAVA_11
 }
