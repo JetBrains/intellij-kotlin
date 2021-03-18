@@ -1467,10 +1467,161 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("performance-tests", testDataPath = "../idea/testData") {
-        testClass<AbstractPerformanceJavaToKotlinCopyPasteConversionTest> {
-            model("copyPaste/conversion", testMethodName = "doPerfTest", pattern = """^([^\.]+)\.java$""".toRegex())
+            testClass<AbstractParcelBoxTest> {
+                model("parcel/box", targetBackend = TargetBackend.JVM)
+            }
+
+            testClass<AbstractParcelIrBoxTest> {
+                model("parcel/box", targetBackend = TargetBackend.JVM_IR)
+            }
+
+            testClass<AbstractParcelBytecodeListingTest> {
+                model("parcel/codegen", targetBackend = TargetBackend.JVM)
+            }
+
+            testClass<AbstractParcelIrBytecodeListingTest> {
+                model("parcel/codegen", targetBackend = TargetBackend.JVM_IR)
+            }
         }
+
+        testGroup("plugins/parcelize/parcelize-compiler/tests", "plugins/parcelize/parcelize-compiler/testData") {
+            testClass<AbstractParcelizeBoxTest> {
+                model("box", targetBackend = TargetBackend.JVM)
+            }
+
+            testClass<AbstractParcelizeIrBoxTest> {
+                model("box", targetBackend = TargetBackend.JVM_IR)
+            }
+
+            testClass<AbstractParcelizeBytecodeListingTest> {
+                model("codegen", targetBackend = TargetBackend.JVM)
+            }
+
+            testClass<AbstractParcelizeIrBytecodeListingTest> {
+                model("codegen", targetBackend = TargetBackend.JVM_IR)
+            }
+        }
+
+        testGroup("plugins/parcelize/parcelize-ide/tests", "plugins/parcelize/parcelize-ide/testData") {
+            testClass<AbstractParcelizeQuickFixTest> {
+                model("quickfix", pattern = "^([\\w\\-_]+)\\.kt$", filenameStartsLowerCase = true)
+            }
+
+            testClass<AbstractParcelizeCheckerTest> {
+                model("checker", extension = "kt")
+            }
+        }
+
+        testGroup("plugins/jvm-abi-gen/test", "plugins/jvm-abi-gen/testData") {
+            testClass<AbstractCompareJvmAbiTest> {
+                model("compare", recursive = false, extension = null)
+            }
+
+            testClass<AbstractJvmAbiContentTest> {
+                model("content", recursive = false, extension = null)
+            }
+
+            testClass<AbstractCompileAgainstJvmAbiTest> {
+                model("compile", recursive = false, extension = null)
+            }
+        }
+
+        testGroup("plugins/kapt3/kapt3-compiler/test", "plugins/kapt3/kapt3-compiler/testData") {
+            testClass<AbstractClassFileToSourceStubConverterTest> {
+                model("converter")
+            }
+
+            testClass<AbstractKotlinKaptContextTest> {
+                model("kotlinRunner")
+            }
+
+            testClass<AbstractIrClassFileToSourceStubConverterTest> {
+                model("converter", targetBackend = TargetBackend.JVM_IR)
+            }
+
+            testClass<AbstractIrKotlinKaptContextTest> {
+                model("kotlinRunner", targetBackend = TargetBackend.JVM_IR)
+            }
+        }
+
+        testGroup("plugins/kapt3/kapt3-cli/test", "plugins/kapt3/kapt3-cli/testData") {
+            testClass<AbstractArgumentParsingTest> {
+                model("argumentParsing", extension = "txt")
+            }
+
+            testClass<AbstractKaptToolIntegrationTest> {
+                model("integration", recursive = false, extension = null)
+            }
+        }
+
+        testGroup("plugins/allopen/allopen-cli/test", "plugins/allopen/allopen-cli/testData") {
+            testClass<AbstractBytecodeListingTestForAllOpen> {
+                model("bytecodeListing", extension = "kt")
+            }
+        }
+
+        testGroup("plugins/noarg/noarg-cli/test", "plugins/noarg/noarg-cli/testData") {
+            testClass<AbstractDiagnosticsTestForNoArg> { model("diagnostics", extension = "kt") }
+
+            testClass<AbstractBytecodeListingTestForNoArg> {
+                model("bytecodeListing", extension = "kt", targetBackend = TargetBackend.JVM)
+            }
+            testClass<AbstractIrBytecodeListingTestForNoArg> {
+                model("bytecodeListing", extension = "kt", targetBackend = TargetBackend.JVM_IR)
+            }
+
+            testClass<AbstractBlackBoxCodegenTestForNoArg> { model("box", targetBackend = TargetBackend.JVM) }
+            testClass<AbstractIrBlackBoxCodegenTestForNoArg> { model("box", targetBackend = TargetBackend.JVM_IR) }
+        }
+
+        testGroup("plugins/sam-with-receiver/sam-with-receiver-cli/test", "plugins/sam-with-receiver/sam-with-receiver-cli/testData") {
+            testClass<AbstractSamWithReceiverTest> {
+                model("diagnostics")
+            }
+            testClass<AbstractSamWithReceiverScriptTest> {
+                model("script", extension = "kts")
+            }
+        }
+
+        testGroup(
+            "plugins/kotlin-serialization/kotlin-serialization-compiler/test",
+            "plugins/kotlin-serialization/kotlin-serialization-compiler/testData"
+        ) {
+            testClass<AbstractSerializationPluginDiagnosticTest> {
+                model("diagnostics")
+            }
+
+            testClass<AbstractSerializationPluginBytecodeListingTest> {
+                model("codegen")
+            }
+
+            testClass<AbstractSerializationIrBytecodeListingTest> {
+                model("codegen")
+            }
+        }
+
+        testGroup(
+            "plugins/kotlin-serialization/kotlin-serialization-ide/test",
+            "plugins/kotlin-serialization/kotlin-serialization-ide/testData"
+        ) {
+            testClass<AbstractSerializationPluginIdeDiagnosticTest> {
+                model("diagnostics")
+            }
+            testClass<AbstractSerializationQuickFixTest> {
+                model("quickfix", pattern = "^([\\w\\-_]+)\\.kt$", filenameStartsLowerCase = true)
+            }
+        }
+
+        testGroup("plugins/fir/fir-plugin-prototype/tests", "plugins/fir/fir-plugin-prototype/testData") {
+            testClass<AbstractFirAllOpenDiagnosticTest> {
+                model("")
+            }
+        }
+
+        testGroup("idea/performanceTests/test", "idea/testData") {
+            testClass<AbstractPerformanceJavaToKotlinCopyPasteConversionTest> {
+                model("copyPaste/conversion", testMethod = "doPerfTest", pattern = """^([^\.]+)\.java$""")
+            }
 
         testClass<AbstractPerformanceNewJavaToKotlinCopyPasteConversionTest> {
             model("copyPaste/conversion", testMethodName = "doPerfTest", pattern = """^([^\.]+)\.java$""".toRegex())
