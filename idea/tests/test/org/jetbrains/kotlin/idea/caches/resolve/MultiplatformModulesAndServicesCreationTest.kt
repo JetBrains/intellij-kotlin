@@ -45,7 +45,7 @@ class MultiplatformModulesAndServicesCreationTest : AbstractCodeMetaInfoTest() {
     }
 
     fun doRunTest(testDataDir: String) {
-        setupProject(testDataPath)
+        setupProject(File(testDataDir))
         require(project.useCompositeAnalysis) {
             "Expected enabled composite analysis for project"
         }
