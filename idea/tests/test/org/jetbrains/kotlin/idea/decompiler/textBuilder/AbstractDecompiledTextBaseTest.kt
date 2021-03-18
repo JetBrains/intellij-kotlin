@@ -14,6 +14,7 @@ import com.intellij.util.ThrowableRunnable
 import org.jetbrains.kotlin.idea.artifacts.KotlinArtifacts
 import org.jetbrains.kotlin.idea.test.*
 import org.jetbrains.kotlin.psi.psiUtil.getElementTextWithContext
+import org.jetbrains.kotlin.test.TargetBackend
 import java.io.File
 
 abstract class AbstractDecompiledTextBaseTest(
@@ -37,6 +38,14 @@ abstract class AbstractDecompiledTextBaseTest(
 
     private lateinit var mockLibraryFacility: MockLibraryFacility
 
+    override val testDataDirectory: File
+        get() = File(mockSourcesBase, getTestName(false))
+
+    override fun shouldRunTest(): Boolean {
+        val targetBackend = if (isJsLibrary) TargetBackend.JS else TargetBackend.JVM
+        return InTextDirectivesUtils.isCompatibleTarget(targetBackend, testDataDirectory)
+    }
+
     override fun setUp() {
         super.setUp()
 
@@ -49,7 +58,7 @@ abstract class AbstractDecompiledTextBaseTest(
 
         val directivesText = InTextDirectivesUtils.textWithDirectives(testDirectory)
         mockLibraryFacility = MockLibraryFacility(
-            source = testDirectory,
+            source = testDataDirectory,
             attachSources = false,
             platform = platform,
             options = getCompilationOptions(directivesText),
