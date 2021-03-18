@@ -7,11 +7,24 @@ package org.jetbrains.kotlin.checkers
 
 import org.jetbrains.kotlin.idea.perf.forceUsingOldLightClassesForTest
 import java.io.File
+import org.jetbrains.kotlin.idea.test.withCustomCompilerOptions
 
 abstract class AbstractJavaAgainstKotlinSourceCheckerTest : AbstractJavaAgainstKotlinCheckerTest() {
     fun doTest(path: String) {
-        val relativePath = File(path).toRelativeString(File(testDataPath))
-        doTest(true, true, relativePath.replace(".kt", ".java"), relativePath)
+        fun doTest() {
+            val relativePath = File(path).toRelativeString(File(testDataPath))
+            doTest(true, true, relativePath.replace(".kt", ".java"), relativePath)
+        }
+
+        val configFile = configFileText
+        if (configFile != null) {
+            withCustomCompilerOptions(configFile, project, module) {
+                doTest()
+            }
+        }
+        else {
+            doTest()
+        }
     }
 }
 
