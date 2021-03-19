@@ -986,6 +986,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("resoreSymbolFromLibrary", pattern = TXT)
         }
 
+        testClass<AbstractSymbolByReferencePointerRestoreTest> {
+            model("symbolByReference")
+        }
+
         testClass<AbstractMemoryLeakInSymbolsTest> {
             model("symbolMemoryLeak")
         }
