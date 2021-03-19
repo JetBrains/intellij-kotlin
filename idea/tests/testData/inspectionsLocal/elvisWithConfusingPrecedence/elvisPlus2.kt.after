@@ -1,0 +1,4 @@
+// FIX: Add parentheses to elvis right-hand side
+fun test(i: Int?) {
+    val y = i ?: (0 + 1)
+}

@@ -1,0 +1,6 @@
+// FIX: Add parentheses to elvis expression
+fun test(i: Int?) {
+    val x = (i
+        ?: // comment
+        0) + 1
+}

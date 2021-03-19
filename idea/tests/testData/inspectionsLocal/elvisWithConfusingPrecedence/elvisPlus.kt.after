@@ -1,0 +1,4 @@
+// FIX: Add parentheses to elvis expression
+fun test(i: Int?) {
+    val y = (i ?: 0) + 1
+}

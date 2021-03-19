@@ -4466,6 +4466,114 @@ public abstract class LocalInspectionTestGenerated extends AbstractLocalInspecti
     }
 
     @RunWith(JUnit3RunnerWithInners.class)
+    @TestMetadata("testData/inspectionsLocal/elvisWithConfusingPrecedence")
+    public static class ElvisWithConfusingPrecedence extends AbstractLocalInspectionTest {
+        private void runTest(String testDataFilePath) throws Exception {
+            KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+        }
+
+        @TestMetadata("elvisAs.kt")
+        public void testElvisAs() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisAs.kt");
+        }
+
+        @TestMetadata("elvisAs2.kt")
+        public void testElvisAs2() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisAs2.kt");
+        }
+
+        @TestMetadata("elvisElvis.kt")
+        public void testElvisElvis() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisElvis.kt");
+        }
+
+        @TestMetadata("elvisEqEq.kt")
+        public void testElvisEqEq() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisEqEq.kt");
+        }
+
+        @TestMetadata("elvisEqEq2.kt")
+        public void testElvisEqEq2() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisEqEq2.kt");
+        }
+
+        @TestMetadata("elvisEqEqWithComment.kt")
+        public void testElvisEqEqWithComment() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisEqEqWithComment.kt");
+        }
+
+        @TestMetadata("elvisEqEqWithComment2.kt")
+        public void testElvisEqEqWithComment2() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisEqEqWithComment2.kt");
+        }
+
+        @TestMetadata("elvisEqEqWithLineBreak.kt")
+        public void testElvisEqEqWithLineBreak() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisEqEqWithLineBreak.kt");
+        }
+
+        @TestMetadata("elvisEqEqWithLineBreakAndComment.kt")
+        public void testElvisEqEqWithLineBreakAndComment() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisEqEqWithLineBreakAndComment.kt");
+        }
+
+        @TestMetadata("elvisIs.kt")
+        public void testElvisIs() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisIs.kt");
+        }
+
+        @TestMetadata("elvisIs2.kt")
+        public void testElvisIs2() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisIs2.kt");
+        }
+
+        @TestMetadata("elvisPlus.kt")
+        public void testElvisPlus() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisPlus.kt");
+        }
+
+        @TestMetadata("elvisPlus2.kt")
+        public void testElvisPlus2() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisPlus2.kt");
+        }
+
+        @TestMetadata("elvisPlusWithComment.kt")
+        public void testElvisPlusWithComment() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisPlusWithComment.kt");
+        }
+
+        @TestMetadata("elvisPlusWithComment2.kt")
+        public void testElvisPlusWithComment2() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisPlusWithComment2.kt");
+        }
+
+        @TestMetadata("elvisPlusWithLineBreak.kt")
+        public void testElvisPlusWithLineBreak() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisPlusWithLineBreak.kt");
+        }
+
+        @TestMetadata("elvisPlusWithLineBreakAndComment.kt")
+        public void testElvisPlusWithLineBreakAndComment() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/elvisPlusWithLineBreakAndComment.kt");
+        }
+
+        @TestMetadata("eqElvis.kt")
+        public void testEqElvis() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/eqElvis.kt");
+        }
+
+        @TestMetadata("eqEqElvis.kt")
+        public void testEqEqElvis() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/eqEqElvis.kt");
+        }
+
+        @TestMetadata("hasParentheses.kt")
+        public void testHasParentheses() throws Exception {
+            runTest("testData/inspectionsLocal/elvisWithConfusingPrecedence/hasParentheses.kt");
+        }
+    }
+
+    @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("testData/inspectionsLocal/emptyRange")
     public static class EmptyRange extends AbstractLocalInspectionTest {
         private void runTest(String testDataFilePath) throws Exception {
