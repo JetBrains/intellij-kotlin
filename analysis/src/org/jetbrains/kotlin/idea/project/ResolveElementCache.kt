@@ -600,7 +600,8 @@ class ResolveElementCache(
             descriptor,
             descriptor.unsubstitutedPrimaryConstructor,
             descriptor.scopeForConstructorHeaderResolution,
-            descriptor.scopeForMemberDeclarationResolution
+            descriptor.scopeForMemberDeclarationResolution,
+            resolveSession.inferenceSession
         )
 
         return trace
@@ -724,7 +725,8 @@ class ResolveElementCache(
                 trace,
                 primaryConstructor,
                 constructorDescriptor,
-                scope
+                scope,
+                resolveSession.inferenceSession
             )
 
             forceResolveAnnotationsInside(primaryConstructor)
@@ -754,7 +756,9 @@ class ResolveElementCache(
         val classOrObjectDescriptor = resolveSession.resolveToDescriptor(anonymousInitializer.containingDeclaration) as LazyClassDescriptor
 
         val bodyResolver = createBodyResolver(resolveSession, trace, file, statementFilter)
-        bodyResolver.resolveAnonymousInitializer(DataFlowInfo.EMPTY, anonymousInitializer, classOrObjectDescriptor)
+        bodyResolver.resolveAnonymousInitializer(
+            DataFlowInfo.EMPTY, anonymousInitializer, classOrObjectDescriptor, resolveSession.inferenceSession
+        )
 
         forceResolveAnnotationsInside(anonymousInitializer)
 
