@@ -948,7 +948,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
 
         testClass<AbstractSymbolsByFqNameBuildingTest> {
-            model("symbolsByFqName", extension = "txt")
+            model("symbolsByFqName", pattern = TXT)
         }
 
         testClass<AbstractSymbolByReferenceTest> {
@@ -956,23 +956,23 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
 
         testClass<AbstractMemberScopeByFqNameTest> {
-            model("memberScopeByFqName", extension = "txt")
+            model("memberScopeByFqName", pattern = TXT)
         }
 
         testClass<AbstractFileScopeTest> {
             model("fileScopeTest", pattern = KT)
         }
 
-        testClass<AbstractSymbolFromSourcePointerRestoreTest> {
-            model("symbolPointer", pattern = KT)
+        testClass<AbstractSymbolByPsiTest> {
+            model("symbols/symbolByPsi")
         }
 
         testClass<AbstractSymbolFromLibraryPointerRestoreTest> {
-            model("resoreSymbolFromLibrary", extension = "txt")
+            model("resoreSymbolFromLibrary", pattern = TXT)
         }
 
-        testClass<AbstractSymbolByReferencePointerRestoreTest> {
-            model("symbolByReference")
+        testClass<AbstractSymbolByReferenceTest> {
+            model("symbols/symbolByReference")
         }
 
         testClass<AbstractMemoryLeakInSymbolsTest> {
