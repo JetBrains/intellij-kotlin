@@ -69,7 +69,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
         val libraries = LinkedHashSet<DependencyCandidate>()
         val sdks = LinkedHashSet<SdkInfo>()
 
-        for (module in getLibraryUsageIndex().modulesLibraryIsUsedIn[libraryInfo.library]) {
+        for (module in getLibraryUsageIndex().modulesLibraryIsUsedIn[libraryInfo.library.wrap()]) {
             if (!processedModules.add(module)) continue
 
             ModuleRootManager.getInstance(module).orderEntries().recursively().satisfying(condition).process(object : RootPolicy<Unit>() {
@@ -101,7 +101,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
     }
 
     private inner class LibraryUsageIndex {
-        val modulesLibraryIsUsedIn: MultiMap<Library, Module> = MultiMap.createSet()
+        val modulesLibraryIsUsedIn: MultiMap<LibraryWrapper, Module> = MultiMap.createSet()
 
         init {
             for (module in ModuleManager.getInstance(project).modules) {
@@ -109,7 +109,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
                     if (entry is LibraryOrderEntry) {
                         val library = entry.library
                         if (library != null) {
-                            modulesLibraryIsUsedIn.putValue(library, module)
+                            modulesLibraryIsUsedIn.putValue(library.wrap(), module)
                         }
                     }
                 }
