@@ -72,7 +72,6 @@ abstract class MultiplePluginVersionGradleImportingTestCase : KotlinGradleImport
             repositories += if (useKts) "maven(\"$url\")" else "maven { url '$url' }"
         }
 
-        addCustomRepository("https://dl.bintray.com/kotlin/kotlin-dev")
         addCustomRepository("https://kotlin.bintray.com/kotlinx")
 
         return repositories.joinToString("\n")
