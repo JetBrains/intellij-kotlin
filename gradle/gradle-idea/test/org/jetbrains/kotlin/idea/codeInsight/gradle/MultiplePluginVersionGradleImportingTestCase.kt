@@ -62,29 +62,22 @@ abstract class MultiplePluginVersionGradleImportingTestCase : KotlinGradleImport
         }
     }
 
-    private fun repositories(useKts: Boolean): String {
-        val repositories = mutableListOf(
+    private fun repositories(): String {
+        return listOf(
             "mavenCentral()",
             "mavenLocal()",
             "google()",
             "jcenter()"
-        )
-
-        fun addCustomRepository(url: String) {
-            repositories += if (useKts) "maven(\"$url\")" else "maven { url '$url' }"
-        }
-
-        addCustomRepository("https://dl.bintray.com/kotlin/kotlin-dev")
-
-        return repositories.joinToString("\n")
+        ).joinToString("\n")
     }
 
     override fun configureByFiles(properties: Map<String, String>?): List<VirtualFile> {
         val unitedProperties = HashMap(properties ?: emptyMap())
         unitedProperties["kotlin_plugin_version"] = gradleKotlinPluginVersion
 
-        unitedProperties["kotlin_plugin_repositories"] = repositories(false)
-        unitedProperties["kts_kotlin_plugin_repositories"] = repositories(true)
+        val defaultRepositories = repositories()
+        unitedProperties["kotlin_plugin_repositories"] = defaultRepositories
+        unitedProperties["kts_kotlin_plugin_repositories"] = defaultRepositories
         return super.configureByFiles(unitedProperties)
     }
 }
