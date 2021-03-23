@@ -64,7 +64,7 @@ class IdeaModelInfosCache(
 }
 
 // Workaround for duplicated libraries, see KT-42607
-private class LibraryWrapper(val library: LibraryEx) {
+internal class LibraryWrapper(val library: LibraryEx) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is LibraryWrapper) return false
@@ -80,7 +80,7 @@ internal fun Library.asLibraryEx(): LibraryEx {
     return this
 }
 
-private fun Library.wrap() = LibraryWrapper(this.asLibraryEx())
+internal fun Library.wrap() = LibraryWrapper(this.asLibraryEx())
 
 private val LibraryEx.lazyAllRootUrls
     get() = lazy {
