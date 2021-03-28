@@ -39,7 +39,7 @@ public class PluginStartupActivity implements StartupActivity {
 
     @Override
     public void runActivity(@NotNull Project project) {
-        StartupCompatKt.runActivity(project);
+        StartupKt.runActivity(project);
         PluginStartupService.Companion.getInstance(project).register(project);
 
         project.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootListener() {
