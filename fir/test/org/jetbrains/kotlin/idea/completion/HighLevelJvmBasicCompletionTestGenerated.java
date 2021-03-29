@@ -2167,12 +2167,12 @@ public class HighLevelJvmBasicCompletionTestGenerated extends AbstractHighLevelJ
 
             @TestMetadata("completionInLocalFunction.kt")
             public void testCompletionInLocalFunction() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/primitiveCompletion/completionInLocalFunction.kt");
+                runTest("../completion/testData/basic/common/primitiveCompletion/completionInLocalFunction.kt");
             }
 
             @TestMetadata("completionInPropertyLambdaInitializer.kt")
             public void testCompletionInPropertyLambdaInitializer() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/primitiveCompletion/completionInPropertyLambdaInitializer.kt");
+                runTest("../completion/testData/basic/common/primitiveCompletion/completionInPropertyLambdaInitializer.kt");
             }
 
             @TestMetadata("defaultKotlinImports.kt")

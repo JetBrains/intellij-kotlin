@@ -8,7 +8,6 @@ package org.jetbrains.kotlin.idea.fir.low.level.api.resolve;
 import com.intellij.testFramework.TestDataPath;
 import org.jetbrains.kotlin.test.JUnit3RunnerWithInners;
 import org.jetbrains.kotlin.test.KotlinTestUtils;
-import org.jetbrains.kotlin.test.util.KtTestUtil;
 import org.jetbrains.kotlin.test.TestMetadata;
 import org.junit.runner.RunWith;
 
@@ -23,10 +22,6 @@ import java.util.regex.Pattern;
 public class InnerDeclarationsResolvePhaseTestGenerated extends AbstractInnerDeclarationsResolvePhaseTest {
     private void runTest(String testDataFilePath) throws Exception {
         KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
-    }
-
-    public void testAllFilesPresentInInnerDeclarationsResolve() throws Exception {
-        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/innerDeclarationsResolve"), Pattern.compile("^(.+)\\.kt$"), null, true);
     }
 
     @TestMetadata("annonymousClass.kt")

@@ -68,7 +68,7 @@ public class HighlightingTestGenerated extends AbstractHighlightingTest {
 
     @TestMetadata("InaccessibleExpression.kt")
     public void testInaccessibleExpression() throws Exception {
-        runTest("idea/testData/highlighter/InaccessibleExpression.kt");
+        runTest("testData/highlighter/InaccessibleExpression.kt");
     }
 
     @TestMetadata("InvokeCall.kt")
