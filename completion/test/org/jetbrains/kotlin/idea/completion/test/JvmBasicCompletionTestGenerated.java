@@ -2167,12 +2167,12 @@ public class JvmBasicCompletionTestGenerated extends AbstractJvmBasicCompletionT
 
             @TestMetadata("completionInLocalFunction.kt")
             public void testCompletionInLocalFunction() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/primitiveCompletion/completionInLocalFunction.kt");
+                runTest("testData/basic/common/primitiveCompletion/completionInLocalFunction.kt");
             }
 
             @TestMetadata("completionInPropertyLambdaInitializer.kt")
             public void testCompletionInPropertyLambdaInitializer() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/primitiveCompletion/completionInPropertyLambdaInitializer.kt");
+                runTest("testData/basic/common/primitiveCompletion/completionInPropertyLambdaInitializer.kt");
             }
 
             @TestMetadata("defaultKotlinImports.kt")

@@ -26,23 +26,23 @@ public class MemberScopeByFqNameTestGenerated extends AbstractMemberScopeByFqNam
         KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
     }
 
-    @TestMetadata("Int.txt")
+    @TestMetadata("Int.kt")
     public void testInt() throws Exception {
-        runTest("testData/memberScopeByFqName/Int.txt");
+        runTest("testData/memberScopeByFqName/Int.kt");
     }
 
-    @TestMetadata("java.lang.String.txt")
+    @TestMetadata("java.lang.String.kt")
     public void testJava_lang_String() throws Exception {
-        runTest("testData/memberScopeByFqName/java.lang.String.txt");
+        runTest("testData/memberScopeByFqName/java.lang.String.kt");
     }
 
-    @TestMetadata("kotlin.Function2.txt")
+    @TestMetadata("kotlin.Function2.kt")
     public void testKotlin_Function2() throws Exception {
-        runTest("idea/idea-frontend-fir/testData/memberScopeByFqName/kotlin.Function2.txt");
+        runTest("testData/memberScopeByFqName/kotlin.Function2.kt");
     }
 
-    @TestMetadata("MutableList.txt")
+    @TestMetadata("MutableList.kt")
     public void testMutableList() throws Exception {
-        runTest("testData/memberScopeByFqName/MutableList.txt");
+        runTest("testData/memberScopeByFqName/MutableList.kt");
     }
 }

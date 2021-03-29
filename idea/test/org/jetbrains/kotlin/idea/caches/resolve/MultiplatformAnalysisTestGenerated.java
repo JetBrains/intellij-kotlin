@@ -163,7 +163,7 @@ public class MultiplatformAnalysisTestGenerated extends AbstractMultiplatformAna
 
     @TestMetadata("jvmInlineValueClass")
     public void testJvmInlineValueClass() throws Exception {
-        runTest("idea/testData/multiplatform/jvmInlineValueClass/");
+        runTest("testData/multiplatform/jvmInlineValueClass/");
     }
 
     @TestMetadata("kt41218")
