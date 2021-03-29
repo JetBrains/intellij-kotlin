@@ -16,6 +16,7 @@ import com.intellij.openapi.roots.impl.libraries.LibraryEx
 import com.intellij.openapi.roots.libraries.Library
 import com.intellij.openapi.roots.libraries.PersistentLibraryKind
 import com.intellij.openapi.roots.ui.configuration.libraryEditor.NewLibraryEditor
+import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.util.PathUtil
 import org.jetbrains.kotlin.idea.artifacts.KotlinArtifacts
@@ -145,6 +146,36 @@ object ConfigLibraryUtil {
         return library
     }
 
+
+    fun addLibrary(module: Module, libraryName: String, rootPath: String?, jarPaths: Array<String>) {
+        val editor = NewLibraryEditor()
+        editor.name = libraryName
+        for (jarPath in jarPaths) {
+            val jarFile = rootPath?.let {
+                File(rootPath, jarPath).takeIf { it.exists() }
+                    ?: FileUtil.findFilesByMask(jarPath.toPattern(), File(rootPath)).firstOrNull()
+            } ?: File(jarPath)
+
+            require(jarFile.exists()) {
+                "Cannot configure library with given path, file doesn't exists $jarPath"
+            }
+            editor.addRoot(VfsUtil.getUrlForLibraryRoot(jarFile), OrderRootType.CLASSES)
+        }
+
+        addLibrary(editor, module)
+    }
+
+    fun addLibrary(editor: NewLibraryEditor, module: Module, kind: PersistentLibraryKind<*>? = null): Library =
+        runWriteAction {
+            val rootManager = ModuleRootManager.getInstance(module)
+            val model = rootManager.modifiableModel
+
+            val library = addLibrary(editor, model, kind)
+
+            model.commit()
+
+            library
+        }
 
     fun removeLibrary(module: Module, libraryName: String): Boolean {
         return runWriteAction {

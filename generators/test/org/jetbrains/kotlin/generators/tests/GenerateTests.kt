@@ -157,11 +157,6 @@ import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractProjectTemplateBuild
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractYamlBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractProjectTemplateNewWizardProjectImportTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractYamlNewWizardProjectImportTest
-import org.jetbrains.kotlinx.serialization.AbstractSerializationIrBytecodeListingTest
-import org.jetbrains.kotlinx.serialization.AbstractSerializationPluginBytecodeListingTest
-import org.jetbrains.kotlinx.serialization.AbstractSerializationPluginDiagnosticTest
-import org.jetbrains.kotlinx.serialization.idea.AbstractSerializationPluginIdeDiagnosticTest
-import org.jetbrains.kotlinx.serialization.idea.AbstractSerializationQuickFixTest
 
 fun main() {
     System.setProperty("java.awt.headless", "true")
@@ -1122,11 +1117,11 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             }
 
             testClass<AbstractHighLevelWeigherTest> {
-                model("weighers/basic", pattern = KT_OR_KTS_WITHOUT_DOTS_IN_NAME)
+                model("weighers/basic", pattern = KT_OR_KTS_WITHOUT_DOTS)
             }
 
             testClass<AbstractHighLevelMultiFileJvmBasicCompletionTest> {
-                model("basic/multifile", extension = null, recursive = false)
+                model("basic/multifile", isRecursive = false)
             }
         }
 
@@ -1294,12 +1289,12 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("basic/multifile", pattern = DIRECTORY, isRecursive = false)
         }
 
-        testClass<AbstractMultiFileJvmBasicCompletionTest>("MultiFilePrimitiveJvmBasicCompletionTestGenerated") {
-            model("basic/multifilePrimitive", extension = null, recursive = false)
+        testClass<AbstractMultiFileJvmBasicCompletionTest> {
+            model("basic/multifilePrimitive", isRecursive = false)
         }
 
         testClass<AbstractMultiFileSmartCompletionTest> {
-            model("smartMultiFile", extension = null, recursive = false)
+            model("smartMultiFile", isRecursive = false)
         }
 
         testClass<AbstractJvmBasicCompletionTest>("org.jetbrains.kotlin.idea.completion.test.KDocCompletionTestGenerated") {
@@ -1469,161 +1464,20 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-            testClass<AbstractParcelBoxTest> {
-                model("parcel/box", targetBackend = TargetBackend.JVM)
-            }
-
-            testClass<AbstractParcelIrBoxTest> {
-                model("parcel/box", targetBackend = TargetBackend.JVM_IR)
-            }
-
-            testClass<AbstractParcelBytecodeListingTest> {
-                model("parcel/codegen", targetBackend = TargetBackend.JVM)
-            }
-
-            testClass<AbstractParcelIrBytecodeListingTest> {
-                model("parcel/codegen", targetBackend = TargetBackend.JVM_IR)
-            }
+    testGroup("plugins/parcelize/parcelize-ide/tests", "plugins/parcelize/parcelize-ide/testData") {
+        testClass<AbstractParcelizeQuickFixTest> {
+            model("quickfix", pattern = "^([\\w\\-_]+)\\.kt$".toRegex())
         }
 
-        testGroup("plugins/parcelize/parcelize-compiler/tests", "plugins/parcelize/parcelize-compiler/testData") {
-            testClass<AbstractParcelizeBoxTest> {
-                model("box", targetBackend = TargetBackend.JVM)
-            }
-
-            testClass<AbstractParcelizeIrBoxTest> {
-                model("box", targetBackend = TargetBackend.JVM_IR)
-            }
-
-            testClass<AbstractParcelizeBytecodeListingTest> {
-                model("codegen", targetBackend = TargetBackend.JVM)
-            }
-
-            testClass<AbstractParcelizeIrBytecodeListingTest> {
-                model("codegen", targetBackend = TargetBackend.JVM_IR)
-            }
+        testClass<AbstractParcelizeCheckerTest> {
+            model("checker")
         }
+    }
 
-        testGroup("plugins/parcelize/parcelize-ide/tests", "plugins/parcelize/parcelize-ide/testData") {
-            testClass<AbstractParcelizeQuickFixTest> {
-                model("quickfix", pattern = "^([\\w\\-_]+)\\.kt$", filenameStartsLowerCase = true)
-            }
-
-            testClass<AbstractParcelizeCheckerTest> {
-                model("checker", extension = "kt")
-            }
+    testGroup("idea/performanceTests/test", "idea/testData") {
+        testClass<AbstractPerformanceJavaToKotlinCopyPasteConversionTest> {
+            model("copyPaste/conversion", testMethodName = "doPerfTest", pattern = """^([^\.]+)\.java$""".toRegex())
         }
-
-        testGroup("plugins/jvm-abi-gen/test", "plugins/jvm-abi-gen/testData") {
-            testClass<AbstractCompareJvmAbiTest> {
-                model("compare", recursive = false, extension = null)
-            }
-
-            testClass<AbstractJvmAbiContentTest> {
-                model("content", recursive = false, extension = null)
-            }
-
-            testClass<AbstractCompileAgainstJvmAbiTest> {
-                model("compile", recursive = false, extension = null)
-            }
-        }
-
-        testGroup("plugins/kapt3/kapt3-compiler/test", "plugins/kapt3/kapt3-compiler/testData") {
-            testClass<AbstractClassFileToSourceStubConverterTest> {
-                model("converter")
-            }
-
-            testClass<AbstractKotlinKaptContextTest> {
-                model("kotlinRunner")
-            }
-
-            testClass<AbstractIrClassFileToSourceStubConverterTest> {
-                model("converter", targetBackend = TargetBackend.JVM_IR)
-            }
-
-            testClass<AbstractIrKotlinKaptContextTest> {
-                model("kotlinRunner", targetBackend = TargetBackend.JVM_IR)
-            }
-        }
-
-        testGroup("plugins/kapt3/kapt3-cli/test", "plugins/kapt3/kapt3-cli/testData") {
-            testClass<AbstractArgumentParsingTest> {
-                model("argumentParsing", extension = "txt")
-            }
-
-            testClass<AbstractKaptToolIntegrationTest> {
-                model("integration", recursive = false, extension = null)
-            }
-        }
-
-        testGroup("plugins/allopen/allopen-cli/test", "plugins/allopen/allopen-cli/testData") {
-            testClass<AbstractBytecodeListingTestForAllOpen> {
-                model("bytecodeListing", extension = "kt")
-            }
-        }
-
-        testGroup("plugins/noarg/noarg-cli/test", "plugins/noarg/noarg-cli/testData") {
-            testClass<AbstractDiagnosticsTestForNoArg> { model("diagnostics", extension = "kt") }
-
-            testClass<AbstractBytecodeListingTestForNoArg> {
-                model("bytecodeListing", extension = "kt", targetBackend = TargetBackend.JVM)
-            }
-            testClass<AbstractIrBytecodeListingTestForNoArg> {
-                model("bytecodeListing", extension = "kt", targetBackend = TargetBackend.JVM_IR)
-            }
-
-            testClass<AbstractBlackBoxCodegenTestForNoArg> { model("box", targetBackend = TargetBackend.JVM) }
-            testClass<AbstractIrBlackBoxCodegenTestForNoArg> { model("box", targetBackend = TargetBackend.JVM_IR) }
-        }
-
-        testGroup("plugins/sam-with-receiver/sam-with-receiver-cli/test", "plugins/sam-with-receiver/sam-with-receiver-cli/testData") {
-            testClass<AbstractSamWithReceiverTest> {
-                model("diagnostics")
-            }
-            testClass<AbstractSamWithReceiverScriptTest> {
-                model("script", extension = "kts")
-            }
-        }
-
-        testGroup(
-            "plugins/kotlin-serialization/kotlin-serialization-compiler/test",
-            "plugins/kotlin-serialization/kotlin-serialization-compiler/testData"
-        ) {
-            testClass<AbstractSerializationPluginDiagnosticTest> {
-                model("diagnostics")
-            }
-
-            testClass<AbstractSerializationPluginBytecodeListingTest> {
-                model("codegen")
-            }
-
-            testClass<AbstractSerializationIrBytecodeListingTest> {
-                model("codegen")
-            }
-        }
-
-        testGroup(
-            "plugins/kotlin-serialization/kotlin-serialization-ide/test",
-            "plugins/kotlin-serialization/kotlin-serialization-ide/testData"
-        ) {
-            testClass<AbstractSerializationPluginIdeDiagnosticTest> {
-                model("diagnostics")
-            }
-            testClass<AbstractSerializationQuickFixTest> {
-                model("quickfix", pattern = "^([\\w\\-_]+)\\.kt$", filenameStartsLowerCase = true)
-            }
-        }
-
-        testGroup("plugins/fir/fir-plugin-prototype/tests", "plugins/fir/fir-plugin-prototype/testData") {
-            testClass<AbstractFirAllOpenDiagnosticTest> {
-                model("")
-            }
-        }
-
-        testGroup("idea/performanceTests/test", "idea/testData") {
-            testClass<AbstractPerformanceJavaToKotlinCopyPasteConversionTest> {
-                model("copyPaste/conversion", testMethod = "doPerfTest", pattern = """^([^\.]+)\.java$""")
-            }
 
         testClass<AbstractPerformanceNewJavaToKotlinCopyPasteConversionTest> {
             model("copyPaste/conversion", testMethodName = "doPerfTest", pattern = """^([^\.]+)\.java$""".toRegex())
