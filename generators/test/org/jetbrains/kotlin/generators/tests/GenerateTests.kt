@@ -40,10 +40,8 @@ import org.jetbrains.kotlin.idea.completion.test.*
 import org.jetbrains.kotlin.idea.completion.test.handlers.*
 import org.jetbrains.kotlin.idea.completion.test.weighers.AbstractBasicCompletionWeigherTest
 import org.jetbrains.kotlin.idea.configuration.AbstractGradleConfigureProjectByChangingFileTest
-import org.jetbrains.kotlin.idea.conversion.copy.AbstractJavaToKotlinCopyPasteConversionTest
 import org.jetbrains.kotlin.idea.conversion.copy.AbstractLiteralKotlinToKotlinCopyPasteTest
 import org.jetbrains.kotlin.idea.conversion.copy.AbstractLiteralTextToKotlinCopyPasteTest
-import org.jetbrains.kotlin.idea.conversion.copy.AbstractTextJavaToKotlinCopyPasteConversionTest
 import org.jetbrains.kotlin.idea.coverage.AbstractKotlinCoverageOutputFilesTest
 import org.jetbrains.kotlin.idea.debugger.evaluate.AbstractCodeFragmentAutoImportTest
 import org.jetbrains.kotlin.idea.debugger.evaluate.AbstractCodeFragmentCompletionHandlerTest
@@ -116,6 +114,7 @@ import org.jetbrains.kotlin.idea.stubs.AbstractResolveByStubTest
 import org.jetbrains.kotlin.idea.stubs.AbstractStubBuilderTest
 import org.jetbrains.kotlin.j2k.AbstractJavaToKotlinConverterMultiFileTest
 import org.jetbrains.kotlin.j2k.AbstractJavaToKotlinConverterSingleFileTest
+import org.jetbrains.kotlin.incremental.*
 import org.jetbrains.kotlin.jps.build.*
 import org.jetbrains.kotlin.jps.incremental.AbstractJsProtoComparisonTest
 import org.jetbrains.kotlin.jps.incremental.AbstractJvmProtoComparisonTest
@@ -650,13 +649,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("dataFlowValueRendering")
         }
 
-        testClass<AbstractJavaToKotlinCopyPasteConversionTest> {
-            model("copyPaste/conversion", pattern = """^([^\.]+)\.java$""".toRegex())
-        }
-
-        testClass<AbstractTextJavaToKotlinCopyPasteConversionTest> {
-            model("copyPaste/plainTextConversion", pattern = """^([^\.]+)\.txt$""".toRegex())
-        }
 
         testClass<AbstractLiteralTextToKotlinCopyPasteTest> {
             model("copyPaste/plainTextLiteral", pattern = """^([^\.]+)\.txt$""".toRegex())
@@ -1346,14 +1338,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("j2k/old") {
-        testClass<AbstractJavaToKotlinConverterSingleFileTest> {
-            model("fileOrElement", pattern = JAVA)
-        }
-        testClass<AbstractJavaToKotlinConverterMultiFileTest> {
-            model("multiFile", pattern = DIRECTORY, isRecursive = false)
-        }
-    }
 
     testGroup("j2k/new") {
         testClass<AbstractNewJavaToKotlinConverterSingleFileTest> {
