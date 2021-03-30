@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.idea.completion.test.AbstractMultiFileJvmBasicComple
  * DO NOT MODIFY MANUALLY.
  */
 @SuppressWarnings("all")
-@TestRoot("completion")
+@TestRoot("completion/tests")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
 @TestMetadata("testData/basic/multifilePrimitive")
