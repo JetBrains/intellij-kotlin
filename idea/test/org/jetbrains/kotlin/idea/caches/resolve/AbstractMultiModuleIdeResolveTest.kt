@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.diagnostics.Severity
 import org.jetbrains.kotlin.idea.FrontendInternals
 import org.jetbrains.kotlin.idea.multiplatform.setupMppProjectFromTextFile
 import org.jetbrains.kotlin.idea.project.KotlinMultiplatformAnalysisModeComponent
+import org.jetbrains.kotlin.idea.codeMetaInfo.AbstractDiagnosticCodeMetaInfoTest
 import org.jetbrains.kotlin.idea.resolve.getDataFlowValueFactory
 import org.jetbrains.kotlin.idea.resolve.getLanguageVersionSettings
 import org.jetbrains.kotlin.idea.stubs.AbstractMultiModuleTest
@@ -121,7 +122,7 @@ abstract class AbstractMultiModuleIdeResolveTest : AbstractMultiModuleTest() {
 
     companion object {
         private const val DIAGNOSTICS_DIRECTIVE = "DIAGNOSTICS"
-        private const val RENDER_DIAGNOSTICS_MESSAGES = "RENDER_DIAGNOSTICS_MESSAGES"
+        const val RENDER_DIAGNOSTICS_MESSAGES = "RENDER_DIAGNOSTICS_MESSAGES"
         private val DIAGNOSTICS_PATTERN: Pattern = Pattern.compile("([+\\-!])(\\w+)\\s*")
         private val DIAGNOSTICS_TO_INCLUDE_ANYWAY: Set<DiagnosticFactory<*>> = setOf(
                 Errors.UNRESOLVED_REFERENCE,
@@ -205,7 +206,7 @@ abstract class AbstractMultiModuleIdeResolveTest : AbstractMultiModuleTest() {
     }
 }
 
-abstract class AbstractMultiplatformAnalysisTest : AbstractMultiModuleIdeResolveTest() {
+abstract class AbstractMultiplatformAnalysisTest : AbstractDiagnosticCodeMetaInfoTest() {
     override fun getTestDataDirectory() = IDEA_TEST_DATA_DIR.resolve("multiplatform")
 
     override fun setUp() {

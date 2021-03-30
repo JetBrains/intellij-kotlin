@@ -6,21 +6,14 @@
 package org.jetbrains.kotlin.idea.completion
 
 import org.jetbrains.kotlin.idea.completion.test.AbstractJvmBasicCompletionTest
-import org.jetbrains.kotlin.test.InTextDirectivesUtils
+import org.jetbrains.kotlin.test.uitls.IgnoreTests
 
 abstract class AbstractHighLevelJvmBasicCompletionTest : AbstractJvmBasicCompletionTest() {
     override val captureExceptions: Boolean = false
 
     override fun executeTest(test: () -> Unit) {
-        val doComparison = InTextDirectivesUtils.isDirectiveDefined(myFixture.file.text, "FIR_COMPARISON")
-        try {
-            test()
-        } catch (e: Throwable) {
-            if (doComparison) throw e
-            return
-        }
-        if (!doComparison) {
-            throw AssertionError("Looks like test is passing, please add // FIR_COMPARISON at the beginning of the file")
+        IgnoreTests.runTestIfEnabledByFileDirective(testDataFile().toPath(), IgnoreTests.DIRECTIVES.FIR_COMPARISON, ".after") {
+            super.executeTest(test)
         }
     }
 }

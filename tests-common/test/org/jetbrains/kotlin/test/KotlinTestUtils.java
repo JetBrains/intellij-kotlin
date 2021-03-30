@@ -98,7 +98,8 @@ public class KotlinTestUtils {
             @NotNull TestJdkKind jdkKind
     ) {
         return KotlinCoreEnvironment.createForTests(
-                disposable, newConfiguration(configurationKind, jdkKind, KotlinArtifacts.getInstance().getJetbrainsAnnotations()), EnvironmentConfigFiles.JVM_CONFIG_FILES
+                disposable, newConfiguration(configurationKind, jdkKind, KotlinArtifacts.getInstance().getJetbrainsAnnotations()),
+                EnvironmentConfigFiles.JVM_CONFIG_FILES
         );
     }
 
@@ -206,8 +207,7 @@ public class KotlinTestUtils {
     public static String doLoadFile(@NotNull File file) throws IOException {
         try {
             return FileUtil.loadFile(file, CharsetToolkit.UTF8, true);
-        }
-        catch (FileNotFoundException fileNotFoundException) {
+        } catch (FileNotFoundException fileNotFoundException) {
             /*
              * Unfortunately, the FileNotFoundException will only show the relative path in it's exception message.
              * This clarifies the exception by showing the full path.
@@ -247,8 +247,8 @@ public class KotlinTestUtils {
             ) {
                 if (severity == CompilerMessageSeverity.ERROR) {
                     String prefix = location == null
-                                  ? ""
-                                  : "(" + location.getPath() + ":" + location.getLine() + ":" + location.getColumn() + ") ";
+                                    ? ""
+                                    : "(" + location.getPath() + ":" + location.getLine() + ":" + location.getColumn() + ") ";
                     throw new AssertionError(prefix + message);
                 }
             }
@@ -283,8 +283,7 @@ public class KotlinTestUtils {
         if (jdkKind == TestJdkKind.MOCK_JDK) {
             JvmContentRootsKt.addJvmClasspathRoot(configuration, findMockJdkRtJar());
             configuration.put(JVMConfigurationKeys.NO_JDK, true);
-        }
-        else if (SystemInfo.IS_AT_LEAST_JAVA9) {
+        } else if (SystemInfo.IS_AT_LEAST_JAVA9) {
             configuration.put(JVMConfigurationKeys.JDK_HOME, getAtLeastJdk9Home());
         }
 
@@ -341,11 +340,20 @@ public class KotlinTestUtils {
         assertEqualsToFile(message, expectedFile, actual, s -> s);
     }
 
-    public static void assertEqualsToFile(@NotNull File expectedFile, @NotNull String actual, @NotNull Function1<String, String> sanitizer) {
+    public static void assertEqualsToFile(
+            @NotNull File expectedFile,
+            @NotNull String actual,
+            @NotNull Function1<String, String> sanitizer
+    ) {
         assertEqualsToFile("Actual data differs from file content", expectedFile, actual, sanitizer);
     }
 
-    public static void assertEqualsToFile(@NotNull String message, @NotNull File expectedFile, @NotNull String actual, @NotNull Function1<String, String> sanitizer) {
+    public static void assertEqualsToFile(
+            @NotNull String message,
+            @NotNull File expectedFile,
+            @NotNull String actual,
+            @NotNull Function1<String, String> sanitizer
+    ) {
         try {
             String actualText = JetTestUtils.trimTrailingWhitespacesAndAddNewlineAtEOF(StringUtil.convertLineSeparators(actual.trim()));
 
@@ -361,8 +369,7 @@ public class KotlinTestUtils {
                 throw new FileComparisonFailure(message + ": " + expectedFile.getName(),
                                                 expected, actual, expectedFile.getAbsolutePath());
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw ExceptionUtilsKt.rethrow(e);
         }
     }
@@ -388,8 +395,7 @@ public class KotlinTestUtils {
 
         try {
             content = FileUtil.loadFile(new File(filePath), true);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -418,8 +424,7 @@ public class KotlinTestUtils {
 
             if ("//".equals(document.getCharsSequence().subSequence(lineStart, lineStart + 2).toString())) {
                 resultLines.add(document.getCharsSequence().subSequence(lineStart + 2, lineEnd));
-            }
-            else {
+            } else {
                 break;
             }
         }
@@ -459,13 +464,11 @@ public class KotlinTestUtils {
                     String lastChildText = lastChild.getText();
                     comments.add(lastChildText.substring(2, lastChildText.length() - 2).trim());
                 }
-            }
-            else if (lastChild.getNode().getElementType().equals(KtTokens.EOL_COMMENT)) {
+            } else if (lastChild.getNode().getElementType().equals(KtTokens.EOL_COMMENT)) {
                 if (commentType == CommentType.ALL || commentType == CommentType.LINE_COMMENT) {
                     comments.add(lastChild.getText().substring(2).trim());
                 }
-            }
-            else {
+            } else {
                 break;
             }
 
@@ -484,7 +487,8 @@ public class KotlinTestUtils {
         return compileJavaFiles(files, options, null);
     }
 
-    private static boolean compileJavaFiles(@NotNull Collection<File> files, List<String> options, @Nullable File javaErrorFile) throws IOException {
+    private static boolean compileJavaFiles(@NotNull Collection<File> files, List<String> options, @Nullable File javaErrorFile)
+            throws IOException {
         JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector<JavaFileObject> diagnosticCollector = new DiagnosticCollector<>();
         try (StandardJavaFileManager fileManager =
@@ -502,8 +506,7 @@ public class KotlinTestUtils {
             Boolean success = task.call(); // do NOT inline this variable, call() should complete before errorsToString()
             if (javaErrorFile == null || !javaErrorFile.exists()) {
                 Assert.assertTrue(errorsToString(diagnosticCollector, true), success);
-            }
-            else {
+            } else {
                 assertEqualsToFile(javaErrorFile, errorsToString(diagnosticCollector, false));
             }
             return success;
@@ -522,8 +525,7 @@ public class KotlinTestUtils {
             Process process = new ProcessBuilder().command(command).inheritIO().start();
             process.waitFor();
             return process.exitValue() == 0;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw ExceptionUtilsKt.rethrow(e);
         }
     }
@@ -536,8 +538,7 @@ public class KotlinTestUtils {
 
             if (humanReadable) {
                 builder.append(diagnostic).append("\n");
-            }
-            else {
+            } else {
                 builder.append(new File(diagnostic.getSource().toUri()).getName()).append(":")
                         .append(diagnostic.getLineNumber()).append(":")
                         .append(diagnostic.getColumnNumber()).append(":")
@@ -557,7 +558,8 @@ public class KotlinTestUtils {
 
     // In this test runner version the `testDataFile` parameter is annotated by `TestDataFile`.
     // So only file paths passed to this parameter will be used in navigation actions, like "Navigate to testdata" and "Related Symbol..."
-    public static void runTest(DoTest test, TestCase testCase, TargetBackend targetBackend, @TestDataFile String testDataFile) throws Exception {
+    public static void runTest(DoTest test, TestCase testCase, TargetBackend targetBackend, @TestDataFile String testDataFile)
+            throws Exception {
         runTest0(test, testCase, targetBackend, testDataFile);
     }
 
@@ -599,8 +601,7 @@ public class KotlinTestUtils {
 
             try {
                 test.invoke(filePath);
-            }
-            catch (Throwable e) {
+            } catch (Throwable e) {
                 if (!isIgnored && AUTOMATICALLY_MUTE_FAILED_TESTS) {
                     String text = doLoadFile(testDataFile);
                     String directive = ignoreDirective + targetBackend.name() + "\n";
@@ -675,8 +676,7 @@ public class KotlinTestUtils {
         try {
             Method method = testCaseClass.getDeclaredMethod(testName);
             return getMethodMetadata(method);
-        }
-        catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
     }

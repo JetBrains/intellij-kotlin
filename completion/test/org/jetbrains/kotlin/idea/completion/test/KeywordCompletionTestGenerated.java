@@ -501,6 +501,61 @@ public class KeywordCompletionTestGenerated extends AbstractKeywordCompletionTes
         runTest("testData/keywords/ReturnSet.kt");
     }
 
+    @TestMetadata("SealedForAlreadySealed.kt")
+    public void testSealedForAlreadySealed() throws Exception {
+        runTest("testData/keywords/SealedForAlreadySealed.kt");
+    }
+
+    @TestMetadata("SealedForAnnotationClass.kt")
+    public void testSealedForAnnotationClass() throws Exception {
+        runTest("testData/keywords/SealedForAnnotationClass.kt");
+    }
+
+    @TestMetadata("SealedForDataClass.kt")
+    public void testSealedForDataClass() throws Exception {
+        runTest("testData/keywords/SealedForDataClass.kt");
+    }
+
+    @TestMetadata("SealedForDeclaredClass.kt")
+    public void testSealedForDeclaredClass() throws Exception {
+        runTest("testData/keywords/SealedForDeclaredClass.kt");
+    }
+
+    @TestMetadata("SealedForDeclaredInterface.kt")
+    public void testSealedForDeclaredInterface() throws Exception {
+        runTest("testData/keywords/SealedForDeclaredInterface.kt");
+    }
+
+    @TestMetadata("SealedForEnumClass.kt")
+    public void testSealedForEnumClass() throws Exception {
+        runTest("testData/keywords/SealedForEnumClass.kt");
+    }
+
+    @TestMetadata("SealedForFunInterface.kt")
+    public void testSealedForFunInterface() throws Exception {
+        runTest("testData/keywords/SealedForFunInterface.kt");
+    }
+
+    @TestMetadata("SealedForInnerClass.kt")
+    public void testSealedForInnerClass() throws Exception {
+        runTest("testData/keywords/SealedForInnerClass.kt");
+    }
+
+    @TestMetadata("SealedForOpenClass.kt")
+    public void testSealedForOpenClass() throws Exception {
+        runTest("testData/keywords/SealedForOpenClass.kt");
+    }
+
+    @TestMetadata("SealedWithName.kt")
+    public void testSealedWithName() throws Exception {
+        runTest("testData/keywords/SealedWithName.kt");
+    }
+
+    @TestMetadata("SealedWithoutName.kt")
+    public void testSealedWithoutName() throws Exception {
+        runTest("testData/keywords/SealedWithoutName.kt");
+    }
+
     @TestMetadata("SuspendInParameterTypePosition.kt")
     public void testSuspendInParameterTypePosition() throws Exception {
         runTest("testData/keywords/SuspendInParameterTypePosition.kt");

@@ -37,10 +37,7 @@ import org.jetbrains.kotlin.idea.codeInsight.postfix.AbstractPostfixTemplateProv
 import org.jetbrains.kotlin.idea.codeInsight.surroundWith.AbstractSurroundWithTest
 import org.jetbrains.kotlin.idea.codeInsight.unwrap.AbstractUnwrapRemoveTest
 import org.jetbrains.kotlin.idea.completion.test.*
-import org.jetbrains.kotlin.idea.completion.test.handlers.AbstractBasicCompletionHandlerTest
-import org.jetbrains.kotlin.idea.completion.test.handlers.AbstractCompletionCharFilterTest
-import org.jetbrains.kotlin.idea.completion.test.handlers.AbstractKeywordCompletionHandlerTest
-import org.jetbrains.kotlin.idea.completion.test.handlers.AbstractSmartCompletionHandlerTest
+import org.jetbrains.kotlin.idea.completion.test.handlers.*
 import org.jetbrains.kotlin.idea.completion.test.weighers.AbstractBasicCompletionWeigherTest
 import org.jetbrains.kotlin.idea.configuration.AbstractGradleConfigureProjectByChangingFileTest
 import org.jetbrains.kotlin.idea.conversion.copy.AbstractJavaToKotlinCopyPasteConversionTest
@@ -200,6 +197,11 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractKotlinEvaluateExpressionTest> {
             model("evaluation/singleBreakpoint", testMethodName = "doSingleBreakpointTest")
             model("evaluation/multipleBreakpoints", testMethodName = "doMultipleBreakpointsTest")
+        }
+
+        testClass<AbstractIrKotlinEvaluateExpressionTest> {
+            model("evaluation/singleBreakpoint", testMethodName = "doSingleBreakpointTest", targetBackend = TargetBackend.JVM_IR)
+            model("evaluation/multipleBreakpoints", testMethodName = "doMultipleBreakpointsTest", targetBackend = TargetBackend.JVM_IR)
         }
 
         testClass<AbstractSelectExpressionForDebuggerTest> {
@@ -949,6 +951,24 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractSymbolFromLibraryPointerRestoreTest> {
             model("resoreSymbolFromLibrary", extension = "txt")
         }
+
+        testClass<AbstractMemoryLeakInSymbolsTest> {
+            model("symbolMemoryLeak")
+        }
+    }
+
+    testGroup("idea/idea-fir/tests", "compiler/testData") {
+        testClass<AbstractFirLightClassTest> {
+            model("asJava/lightClasses", excludeDirs = listOf("delegation", "script"), pattern = KT_WITHOUT_DOTS_IN_NAME)
+        }
+
+        testClass<AbstractFirClassLoadingTest> {
+            model("asJava/ultraLightClasses", pattern = KT_OR_KTS)
+        }
+
+        testClass<AbstractFirLightFacadeClassTest> {
+            model("asJava/ultraLightFacades", pattern = KT_OR_KTS)
+        }
     }
 
     testGroup("fir-low-level-api", testDataPath = "../idea/testData") {
@@ -961,11 +981,26 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("idea/idea-frontend-fir/idea-fir-low-level-api/tests", "idea/idea-frontend-fir/idea-fir-low-level-api/testdata") {
-        testClass<AbstractFirMultiModuleLazyResolveTest> {
-            model("multiModuleLazyResolve", recursive = false, extension = null)
+        testGroup("idea/idea-frontend-fir/idea-fir-low-level-api/tests", "idea/idea-frontend-fir/idea-fir-low-level-api/testdata") {
+            testClass<AbstractFirMultiModuleLazyResolveTest> {
+                model("multiModuleLazyResolve", recursive = false, extension = null)
+            }
+            testClass<AbstractFirLazyDeclarationResolveTest> {
+                model("lazyResolve")
+            }
+            testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
+                model("outOfBlockProjectWide")
+            }
+            testClass<AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest> {
+                model("outOfBlockProjectWide")
+            }
+            testClass<AbstractFileStructureTest> {
+                model("fileStructure")
+            }
+            testClass<AbstractSessionsInvalidationTest> {
+                model("sessionInvalidation", recursive = false, extension = null)
+            }
         }
-    }
 
     testGroup("idea/idea-fir/tests", "idea") {
         testClass<AbstractFirHighlightingTest> {
@@ -1005,6 +1040,31 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractHighLevelJvmBasicCompletionTest> {
             model("basic/common")
             model("basic/java")
+        }
+
+        testClass<AbstractHighLevelBasicCompletionHandlerTest> {
+            model("handlers/basic", pattern = KT_WITHOUT_DOTS_IN_NAME)
+        }
+    }
+
+    testGroup("idea/idea-fir/tests", "idea/testData/findUsages") {
+
+        testClass<AbstractFindUsagesFirTest> {
+            model("kotlin", pattern = """^(.+)\.0\.(kt|kts)$""")
+            model("java", pattern = """^(.+)\.0\.java$""")
+            model("propertyFiles", pattern = """^(.+)\.0\.properties$""")
+        }
+
+        testClass<AbstractFindUsagesWithDisableComponentSearchFirTest> {
+            model("kotlin/conventions/components", pattern = """^(.+)\.0\.(kt|kts)$""")
+        }
+
+        testClass<AbstractKotlinFindUsagesWithLibraryFirTest> {
+            model("libraryUsages", pattern = """^(.+)\.0\.kt$""")
+        }
+
+        testClass<AbstractKotlinFindUsagesWithStdlibFirTest> {
+            model("stdlibUsages", pattern = """^(.+)\.0\.kt$""")
         }
     }
     */

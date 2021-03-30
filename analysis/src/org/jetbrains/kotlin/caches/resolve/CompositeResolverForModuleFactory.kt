@@ -35,7 +35,6 @@ import org.jetbrains.kotlin.platform.jvm.JvmPlatform
 import org.jetbrains.kotlin.platform.konan.NativePlatform
 import org.jetbrains.kotlin.platform.konan.NativePlatforms
 import org.jetbrains.kotlin.resolve.*
-import org.jetbrains.kotlin.resolve.calls.inference.InferenceCompatibilityCheckerImpl
 import org.jetbrains.kotlin.resolve.checkers.ExperimentalMarkerDeclarationAnnotationChecker
 import org.jetbrains.kotlin.resolve.jvm.JavaDescriptorResolver
 import org.jetbrains.kotlin.resolve.jvm.JvmPlatformParameters
@@ -57,7 +56,8 @@ class CompositeResolverForModuleFactory(
         moduleContext: ModuleContext,
         moduleContent: ModuleContent<M>,
         resolverForProject: ResolverForProject<M>,
-        languageVersionSettings: LanguageVersionSettings
+        languageVersionSettings: LanguageVersionSettings,
+        sealedInheritorsProvider: SealedClassInheritorsProvider
     ): ResolverForModule {
         val (moduleInfo, syntheticFiles, moduleContentScope) = moduleContent
         val project = moduleContext.project
@@ -179,7 +179,7 @@ class CompositeResolverForModuleFactory(
         }
 
         // Called by all normal containers set-ups
-        configureModule(moduleContext, targetPlatform, analyzerServices, trace, languageVersionSettings)
+        configureModule(moduleContext, targetPlatform, analyzerServices, trace, languageVersionSettings,)
         configureStandardResolveComponents()
         useInstance(moduleContentScope)
         useInstance(declarationProviderFactory)
@@ -253,6 +253,5 @@ class CompositePlatformConigurator(private val componentConfigurators: List<Plat
         // Unfortunately, it is declared in base class, so repeating call to 'configureModuleDependentCheckers' will lead
         // to multiple registrrations.
         container.useImpl<ExperimentalMarkerDeclarationAnnotationChecker>()
-        container.useImpl<InferenceCompatibilityCheckerImpl>()
     }
 }

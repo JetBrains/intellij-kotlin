@@ -11,6 +11,7 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.testFramework.VfsTestUtil
 import org.jetbrains.jps.model.module.JpsModuleSourceRootType
+import org.jetbrains.kotlin.idea.test.GradleProcessOutputInterceptor
 import org.jetbrains.kotlin.idea.test.IDEA_TEST_DATA_DIR
 import org.jetbrains.kotlin.test.AndroidStudioTestUtils
 import org.jetbrains.kotlin.test.KotlinTestUtils
@@ -26,6 +27,8 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
 
     protected open fun testDataDirName(): String = ""
 
+    protected open fun clearTextFromMarkup(text: String): String = text
+
     protected open fun testDataDirectory(): File {
         val baseDir = IDEA_TEST_DATA_DIR.resolve("gradle/${testDataDirName()}")
         return File(baseDir, getTestName(true).substringBefore("_").substringBefore(" "))
@@ -34,6 +37,7 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
     override fun setUp() {
         Assume.assumeFalse(AndroidStudioTestUtils.skipIncompatibleTestAgainstAndroidStudio())
         super.setUp()
+        GradleProcessOutputInterceptor.install(testRootDisposable)
     }
 
     protected fun configureKotlinVersionAndProperties(text: String, properties: Map<String, String>? = null): String {
@@ -53,7 +57,7 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
                 it.isDirectory -> null
 
                 !it.name.endsWith(AFTER_SUFFIX) -> {
-                    var text = FileUtil.loadFile(it, /* convertLineSeparators = */ true)
+                    var text = clearTextFromMarkup(FileUtil.loadFile(it, /* convertLineSeparators = */ true))
                     (properties ?: mapOf("kotlin_plugin_version" to LATEST_STABLE_GRADLE_PLUGIN_VERSION)).forEach { (key, value) ->
                         text = text.replace(Regex("""\{\s*\{\s*${key}\s*}\s*}"""), value)
                     }
@@ -104,9 +108,9 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
         super.importProject()
     }
 
-    protected fun importProjectFromTestData(skipIndexing: Boolean? = null): List<VirtualFile> {
+    protected fun importProjectFromTestData(): List<VirtualFile> {
         val files = configureByFiles()
-        importProject(skipIndexing)
+        importProject()
         return files
     }
 
@@ -116,6 +120,32 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
                 sourceFolder.url.replace(projectPath, "") to sourceFolder.rootType
             }
         }
+    }
+
+    override fun handleImportFailure(errorMessage: String, errorDetails: String?) {
+        val gradleOutput = GradleProcessOutputInterceptor.getInstance()?.getOutput().orEmpty()
+
+        // Typically Gradle error message consists of a line with the description of the error followed by
+        // a multi-line stacktrace. The idea is to cut off the stacktrace if it is already contained in
+        // the intercepted Gradle process output to avoid unnecessary verbosity.
+        val compactErrorMessage = when (val indexOfNewLine = errorMessage.indexOf('\n')) {
+            -1 -> errorMessage
+            else -> {
+                val compactErrorMessage = errorMessage.substring(0, indexOfNewLine)
+                val theRest = errorMessage.substring(indexOfNewLine + 1)
+                if (theRest in gradleOutput) compactErrorMessage else errorMessage
+            }
+        }
+
+        val failureMessage = buildString {
+            append("Gradle import failed: ").append(compactErrorMessage).append('\n')
+            if (!errorDetails.isNullOrBlank()) append("Error details: ").append(errorDetails).append('\n')
+            append("Gradle process output (BEGIN):\n")
+            append(gradleOutput)
+            if (!gradleOutput.endsWith('\n')) append('\n')
+            append("Gradle process output (END)")
+        }
+        fail(failureMessage)
     }
 
     protected open fun assertNoModuleDepForModule(moduleName: String, depName: String) {

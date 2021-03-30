@@ -69,6 +69,7 @@ class AnnotationPresentationInfo(
         if (diagnostic.severity == Severity.WARNING) {
             if (fixes.isEmpty()) {
                 // if there are no quick fixes we need to register an EmptyIntentionAction to enable 'suppress' actions
+                //annotation.newFix(EmptyIntentionAction(diagnostic.factory.name)).registerFix()
                 QuickFixAction.registerQuickFixAction(info, EmptyIntentionAction(diagnostic.factory.name))
             }
         }

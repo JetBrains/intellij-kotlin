@@ -13,7 +13,7 @@ import java.util.ArrayList
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class Benchmark(
-    val version: Int = 100,
+    val version: Int = 4,
     @set:JsonProperty("agentName")
     var agentName: String?,
     @set:JsonProperty("benchmark")

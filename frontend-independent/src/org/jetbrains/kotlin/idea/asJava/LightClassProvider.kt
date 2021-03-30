@@ -8,15 +8,8 @@ package org.jetbrains.kotlin.idea.asJava
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.project.Project
 import com.intellij.psi.*
-import com.intellij.psi.impl.light.AbstractLightClass
-import com.intellij.psi.impl.light.LightMethod
 import org.jetbrains.kotlin.asJava.classes.KtLightClass
-import org.jetbrains.kotlin.asJava.elements.KtLightElement
-import org.jetbrains.kotlin.idea.KotlinLanguage
-import org.jetbrains.kotlin.idea.search.KotlinSearchUsagesSupport
-import org.jetbrains.kotlin.load.java.structure.LightClassOriginKind
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 
 interface LightClassProvider {
 
@@ -24,10 +17,8 @@ interface LightClassProvider {
 
     fun getLightClassMethods(function: KtFunction): List<PsiMethod>
 
-    //getLightClassPropertyMethods.allDeclarations
     fun getLightClassParameterDeclarations(parameter: KtParameter): List<PsiNamedElement>
 
-    //getLightClassPropertyMethods.allDeclarations
     fun getLightClassPropertyDeclarations(property: KtProperty): List<PsiNamedElement>
 
     fun toLightClassWithBuiltinMapping(classOrObject: KtClassOrObject): PsiClass?
@@ -60,11 +51,9 @@ interface LightClassProvider {
         fun providedGetLightClassMethods(function: KtFunction): List<PsiMethod> =
             getInstance(function.project).getLightClassMethods(function)
 
-        //getLightClassPropertyMethods.allDeclarations
         fun providedGetLightClassParameterDeclarations(parameter: KtParameter): List<PsiNamedElement> =
             getInstance(parameter.project).getLightClassParameterDeclarations(parameter)
 
-        //getLightClassPropertyMethods.allDeclarations
         fun providedGetLightClassPropertyDeclarations(property: KtProperty): List<PsiNamedElement> =
             getInstance(property.project).getLightClassPropertyDeclarations(property)
 

@@ -10,7 +10,6 @@ import com.intellij.openapi.util.ModificationTracker
 import org.jetbrains.kotlin.analyzer.*
 import org.jetbrains.kotlin.analyzer.common.CommonAnalysisParameters
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.builtins.jvm.JvmBuiltIns
 import org.jetbrains.kotlin.caches.resolve.CompositeAnalyzerServices
 import org.jetbrains.kotlin.caches.resolve.CompositeResolverForModuleFactory
 import org.jetbrains.kotlin.caches.resolve.KotlinCacheService
@@ -24,6 +23,7 @@ import org.jetbrains.kotlin.idea.caches.project.IdeaModuleInfo
 import org.jetbrains.kotlin.idea.caches.project.getNullableModuleInfo
 import org.jetbrains.kotlin.idea.compiler.IDELanguageSettingsProvider
 import org.jetbrains.kotlin.idea.project.IdeaEnvironment
+import org.jetbrains.kotlin.idea.compiler.IdeSealedClassInheritorsProvider
 import org.jetbrains.kotlin.idea.project.findAnalyzerServices
 import org.jetbrains.kotlin.idea.project.useCompositeAnalysis
 import org.jetbrains.kotlin.load.java.structure.JavaClass
@@ -58,9 +58,15 @@ class IdeaResolverForProject(
     private val builtInsCache: BuiltInsCache =
         (delegateResolver as? IdeaResolverForProject)?.builtInsCache ?: BuiltInsCache(projectContext, this)
 
-    override fun sdkDependency(module: IdeaModuleInfo): SdkInfo? {
+    override fun sdkDependency(module: IdeaModuleInfo, ownerModuleDescriptor: ModuleDescriptorImpl?): SdkInfo? {
         if (projectContext.project.useCompositeAnalysis) {
             require(constantSdkDependencyIfAny == null) { "Shouldn't pass SDK dependency manually for composite analysis mode" }
+        }
+        // This is needed for case when we find sdk dependency for module descriptor of
+        //   that sdk itself. There was some situations when we create additional module
+        //   descriptor for one SdkInfo
+        if (module is SdkInfo && ownerModuleDescriptor?.getCapability(ModuleInfo.Capability) == module) {
+            return module
         }
         return constantSdkDependencyIfAny ?: module.findSdkAcrossDependencies()
     }
@@ -83,7 +89,8 @@ class IdeaResolverForProject(
             projectContext.withModule(descriptor),
             moduleContent,
             this,
-            languageVersionSettings
+            languageVersionSettings,
+            sealedInheritorsProvider = IdeSealedClassInheritorsProvider
         )
     }
 
@@ -131,27 +138,18 @@ class IdeaResolverForProject(
         private val cache = mutableMapOf<BuiltInsCacheKey, KotlinBuiltIns>()
 
         fun getOrCreateIfNeeded(module: IdeaModuleInfo): KotlinBuiltIns = projectContextFromSdkResolver.storageManager.compute {
-            val sdk = resolverForSdk.sdkDependency(module)
+            val sdk = resolverForSdk.sdkDependency(module, null)
 
             val key = module.platform.idePlatformKind.resolution.getKeyForBuiltIns(module, sdk)
             val cachedBuiltIns = cache[key]
             if (cachedBuiltIns != null) return@compute cachedBuiltIns
 
-            // Note #1: we can't use .getOrPut, because we have to put builtIns into map *before* initialization
-            // Note #2: it's OK to put not-initialized built-ins into public map, because access to [cache] is guarded by storageManager.lock
-            val newBuiltIns = module.platform.idePlatformKind.resolution.createBuiltIns(module, projectContextFromSdkResolver, sdk)
-            cache[key] = newBuiltIns
-
-            if (newBuiltIns is JvmBuiltIns) {
-                // SDK should be present, otherwise we wouldn't have created JvmBuiltIns in createBuiltIns
-                val sdkDescriptor = resolverForSdk.descriptorForModule(sdk!!)
-
-                val isAdditionalBuiltInsFeaturesSupported = module.supportsAdditionalBuiltInsMembers(projectContextFromSdkResolver.project)
-
-                newBuiltIns.initialize(sdkDescriptor, isAdditionalBuiltInsFeaturesSupported)
-            }
-
-            return@compute newBuiltIns
+            module.platform.idePlatformKind.resolution
+                .createBuiltIns(module, projectContextFromSdkResolver, resolverForSdk, sdk)
+                .also {
+                    // TODO: MemoizedFunction should be used here instead, but for proper we also need a module (for LV settings) that is not contained in the key
+                    cache[key] = it
+                }
         }
     }
 

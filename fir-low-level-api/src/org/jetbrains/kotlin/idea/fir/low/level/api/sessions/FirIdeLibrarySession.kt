@@ -5,8 +5,10 @@
 
 package org.jetbrains.kotlin.idea.fir.low.level.api.sessions
 
+import com.intellij.openapi.project.Project
 import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.kotlin.analyzer.ModuleInfo
+import org.jetbrains.kotlin.fir.BuiltinTypes
 import org.jetbrains.kotlin.fir.PrivateSessionConstructor
 
 /**
@@ -14,7 +16,8 @@ import org.jetbrains.kotlin.fir.PrivateSessionConstructor
  */
 @OptIn(PrivateSessionConstructor::class)
 internal class FirIdeLibrariesSession @PrivateSessionConstructor constructor(
-    moduleInfo: ModuleInfo,
-    sessionProvider: FirIdeSessionProvider,
-    override val scope: GlobalSearchScope
-) : FirIdeSession(moduleInfo, sessionProvider)
+    override val moduleInfo: ModuleInfo,
+    override val project: Project,
+    override val scope: GlobalSearchScope,
+    builtinTypes: BuiltinTypes,
+) : FirIdeModuleSession(builtinTypes)

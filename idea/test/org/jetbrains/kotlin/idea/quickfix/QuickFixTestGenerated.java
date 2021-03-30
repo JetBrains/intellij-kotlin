@@ -7619,14 +7619,29 @@ public abstract class QuickFixTestGenerated extends AbstractQuickFixTest {
             runTest("testData/quickfix/implement/sealed.kt");
         }
 
+        @TestMetadata("sealedAfter15.kt")
+        public void testSealedAfter15() throws Exception {
+            runTest("testData/quickfix/implement/sealedAfter15.kt");
+        }
+
         @TestMetadata("sealedEmpty.kt")
         public void testSealedEmpty() throws Exception {
             runTest("testData/quickfix/implement/sealedEmpty.kt");
         }
 
+        @TestMetadata("sealedEmptyAfter15.kt")
+        public void testSealedEmptyAfter15() throws Exception {
+            runTest("testData/quickfix/implement/sealedEmptyAfter15.kt");
+        }
+
         @TestMetadata("sealedWithConflict.kt")
         public void testSealedWithConflict() throws Exception {
             runTest("testData/quickfix/implement/sealedWithConflict.kt");
+        }
+
+        @TestMetadata("sealedWithConflictAfter15.kt")
+        public void testSealedWithConflictAfter15() throws Exception {
+            runTest("testData/quickfix/implement/sealedWithConflictAfter15.kt");
         }
 
         @TestMetadata("typeParameter.kt")
@@ -7901,6 +7916,24 @@ public abstract class QuickFixTestGenerated extends AbstractQuickFixTest {
         @TestMetadata("topLevelProperty.kt")
         public void testTopLevelProperty() throws Exception {
             runTest("testData/quickfix/initializeWithConstructorParameter/topLevelProperty.kt");
+        }
+    }
+
+    @RunWith(JUnit3RunnerWithInners.class)
+    @TestMetadata("testData/quickfix/inlineClassConstructorNotValParameter")
+    public static class InlineClassConstructorNotValParameter extends AbstractQuickFixTest {
+        private void runTest(String testDataFilePath) throws Exception {
+            KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+        }
+
+        @TestMetadata("basic.kt")
+        public void testBasic() throws Exception {
+            runTest("testData/quickfix/inlineClassConstructorNotValParameter/basic.kt");
+        }
+
+        @TestMetadata("var.kt")
+        public void testVar() throws Exception {
+            runTest("testData/quickfix/inlineClassConstructorNotValParameter/var.kt");
         }
     }
 

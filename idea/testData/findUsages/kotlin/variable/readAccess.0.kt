@@ -1,6 +1,8 @@
 // PSI_ELEMENT: org.jetbrains.kotlin.psi.KtProperty
 // OPTIONS: usages
 // OPTIONS: skipWrite
+// FIR_COMPARISON
+
 fun foo() {
     var <caret>v = 1
     (X@ v) = 2

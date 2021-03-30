@@ -15,3 +15,4 @@ fun y(o: Any) {
     val (x, y) = list[0]
 }
 // DISABLE-ERRORS
+// FIR_IGNORE

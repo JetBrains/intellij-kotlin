@@ -12,33 +12,19 @@ import org.jetbrains.kotlin.fir.FirSessionProvider
 import org.jetbrains.kotlin.idea.caches.project.IdeaModuleInfo
 import org.jetbrains.kotlin.idea.caches.project.ModuleSourceInfo
 import org.jetbrains.kotlin.idea.caches.project.isLibraryClasses
+import org.jetbrains.kotlin.idea.fir.low.level.api.annotations.Immutable
 import org.jetbrains.kotlin.idea.fir.low.level.api.annotations.ThreadSafe
+import org.jetbrains.kotlin.idea.fir.low.level.api.file.builder.ModuleFileCache
 
-@ThreadSafe
-internal class FirIdeSessionProvider(
-    override val project: Project,
+@Immutable
+class FirIdeSessionProvider internal constructor(
+    val project: Project,
+    internal val rootModuleSession: FirIdeSourcesSession,
+    val sessions: Map<ModuleSourceInfo, FirIdeSession>
 ) : FirSessionProvider {
-    private lateinit var sourcesSession: FirIdeSourcesSession
-    private lateinit var librariesSession: FirIdeLibrariesSession
+    override fun getSession(moduleInfo: ModuleInfo): FirSession? =
+        sessions[moduleInfo]
 
-
-    fun setSourcesSession(sourcesSession: FirIdeSourcesSession) {
-        check(!this::sourcesSession.isInitialized)
-        this.sourcesSession = sourcesSession
-    }
-
-    fun setLibrariesSession(librariesSession: FirIdeLibrariesSession) {
-        check(!this::librariesSession.isInitialized)
-        this.librariesSession = librariesSession
-    }
-
-    override fun getSession(moduleInfo: ModuleInfo): FirSession = when {
-        moduleInfo is IdeaModuleInfo && moduleInfo.isLibraryClasses() -> {
-            librariesSession /* TODO check if library is in libraries session scope */
-        }
-        moduleInfo is ModuleSourceInfo -> {
-            sourcesSession /* TODO check if source is in sources session scope */
-        }
-        else -> error("Invalid module info $moduleInfo")
-    }
+    internal fun getModuleCache(moduleSourceInfo: ModuleSourceInfo): ModuleFileCache =
+        (sessions.getValue(moduleSourceInfo) as FirIdeSourcesSession).cache
 }
