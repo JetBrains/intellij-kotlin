@@ -20,10 +20,10 @@ import org.junit.runner.RunWith;
 @TestRoot("fir")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-@TestMetadata("../idea/testData/inspections/redundantUnitReturnType")
+@TestMetadata("../idea/tests/testData/inspections/redundantUnitReturnType")
 public abstract class HLInspectionTestGenerated extends AbstractHLInspectionTest {
     @RunWith(JUnit3RunnerWithInners.class)
-    @TestMetadata("../idea/testData/inspections/redundantUnitReturnType/inspectionData")
+    @TestMetadata("../idea/tests/testData/inspections/redundantUnitReturnType/inspectionData")
     public static class InspectionData extends AbstractHLInspectionTest {
         private void runTest(String testDataFilePath) throws Exception {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
@@ -31,7 +31,7 @@ public abstract class HLInspectionTestGenerated extends AbstractHLInspectionTest
 
         @TestMetadata("inspections.test")
         public void testInspections_test() throws Exception {
-            runTest("../idea/testData/inspections/redundantUnitReturnType/inspectionData/inspections.test");
+            runTest("../idea/tests/testData/inspections/redundantUnitReturnType/inspectionData/inspections.test");
         }
     }
 }

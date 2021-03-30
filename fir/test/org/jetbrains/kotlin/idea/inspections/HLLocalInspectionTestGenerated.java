@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 @RunWith(JUnit3RunnerWithInners.class)
 public class HLLocalInspectionTestGenerated extends AbstractHLLocalInspectionTest {
     @RunWith(JUnit3RunnerWithInners.class)
-    @TestMetadata("../idea/testData/inspectionsLocal/redundantVisibilityModifier")
+    @TestMetadata("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier")
     public static class RedundantVisibilityModifier extends AbstractHLLocalInspectionTest {
         private void runTest(String testDataFilePath) throws Exception {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
@@ -30,42 +30,42 @@ public class HLLocalInspectionTestGenerated extends AbstractHLLocalInspectionTes
 
         @TestMetadata("internalInPrivateClass.kt")
         public void testInternalInPrivateClass() throws Exception {
-            runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/internalInPrivateClass.kt");
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/internalInPrivateClass.kt");
         }
 
         @TestMetadata("overridePropertySetter.kt")
         public void testOverridePropertySetter() throws Exception {
-            runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/overridePropertySetter.kt");
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/overridePropertySetter.kt");
         }
 
         @TestMetadata("publicOverrideProtectedSetter.kt")
         public void testPublicOverrideProtectedSetter() throws Exception {
-            runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter.kt");
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter.kt");
         }
 
         @TestMetadata("publicOverrideProtectedSetter2.kt")
         public void testPublicOverrideProtectedSetter2() throws Exception {
-            runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter2.kt");
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter2.kt");
         }
 
         @TestMetadata("publicOverrideProtectedSetter3.kt")
         public void testPublicOverrideProtectedSetter3() throws Exception {
-            runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter3.kt");
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter3.kt");
         }
 
         @TestMetadata("publicOverrideProtectedSetter4.kt")
         public void testPublicOverrideProtectedSetter4() throws Exception {
-            runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter4.kt");
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter4.kt");
         }
 
         @TestMetadata("publicOverrideProtectedSetter5.kt")
         public void testPublicOverrideProtectedSetter5() throws Exception {
-            runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter5.kt");
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter5.kt");
         }
 
         @TestMetadata("publicOverrideProtectedSetter6.kt")
         public void testPublicOverrideProtectedSetter6() throws Exception {
-            runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter6.kt");
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/publicOverrideProtectedSetter6.kt");
         }
     }
 
