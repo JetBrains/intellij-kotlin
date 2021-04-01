@@ -1306,7 +1306,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("j2k/old") {
+    testGroup("j2k/old/tests") {
         testClass<AbstractJavaToKotlinConverterSingleFileTest> {
             model("fileOrElement", pattern = JAVA)
         }
