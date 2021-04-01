@@ -1348,7 +1348,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("j2k/new") {
+    testGroup("j2k/new/tests") {
         testClass<AbstractNewJavaToKotlinConverterSingleFileTest> {
             model("newJ2k", pattern = Patterns.forRegex("""^([^\.]+)\.java$"""))
         }
