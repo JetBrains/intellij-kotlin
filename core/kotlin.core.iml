@@ -32,10 +32,12 @@
     <orderEntry type="library" name="javax-inject" level="project" />
     <orderEntry type="library" name="Guava" level="project" />
     <orderEntry type="library" name="Trove4j" level="project" />
+    <orderEntry type="library" scope="TEST" name="JUnit4" level="project" />
+    <orderEntry type="library" scope="TEST" name="kotlin-test" level="project" />
     <orderEntry type="library" name="kotlinc.kotlin-compiler" level="project" />
     <orderEntry type="library" name="kotlinc.kotlin-scripting-common" level="project" />
     <orderEntry type="library" name="kotlinc.kotlin-scripting-compiler" level="project" />
-    <orderEntry type="library" name="kotlinc.kotlin-scripting-compiler-impl" level="project" />
+    <orderEntry type="library" name="kotlinc.kotlin-scripting-compiler-impl" level="project" exported=""  />
     <orderEntry type="library" name="kotlinc.kotlin-scripting-jvm" level="project" />
     <orderEntry type="library" name="kotlinc.kotlin-script-runtime" level="project" />
     <orderEntry type="module" module-name="kotlin.common" />
@@ -55,5 +57,8 @@
     <orderEntry type="module" module-name="intellij.xml.psi.impl" />
     <orderEntry type="module" module-name="intellij.platform.core.ui" />
     <orderEntry type="module" module-name="intellij.java.manifest" />
+    <orderEntry type="library" scope="TEST" name="kotlin-test" level="project" />
+    <orderEntry type="module" module-name="kotlin.tests-common" scope="TEST" />
+    <orderEntry type="module" module-name="kotlin.test-framework" scope="TEST" />
   </component>
 </module>
