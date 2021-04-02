@@ -44,7 +44,7 @@ kotlin {
         }
         browserTest {
             dependencies {
-                implementation kotlin('test-js')
+                implementation kotlin('test')
             }
         }
     }
