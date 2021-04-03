@@ -22,6 +22,7 @@ import com.intellij.openapi.projectRoots.JavaSdk;
 import com.intellij.openapi.projectRoots.ProjectJdkTable;
 import com.intellij.openapi.projectRoots.Sdk;
 import com.intellij.openapi.vfs.newvfs.impl.VfsRootAccess;
+import com.intellij.pom.java.LanguageLevel;
 import com.intellij.testFramework.IdeaTestUtil;
 import kotlin.jvm.functions.Function0;
 import org.jetbrains.annotations.NotNull;
@@ -70,13 +71,44 @@ public class PluginTestCaseBase {
         switch (kind) {
             case MOCK_JDK:
                 return IdeaTestUtil.getMockJdk18();
+            case MODIFIED_MOCK_JDK:
+                return jdkByVersion("MODIFIED MOCK", KtTestUtil.findMockJdkRtModified());
+            case FULL_JDK_6:
+                return jdkByVersion("6", KtTestUtil.getJdk6Home());
             case FULL_JDK_9:
-                String jre9 = KotlinTestUtils.getJdk9Home().getPath();
-                return getSdk(jre9, "Full JDK 9");
+                return jdkByVersion("9", KotlinTestUtils.getJdk9Home());
             case FULL_JDK:
                 return fullJdk();
+            case FULL_JDK_15:
+                return jdkByVersion("15", KtTestUtil.getJdk15Home());
             default:
                 throw new UnsupportedOperationException(kind.toString());
         }
+    }
+
+    @NotNull
+    public static LanguageLevel getLanguageLevel(@NotNull TestJdkKind kind) {
+        switch (kind) {
+            case MOCK_JDK:
+                return LanguageLevel.JDK_1_8;
+            case MODIFIED_MOCK_JDK:
+                return LanguageLevel.JDK_11;
+            case FULL_JDK_6:
+                return LanguageLevel.JDK_1_6;
+            case FULL_JDK_9:
+                return LanguageLevel.JDK_1_9;
+            case FULL_JDK:
+                return LanguageLevel.JDK_1_8;
+            case FULL_JDK_15:
+                return LanguageLevel.JDK_15_PREVIEW;
+            default:
+                throw new UnsupportedOperationException(kind.toString());
+        }
+    }
+
+    private static Sdk jdkByVersion(String version, File jdkDir) {
+        String path = jdkDir.getPath();
+        VfsRootAccess.allowRootAccess(path);
+        return getSdk(path, "Full JDK " + version);
     }
 }
