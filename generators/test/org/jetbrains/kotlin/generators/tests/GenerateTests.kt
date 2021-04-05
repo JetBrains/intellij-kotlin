@@ -39,10 +39,13 @@ import org.jetbrains.kotlin.idea.codeInsight.unwrap.AbstractUnwrapRemoveTest
 import org.jetbrains.kotlin.idea.completion.test.*
 import org.jetbrains.kotlin.idea.completion.test.handlers.*
 import org.jetbrains.kotlin.idea.completion.test.weighers.AbstractBasicCompletionWeigherTest
+import org.jetbrains.kotlin.idea.completion.test.weighers.AbstractSmartCompletionWeigherTest
 import org.jetbrains.kotlin.idea.completion.wheigher.AbstractHighLevelWeigherTest
 import org.jetbrains.kotlin.idea.configuration.AbstractGradleConfigureProjectByChangingFileTest
+import org.jetbrains.kotlin.idea.conversion.copy.AbstractJavaToKotlinCopyPasteConversionTest
 import org.jetbrains.kotlin.idea.conversion.copy.AbstractLiteralKotlinToKotlinCopyPasteTest
 import org.jetbrains.kotlin.idea.conversion.copy.AbstractLiteralTextToKotlinCopyPasteTest
+import org.jetbrains.kotlin.idea.conversion.copy.AbstractTextJavaToKotlinCopyPasteConversionTest
 import org.jetbrains.kotlin.idea.coverage.AbstractKotlinCoverageOutputFilesTest
 import org.jetbrains.kotlin.idea.debugger.evaluate.AbstractCodeFragmentAutoImportTest
 import org.jetbrains.kotlin.idea.debugger.evaluate.AbstractCodeFragmentCompletionHandlerTest
@@ -122,7 +125,6 @@ import org.jetbrains.kotlin.idea.stubs.AbstractResolveByStubTest
 import org.jetbrains.kotlin.idea.stubs.AbstractStubBuilderTest
 import org.jetbrains.kotlin.j2k.AbstractJavaToKotlinConverterMultiFileTest
 import org.jetbrains.kotlin.j2k.AbstractJavaToKotlinConverterSingleFileTest
-import org.jetbrains.kotlin.incremental.*
 import org.jetbrains.kotlin.jps.build.*
 import org.jetbrains.kotlin.jps.incremental.AbstractJsProtoComparisonTest
 import org.jetbrains.kotlin.jps.incremental.AbstractJvmProtoComparisonTest
@@ -149,6 +151,7 @@ import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_OR_KTS
 import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_OR_KTS_WITHOUT_DOTS
 import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_WITHOUT_DOTS
 import org.jetbrains.kotlin.testGenerator.model.Patterns.TEST
+import org.jetbrains.kotlin.testGenerator.model.Patterns.TXT
 import org.jetbrains.kotlin.testGenerator.model.Patterns.WS_KTS
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractProjectTemplateBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractYamlBuildFileGenerationTest
@@ -657,7 +660,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("dataFlowValueRendering")
         }
 
-
         testClass<AbstractLiteralTextToKotlinCopyPasteTest> {
             model("copyPaste/plainTextLiteral", pattern = Patterns.forRegex("""^([^\.]+)\.txt$"""))
         }
@@ -947,7 +949,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
 
         testClass<AbstractFileScopeTest> {
-            model("fileScopeTest", pattern = KT)
+            model("fileScopeTest")
         }
 
         testClass<AbstractSymbolByPsiTest> {
@@ -1099,23 +1101,23 @@ private fun assembleWorkspace(): TWorkspace = workspace {
     }
 
     testGroup("fir", testDataPath = "../completion/testData") {
-            testClass<AbstractHighLevelJvmBasicCompletionTest> {
-                model("basic/common")
-                model("basic/java")
-            }
-
-            testClass<AbstractHighLevelBasicCompletionHandlerTest> {
-                model("handlers/basic", pattern = KT_WITHOUT_DOTS)
-            }
-
-            testClass<AbstractHighLevelWeigherTest> {
-                model("weighers/basic", pattern = KT_OR_KTS_WITHOUT_DOTS)
-            }
-
-            testClass<AbstractHighLevelMultiFileJvmBasicCompletionTest> {
-                model("basic/multifile", isRecursive = false)
-            }
+        testClass<AbstractHighLevelJvmBasicCompletionTest> {
+            model("basic/common")
+            model("basic/java")
         }
+
+        testClass<AbstractHighLevelBasicCompletionHandlerTest> {
+            model("handlers/basic", pattern = KT_WITHOUT_DOTS)
+        }
+
+        testClass<AbstractHighLevelWeigherTest> {
+            model("weighers/basic", pattern = KT_OR_KTS_WITHOUT_DOTS)
+        }
+
+        testClass<AbstractHighLevelMultiFileJvmBasicCompletionTest> {
+            model("basic/multifile", pattern = DIRECTORY, isRecursive = false)
+        }
+    }
 
     testGroup("idea/idea-fir/tests", "idea/testData/findUsages") {
 
@@ -1281,12 +1283,12 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("basic/multifile", pattern = DIRECTORY, isRecursive = false)
         }
 
-        testClass<AbstractMultiFileJvmBasicCompletionTest> {
-            model("basic/multifilePrimitive", isRecursive = false)
+        testClass<AbstractMultiFileJvmBasicCompletionTest>("MultiFilePrimitiveJvmBasicCompletionTestGenerated") {
+            model("basic/multifilePrimitive", pattern = DIRECTORY, isRecursive = false)
         }
 
         testClass<AbstractMultiFileSmartCompletionTest> {
-            model("smartMultiFile", isRecursive = false)
+            model("smartMultiFile", pattern = DIRECTORY, isRecursive = false)
         }
 
         testClass<AbstractJvmBasicCompletionTest>("org.jetbrains.kotlin.idea.completion.test.KDocCompletionTestGenerated") {
@@ -1345,7 +1347,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("basic/codeFragments", pattern = KT)
         }
     }
-
 
     testGroup("j2k/new") {
         testClass<AbstractNewJavaToKotlinConverterSingleFileTest> {
@@ -1448,17 +1449,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("plugins/parcelize/parcelize-ide/tests", "plugins/parcelize/parcelize-ide/testData") {
-        testClass<AbstractParcelizeQuickFixTest> {
-            model("quickfix", pattern = Patterns.forRegex("^([\\w\\-_]+)\\.kt$"))
-        }
-
-        testClass<AbstractParcelizeCheckerTest> {
-            model("checker")
-        }
-    }
-
-    testGroup("idea/performanceTests/test", "idea/testData") {
+    testGroup("performance-tests", testDataPath = "../idea/testData") {
         testClass<AbstractPerformanceJavaToKotlinCopyPasteConversionTest> {
             model("copyPaste/conversion", testMethodName = "doPerfTest", pattern = Patterns.forRegex("""^([^\.]+)\.java$"""))
         }
