@@ -6,7 +6,7 @@
 package org.jetbrains.kotlin.test.uitls
 
 import com.intellij.openapi.util.io.FileUtil
-import org.jetbrains.kotlin.test.KtAssert
+import org.junit.Assert
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -216,7 +216,7 @@ object IgnoreTests {
 
                 "Deleted .fir.kt dump, added // FIR_IDENTICAL to test source"
             }
-            KtAssert.fail(
+            Assert.fail(
                 """
                         Dumps via FIR & via old FE are the same. 
                         $message
