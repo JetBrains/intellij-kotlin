@@ -48,7 +48,7 @@ class KotlinExceptionFilterTest : KotlinLightCodeInsightFixtureTestCase() {
     fun doTest(template: String, expectedLine: Int, expectedColumn: Int) {
         val filter = KotlinExceptionFilterFactory().create(GlobalSearchScope.allScope(project))
 
-        val rootDir = File(KotlinRoot.DIR, "idea/testData/debugger/nativeExceptions")
+        val rootDir = IDEA_TEST_DATA_DIR.resolve("debugger/nativeExceptions")
 
         for (ioFile in rootDir.listFiles()!!) {
             val absolutePath = ioFile.absolutePath
