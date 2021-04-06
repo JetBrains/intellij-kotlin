@@ -15,7 +15,6 @@ import org.jetbrains.kotlin.idea.testFramework.ProjectOpenAction
 import org.jetbrains.kotlin.test.KotlinRoot
 import java.io.File
 import java.nio.file.Files
-import java.nio.file.Paths
 
 abstract class AbstractSource {
     protected val body = StringBuilder()
@@ -149,7 +148,7 @@ class KotlinFileSource : AbstractSource() {
 }
 
 class ProjectBuilder {
-    internal var buildGradle: String? = null
+    internal var buildGradle: File? = null
     internal lateinit var name: String
     internal var initDefaultProfile: Boolean = true
     private val kotlinFiles = mutableListOf<Pair<String, KotlinFileSource>>()
@@ -157,7 +156,7 @@ class ProjectBuilder {
     fun buildGradle(buildGradle: String) {
         val file = File(buildGradle)
         val target = if (file.exists()) file else KotlinRoot.DIR.resolve(file)
-        this.buildGradle = target.absolutePath
+        this.buildGradle = target
     }
 
     fun name(name: String) {
@@ -184,7 +183,7 @@ class ProjectBuilder {
         })
 
         val javaMainSrcDir = if (buildGradle != null) {
-            val buildGradlePath = Paths.get(buildGradle)
+            val buildGradlePath = buildGradle!!.toPath()
             when {
                 buildGradlePath.isFile() -> {
                     buildGradlePath.copy(targetDirectory)
