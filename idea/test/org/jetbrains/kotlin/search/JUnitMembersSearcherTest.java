@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static org.jetbrains.kotlin.idea.test.TestUtilsKt.IDEA_TEST_DATA_DIR;
+
 @TestMetadata("idea/testData/search/junit/")
 @RunWith(JUnit38ClassRunner.class)
 public class JUnitMembersSearcherTest extends AbstractSearcherTest {
@@ -45,7 +47,7 @@ public class JUnitMembersSearcherTest extends AbstractSearcherTest {
     }
 
     private void doJUnit3test() throws IOException {
-        checkClassWithDirectives("idea/testData/search/junit/testJunit3.kt");
+        checkClassWithDirectives(new File(IDEA_TEST_DATA_DIR, "search/junit/testJunit3.kt").getPath());
     }
 
     private void doJUnit4test() throws IOException {

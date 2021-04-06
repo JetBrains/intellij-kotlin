@@ -11,6 +11,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.testFramework.LightProjectDescriptor
 import org.jetbrains.kotlin.idea.core.util.toVirtualFile
+import org.jetbrains.kotlin.idea.test.IDEA_TEST_DATA_DIR
 import org.jetbrains.kotlin.idea.test.KotlinLightCodeInsightFixtureTestCase
 import org.junit.Assert
 import org.junit.internal.runners.JUnit38ClassRunner
@@ -43,7 +44,7 @@ class KotlinExceptionFilterTest : KotlinLightCodeInsightFixtureTestCase() {
 
     override fun setUp() {
         super.setUp()
-        val rootDir = File("idea/testData/debugger/nativeExceptions/")
+        val rootDir = IDEA_TEST_DATA_DIR.resolve("debugger/nativeExceptions")
         rootDir.listFiles().forEach {
             val virtualFile = it.toVirtualFile()
             if (virtualFile != null) {
