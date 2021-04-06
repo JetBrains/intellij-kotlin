@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.idea.perf.PerformanceNativeProjectsTest.TestTarget.*
 import org.jetbrains.kotlin.idea.perf.Stats.Companion.WARM_UP
 import org.jetbrains.kotlin.idea.perf.util.TeamCity.suite
 import org.jetbrains.kotlin.idea.perf.util.logMessage
+import org.jetbrains.kotlin.idea.test.IDEA_TEST_DATA_DIR
 import org.jetbrains.kotlin.idea.testFramework.ProjectOpenAction.GRADLE_PROJECT
 import org.jetbrains.kotlin.idea.testFramework.suggestOsNeutralFileName
 import org.jetbrains.kotlin.idea.util.projectStructure.allModules
@@ -37,8 +38,6 @@ import java.io.File
 class PerformanceNativeProjectsTest : AbstractPerformanceProjectsTest() {
 
     companion object {
-        private const val TEST_DATA_PATH = "idea/testData/perfTest/native"
-
         private var warmedUp: Boolean = false
     }
 
@@ -172,7 +171,7 @@ class PerformanceNativeProjectsTest : AbstractPerformanceProjectsTest() {
         enableCommonizer: Boolean,
         note: String = ""
     ): Project {
-        val nativeTestsRoot = File(TEST_DATA_PATH)
+        val nativeTestsRoot = IDEA_TEST_DATA_DIR.resolve("perfTest/native")
 
         val commonRoot = nativeTestsRoot.resolve("_common")
         val targetRoot = nativeTestsRoot.resolve("_${testTarget.alias}")
