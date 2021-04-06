@@ -23,10 +23,14 @@ import kotlin.concurrent.withLock
 
 internal class FirPhaseRunner {
     private val superTypesBodyResolveLock = ReentrantLock()
+    private val statusResolveLock = ReentrantLock()
     private val implicitTypesResolveLock = ReentrantLock()
 
     fun runPhase(firFile: FirFile, phase: FirResolvePhase, scopeSession: ScopeSession) = when (phase) {
         FirResolvePhase.SUPER_TYPES -> superTypesBodyResolveLock.withLock {
+            runPhaseWithoutLock(firFile, phase, scopeSession)
+        }
+        FirResolvePhase.STATUS -> statusResolveLock.withLock {
             runPhaseWithoutLock(firFile, phase, scopeSession)
         }
         FirResolvePhase.IMPLICIT_TYPES_BODY_RESOLVE -> implicitTypesResolveLock.withLock {
@@ -39,6 +43,9 @@ internal class FirPhaseRunner {
 
     inline fun runPhaseWithCustomResolve(phase: FirResolvePhase, crossinline resolve: () -> Unit) = when (phase) {
         FirResolvePhase.SUPER_TYPES -> superTypesBodyResolveLock.withLock {
+            runPhaseWithCustomResolveWithoutLock(resolve)
+        }
+        FirResolvePhase.STATUS -> statusResolveLock.withLock {
             runPhaseWithCustomResolveWithoutLock(resolve)
         }
         FirResolvePhase.IMPLICIT_TYPES_BODY_RESOLVE -> implicitTypesResolveLock.withLock {
@@ -74,7 +81,7 @@ internal fun FirResolvePhase.createTransformerBasedProcessorByPhase(
         FirResolvePhase.CLASS_GENERATION -> FirDummyTransformerBasedProcessor(session, scopeSession) // TODO: remove
         FirResolvePhase.IMPORTS -> FirImportResolveProcessor(session, scopeSession)
         FirResolvePhase.SUPER_TYPES -> FirSupertypeResolverProcessor(session, scopeSession)
-        FirResolvePhase.SEALED_CLASS_INHERITORS -> FirIdeSealedHierarchyProcessor(session, scopeSession)
+        FirResolvePhase.SEALED_CLASS_INHERITORS -> FirDummyTransformerBasedProcessor(session, scopeSession)
         FirResolvePhase.TYPES -> FirTypeResolveProcessor(session, scopeSession)
         FirResolvePhase.ARGUMENTS_OF_PLUGIN_ANNOTATIONS -> FirAnnotationArgumentsResolveProcessor(session, scopeSession)
         FirResolvePhase.EXTENSION_STATUS_UPDATE -> FirTransformerBasedExtensionStatusProcessor(session, scopeSession)

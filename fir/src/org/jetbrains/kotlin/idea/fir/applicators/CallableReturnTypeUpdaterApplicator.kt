@@ -7,8 +7,8 @@ package org.jetbrains.kotlin.idea.fir.applicators
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.idea.KotlinBundle
-import org.jetbrains.kotlin.idea.fir.api.applicator.HLApplicatorInput
-import org.jetbrains.kotlin.idea.fir.api.applicator.applicator
+import org.jetbrains.kotlin.idea.api.applicator.HLApplicatorInput
+import org.jetbrains.kotlin.idea.api.applicator.applicator
 import org.jetbrains.kotlin.idea.frontend.api.KtAnalysisSession
 import org.jetbrains.kotlin.idea.frontend.api.components.KtTypeRendererOptions
 import org.jetbrains.kotlin.idea.frontend.api.types.KtType
@@ -25,7 +25,7 @@ object CallableReturnTypeUpdaterApplicator {
         applyTo { declaration, type, project ->
             val newTypeRef = if (!declaration.isProcedure(type)) {
                 // TODO use longTypeRepresentation and then shorten
-                KtPsiFactory(project ?: declaration.project).createType(type.shortTypeRepresentation)
+                KtPsiFactory(project).createType(type.shortTypeRepresentation)
             } else null
             runWriteAction {
                 declaration.typeReference = newTypeRef

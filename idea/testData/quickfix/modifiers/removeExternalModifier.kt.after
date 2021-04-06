@@ -1,0 +1,6 @@
+// "Remove 'external' modifier" "true"
+
+class B {
+    val foo: Int = 23
+}
+/* IGNORE_FIR */

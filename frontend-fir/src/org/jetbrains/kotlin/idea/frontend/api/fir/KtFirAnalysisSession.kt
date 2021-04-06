@@ -14,10 +14,10 @@ import org.jetbrains.kotlin.idea.fir.low.level.api.api.FirModuleResolveState
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.LowLevelFirApiFacadeForCompletion
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.getFirFile
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.getResolveState
+import org.jetbrains.kotlin.idea.frontend.api.InvalidWayOfUsingAnalysisSession
 import org.jetbrains.kotlin.idea.frontend.api.KtAnalysisSession
-import org.jetbrains.kotlin.idea.frontend.api.ReadActionConfinementValidityToken
-import org.jetbrains.kotlin.idea.frontend.api.ValidityToken
-import org.jetbrains.kotlin.idea.frontend.api.assertIsValidAndAccessible
+import org.jetbrains.kotlin.idea.frontend.api.tokens.ReadActionConfinementValidityToken
+import org.jetbrains.kotlin.idea.frontend.api.tokens.ValidityToken
 import org.jetbrains.kotlin.idea.frontend.api.fir.components.*
 import org.jetbrains.kotlin.idea.frontend.api.fir.symbols.KtFirSymbolProvider
 import org.jetbrains.kotlin.idea.frontend.api.fir.utils.EnclosingDeclarationContext
@@ -34,9 +34,6 @@ private constructor(
     token: ValidityToken,
     val context: KtFirAnalysisSessionContext,
 ) : KtAnalysisSession(token) {
-    init {
-        assertIsValidAndAccessible()
-    }
 
     override val smartCastProviderImpl = KtFirSmartcastProvider(this, token)
 
@@ -86,16 +83,13 @@ private constructor(
     val firSymbolProvider: FirSymbolProvider get() = rootModuleSession.symbolProvider
 
     companion object {
+        @InvalidWayOfUsingAnalysisSession
         @Deprecated("Please use org.jetbrains.kotlin.idea.frontend.api.KtAnalysisSessionProviderKt.analyze")
-        internal fun createForElement(element: KtElement): KtFirAnalysisSession {
-            val firResolveState = element.getResolveState()
-            return createAnalysisSessionByResolveState(firResolveState)
-        }
-
-        @Deprecated("Please use org.jetbrains.kotlin.idea.frontend.api.KtAnalysisSessionProviderKt.analyze")
-        internal fun createAnalysisSessionByResolveState(firResolveState: FirModuleResolveState): KtFirAnalysisSession {
+        internal fun createAnalysisSessionByResolveState(
+            firResolveState: FirModuleResolveState,
+            token: ValidityToken
+        ): KtFirAnalysisSession {
             val project = firResolveState.project
-            val token = ReadActionConfinementValidityToken(project)
             val firSymbolBuilder = KtSymbolByFirBuilder(
                 firResolveState,
                 project,

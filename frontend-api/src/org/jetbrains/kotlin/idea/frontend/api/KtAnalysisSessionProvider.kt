@@ -9,11 +9,18 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.components.service
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task
+import org.jetbrains.kotlin.idea.frontend.api.tokens.ReadActionConfinementValidityTokenFactory
+import org.jetbrains.kotlin.idea.frontend.api.tokens.ValidityToken
+import org.jetbrains.kotlin.idea.frontend.api.tokens.ValidityTokenFactory
 import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
 
 @RequiresOptIn("To use analysis session, consider using analyze/analyzeWithReadAction/analyseInModalWindow methods")
 annotation class InvalidWayOfUsingAnalysisSession
+
+@RequiresOptIn
+annotation class KtAnalysisSessionProviderInternals
 
 /**
  * Provides [KtAnalysisSession] by [contextElement]
@@ -22,12 +29,31 @@ annotation class InvalidWayOfUsingAnalysisSession
 @InvalidWayOfUsingAnalysisSession
 abstract class KtAnalysisSessionProvider {
     @InvalidWayOfUsingAnalysisSession
-    abstract fun getAnalysisSessionFor(contextElement: KtElement): KtAnalysisSession
-}
+    abstract fun getAnalysisSession(contextElement: KtElement, factory: ValidityTokenFactory): KtAnalysisSession
 
-@InvalidWayOfUsingAnalysisSession
-fun getAnalysisSessionFor(contextElement: KtElement): KtAnalysisSession =
-    contextElement.project.service<KtAnalysisSessionProvider>().getAnalysisSessionFor(contextElement)
+    @InvalidWayOfUsingAnalysisSession
+    inline fun <R> analyseInFakeAnalysisSession(originalFile: KtFile, fakeExpresion: KtElement, action: KtAnalysisSession.() -> R): R {
+        val fakeAnalysisSession = getAnalysisSession(originalFile, ReadActionConfinementValidityTokenFactory)
+            .createContextDependentCopy(originalFile, fakeExpresion)
+        return analyse(fakeAnalysisSession, ReadActionConfinementValidityTokenFactory, action)
+    }
+
+    @InvalidWayOfUsingAnalysisSession
+    inline fun <R> analyse(contextElement: KtElement, tokenFactory: ValidityTokenFactory, action: KtAnalysisSession.() -> R): R =
+        analyse(getAnalysisSession(contextElement, tokenFactory), tokenFactory, action)
+
+    @OptIn(KtAnalysisSessionProviderInternals::class)
+    @InvalidWayOfUsingAnalysisSession
+    inline fun <R> analyse(analysisSession: KtAnalysisSession, factory: ValidityTokenFactory, action: KtAnalysisSession.() -> R): R {
+        factory.beforeEnteringAnalysisContext()
+        return try {
+            analysisSession.action()
+        } finally {
+            factory.afterLeavingAnalysisContext()
+        }
+    }
+
+}
 
 /**
  * Execute given [action] in [KtAnalysisSession] context
@@ -43,8 +69,21 @@ fun getAnalysisSessionFor(contextElement: KtElement): KtAnalysisSession =
  */
 @OptIn(InvalidWayOfUsingAnalysisSession::class)
 inline fun <R> analyse(contextElement: KtElement, action: KtAnalysisSession.() -> R): R =
-    getAnalysisSessionFor(contextElement).action()
+    contextElement.project
+        .service<KtAnalysisSessionProvider>()
+        .analyse(contextElement, ReadActionConfinementValidityTokenFactory, action)
 
+@OptIn(InvalidWayOfUsingAnalysisSession::class)
+inline fun <R> analyseWithCustomToken(
+    contextElement: KtElement,
+    tokenFactory: ValidityTokenFactory,
+    action: KtAnalysisSession.() -> R
+): R =
+    contextElement.project.service<KtAnalysisSessionProvider>().analyse(contextElement, tokenFactory, action)
+
+@OptIn(InvalidWayOfUsingAnalysisSession::class)
+inline fun <R> analyseInFakeAnalysisSession(originalFile: KtFile, fakeExpresion: KtElement, action: KtAnalysisSession.() -> R): R =
+    originalFile.project.service<KtAnalysisSessionProvider>().analyseInFakeAnalysisSession(originalFile, fakeExpresion, action)
 
 /**
  * Execute given [action] in [KtAnalysisSession] context like [analyse] does but execute it in read action
