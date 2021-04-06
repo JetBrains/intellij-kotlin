@@ -135,8 +135,7 @@ object ExpectedCompletionUtils {
         COMPLETION_TYPE_PREFIX,
         LightClassComputationControl.LIGHT_CLASS_DIRECTIVE,
         AstAccessControl.ALLOW_AST_ACCESS_DIRECTIVE,
-        // TODO
-        //IgnoreTests.DIRECTIVES.FIR_COMPARISON,
+        "// FIR_COMPARISON",
     )
 
     fun itemsShouldExist(fileText: String, platform: TargetPlatform?): Array<CompletionProposal> = when {
