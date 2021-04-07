@@ -415,7 +415,7 @@ class MoveConflictChecker(
                     render(container),
                     render(referencedElement)
                 )
-                conflicts.putValue(element, message.capitalize())
+                conflicts.putValue(element, message.replaceFirstChar(Char::uppercaseChar))
             }
         }
     }
@@ -493,7 +493,7 @@ class MoveConflictChecker(
                                 render(declaration),
                                 render(target)
                             )
-                            conflicts.putValue(refExpr, message.capitalize())
+                            conflicts.putValue(refExpr, message.replaceFirstChar(Char::uppercaseChar))
                         }
                     }
             }
@@ -526,7 +526,7 @@ class MoveConflictChecker(
                         render(container),
                         render(memberToCheck)
                     )
-                    conflicts.putValue(element, message.capitalize())
+                    conflicts.putValue(element, message.replaceFirstChar(Char::uppercaseChar))
                 }
             }
         }
@@ -572,7 +572,8 @@ class MoveConflictChecker(
             val message = if (elementToMove == rootClass) {
                 KotlinBundle.message("text.sealed.class.0.must.be.moved.with.all.its.subclasses", rootClass.name.toString())
             } else {
-                val type = ElementDescriptionUtil.getElementDescription(elementToMove, UsageViewTypeLocation.INSTANCE).capitalize()
+                val type = ElementDescriptionUtil.getElementDescription(elementToMove, UsageViewTypeLocation.INSTANCE)
+                    .replaceFirstChar(Char::uppercaseChar)
                 KotlinBundle.message(
                     "text.0.1.must.be.moved.with.sealed.parent.class.and.all.its.subclasses",
                     type,
