@@ -15,7 +15,7 @@ import org.junit.internal.runners.JUnit38ClassRunner
 import org.junit.runner.RunWith
 import java.io.File
 
-@TestRoot("idea")
+@TestRoot("idea/tests")
 @TestMetadata("testData/search/definitions")
 @RunWith(JUnit38ClassRunner::class)
 class DefinitionsSearchTest : AbstractSearcherTest() {

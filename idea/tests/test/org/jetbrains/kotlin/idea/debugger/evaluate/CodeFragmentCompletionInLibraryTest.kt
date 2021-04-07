@@ -14,6 +14,7 @@ import com.intellij.psi.PsiManager
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.util.ThrowableRunnable
 import org.jetbrains.kotlin.idea.completion.test.AbstractJvmBasicCompletionTest
+import org.jetbrains.kotlin.idea.completion.test.COMPLETION_TEST_DATA_BASE
 import org.jetbrains.kotlin.idea.completion.test.testCompletion
 import org.jetbrains.kotlin.idea.debugger.getContextElement
 import org.jetbrains.kotlin.idea.test.SdkAndMockLibraryProjectDescriptor
@@ -27,7 +28,7 @@ import org.junit.internal.runners.JUnit38ClassRunner
 import org.junit.runner.RunWith
 import java.io.File
 
-private val LIBRARY_SRC = File(KotlinRoot.DIR, "completion/testData/codeFragmentInLibrarySource/customLibrary/")
+private val LIBRARY_SRC = COMPLETION_TEST_DATA_BASE.resolve("codeFragmentInLibrarySource/customLibrary/")
 
 @RunWith(JUnit38ClassRunner::class)
 class CodeFragmentCompletionInLibraryTest : AbstractJvmBasicCompletionTest() {
