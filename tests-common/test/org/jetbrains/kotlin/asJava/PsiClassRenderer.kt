@@ -130,7 +130,7 @@ object PsiClassRenderer {
         val initializingClass = initializingClass ?: return name
 
         return buildString {
-            appendLine("$name {")
+            appendln("$name {")
             append(initializingClass.renderMembers(renderInner))
             append("}")
         }
@@ -151,7 +151,7 @@ object PsiClassRenderer {
             append(typeParameters.renderTypeParams())
             append(extendsList.renderRefList("extends"))
             append(implementsList.renderRefList("implements"))
-            appendLine(" {")
+            appendln(" {")
 
             if (isEnum) {
                 append(
@@ -183,7 +183,7 @@ object PsiClassRenderer {
 
             appendSorted(
                 innerClasses.map {
-                    appendLine()
+                    appendln()
                     if (renderInner)
                         it.renderClass(renderInner)
                     else
