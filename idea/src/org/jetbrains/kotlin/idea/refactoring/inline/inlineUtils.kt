@@ -82,7 +82,7 @@ internal fun buildCodeToInline(
     )
 }
 
-internal fun Editor.findSimpleNameReference(): PsiReference? = TargetElementUtil.findReference(this, caretModel.offset)
+fun Editor.findSimpleNameReference(): PsiReference? = TargetElementUtil.findReference(this, caretModel.offset)
 
 fun findCallableConflictForUsage(usage: PsiElement): @NlsContexts.DialogMessage String? {
     val usageParent = usage.parent as? KtCallableReferenceExpression ?: return null
