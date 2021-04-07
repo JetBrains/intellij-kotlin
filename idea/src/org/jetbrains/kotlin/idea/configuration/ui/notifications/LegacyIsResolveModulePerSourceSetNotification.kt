@@ -31,7 +31,7 @@ fun notifyLegacyIsResolveModulePerSourceSetSettingIfNeeded(project: Project) {
     )
 }
 
-internal fun notifyLegacyIsResolveModulePerSourceSetSettingIfNeeded(
+fun notifyLegacyIsResolveModulePerSourceSetSettingIfNeeded(
     project: Project,
     notificationSuppressState: SuppressResolveModulePerSourceSetNotificationState,
     isResolveModulePerSourceSetSetting: IsResolveModulePerSourceSetSetting
@@ -102,7 +102,7 @@ private val Project.gradleProjectSettings: List<GradleProjectSettings>
 Accessing "isResolveModulePerSourceSet" setting
  */
 
-internal interface IsResolveModulePerSourceSetSetting {
+interface IsResolveModulePerSourceSetSetting {
     var isResolveModulePerSourceSet: Boolean
 
     companion object {
@@ -121,7 +121,7 @@ private class ProjectIsResolveModulePerSourceSetSetting(private val project: Pro
 Storing State about Notification Suppress
  */
 
-internal interface SuppressResolveModulePerSourceSetNotificationState {
+interface SuppressResolveModulePerSourceSetNotificationState {
     var isSuppressed: Boolean
 
     companion object {
@@ -145,5 +145,4 @@ private class IdeResolveModulePerSourceSetComponent :
     }
 }
 
-internal const val KOTLIN_UPDATE_IS_RESOLVE_MODULE_PER_SOURCE_SET_GROUP_ID =
-    "Update isResolveModulePerSourceSet setting"
+const val KOTLIN_UPDATE_IS_RESOLVE_MODULE_PER_SOURCE_SET_GROUP_ID = "Update isResolveModulePerSourceSet setting"
