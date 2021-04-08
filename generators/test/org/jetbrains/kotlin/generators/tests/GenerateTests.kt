@@ -999,28 +999,36 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-        testGroup("idea/idea-frontend-fir/idea-fir-low-level-api/tests", "idea/idea-frontend-fir/idea-fir-low-level-api/testdata") {
-            testClass<AbstractFirMultiModuleLazyResolveTest> {
-                model("multiModuleLazyResolve", recursive = false, extension = null)
-            }
-            testClass<AbstractFirLazyDeclarationResolveTest> {
-                model("lazyResolve")
-            }
-            testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
-                model("outOfBlockProjectWide")
-            }
-            testClass<AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest> {
-                model("outOfBlockProjectWide")
-            }
-            testClass<AbstractFileStructureTest> {
-                model("fileStructure")
-            }
-            testClass<AbstractDiagnosticTraversalCounterTest> {
-                model("diagnosticTraversalCounter")
-            }
-            testClass<AbstractSessionsInvalidationTest> {
-                model("sessionInvalidation", recursive = false, extension = null)
-            }
+    testGroup("fir-low-level-api", testDataPath = "testdata") {
+        testClass<AbstractFirMultiModuleLazyResolveTest> {
+            model("multiModuleLazyResolve", pattern = DIRECTORY, isRecursive = false)
+        }
+        testClass<AbstractFirSealedInheritorsTest> {
+            model("resolveSealed", pattern = DIRECTORY, isRecursive = false)
+        }
+        testClass<AbstractFirLazyDeclarationResolveTest> {
+            model("lazyResolve")
+        }
+        testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
+            model("outOfBlockProjectWide")
+        }
+        testClass<AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest> {
+            model("outOfBlockProjectWide")
+        }
+        testClass<AbstractFileStructureTest> {
+            model("fileStructure")
+        }
+        testClass<AbstractFirContextCollectionTest> {
+            model("fileStructure")
+        }
+        testClass<AbstractDiagnosticTraversalCounterTest> {
+            model("diagnosticTraversalCounter")
+        }
+        testClass<AbstractSessionsInvalidationTest> {
+            model("sessionInvalidation", pattern = DIRECTORY, isRecursive = false)
+        }
+        testClass<AbstractInnerDeclarationsResolvePhaseTest> {
+            model("innerDeclarationsResolve")
         }
 
     testGroup("idea/idea-fir/tests", "idea") {
