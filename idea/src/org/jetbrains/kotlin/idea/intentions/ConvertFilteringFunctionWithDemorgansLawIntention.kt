@@ -10,7 +10,6 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
-import org.jetbrains.kotlin.idea.core.getLastLambdaExpression
 import org.jetbrains.kotlin.idea.core.replaced
 import org.jetbrains.kotlin.idea.inspections.ReplaceNegatedIsEmptyWithIsNotEmptyInspection.Companion.invertSelectorFunction
 import org.jetbrains.kotlin.idea.inspections.SimplifyNegatedBinaryExpressionInspection
@@ -46,7 +45,7 @@ sealed class ConvertFilteringFunctionWithDemorgansLawIntention(
         val context = element.analyze(BodyResolveMode.PARTIAL)
         if (element.getResolvedCall(context)?.resultingDescriptor?.fqNameOrNull() !in fqNames) return null
 
-        val lambda = element.lambda() ?: return null
+        val lambda = element.singleLambdaArgumentExpression() ?: return null
         val lambdaBody = lambda.bodyExpression ?: return null
         if (lambdaBody.anyDescendantOfType<KtReturnExpression>()) return null
         if (lambdaBody.statements.lastOrNull()?.getType(context)?.isBoolean() != true) return null
@@ -55,9 +54,8 @@ sealed class ConvertFilteringFunctionWithDemorgansLawIntention(
     }
 
     override fun applyTo(element: KtCallExpression, editor: Editor?) {
-        val lambda = element.lambda() ?: return
+        val lambda = element.singleLambdaArgumentExpression() ?: return
         val lastExpression = lambda.bodyExpression?.statements?.lastOrNull() ?: return
-        val callOrQualified = element.getQualifiedExpressionForSelector() ?: element
         val psiFactory = KtPsiFactory(element)
 
         if (negatePredicate) {
@@ -84,26 +82,13 @@ sealed class ConvertFilteringFunctionWithDemorgansLawIntention(
             }
         }
 
+        val callOrQualified = element.getQualifiedExpressionForSelector() ?: element
         val parentExclPrefixExpression =
             callOrQualified.parents.dropWhile { it is KtParenthesizedExpression }.firstOrNull()?.asExclPrefixExpression()
         psiFactory.buildExpression {
             appendFixedText(if (negateCall && parentExclPrefixExpression == null) "!" else "")
-            if (callOrQualified is KtQualifiedExpression) {
-                appendExpression(callOrQualified.receiverExpression)
-                appendFixedText(".")
-            }
-            appendFixedText(toFunctionName)
-            element.valueArgumentList?.let {
-                appendFixedText(it.text)
-            }
-            if (element.lambdaArguments.isNotEmpty()) {
-                appendFixedText(lambda.text)
-            }
+            appendCallOrQualifiedExpression(element, toFunctionName)
         }.let { (parentExclPrefixExpression ?: callOrQualified).replaced(it) }
-    }
-
-    private fun KtCallExpression.lambda(): KtLambdaExpression? {
-        return lambdaArguments.singleOrNull()?.getArgumentExpression().safeAs() ?: getLastLambdaExpression()
     }
 
     private fun PsiElement.asExclPrefixExpression(): KtPrefixExpression? {

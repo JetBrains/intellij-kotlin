@@ -33,13 +33,16 @@ class ConvertBinaryExpressionWithDemorgansLawIntention : SelfTargetingOffsetInde
 
     companion object {
         fun convertIfPossible(element: KtBinaryExpression) {
-            val expr = element.parentsWithSelf.takeWhile { it is KtBinaryExpression }.last() as KtBinaryExpression
+            val expr = element.topmostBinaryExpression()
             if (splitBooleanSequence(expr) == null) return
             applyTo(element)
         }
 
+        private fun KtBinaryExpression.topmostBinaryExpression(): KtBinaryExpression =
+            parentsWithSelf.takeWhile { it is KtBinaryExpression }.last() as KtBinaryExpression
+
         private fun applyTo(element: KtBinaryExpression) {
-            val expr = element.parentsWithSelf.takeWhile { it is KtBinaryExpression }.last() as KtBinaryExpression
+            val expr = element.topmostBinaryExpression()
 
             val operatorText = when (expr.operationToken) {
                 KtTokens.ANDAND -> KtTokens.OROR.value
