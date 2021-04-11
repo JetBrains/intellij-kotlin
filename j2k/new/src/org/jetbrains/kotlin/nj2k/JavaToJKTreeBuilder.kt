@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2017 JetBrains s.r.o.
+ * Copyright 2010-2021 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.jetbrains.kotlin.nj2k
 
 import com.intellij.codeInsight.AnnotationTargetUtil
+import com.intellij.codeInsight.daemon.impl.quickfix.AddTypeArgumentsFix
 import com.intellij.lang.jvm.JvmModifier
 import com.intellij.psi.*
 import com.intellij.psi.JavaTokenType.SUPER_KEYWORD
@@ -47,7 +48,10 @@ import org.jetbrains.kotlin.nj2k.tree.*
 import org.jetbrains.kotlin.nj2k.tree.JKLiteralExpression.LiteralType.*
 import org.jetbrains.kotlin.nj2k.types.*
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.*
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getNextSiblingIgnoringWhitespaceAndComments
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 import org.jetbrains.kotlin.resolve.QualifiedExpressionResolver
 import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
@@ -334,7 +338,7 @@ class JavaToJKTreeBuilder constructor(
                 if (method.isConstructor || !method.hasTypeParameters()) return typeArgumentList
             }
 
-            return FixTypeArguments.addTypeArguments(this, null)
+            return AddTypeArgumentsFix.addTypeArguments(this, null, false)
                 ?.safeAs<PsiMethodCallExpression>()
                 ?.typeArgumentList
                 ?: typeArgumentList
@@ -782,7 +786,7 @@ class JavaToJKTreeBuilder constructor(
             val plainAnnotations = annotations.mapNotNull { annotation ->
                 when {
                     annotation !is PsiAnnotation -> null
-                    annotation.qualifiedName == DEPRECATED_ANNOTAION_FQ_NAME && deprecatedAnnotation != null -> null
+                    annotation.qualifiedName == DEPRECATED_ANNOTATION_FQ_NAME && deprecatedAnnotation != null -> null
                     AnnotationTargetUtil.isTypeAnnotation(annotation) -> null
                     else -> annotation.toJK()
                 }
@@ -1076,12 +1080,24 @@ class JavaToJKTreeBuilder constructor(
 
     private fun PsiElement.throwCanNotConvertError(message: String? = null): Nothing {
         throw KotlinExceptionWithAttachments("Cannot convert the following Java element ${this::class}" + message?.let { " due to `$it`" })
-            .withAttachment("elementText", text)
-            .withAttachment("file", containingFile?.text)
+            .also {
+                try {
+                    it.withAttachment("elementText", text)
+                } catch (e: Exception) {
+                    it.withAttachment("elementText.error", e.message)
+                }
+            }
+            .also {
+                try {
+                    it.withAttachment("file", containingFile?.text)
+                } catch (e: Exception) {
+                    it.withAttachment("file.error", e.message)
+                }
+            }
     }
 
     companion object {
-        private const val DEPRECATED_ANNOTAION_FQ_NAME = "java.lang.Deprecated"
+        private const val DEPRECATED_ANNOTATION_FQ_NAME = "java.lang.Deprecated"
     }
 }
 

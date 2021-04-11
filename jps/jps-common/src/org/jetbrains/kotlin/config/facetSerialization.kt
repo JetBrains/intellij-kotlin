@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2019 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -107,8 +107,7 @@ private fun readV1Config(element: Element): KotlinFacetSettings {
 // TODO: Introduce new version of facet serialization. See https://youtrack.jetbrains.com/issue/KT-38235
 //  This is necessary to avoid having too much custom logic for platform serialization.
 fun Element.getFacetPlatformByConfigurationElement(): TargetPlatform {
-    val targetPlatform = getAttributeValue("allPlatforms").deserializeTargetPlatformByComponentPlatforms()
-    if (targetPlatform != null) return targetPlatform
+    getAttributeValue("allPlatforms").deserializeTargetPlatformByComponentPlatforms()?.let { return it }
 
     // failed to read list of all platforms. Fallback to legacy algorithm
     val platformName = getAttributeValue("platform") ?: return (null as TargetPlatform?).orDefault()
@@ -329,7 +328,7 @@ private fun KotlinFacetSettings.writeLatestConfig(element: Element) {
     if (externalProjectId.isNotEmpty()) {
         element.setAttribute("externalProjectId", externalProjectId)
     }
-    if (isHmppEnabled) {
+    if (mppVersion.isHmpp) {
         element.setAttribute("isHmppProject", mppVersion.isHmpp.toString())
     }
     if (externalSystemRunTasks.isNotEmpty()) {
@@ -450,9 +449,7 @@ private fun TargetPlatform.serializeComponentPlatforms(): String {
 }
 
 private fun String?.deserializeTargetPlatformByComponentPlatforms(): TargetPlatform? {
-    val componentPlatformNames = this?.split('/')?.toSet()
-    if (componentPlatformNames == null || componentPlatformNames.isEmpty())
-        return null
+    val componentPlatformNames = this?.split('/')?.toSet()?.takeIf { it.isNotEmpty() } ?: return null
 
     val knownComponentPlatforms = HashMap<String, SimplePlatform>() // "serialization presentation" to "simple platform name"
 

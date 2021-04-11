@@ -1,13 +1,11 @@
 package org.jetbrains.kotlin.idea.scripting.gradle
 
 import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil
-import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiFile
-import junit.framework.TestCase
-import junit.framework.TestCase.*
 import org.jetbrains.kotlin.idea.script.AbstractScriptConfigurationLoadingTest
 import org.jetbrains.kotlin.idea.scripting.gradle.roots.GradleBuildRootsManager
 import org.jetbrains.kotlin.idea.scripting.gradle.settings.StandaloneScriptsStorage
+import org.jetbrains.kotlin.idea.test.IDEA_TEST_DATA_DIR
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.test.KotlinRoot
 import org.jetbrains.plugins.gradle.settings.DistributionType
@@ -17,7 +15,7 @@ import java.io.File
 
 class GradleBuildRootIndexTest : AbstractScriptConfigurationLoadingTest() {
     override fun setUpTestProject() {
-        val rootDir = File(KotlinRoot.DIR, "idea/testData/script/definition/loading/gradle/")
+        val rootDir = IDEA_TEST_DATA_DIR.resolve("script/definition/loading/gradle/")
 
         val settings: KtFile = copyFromTestdataToProject(File(rootDir, GradleConstants.KOTLIN_DSL_SETTINGS_FILE_NAME))
         val prop: PsiFile = copyFromTestdataToProject(File(rootDir, "gradle.properties"))

@@ -10,6 +10,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiManager
 import com.intellij.psi.compiled.ClassFileDecompilers
+import org.jetbrains.annotations.TestOnly
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.idea.decompiler.KotlinDecompiledFileViewProvider
 import org.jetbrains.kotlin.idea.decompiler.KtDecompiledFile
@@ -51,13 +52,20 @@ abstract class KotlinMetadataDecompiler<out V : BinaryVersion>(
 
     override fun createFileViewProvider(file: VirtualFile, manager: PsiManager, physical: Boolean): FileViewProvider {
         return KotlinDecompiledFileViewProvider(manager, file, physical) { provider ->
-            if (readFileSafely(provider.virtualFile) == null) {
-                null
-            } else {
-                KtDecompiledFile(provider, this::buildDecompiledText)
+            val virtualFile = provider.virtualFile
+            readFileSafely(virtualFile)?.let { fileWithMetadata ->
+                KtDecompiledFile(provider) {
+                    check(it == virtualFile) {
+                        "Unexpected file $it, expected ${virtualFile.fileType}"
+                    }
+                    buildDecompiledText(fileWithMetadata)
+                }
             }
         }
     }
+
+    @TestOnly
+    fun readFile(file: VirtualFile) = readFileSafely(file)
 
     private fun readFileSafely(file: VirtualFile, content: ByteArray? = null): FileWithMetadata? {
         if (!file.isValid) return null
@@ -73,17 +81,8 @@ abstract class KotlinMetadataDecompiler<out V : BinaryVersion>(
         }
     }
 
-    private fun buildDecompiledText(virtualFile: VirtualFile): DecompiledText {
-        if (virtualFile.fileType != fileType) {
-            error("Unexpected file type ${virtualFile.fileType}")
-        }
-
-        val file = readFileSafely(virtualFile)
-
+    private fun buildDecompiledText(file: FileWithMetadata): DecompiledText {
         return when (file) {
-            null -> {
-                createIncompatibleAbiVersionDecompiledText(expectedBinaryVersion(), invalidBinaryVersion())
-            }
             is FileWithMetadata.Incompatible -> {
                 createIncompatibleAbiVersionDecompiledText(expectedBinaryVersion(), file.version)
             }

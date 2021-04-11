@@ -8,6 +8,7 @@ import org.gradle.util.GradleVersion;
 import org.hamcrest.CustomMatcher;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.kotlin.util.KotlinVersionUtils;
 import org.jetbrains.plugins.gradle.tooling.annotation.PluginTargetVersions;
 import org.jetbrains.plugins.gradle.tooling.annotation.TargetVersions;
 import org.jetbrains.plugins.gradle.tooling.util.VersionMatcher;
@@ -69,15 +70,13 @@ public class PluginTargetVersionsRule implements MethodRule {
 
     private static boolean shouldRun(PluginTargetVersions targetVersions, MultiplePluginVersionGradleImportingTestCase testCase) {
         var gradleVersion = testCase.gradleVersion;
-        var pluginVersion = testCase.pluginVersion;
+        var pluginVersion = testCase.getKotlinPluginVersionString();
 
         var gradleVersionMatcher = createMatcher("Gradle", targetVersions.gradleVersion());
-        var pluginVersionMatcher = createMatcher("Plugin", targetVersions.pluginVersion());
+        var kotlinVersionRequirement = KotlinVersionUtils.parseKotlinVersionRequirement(targetVersions.pluginVersion());
 
         boolean matchGradleVersion = gradleVersionMatcher == null || gradleVersionMatcher.matches(gradleVersion);
-
-        boolean pluginVersionMatches = pluginVersionMatcher == null || pluginVersionMatcher.matches(pluginVersion);
-        return matchGradleVersion && pluginVersionMatches;
+        return matchGradleVersion && KotlinVersionUtils.matches(kotlinVersionRequirement, pluginVersion);
     }
 
     @Nullable

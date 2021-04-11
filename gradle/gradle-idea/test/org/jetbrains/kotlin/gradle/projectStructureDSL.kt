@@ -11,6 +11,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.rootManager
 import com.intellij.openapi.roots.*
 import com.intellij.openapi.util.io.FileUtil
+import com.intellij.openapi.util.io.systemIndependentPath
+import com.intellij.openapi.vfs.VfsUtil
+import com.intellij.openapi.vfs.VirtualFile
 import org.jetbrains.jps.model.module.JpsModuleSourceRootType
 import org.jetbrains.jps.util.JpsPathUtil
 import org.jetbrains.kotlin.config.ExternalSystemTestRunTask
@@ -21,7 +24,7 @@ import org.jetbrains.kotlin.idea.project.languageVersionSettings
 import org.jetbrains.kotlin.idea.project.platform
 import org.jetbrains.kotlin.platform.TargetPlatform
 import org.jetbrains.kotlin.utils.addToStdlib.filterIsInstanceWithChecker
-import kotlin.test.assertEquals
+import java.io.File
 import kotlin.test.fail
 
 class MessageCollector {
@@ -92,6 +95,7 @@ class ModuleInfo(val module: Module, private val projectInfo: ProjectInfo) {
     private val expectedSourceRoots = HashSet<String>()
     private val expectedExternalSystemTestTasks = ArrayList<ExternalSystemTestRunTask>()
     private val assertions = mutableListOf<(ModuleInfo) -> Unit>()
+    private var mustHaveSdk: Boolean = true
 
     private val sourceFolderByPath by lazy {
         rootModel.contentEntries.asSequence()
@@ -109,7 +113,11 @@ class ModuleInfo(val module: Module, private val projectInfo: ProjectInfo) {
 
     private fun checkReport(subject: String, expected: Any?, actual: Any?) {
         if (expected != actual) {
-            report("$subject differs: expected $expected, got $actual")
+            report(
+                "$subject differs:\n" +
+                        "expected $expected\n" +
+                        "actual:  $actual"
+            )
         }
     }
 
@@ -206,7 +214,10 @@ class ModuleInfo(val module: Module, private val projectInfo: ProjectInfo) {
         expectedDependencyNames += libraryEntry.debugText
     }
 
-    fun moduleDependency(moduleName: String, scope: DependencyScope, productionOnTest: Boolean? = null, allowMultiple: Boolean = false) {
+    fun moduleDependency(
+        moduleName: String, scope: DependencyScope,
+        productionOnTest: Boolean? = null, allowMultiple: Boolean = false, isOptional: Boolean = false
+    ) {
         val moduleEntries = rootModel.orderEntries.asList()
             .filterIsInstanceWithChecker<ModuleOrderEntry> { it.moduleName == moduleName && it.scope == scope }
 
@@ -220,8 +231,10 @@ class ModuleInfo(val module: Module, private val projectInfo: ProjectInfo) {
         val moduleEntry = moduleEntries.firstOrNull()
 
         if (moduleEntry == null) {
-            val allModules = rootModel.orderEntries.filterIsInstance<ModuleOrderEntry>().joinToString { it.debugText }
-            report("Module dependency ${moduleName} (${scope.displayName}) not found. All module dependencies: $allModules")
+            if (!isOptional) {
+                val allModules = rootModel.orderEntries.filterIsInstance<ModuleOrderEntry>().joinToString { it.debugText }
+                report("Module dependency ${moduleName} (${scope.displayName}) not found. All module dependencies: $allModules")
+            }
             return
         }
 
@@ -273,6 +286,10 @@ class ModuleInfo(val module: Module, private val projectInfo: ProjectInfo) {
         }
 
         checkReport("Output path", pathInProject, actualPathInProject)
+    }
+
+    fun noSdk() {
+        mustHaveSdk = false
     }
 
     fun assertExhaustiveModuleDependencyList() {
@@ -333,10 +350,26 @@ class ModuleInfo(val module: Module, private val projectInfo: ProjectInfo) {
         }
     }
 
+    fun assertNoDependencyInBuildClasses() {
+        val dependenciesInBuildDirectory = module.rootManager.orderEntries
+            .flatMap { orderEntry ->
+                orderEntry.getFiles(OrderRootType.SOURCES).toList().map { it.toIoFile() } +
+                        orderEntry.getFiles(OrderRootType.CLASSES).toList().map { it.toIoFile() } +
+                        orderEntry.getUrls(OrderRootType.CLASSES).toList().map { File(it) } +
+                        orderEntry.getUrls(OrderRootType.SOURCES).toList().map { File(it) }
+            }
+            .map { file -> file.systemIndependentPath }
+            .filter { path -> "/build/classes/" in path }
+
+        if (dependenciesInBuildDirectory.isNotEmpty()) {
+            report("References dependency in build directory:\n${dependenciesInBuildDirectory.joinToString("\n")}")
+        }
+    }
+
     fun run(body: ModuleInfo.() -> Unit = {}) {
         body()
         assertions.forEach { it.invoke(this) }
-        if (rootModel.sdk == null) {
+        if (mustHaveSdk && rootModel.sdk == null) {
             report("No SDK defined")
         }
     }
@@ -373,7 +406,7 @@ class ModuleInfo(val module: Module, private val projectInfo: ProjectInfo) {
 fun checkProjectStructure(
     project: Project,
     projectPath: String,
-    exhaustiveModuleList: Boolean = false ,
+    exhaustiveModuleList: Boolean = false,
     exhaustiveSourceSourceRootList: Boolean = false,
     exhaustiveDependencyList: Boolean = false,
     exhaustiveTestsList: Boolean = false,
@@ -391,3 +424,5 @@ fun checkProjectStructure(
 
 private val ExportableOrderEntry.debugText: String
     get() = "$presentableName (${scope.displayName})"
+
+private fun VirtualFile.toIoFile(): File = VfsUtil.virtualToIoFile(this)

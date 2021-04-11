@@ -1,64 +1,61 @@
 /*
- * Copyright 2010-2019 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package org.jetbrains.uast.test.kotlin
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.extensions.DefaultPluginDescriptor
 import com.intellij.openapi.util.Disposer
 import com.intellij.patterns.uast.injectionHostUExpression
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.resolve.reference.PsiReferenceContributorEP
-import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
-import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistryImpl
 import com.intellij.psi.util.PropertyUtil
-import com.intellij.testFramework.ExtensionTestUtil
 import com.intellij.testFramework.LightProjectDescriptor
-import com.intellij.testFramework.registerServiceInstance
 import org.jetbrains.kotlin.idea.test.KotlinLightCodeInsightFixtureTestCase
 import org.jetbrains.kotlin.idea.test.KotlinWithJdkAndRuntimeLightProjectDescriptor
-import org.junit.internal.runners.JUnit38ClassRunner
-import org.jetbrains.kotlin.test.KotlinTestUtils
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.evaluateString
 import org.jetbrains.uast.toUElementOfType
 import org.junit.Test
+import org.junit.internal.runners.JUnit38ClassRunner
 import org.junit.runner.RunWith
 import kotlin.test.fail
 
 @RunWith(JUnit38ClassRunner::class)
 class KotlinUastReferencesTest : KotlinLightCodeInsightFixtureTestCase() {
-
     override fun getProjectDescriptor(): LightProjectDescriptor = KotlinWithJdkAndRuntimeLightProjectDescriptor.INSTANCE
 
     @Test
     fun `test original getter is visible when reference is under renaming`() {
-        registerReferenceContributor(testRootDisposable, MockPsiReferenceContributor::class.java)
+        val myDisposable = Disposer.newDisposable("MockPsiReferenceContributor")
+        try {
+            registerReferenceContributor(myDisposable, MockPsiReferenceContributor::class.java)
 
-        myFixture.configureByText(
-            "KotlinBean.kt", """
+            myFixture.configureByText(
+                "KotlinBean.kt", """
                 data class KotlinBean(val myF<caret>ield: String)
 
                 val reference = "myField"
 
                 """.trimIndent()
-        )
+            )
 
-        myFixture.renameElementAtCaret("myRenamedField")
+            myFixture.renameElementAtCaret("myRenamedField")
 
-        myFixture.checkResult(
-            """
+            myFixture.checkResult(
+                """
                 data class KotlinBean(val myRenamedField: String)
 
                 val reference = "myRenamedField"
 
                 """.trimIndent()
-        )
+            )
+        } finally {
+            Disposer.dispose(myDisposable)
+        }
     }
-
 }
 
 private class GetterReference(
@@ -97,26 +94,11 @@ class MockPsiReferenceContributor : PsiReferenceContributor() {
 }
 
 fun registerReferenceContributor(disposable: Disposable, clazz: Class<out PsiReferenceContributor>) {
-    ExtensionTestUtil.maskExtensions(PsiReferenceContributor.EP_NAME,
-                                     listOf(PsiReferenceContributorEP().apply {
-                                         implementationClass = clazz.name
-                                         pluginDescriptor = DefaultPluginDescriptor("kotlin-uast-test")
-                                     }
-                                     ), disposable)
-
-    val application = ApplicationManager.getApplication()
-
-    //we need a fresh ReferenceProvidersRegistry after updating ReferenceContributors
-    val oldReferenceProviderRegistry =
-        application.picoContainer.getComponentInstance(ReferenceProvidersRegistry::class.java) as ReferenceProvidersRegistry
-    application.registerServiceInstance(ReferenceProvidersRegistry::class.java, ReferenceProvidersRegistryImpl())
-
-    Disposer.register(disposable, Disposable {
-        application.registerServiceInstance(ReferenceProvidersRegistry::class.java, oldReferenceProviderRegistry)
-    })
-
+    PsiReferenceContributor.EP_NAME.point.registerExtension(
+        PsiReferenceContributorEP().apply {
+            implementationClass = clazz.name
+            pluginDescriptor = DefaultPluginDescriptor("kotlin-uast-test")
+        },
+        disposable,
+    )
 }
-
-
-
-

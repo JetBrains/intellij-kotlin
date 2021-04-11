@@ -29,14 +29,12 @@ import com.intellij.openapi.vfs.newvfs.impl.VfsRootAccess
 import com.intellij.pom.java.LanguageLevel
 import com.intellij.psi.PsiClassOwner
 import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiManager
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.codeStyle.CodeStyleSettingsManager
 import com.intellij.psi.search.FileTypeIndex
 import com.intellij.psi.search.ProjectScope
-import com.intellij.refactoring.rename.PsiElementRenameHandler
 import com.intellij.testFramework.IdeaTestUtil
 import com.intellij.testFramework.LightProjectDescriptor
 import com.intellij.testFramework.LoggedErrorProcessor
@@ -44,7 +42,6 @@ import com.intellij.testFramework.RunAll
 import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture
 import com.intellij.util.ThrowableRunnable
 import org.apache.log4j.Logger
-import org.jetbrains.annotations.NotNull
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.config.*
 import org.jetbrains.kotlin.config.CompilerSettings.Companion.DEFAULT_ADDITIONAL_ARGUMENTS
@@ -52,12 +49,13 @@ import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.idea.compiler.configuration.KotlinCommonCompilerArgumentsHolder
 import org.jetbrains.kotlin.idea.compiler.configuration.KotlinCompilerSettings
 import org.jetbrains.kotlin.idea.facet.*
+import org.jetbrains.kotlin.idea.formatter.KotlinLanguageCodeStyleSettingsProvider
 import org.jetbrains.kotlin.idea.formatter.KotlinStyleGuideCodeStyle
 import org.jetbrains.kotlin.idea.inspections.UnusedSymbolInspection
+import org.jetbrains.kotlin.idea.test.CompilerTestDirectives.API_VERSION_DIRECTIVE
 import org.jetbrains.kotlin.idea.test.CompilerTestDirectives.COMPILER_ARGUMENTS_DIRECTIVE
 import org.jetbrains.kotlin.idea.test.CompilerTestDirectives.JVM_TARGET_DIRECTIVE
 import org.jetbrains.kotlin.idea.test.CompilerTestDirectives.LANGUAGE_VERSION_DIRECTIVE
-import org.jetbrains.kotlin.idea.test.CompilerTestDirectives.API_VERSION_DIRECTIVE
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.test.InTextDirectivesUtils
 import org.jetbrains.kotlin.test.KotlinRoot
@@ -68,8 +66,6 @@ import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.rethrow
 import java.io.File
 import java.io.IOException
-import java.util.*
-import kotlin.reflect.full.findAnnotation
 import java.nio.file.Path
 
 abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFixtureTestCaseBase() {
@@ -78,7 +74,7 @@ abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFix
 
     protected open val captureExceptions = false
 
-    protected fun testDataFile(fileName: String): File = File(testDataPath, fileName)
+    protected fun testDataFile(fileName: String): File = File(testDataDirectory, fileName)
 
     protected fun testDataFile(): File = testDataFile(fileName())
 
@@ -182,7 +178,7 @@ abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFix
     }
 
     protected fun getProjectDescriptorFromFileDirective(): LightProjectDescriptor {
-        val file = File(testDataPath, fileName())
+        val file = File(testDataDirectory, fileName())
         if (!file.exists()) {
             return KotlinLightProjectDescriptor.INSTANCE
         }
@@ -226,9 +222,9 @@ abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFix
                 InTextDirectivesUtils.isDirectiveDefined(fileText, "RUNTIME") ||
                         InTextDirectivesUtils.isDirectiveDefined(fileText, "WITH_RUNTIME") ->
                     if (minJavaVersion != null) {
-                        val sdk = sdk(minJavaVersion)
                         object : KotlinWithJdkAndRuntimeLightProjectDescriptor(INSTANCE.libraryFiles, INSTANCE.librarySourceFiles) {
-                            override fun getSdk(): Sdk? = sdk
+                            val sdkValue by lazy { sdk(minJavaVersion) }
+                            override fun getSdk(): Sdk = sdkValue
                         }
                     } else {
                         KotlinWithJdkAndRuntimeLightProjectDescriptor.INSTANCE
@@ -247,21 +243,19 @@ abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFix
         }
     }
 
-    private fun sdk(javaVersion: Int): Sdk {
-        return when (javaVersion) {
-            6 -> IdeaTestUtil.getMockJdk16()
-            8 -> IdeaTestUtil.getMockJdk18()
-            9 -> IdeaTestUtil.getMockJdk9()
-            11 -> {
-                if (SystemInfo.isJavaVersionAtLeast(javaVersion, 0, 0)) {
-                    PluginTestCaseBase.fullJdk()
-                } else {
-                    error("JAVA_HOME have to point at least to JDK 11")
-                }
-
+    private fun sdk(javaVersion: Int): Sdk = when (javaVersion) {
+        6 -> IdeaTestUtil.getMockJdk16()
+        8 -> IdeaTestUtil.getMockJdk18()
+        9 -> IdeaTestUtil.getMockJdk9()
+        11 -> {
+            if (SystemInfo.isJavaVersionAtLeast(javaVersion, 0, 0)) {
+                PluginTestCaseBase.fullJdk()
+            } else {
+                error("JAVA_HOME have to point at least to JDK 11")
             }
-            else -> error("Unsupported JDK version $javaVersion")
         }
+
+        else -> error("Unsupported JDK version $javaVersion")
     }
 
     protected open fun getDefaultProjectDescriptor(): KotlinLightProjectDescriptor = KotlinLightProjectDescriptor.INSTANCE
@@ -393,10 +387,19 @@ fun disableKotlinOfficialCodeStyle(project: Project) {
     CodeStyle.dropTemporarySettings(project)
 }
 
+fun resetCodeStyle(project: Project) {
+    val provider = KotlinLanguageCodeStyleSettingsProvider()
+    CodeStyle.getSettings(project).apply {
+        removeCommonSettings(provider)
+        removeCustomSettings(provider)
+        clearCodeStyleSettings()
+    }
+}
+
 fun runAll(
     vararg actions: ThrowableRunnable<Throwable>,
     suppressedExceptions: List<Throwable> = emptyList()
-) = RunAll(*actions).run(suppressedExceptions)
+) = RunAll(actions.toList()).run(suppressedExceptions)
 
 private fun rollbackCompilerOptions(project: Project, module: Module, removeFacet: Boolean) {
     KotlinCompilerSettings.getInstance(project).update { this.additionalArguments = DEFAULT_ADDITIONAL_ARGUMENTS }

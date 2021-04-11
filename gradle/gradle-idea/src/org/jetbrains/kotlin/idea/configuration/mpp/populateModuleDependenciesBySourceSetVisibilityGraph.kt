@@ -17,15 +17,15 @@ import org.jetbrains.plugins.gradle.model.ExternalDependency
 import org.jetbrains.plugins.gradle.model.data.GradleSourceSetData
 
 internal fun KotlinMPPGradleProjectResolver.Companion.populateModuleDependenciesBySourceSetVisibilityGraph(
-    context: PopulateModuleDependenciesContext
+    context: KotlinMppPopulateModuleDependenciesContext
 ): Unit = with(context) {
     val sourceSetVisibilityGraph = createSourceSetVisibilityGraph(mppModel).transitiveClosure
     for (sourceSet in sourceSetVisibilityGraph.nodes()) {
         populateSourceSetInfos(context, sourceSetVisibilityGraph, sourceSet)
-        if (delegateToAndroidPlugin(sourceSet)) continue
+        if (shouldDelegateToOtherPlugin(sourceSet)) continue
 
 
-        val visibleSourceSets = sourceSetVisibilityGraph.successors(sourceSet)
+        val visibleSourceSets = sourceSetVisibilityGraph.successors(sourceSet) - sourceSet
         val fromDataNode = getSiblingKotlinModuleData(sourceSet, gradleModule, ideModule, resolverCtx)?.cast<GradleSourceSetData>()
             ?: continue
 
@@ -39,13 +39,14 @@ internal fun KotlinMPPGradleProjectResolver.Companion.populateModuleDependencies
         if (!processedModuleIds.add(getKotlinModuleId(gradleModule, sourceSet, resolverCtx))) continue
         val settings = dependencyPopulationSettings(mppModel, sourceSet)
         val directDependencies = getDependencies(sourceSet).toSet()
+        val directIntransitiveDependencies = getIntransitiveDependencies(sourceSet).toSet()
         val dependenciesFromVisibleSourceSets = getDependenciesFromVisibleSourceSets(settings, visibleSourceSets)
         val dependenciesFromNativePropagation = getPropagatedNativeDependencies(settings, sourceSet)
         val dependenciesFromPlatformPropagation = getPropagatedPlatformDependencies(sourceSet)
 
         val dependencies = dependenciesPreprocessor(
-            directDependencies + dependenciesFromVisibleSourceSets +
-                    dependenciesFromNativePropagation + dependenciesFromPlatformPropagation
+            dependenciesFromNativePropagation + dependenciesFromPlatformPropagation
+                    + dependenciesFromVisibleSourceSets + directDependencies + directIntransitiveDependencies
         )
 
         buildDependencies(resolverCtx, sourceSetMap, artifactsMap, fromDataNode, dependencies, ideProject)
@@ -73,12 +74,12 @@ private fun dependencyPopulationSettings(mppModel: KotlinMPPGradleModel, sourceS
     )
 }
 
-private fun PopulateModuleDependenciesContext.getDependenciesFromVisibleSourceSets(
+private fun KotlinMppPopulateModuleDependenciesContext.getDependenciesFromVisibleSourceSets(
     settings: DependencyPopulationSettings,
     visibleSourceSets: Set<KotlinSourceSet>
 ): Set<KotlinDependency> {
     val inheritedDependencies = visibleSourceSets
-        .flatMap { visibleSourceSet -> getDependencies(visibleSourceSet) }
+        .flatMap { visibleSourceSet -> getRegularDependencies(visibleSourceSet) }
 
     return if (settings.excludeInheritedNativeDependencies) {
         inheritedDependencies.filter { !it.name.startsWith(KotlinNativeLibraryNameUtil.KOTLIN_NATIVE_LIBRARY_PREFIX_PLUS_SPACE) }
@@ -87,7 +88,7 @@ private fun PopulateModuleDependenciesContext.getDependenciesFromVisibleSourceSe
     }.toSet()
 }
 
-private fun PopulateModuleDependenciesContext.getPropagatedNativeDependencies(
+private fun KotlinMppPopulateModuleDependenciesContext.getPropagatedNativeDependencies(
     settings: DependencyPopulationSettings,
     sourceSet: KotlinSourceSet
 ): Set<KotlinDependency> {
@@ -155,7 +156,7 @@ private fun Iterable<CompilationWithDependencies>.selectFirstAvailableTarget(
 }
 
 
-private fun PopulateModuleDependenciesContext.getPropagatedPlatformDependencies(
+private fun KotlinMppPopulateModuleDependenciesContext.getPropagatedPlatformDependencies(
     sourceSet: KotlinSourceSet
 ): Set<KotlinDependency> {
     if (!mppModel.extraFeatures.isHMPPEnabled) {
@@ -196,11 +197,11 @@ private fun getPropagatedPlatformDependencies(
 
 // TODO: Move this maybe to another semantic part of KotlinMPPGradleProjectResolver?
 private fun KotlinMPPGradleProjectResolver.Companion.populateSourceSetInfos(
-    context: PopulateModuleDependenciesContext,
+    context: KotlinMppPopulateModuleDependenciesContext,
     closedSourceSetGraph: Graph<KotlinSourceSet>,
     sourceSet: KotlinSourceSet
 ) = with(context) {
-    val isAndroid = delegateToAndroidPlugin(sourceSet)
+    val isAndroid = shouldDelegateToOtherPlugin(sourceSet)
     val fromDataNode = if (isAndroid) ideModule
     else getSiblingKotlinModuleData(sourceSet, gradleModule, ideModule, resolverCtx) ?: return
 
