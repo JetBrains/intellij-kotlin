@@ -1047,7 +1047,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
     testGroup("fir", testDataPath = "../idea/tests/testData") {
         testClass<AbstractFirHighlightingTest> {
             model("highlighter")
-            model("../../fir/testData/highlighterFir", pattern = KT_WITHOUT_DOTS)
+            model("../../../fir/testData/highlighterFir", pattern = KT_WITHOUT_DOTS)
         }
 
         testClass<AbstractFirReferenceResolveTest> {
