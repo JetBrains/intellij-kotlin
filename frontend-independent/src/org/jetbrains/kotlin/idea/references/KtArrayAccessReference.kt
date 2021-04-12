@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.lexer.KtToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
@@ -34,6 +35,8 @@ abstract class KtArrayAccessReference(
 
     override fun handleElementRename(newElementName: String): PsiElement? = doRenameImplicitConventionalCall(newElementName)
 
+    protected abstract fun moveFunctionLiteralOutsideParentheses(callExpression: KtCallExpression)
+    protected abstract fun canMoveLambdaOutsideParentheses(callExpression: KtCallExpression): Boolean
     protected abstract fun doRenameImplicitConventionalCall(newName: String?): KtExpression
 
     companion object {

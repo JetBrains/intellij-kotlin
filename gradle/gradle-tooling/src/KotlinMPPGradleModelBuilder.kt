@@ -363,7 +363,7 @@ class KotlinMPPGradleModelBuilder : ModelBuilderService {
         val nativeMainRunTasks =
             if (platform == KotlinPlatform.NATIVE) buildNativeMainRunTasks(gradleTarget)
             else emptyList()
-        val artifacts = konanArtifacts(gradleTarget, dependencyResolver, project, dependencyMapper)
+        val artifacts = konanArtifacts(gradleTarget, dependencyResolver, importingContext.project, dependencyMapper)
         val target = KotlinTargetImpl(
             gradleTarget.name,
             targetPresetName,
@@ -881,7 +881,7 @@ class KotlinMPPGradleModelBuilder : ModelBuilderService {
     }
 }
 
-fun computeSourceSetsDeferredInfo(importingContext: MultiplatformModelImportingContext) {
+private fun computeSourceSetsDeferredInfo(importingContext: MultiplatformModelImportingContext) {
     for (sourceSet in importingContext.sourceSets) {
         val isRoot = sourceSet.name == COMMON_MAIN_SOURCE_SET_NAME || sourceSet.name == COMMON_TEST_SOURCE_SET_NAME
         val isHMPPEnabled = importingContext.getProperty(IS_HMPP_ENABLED)

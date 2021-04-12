@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.idea.core.util.getValue
 import org.jetbrains.kotlin.idea.klib.AbstractKlibLibraryInfo
 import org.jetbrains.kotlin.platform.SimplePlatform
 import org.jetbrains.kotlin.platform.TargetPlatform
+import org.jetbrains.kotlin.platform.isCommon
 import org.jetbrains.kotlin.platform.konan.NativePlatformUnspecifiedTarget
 import org.jetbrains.kotlin.platform.konan.NativePlatformWithTarget
 
@@ -69,6 +70,8 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
         val libraries = LinkedHashSet<DependencyCandidate>()
         val sdks = LinkedHashSet<SdkInfo>()
 
+        val platform = libraryInfo.platform
+
         for (module in getLibraryUsageIndex().modulesLibraryIsUsedIn[libraryInfo.library.wrap()]) {
             if (!processedModules.add(module)) continue
 
@@ -95,6 +98,13 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
         }
 
         return libraries to sdks
+    }
+
+    /**
+     * @return true if it's OK to add a dependency from a library with platform [from] to a library with platform [to]
+     */
+    private fun compatiblePlatforms(from: TargetPlatform, to: TargetPlatform): Boolean {
+        return from === to || to.containsAll(from) || to.isCommon()
     }
 
     private fun getLibraryUsageIndex(): LibraryUsageIndex {
