@@ -1,1 +1,1 @@
-org.jetbrains.kotlin.idea.intentions.ConvertAnyToNoneIntention
+org.jetbrains.kotlin.idea.intentions.ConvertAnyToNoneAndViceVersaIntention

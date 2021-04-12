@@ -1,1 +1,1 @@
-org.jetbrains.kotlin.idea.intentions.ConvertTakeUnlessToTakeIfIntention
+org.jetbrains.kotlin.idea.intentions.ConvertCallToOppositeIntention

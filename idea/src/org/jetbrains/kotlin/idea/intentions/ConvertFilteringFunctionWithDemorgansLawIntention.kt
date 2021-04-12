@@ -29,17 +29,17 @@ import org.jetbrains.kotlin.types.typeUtil.isBoolean
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 sealed class ConvertFilteringFunctionWithDemorgansLawIntention(
-    private val fromFunctionName: String,
-    private val toFunctionName: String,
-    private val negateCall: Boolean,
-    private val negatePredicate: Boolean
+    intentionName: () -> String,
+    conversions: List<Conversion>,
 ) : SelfTargetingRangeIntention<KtCallExpression>(
     KtCallExpression::class.java,
-    KotlinBundle.lazyMessage("replace.0.with.1", fromFunctionName, toFunctionName)
+    intentionName
 ) {
+    private val conversions = conversions.associateBy { it.fromFunctionName }
+
     override fun applicabilityRange(element: KtCallExpression): TextRange? {
         val callee = element.calleeExpression ?: return null
-        if (callee.text != fromFunctionName) return null
+        val (fromFunctionName, toFunctionName, _, _) = conversions[callee.text] ?: return null
         val fqNames = functions[fromFunctionName] ?: return null
         if (element.getQualifiedExpressionForSelector()?.getStrictParentOfType<KtDotQualifiedExpression>() != null) return null
         val context = element.analyze(BodyResolveMode.PARTIAL)
@@ -50,10 +50,12 @@ sealed class ConvertFilteringFunctionWithDemorgansLawIntention(
         if (lambdaBody.anyDescendantOfType<KtReturnExpression>()) return null
         if (lambdaBody.statements.lastOrNull()?.getType(context)?.isBoolean() != true) return null
 
+        setTextGetter(KotlinBundle.lazyMessage("replace.0.with.1", fromFunctionName, toFunctionName))
         return callee.textRange
     }
 
     override fun applyTo(element: KtCallExpression, editor: Editor?) {
+        val (_, toFunctionName, negateCall, negatePredicate) = conversions[element.calleeExpression?.text] ?: return
         val lambda = element.singleLambdaArgumentExpression() ?: return
         val lastExpression = lambda.bodyExpression?.statements?.lastOrNull() ?: return
         val psiFactory = KtPsiFactory(element)
@@ -116,20 +118,39 @@ sealed class ConvertFilteringFunctionWithDemorgansLawIntention(
     }
 }
 
-class ConvertAllToAnyIntention : ConvertFilteringFunctionWithDemorgansLawIntention("all", "any", true, true)
-class ConvertAnyToAllIntention : ConvertFilteringFunctionWithDemorgansLawIntention("any", "all", true, true)
+private data class Conversion(
+    val fromFunctionName: String,
+    val toFunctionName: String,
+    val negateCall: Boolean,
+    val negatePredicate: Boolean
+)
 
-class ConvertAnyToNoneIntention : ConvertFilteringFunctionWithDemorgansLawIntention("any", "none", true, false)
-class ConvertNoneToAnyIntention : ConvertFilteringFunctionWithDemorgansLawIntention("none", "any", true, false)
+class ConvertCallToOppositeIntention : ConvertFilteringFunctionWithDemorgansLawIntention(
+    KotlinBundle.lazyMessage("replace.function.call.with.the.opposite"),
+    listOf(
+        Conversion("all", "none", false, true),
+        Conversion("none", "all", false, true),
+        Conversion("filter", "filterNot", false, true),
+        Conversion("filterNot", "filter", false, true),
+        Conversion("filterTo", "filterNotTo", false, true),
+        Conversion("filterNotTo", "filterTo", false, true),
+        Conversion("takeIf", "takeUnless", false, true),
+        Conversion("takeUnless", "takeIf", false, true)
+    )
+)
 
-class ConvertAllToNoneIntention : ConvertFilteringFunctionWithDemorgansLawIntention("all", "none", false, true)
-class ConvertNoneToAllIntention : ConvertFilteringFunctionWithDemorgansLawIntention("none", "all", false, true)
+class ConvertAnyToAllAndViceVersaIntention : ConvertFilteringFunctionWithDemorgansLawIntention(
+    KotlinBundle.lazyMessage("replace.0.with.1.and.vice.versa", "any", "all"),
+    listOf(
+        Conversion("any", "all", true, true),
+        Conversion("all", "any", true, true)
+    )
+)
 
-class ConvertFilterToFilterNotIntention : ConvertFilteringFunctionWithDemorgansLawIntention("filter", "filterNot", false, true)
-class ConvertFilterNotToFilterIntention : ConvertFilteringFunctionWithDemorgansLawIntention("filterNot", "filter", false, true)
-
-class ConvertFilterToToFilterNotToIntention : ConvertFilteringFunctionWithDemorgansLawIntention("filterTo", "filterNotTo", false, true)
-class ConvertFilterNotToToFilterToIntention : ConvertFilteringFunctionWithDemorgansLawIntention("filterNotTo", "filterTo", false, true)
-
-class ConvertTakeIfToTakeUnlessIntention : ConvertFilteringFunctionWithDemorgansLawIntention("takeIf", "takeUnless", false, true)
-class ConvertTakeUnlessToTakeIfIntention : ConvertFilteringFunctionWithDemorgansLawIntention("takeUnless", "takeIf", false, true)
+class ConvertAnyToNoneAndViceVersaIntention : ConvertFilteringFunctionWithDemorgansLawIntention(
+    KotlinBundle.lazyMessage("replace.0.with.1.and.vice.versa", "any", "none"),
+    listOf(
+        Conversion("any", "none", true, false),
+        Conversion("none", "any", true, false)
+    )
+)

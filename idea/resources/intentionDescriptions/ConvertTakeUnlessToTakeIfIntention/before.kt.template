@@ -1,3 +1,0 @@
-fun test(i: Int) {
-    i.takeUnless { it != 1 }
-}

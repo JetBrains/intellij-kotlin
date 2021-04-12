@@ -1,1 +1,1 @@
-org.jetbrains.kotlin.idea.intentions.ConvertFilterNotToFilterIntention
+org.jetbrains.kotlin.idea.intentions.ConvertCallToOppositeIntention
