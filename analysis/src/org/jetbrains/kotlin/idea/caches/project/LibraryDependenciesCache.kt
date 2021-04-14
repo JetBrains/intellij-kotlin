@@ -17,6 +17,7 @@ import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.util.containers.ContainerUtil
 import com.intellij.util.containers.MultiMap
+import org.jetbrains.kotlin.idea.configuration.IdeBuiltInsLoadingState
 import org.jetbrains.kotlin.idea.core.util.CachedValue
 import org.jetbrains.kotlin.idea.core.util.getValue
 import org.jetbrains.kotlin.idea.klib.AbstractKlibLibraryInfo
@@ -92,13 +93,38 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
             }, Unit)
         }
 
-        return libraries to sdks
+        val filteredLibraries = filterForBuiltins(libraryInfo, libraries)
+
+        return filteredLibraries to sdks
     }
 
     private fun getLibraryUsageIndex(): LibraryUsageIndex {
         return CachedValuesManager.getManager(project).getCachedValue(project) {
             CachedValueProvider.Result(LibraryUsageIndex(), ProjectRootModificationTracker.getInstance(project))
         }!!
+    }
+
+    /*
+    * When built-ins are created from module dependencies (as opposed to loading them from classloader)
+    * we must resolve Kotlin standard library containing some of the built-ins declarations in the same
+    * resolver for project as JDK. This comes from the following requirements:
+    * - JvmBuiltins need JDK and standard library descriptors -> resolver for project should be able to
+    *   resolve them
+    * - Builtins are created in BuiltinsCache -> module descriptors should be resolved under lock of the
+    *   SDK resolver to prevent deadlocks
+    * This means we have to maintain dependencies of the standard library manually or effectively drop
+    * resolver for SDK otherwise. Libraries depend on superset of their actual dependencies because of
+    * the inability to get real dependencies from IDEA model. So moving stdlib with all dependencies
+    * down is a questionable option.
+    */
+    private fun filterForBuiltins(libraryInfo: LibraryInfo, dependencyLibraries: Set<DependencyCandidate>): Set<DependencyCandidate> {
+        return if (!IdeBuiltInsLoadingState.isFromClassLoader && libraryInfo.isCoreKotlinLibrary(project)) {
+            dependencyLibraries.filterTo(mutableSetOf()) { dep ->
+                dep.libraries.any { it.isCoreKotlinLibrary(project) }
+            }
+        } else {
+            dependencyLibraries
+        }
     }
 
     private inner class LibraryUsageIndex {
