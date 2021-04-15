@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.idea.script
 
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.util.text.StringUtilRt
 import com.intellij.openapi.vfs.VfsUtil
 import com.intellij.openapi.vfs.VirtualFile
@@ -48,7 +47,7 @@ abstract class AbstractScriptConfigurationLoadingTest : AbstractScriptConfigurat
         testScriptConfigurationNotification = true
         ApplicationManager.getApplication().isScriptChangesNotifierDisabled = false
 
-        scriptConfigurationManager = ServiceManager.getService(project, ScriptConfigurationManager::class.java) as CompositeScriptConfigurationManager
+        scriptConfigurationManager = project.getService(ScriptConfigurationManager::class.java) as CompositeScriptConfigurationManager
     }
 
     override fun tearDown() {
