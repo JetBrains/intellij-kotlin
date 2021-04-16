@@ -7813,6 +7813,11 @@ public abstract class LocalInspectionTestGenerated extends AbstractLocalInspecti
             runTest("testData/inspectionsLocal/redundantInnerClassModifier/hasOuterClassMemberReferenceFromNotThis4.kt");
         }
 
+        @TestMetadata("hasOuterClassMemberReferenceFromNotThis5.kt")
+        public void testHasOuterClassMemberReferenceFromNotThis5() throws Exception {
+            runTest("testData/inspectionsLocal/redundantInnerClassModifier/hasOuterClassMemberReferenceFromNotThis5.kt");
+        }
+
         @TestMetadata("hasOuterClassMemberReferenceInSuperTypeConstructorCall.kt")
         public void testHasOuterClassMemberReferenceInSuperTypeConstructorCall() throws Exception {
             runTest("testData/inspectionsLocal/redundantInnerClassModifier/hasOuterClassMemberReferenceInSuperTypeConstructorCall.kt");

@@ -11,15 +11,18 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentsOfType
+import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
 import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.idea.caches.resolve.resolveToCall
 import org.jetbrains.kotlin.idea.caches.resolve.util.getJavaClassDescriptor
+import org.jetbrains.kotlin.idea.intentions.receiverType
 import org.jetbrains.kotlin.idea.quickfix.RemoveModifierFix
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.idea.search.usagesSearch.descriptor
+import org.jetbrains.kotlin.idea.util.getThisReceiverOwner
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
@@ -27,6 +30,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.synthetic.SyntheticJavaPropertyDescriptor
@@ -69,11 +73,18 @@ class RedundantInnerClassModifierInspection : AbstractKotlinInspection() {
                     if (referenceContainingClass != null) {
                         if (referenceContainingClass == targetClass) return@anyDescendantOfType false
                         if (referenceContainingClass in outerClasses) {
-                            if (!reference.hasReceiverTypeReference()) {
-                                val parentQualified =
-                                    (expression.parent as? KtCallExpression ?: expression).getQualifiedExpressionForSelector()
-                                if (parentQualified != null && !parentQualified.hasThisReceiverOfOuterClass(outerClassDescriptors)) {
+                            val parentQualified = (expression.parent as? KtCallExpression ?: expression).getQualifiedExpressionForSelector()
+                            if (parentQualified != null && !parentQualified.hasThisReceiverOfOuterClass(outerClassDescriptors)) {
+                                val receiverTypeOfReference = reference.receiverTypeReference()
+                                if (receiverTypeOfReference == null) {
                                     return@anyDescendantOfType false
+                                } else {
+                                    val context = parentQualified.analyze(BodyResolveMode.PARTIAL)
+                                    val receiverOwnerType = parentQualified.getResolvedCall(context)?.dispatchReceiver
+                                        ?.getThisReceiverOwner(context)?.safeAs<CallableDescriptor>()?.receiverType()
+                                    if (receiverOwnerType == context[BindingContext.TYPE, receiverTypeOfReference]) {
+                                        return@anyDescendantOfType false
+                                    }
                                 }
                             }
                             return@anyDescendantOfType reference !is KtClass || reference.isInner()
@@ -103,7 +114,7 @@ class RedundantInnerClassModifierInspection : AbstractKotlinInspection() {
         return resolveToCall()?.resultingDescriptor?.returnType?.constructor?.declarationDescriptor
     }
 
-    private fun PsiElement.hasReceiverTypeReference(): Boolean {
-        return safeAs<KtNamedFunction>()?.receiverTypeReference != null || safeAs<KtProperty>()?.receiverTypeReference != null
+    private fun PsiElement.receiverTypeReference(): KtTypeReference? {
+        return safeAs<KtNamedFunction>()?.receiverTypeReference ?: safeAs<KtProperty>()?.receiverTypeReference
     }
 }
