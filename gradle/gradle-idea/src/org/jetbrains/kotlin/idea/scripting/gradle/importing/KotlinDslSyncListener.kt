@@ -26,9 +26,9 @@ import java.util.*
 
 class KotlinDslSyncListener : ExternalSystemTaskNotificationListenerAdapter() {
     companion object {
-        val instance: KotlinDslSyncListener
+        val instance: KotlinDslSyncListener?
             get() =
-                ExternalSystemTaskNotificationListener.EP_NAME.findExtensionOrFail(KotlinDslSyncListener::class.java)
+                ExternalSystemTaskNotificationListener.EP_NAME.findExtension(KotlinDslSyncListener::class.java)
     }
 
     internal val tasks = WeakHashMap<ExternalSystemTaskId, KotlinDslGradleBuildSync>()
@@ -43,7 +43,7 @@ class KotlinDslSyncListener : ExternalSystemTaskNotificationListenerAdapter() {
         // project may be null in case of new project
         val project = id.findProject() ?: return
         task.project = project
-        GradleBuildRootsManager.getInstance(project).markImportingInProgress(workingDir)
+        GradleBuildRootsManager.getInstance(project)?.markImportingInProgress(workingDir)
     }
 
     override fun onEnd(id: ExternalSystemTaskId) {
@@ -58,7 +58,7 @@ class KotlinDslSyncListener : ExternalSystemTaskNotificationListenerAdapter() {
             sync.gradleHome = ServiceManager
                 .getService(GradleInstallationManager::class.java)
                 .getGradleHome(project, sync.workingDir)
-                ?.canonicalPath
+                ?.path
         }
 
         if (sync.javaHome == null) {
@@ -102,8 +102,12 @@ class KotlinDslSyncListener : ExternalSystemTaskNotificationListenerAdapter() {
 
         // project may be null in case of new project
         val project = id.findProject() ?: return
-        if (cancelled != null) {
-            GradleBuildRootsManager.getInstance(project).markImportingInProgress(cancelled.workingDir, false)
+        cancelled?.let {
+            GradleBuildRootsManager.getInstance(project)?.markImportingInProgress(it.workingDir, false)
+
+            if (it.failed) {
+                reportErrors(project, it)
+            }
         }
     }
 
