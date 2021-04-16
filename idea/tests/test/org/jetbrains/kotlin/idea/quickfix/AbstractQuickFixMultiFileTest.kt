@@ -148,7 +148,7 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
                     val actionShouldBeAvailable = actionHint.shouldPresent()
 
                     if (psiFile is KtFile) {
-                        DirectiveBasedActionUtils.checkForUnexpectedErrors(psiFile)
+                        checkForUnexpectedErrors(psiFile)
                     }
 
                     doAction(
@@ -159,6 +159,7 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
                         getTestName(false),
                         this::availableActions,
                         myFixture::doHighlighting,
+                        checkAvailableActionsAreExpected = this::checkAvailableActionsAreExpected
                     )
 
                     val actualText = file.text
@@ -225,7 +226,7 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
                     val actionShouldBeAvailable = actionHint.shouldPresent()
 
                     if (psiFile is KtFile) {
-                        DirectiveBasedActionUtils.checkForUnexpectedErrors(psiFile)
+                        checkForUnexpectedErrors(psiFile)
                     }
 
                     doAction(
@@ -236,6 +237,7 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
                         beforeFileName,
                         this::availableActions,
                         myFixture::doHighlighting,
+                        checkAvailableActionsAreExpected = this::checkAvailableActionsAreExpected
                     )
 
                     if (actionShouldBeAvailable) {
@@ -277,6 +279,14 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
         }
     }
 
+    protected open fun checkForUnexpectedErrors(file: KtFile) {
+        DirectiveBasedActionUtils.checkForUnexpectedErrors(file)
+    }
+
+    protected open fun checkAvailableActionsAreExpected(file: PsiFile, actions: Collection<IntentionAction>) {
+        DirectiveBasedActionUtils.checkAvailableActionsAreExpected(file, availableActions)
+    }
+
     private val availableActions: List<IntentionAction>
         get() {
             myFixture.doHighlighting()
@@ -309,7 +319,9 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
             testFilePath: String,
             getAvailableActions: () -> List<IntentionAction>,
             doHighlighting: () -> List<HighlightInfo>,
-            shouldBeAvailableAfterExecution: Boolean = false
+            shouldBeAvailableAfterExecution: Boolean = false,
+            checkAvailableActionsAreExpected: (PsiFile, Collection<IntentionAction>) -> Unit =
+                DirectiveBasedActionUtils::checkAvailableActionsAreExpected
         ) {
             val pattern = if (text.startsWith("/"))
                 Pattern.compile(text.substring(1, text.length - 1))
@@ -333,7 +345,7 @@ abstract class AbstractQuickFixMultiFileTest : KotlinLightCodeInsightFixtureTest
                                 StringUtil.join(infos, "\n")
                     )
                 } else {
-                    DirectiveBasedActionUtils.checkAvailableActionsAreExpected(file, availableActions)
+                    checkAvailableActionsAreExpected(file, availableActions)
                 }
             } else {
                 if (!actionShouldBeAvailable) {
