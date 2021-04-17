@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui
 import com.intellij.BundleBase
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.refactoring.RefactoringBundle
 import com.intellij.refactoring.util.RadioUpDownListener
@@ -92,6 +93,7 @@ internal class KotlinSelectNestedClassRefactoringDialog private constructor(
                 listOf(nestedClass),
                 nestedClass.containingClassOrObject!!,
                 targetContainer as? KtClassOrObject ?: nestedClass.containingClassOrObject!!,
+                targetContainer as? PsiDirectory,
                 null
             )
         }
@@ -99,10 +101,7 @@ internal class KotlinSelectNestedClassRefactoringDialog private constructor(
         fun chooseNestedClassRefactoring(nestedClass: KtClassOrObject, targetContainer: PsiElement?) {
             val project = nestedClass.project
             val dialog = when {
-                targetContainer != null && targetContainer !is KtClassOrObject ||
-                        nestedClass is KtClass && nestedClass.isInner() -> {
-                    MoveKotlinNestedClassesToUpperLevelDialog(nestedClass, targetContainer)
-                }
+                targetContainer.isUpperLevelFor(nestedClass) -> MoveKotlinNestedClassesToUpperLevelDialog(nestedClass, targetContainer)
                 nestedClass is KtEnumEntry -> return
                 else -> {
                     val selectionDialog =
@@ -118,5 +117,9 @@ internal class KotlinSelectNestedClassRefactoringDialog private constructor(
             }
             dialog?.show()
         }
+
+        private fun PsiElement?.isUpperLevelFor(nestedClass: KtClassOrObject) =
+            this != null && this !is KtClassOrObject && this !is PsiDirectory ||
+                    nestedClass is KtClass && nestedClass.isInner()
     }
 }

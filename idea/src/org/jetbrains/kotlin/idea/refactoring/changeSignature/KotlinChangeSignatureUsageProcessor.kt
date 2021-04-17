@@ -10,8 +10,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Ref
 import com.intellij.psi.*
 import com.intellij.psi.codeStyle.JavaCodeStyleManager
-import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.psi.search.searches.MethodReferencesSearch
 import com.intellij.psi.search.searches.OverridingMethodsSearch
 import com.intellij.psi.search.searches.ReferencesSearch
@@ -65,13 +65,16 @@ import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.resolvedCallUtil.getImplicitReceivers
+import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.ExplicitReceiverKind
 import org.jetbrains.kotlin.resolve.descriptorUtil.classId
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.resolve.scopes.receivers.ExtensionReceiver
 import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
+import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
 import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.util.OperatorNameConventions
+import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
@@ -270,10 +273,12 @@ class KotlinChangeSignatureUsageProcessor : ChangeSignatureUsageProcessor {
             }
         }
 
+        val searchScope = PsiSearchHelper.getInstance(functionPsi.project).getUseScope(functionPsi)
+
         changeInfo.oldName?.let { oldName ->
             TextOccurrencesUtil.findNonCodeUsages(
                 functionPsi,
-                GlobalSearchScope.projectScope(functionPsi.project),
+                searchScope,
                 oldName,
                 /* searchInStringsAndComments = */true,
                 /* searchInNonJavaFiles = */true,
@@ -400,6 +405,33 @@ class KotlinChangeSignatureUsageProcessor : ChangeSignatureUsageProcessor {
                     }
                 }
 
+                private fun processThisCall(
+                    expression: KtSimpleNameExpression,
+                    context: BindingContext,
+                    extensionReceiver: ReceiverValue?,
+                    dispatchReceiver: ReceiverValue?
+                ) {
+                    val thisExpression = expression.parent as? KtThisExpression ?: return
+                    val thisCallExpression = thisExpression.parent as? KtCallExpression ?: return
+                    val usageInfo = when (callableDescriptor) {
+                        dispatchReceiver.getReceiverTargetDescriptor(context) -> {
+                            val extensionReceiverTargetDescriptor = extensionReceiver.getReceiverTargetDescriptor(context)
+                            if (extensionReceiverTargetDescriptor != null) {
+                                KotlinNonQualifiedOuterThisCallUsage(
+                                    thisCallExpression, originalReceiverInfo!!, functionUsageInfo, extensionReceiverTargetDescriptor
+                                )
+                            } else {
+                                KotlinParameterUsage(expression, originalReceiverInfo!!, functionUsageInfo)
+                            }
+                        }
+                        extensionReceiver.getReceiverTargetDescriptor(context) -> {
+                            KotlinParameterUsage(expression, originalReceiverInfo!!, functionUsageInfo)
+                        }
+                        else -> null
+                    }
+                    result.addIfNotNull(usageInfo)
+                }
+
                 override fun visitSimpleNameExpression(expression: KtSimpleNameExpression, context: BindingContext): Void? {
                     val resolvedCall = expression.getResolvedCall(context) ?: return null
 
@@ -409,9 +441,16 @@ class KotlinChangeSignatureUsageProcessor : ChangeSignatureUsageProcessor {
                         return null
                     }
 
-                    val receiverValue = resolvedCall.extensionReceiver ?: resolvedCall.dispatchReceiver
-                    if (receiverValue is ImplicitReceiver) {
-                        processImplicitThis(resolvedCall.call.callElement, receiverValue)
+                    val (extensionReceiver, dispatchReceiver) = resolvedCall
+                        .let { (it as? VariableAsFunctionResolvedCall)?.variableCall ?: it }
+                        .let { (it.extensionReceiver to it.dispatchReceiver) }
+                    if (extensionReceiver != null || dispatchReceiver != null) {
+                        val receiverValue = extensionReceiver ?: dispatchReceiver
+                        if (receiverValue is ImplicitReceiver) {
+                            processImplicitThis(resolvedCall.call.callElement, receiverValue)
+                        } else {
+                            processThisCall(expression, context, extensionReceiver, dispatchReceiver)
+                        }
                     }
 
                     return null
@@ -675,7 +714,8 @@ class KotlinChangeSignatureUsageProcessor : ChangeSignatureUsageProcessor {
         val javaChangeInfo = wrapper.javaChangeInfo
         val javaUsageInfos = wrapper.javaUsageInfos
         val parametersToRemove = javaChangeInfo.toRemoveParm()
-        val noDefaultValues = javaChangeInfo.newParameters.all { it.defaultValue.isNullOrBlank() }
+        val hasDefaultValue = javaChangeInfo.newParameters.any { !it.defaultValue.isNullOrBlank() }
+        val hasDefaultParameter = kotlinChangeInfo.newParameters.any { it.defaultValueAsDefaultParameter }
 
         for (javaUsage in javaUsageInfos) when (javaUsage) {
             is OverriderUsageInfo -> {
@@ -689,12 +729,13 @@ class KotlinChangeSignatureUsageProcessor : ChangeSignatureUsageProcessor {
             }
 
             is MethodCallUsageInfo -> {
-                if (noDefaultValues) continue
+                val conflictMessage = when {
+                    hasDefaultValue -> KotlinBundle.message("change.signature.conflict.text.kotlin.default.value.in.non.kotlin.files")
+                    hasDefaultParameter -> KotlinBundle.message("change.signature.conflict.text.kotlin.default.parameter.in.non.kotlin.files")
+                    else -> continue
+                }
 
-                result.putValue(
-                    javaUsage.element,
-                    KotlinBundle.message("change.signature.conflict.text.kotlin.default.value.in.non.kotlin.files")
-                )
+                result.putValue(javaUsage.element, conflictMessage)
             }
         }
     }

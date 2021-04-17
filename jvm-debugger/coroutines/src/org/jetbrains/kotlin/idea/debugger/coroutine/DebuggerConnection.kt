@@ -16,7 +16,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.externalSystem.service.execution.ExternalSystemRunConfiguration
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.ui.content.Content
 import com.intellij.util.messages.MessageBusConnection
 import com.intellij.xdebugger.XDebugProcess
@@ -30,7 +29,7 @@ import org.jetbrains.kotlin.idea.debugger.coroutine.view.XCoroutineView
 
 class DebuggerConnection(
     val project: Project,
-    val configuration: RunConfigurationBase<*>,
+    val configuration: RunConfigurationBase<*>?,
     val params: JavaParameters?,
     modifyArgs: Boolean = true,
     val alwaysShowPanel: Boolean = false
@@ -42,19 +41,12 @@ class DebuggerConnection(
     init {
         if (params is JavaParameters && modifyArgs) {
             // gradle related logic in KotlinGradleCoroutineDebugProjectResolver
-            coroutineAgentAttached = CoroutineAgentConnector.attachCoroutineAgent(params)
+            coroutineAgentAttached = CoroutineAgentConnector.attachCoroutineAgent(project, params)
         } else {
             coroutineAgentAttached = false
-        }
-
-        if (!coroutineAgentAttached) {
             log.debug("CoroutineDebugger disabled.")
         }
 
-        connect()
-    }
-
-    private fun connect() {
         connection = project.messageBus.connect()
         connection?.subscribe(XDebuggerManager.TOPIC, this)
     }
@@ -100,6 +92,3 @@ class DebuggerConnection(
         connection = null
     }
 }
-
-fun VirtualFile.isKotlinStdlib() =
-        this.path.contains("kotlin-stdlib")

@@ -16,6 +16,7 @@
 
 package org.jetbrains.kotlin.idea.refactoring.changeSignature.ui
 
+import com.intellij.codeInsight.daemon.DaemonCodeAnalyzer
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.colors.EditorFontType
@@ -51,9 +52,12 @@ import org.jetbrains.kotlin.descriptors.DescriptorVisibility
 import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.idea.KotlinLanguage
+import org.jetbrains.kotlin.idea.caches.resolve.CodeFragmentAnalyzer
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
+import org.jetbrains.kotlin.idea.intentions.AddFullQualifierIntention
 import org.jetbrains.kotlin.idea.refactoring.changeSignature.*
 import org.jetbrains.kotlin.idea.refactoring.changeSignature.KotlinMethodDescriptor.Kind
+import org.jetbrains.kotlin.idea.refactoring.introduce.ui.KotlinSignatureComponent
 import org.jetbrains.kotlin.idea.refactoring.rename.findElementForRename
 import org.jetbrains.kotlin.idea.refactoring.validateElement
 import org.jetbrains.kotlin.psi.KtExpressionCodeFragment
@@ -109,7 +113,11 @@ class KotlinChangeSignatureDialog(
 
                 val parameterName = getPresentationName(item)
                 val typeText = item.typeCodeFragment.text
-                val defaultValue = item.defaultValueCodeFragment.text
+                val defaultValue = if (item.isReceiverIn(parametersTableModel) || !item.parameter.defaultValueAsDefaultParameter)
+                    item.defaultValueCodeFragment.text
+                else
+                    ""
+
                 val separator = StringUtil.repeatSymbol(' ', getParamNamesMaxLength() - parameterName.length + 1)
                 val text = "$valOrVar$parameterName:$separator$typeText" + if (StringUtil.isNotEmpty(defaultValue)) {
                     KotlinBundle.message("text.default.value", defaultValue)
@@ -127,9 +135,12 @@ class KotlinChangeSignatureDialog(
         override fun getRowEditor(item: ParameterTableModelItemBase<KotlinParameterInfo>): JBTableRowEditor = object : JBTableRowEditor() {
             private val components = ArrayList<JComponent>()
             private val nameEditor = EditorTextField(item.parameter.name, project, fileType)
+            private val defaultParameterCheckbox = JCheckBox()
 
-            private fun updateNameEditor() {
-                nameEditor.isEnabled = item.parameter != parametersTableModel.receiver
+            private fun notifyReceiverListeners() {
+                val isNotReceiver = !item.isReceiverIn(parametersTableModel)
+                nameEditor.isEnabled = isNotReceiver
+                defaultParameterCheckbox.isEnabled = isNotReceiver
             }
 
             private fun isDefaultColumnEnabled() = item.parameter.isNewParameter && item.parameter != myMethod.receiver
@@ -151,11 +162,20 @@ class KotlinChangeSignatureDialog(
                     } else if (KotlinCallableParameterTableModel.isNameColumn(columnInfo)) {
                         editor = nameEditor
                         component = editor
-                        updateNameEditor()
+                        notifyReceiverListeners()
                     } else if (KotlinCallableParameterTableModel.isDefaultValueColumn(columnInfo) && isDefaultColumnEnabled()) {
                         val document = PsiDocumentManager.getInstance(project).getDocument(item.defaultValueCodeFragment)
                         editor = EditorTextField(document, project, fileType)
                         component = editor
+                    } else if (KotlinCallableParameterTableModel.isDefaultParameterColumn(columnInfo) && isDefaultColumnEnabled()) {
+                        defaultParameterCheckbox.isSelected = item.parameter.defaultValue != null
+                        defaultParameterCheckbox.addItemListener {
+                            parametersTableModel.setValueAtWithoutUpdate(it.stateChange == ItemEvent.SELECTED, row, columnFinal)
+                            updateSignature()
+                        }
+                        component = defaultParameterCheckbox
+                        editor = null
+                        notifyReceiverListeners()
                     } else if (KotlinPrimaryConstructorParameterTableModel.isValVarColumn(columnInfo)) {
                         val comboBox = ComboBox(KotlinValVar.values())
                         comboBox.selectedItem = item.parameter.valOrVar
@@ -172,7 +192,7 @@ class KotlinChangeSignatureDialog(
                             val newReceiver = if (it.stateChange == ItemEvent.SELECTED) item.parameter else null
                             (parametersTableModel as KotlinFunctionParameterTableModel).receiver = newReceiver
                             updateSignature()
-                            updateNameEditor()
+                            notifyReceiverListeners()
                         }
                         component = checkBox
                         editor = null
@@ -207,6 +227,7 @@ class KotlinChangeSignatureDialog(
                     KotlinCallableParameterTableModel.isTypeColumn(columnInfo) -> item.typeCodeFragment
                     KotlinCallableParameterTableModel.isNameColumn(columnInfo) -> (components[column] as EditorTextField).text
                     KotlinCallableParameterTableModel.isDefaultValueColumn(columnInfo) -> item.defaultValueCodeFragment
+                    KotlinCallableParameterTableModel.isDefaultParameterColumn(columnInfo) -> item.parameter.defaultValue != null
                     else -> null
                 }
             }
@@ -310,6 +331,8 @@ class KotlinChangeSignatureDialog(
         validateButtons()
     }
 
+    override fun createSignaturePreviewComponent(): KotlinSignatureComponent = KotlinSignatureComponent(calculateSignature(), project)
+
     override fun validateAndCommitData(): String? {
         if (myMethod.canChangeReturnType() == MethodDescriptor.ReadWriteOption.ReadWrite &&
             myReturnTypeCodeFragment.getTypeInfo(isCovariant = true, forPreview = false).type == null &&
@@ -395,6 +418,9 @@ class KotlinChangeSignatureDialog(
         ?: super.getSelectedIdx()
 
     companion object {
+        private fun ParameterTableModelItemBase<KotlinParameterInfo>.isReceiverIn(model: KotlinCallableParameterTableModel): Boolean =
+            parameter == model.receiver
+
         /**
          * @return OK -> true, Cancel -> false
          */
@@ -464,10 +490,23 @@ class KotlinChangeSignatureDialog(
         ): KotlinChangeInfo {
             val parameters = parametersModel.items.map { parameter ->
                 val parameterInfo = parameter.parameter
+                if (!forPreview && parameter.isReceiverIn(parametersModel)) {
+                    parameterInfo.defaultValueAsDefaultParameter = false
+                }
 
-                parameterInfo.currentTypeInfo = parameter.typeCodeFragment.getTypeInfo(false, forPreview)
+                val kotlinTypeInfo = parameter.typeCodeFragment.getTypeInfo(false, forPreview)
+                val newKotlinType = kotlinTypeInfo.type
+                val oldKotlinType = parameterInfo.currentTypeInfo.type
+                parameterInfo.currentTypeInfo = kotlinTypeInfo
 
                 val codeFragment = parameter.defaultValueCodeFragment as KtExpressionCodeFragment
+                if (newKotlinType != oldKotlinType && codeFragment.getContentElement() != null) {
+                    codeFragment.putUserData(CodeFragmentAnalyzer.EXPECTED_TYPE_KEY, kotlinTypeInfo.type)
+                    DaemonCodeAnalyzer.getInstance(codeFragment.project).restart(codeFragment)
+                }
+
+                if (!forPreview) AddFullQualifierIntention.addQualifiersRecursively(codeFragment)
+
                 val oldDefaultValue = parameterInfo.defaultValueForCall
                 if (codeFragment.text != (if (oldDefaultValue != null) oldDefaultValue.text else "")) {
                     parameterInfo.defaultValueForCall = codeFragment.getContentElement()

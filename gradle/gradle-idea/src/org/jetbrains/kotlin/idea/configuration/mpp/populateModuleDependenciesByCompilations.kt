@@ -6,10 +6,10 @@ import org.jetbrains.kotlin.idea.configuration.utils.getKotlinModuleId
 
 
 internal fun KotlinMPPGradleProjectResolver.Companion.populateModuleDependenciesByCompilations(
-    context: PopulateModuleDependenciesContext
+    context: KotlinMppPopulateModuleDependenciesContext
 ): Unit = with(context) {
     getCompilations(gradleModule, mppModel, ideModule, resolverCtx)
-        .filterNot { (_, compilation) -> delegateToAndroidPlugin(compilation) }
+        .filterNot { (_, compilation) -> shouldDelegateToOtherPlugin(compilation) }
         .filter { (_, compilation) -> processedModuleIds.add(getKotlinModuleId(gradleModule, compilation, resolverCtx)) }
         .forEach { (dataNode, compilation) ->
             buildDependencies(

@@ -1,23 +1,20 @@
 /*
- * Copyright 2000-2017 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2000-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
 package org.jetbrains.kotlin.idea.decompiler.navigation
 
 import com.intellij.openapi.diagnostic.Logger
-import com.intellij.openapi.module.Module
+import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.DumbService
-import com.intellij.openapi.roots.OrderEntry
-import com.intellij.openapi.roots.ProjectRootManager
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.JavaPsiFacade
 import com.intellij.psi.PsiClass
+import com.intellij.psi.impl.JavaPsiImplementationHelperImpl
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.ProjectScope
 import com.intellij.psi.stubs.StringStubIndexExtension
 import com.intellij.util.containers.ContainerUtil
-import gnu.trove.THashSet
 import org.jetbrains.annotations.TestOnly
 import org.jetbrains.kotlin.asJava.finder.JavaElementFinder
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -30,14 +27,18 @@ import org.jetbrains.kotlin.idea.caches.project.getBinaryLibrariesModuleInfos
 import org.jetbrains.kotlin.idea.caches.project.getLibrarySourcesModuleInfos
 import org.jetbrains.kotlin.idea.caches.resolve.resolveToDescriptorIfAny
 import org.jetbrains.kotlin.idea.decompiler.navigation.MemberMatching.*
-import org.jetbrains.kotlin.idea.stubindex.*
+import org.jetbrains.kotlin.idea.stubindex.KotlinFullClassNameIndex
+import org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelFunctionFqnNameIndex
+import org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelPropertyFqnNameIndex
+import org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelTypeAliasFqNameIndex
 import org.jetbrains.kotlin.idea.util.ProjectRootsUtil
 import org.jetbrains.kotlin.idea.util.isExpectDeclaration
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.platform.isCommon
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.debugText.getDebugText
-import org.jetbrains.kotlin.platform.isCommon
+import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
 import org.jetbrains.kotlin.utils.addToStdlib.firstNotNullResult
 
 object SourceNavigationHelper {
@@ -97,8 +98,7 @@ object SourceNavigationHelper {
     }
 
     private fun BinaryModuleInfo.associatedCommonLibraries(): List<BinaryModuleInfo> {
-        val platform = platform
-        if (platform == null || platform.isCommon()) return emptyList()
+        if (platform.isCommon()) return emptyList()
 
         return dependencies().filterIsInstance<BinaryModuleInfo>().filter {
             it.platform.isCommon()
@@ -121,7 +121,7 @@ object SourceNavigationHelper {
 
         // enum entries
         if (containingClass.hasModifier(KtTokens.ENUM_KEYWORD)) {
-            for (enumEntry in ContainerUtil.findAll<KtDeclaration, KtEnumEntry>(containingClass.declarations, KtEnumEntry::class.java)) {
+            for (enumEntry in ContainerUtil.findAll(containingClass.declarations, KtEnumEntry::class.java)) {
                 if (memberName == enumEntry.nameAsName) {
                     return enumEntry
                 }
@@ -165,12 +165,10 @@ object SourceNavigationHelper {
                     }
                 }
             }
-            else -> throw IllegalStateException(
-                "Unexpected container of " +
-                        (if (navigationKind == NavigationKind.CLASS_FILES_TO_SOURCES) "decompiled" else "source") +
-                        " declaration: " +
-                        decompiledContainer::class.java.simpleName
-            )
+            else -> throw KotlinExceptionWithAttachments("Unexpected container of ${if (navigationKind == NavigationKind.CLASS_FILES_TO_SOURCES) "decompiled" else "source"} declaration: ${decompiledContainer::class.java.simpleName}")
+                .withAttachment("declaration", declaration.text)
+                .withAttachment("container", decompiledContainer.text)
+                .withAttachment("file", declaration.containingFile.text)
         }
 
         if (candidates.isEmpty()) {
@@ -178,6 +176,8 @@ object SourceNavigationHelper {
         }
 
         if (!forceResolve) {
+            ProgressManager.checkCanceled()
+
             candidates = candidates.filter { sameReceiverPresenceAndParametersCount(it, declaration) }
 
             if (candidates.size <= 1) {
@@ -185,6 +185,8 @@ object SourceNavigationHelper {
             }
 
             if (!haveRenamesInImports(candidates.getContainingFiles())) {
+                ProgressManager.checkCanceled()
+
                 candidates = candidates.filter { receiverAndParametersShortTypesMatch(it, declaration) }
 
 
@@ -195,6 +197,8 @@ object SourceNavigationHelper {
         }
 
         for (candidate in candidates) {
+            ProgressManager.checkCanceled()
+
             val candidateDescriptor = candidate.resolveToDescriptorIfAny() as? CallableDescriptor ?: continue
             if (receiversMatch(declaration, candidateDescriptor)
                 && valueParametersTypesMatch(declaration, candidateDescriptor)
@@ -214,6 +218,7 @@ object SourceNavigationHelper {
     ): T? {
         val classFqName = entity.fqName ?: return null
         return targetScopes(entity, navigationKind).firstNotNullResult { scope ->
+            ProgressManager.checkCanceled()
             index.get(classFqName.asString(), entity.project, scope).minByOrNull { it.isExpectDeclaration() }
         }
     }
@@ -235,6 +240,7 @@ object SourceNavigationHelper {
         }
 
         return scopes.flatMap { scope ->
+            ProgressManager.checkCanceled()
             index.get(declaration.fqName!!.asString(), declaration.project, scope).sortedBy { it.isExpectDeclaration() }
         }
     }
@@ -248,38 +254,12 @@ object SourceNavigationHelper {
     }
 
     fun getOriginalClass(classOrObject: KtClassOrObject): PsiClass? {
-        // Copied from JavaPsiImplementationHelperImpl:getOriginalClass()
         val fqName = classOrObject.fqName ?: return null
+        val project = classOrObject.project
 
-        val file = classOrObject.containingKtFile
-
-        val vFile = file.virtualFile
-        val project = file.project
-
-        val idx = ProjectRootManager.getInstance(project).fileIndex
-
-        if (vFile == null || !idx.isInLibrarySource(vFile)) return null
-        val orderEntries = THashSet<OrderEntry>(idx.getOrderEntriesForFile(vFile))
-
-        return JavaPsiFacade.getInstance(project).findClass(fqName.asString(), object : GlobalSearchScope(project) {
-            override fun compare(file1: VirtualFile, file2: VirtualFile): Int {
-                return 0
-            }
-
-            override fun contains(file: VirtualFile): Boolean {
-                if (file == vFile) return false
-                val entries = idx.getOrderEntriesForFile(file)
-                return entries.any { orderEntries.contains(it) }
-            }
-
-            override fun isSearchInModuleContent(aModule: Module): Boolean {
-                return false
-            }
-
-            override fun isSearchInLibraries(): Boolean {
-                return true
-            }
-        })
+        return JavaPsiImplementationHelperImpl.findCompiledElement(project, classOrObject) { scope ->
+            listOfNotNull(JavaPsiFacade.getInstance(project).findClass(fqName.asString(), scope))
+        } as? PsiClass
     }
 
     fun getNavigationElement(declaration: KtDeclaration) = navigateToDeclaration(declaration, NavigationKind.CLASS_FILES_TO_SOURCES)

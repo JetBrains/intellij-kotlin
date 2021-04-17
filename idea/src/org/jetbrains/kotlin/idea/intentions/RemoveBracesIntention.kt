@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -51,6 +51,7 @@ class RemoveBracesIntention : SelfTargetingIntention<KtElement>(KtElement::class
             if (singleStatement is KtLambdaExpression && singleStatement.functionLiteral.arrow == null) return false
             when (val container = block.parent) {
                 is KtContainerNode -> {
+                    if (singleStatement is KtProperty) return false
                     if (singleStatement is KtIfExpression) {
                         val elseExpression = (container.parent as? KtIfExpression)?.`else`
                         if (elseExpression != null && elseExpression != block) return false

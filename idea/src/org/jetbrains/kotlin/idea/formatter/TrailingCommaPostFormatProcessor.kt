@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -11,10 +11,10 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
-import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.codeStyle.CodeStyleSettings
 import com.intellij.psi.impl.source.codeStyle.PostFormatProcessor
 import com.intellij.psi.impl.source.codeStyle.PostFormatProcessorHelper
+import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.idea.formatter.trailingComma.TrailingCommaContext
 import org.jetbrains.kotlin.idea.formatter.trailingComma.TrailingCommaHelper.findInvalidCommas
 import org.jetbrains.kotlin.idea.formatter.trailingComma.TrailingCommaHelper.lineBreakIsMissing
@@ -23,17 +23,24 @@ import org.jetbrains.kotlin.idea.formatter.trailingComma.TrailingCommaState
 import org.jetbrains.kotlin.idea.formatter.trailingComma.addTrailingCommaIsAllowedFor
 import org.jetbrains.kotlin.idea.util.leafIgnoringWhitespace
 import org.jetbrains.kotlin.idea.util.leafIgnoringWhitespaceAndComments
+import org.jetbrains.kotlin.idea.util.reformatted
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.psi.psiUtil.createSmartPointer
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 class TrailingCommaPostFormatProcessor : PostFormatProcessor {
-    override fun processElement(source: PsiElement, settings: CodeStyleSettings): PsiElement =
-        TrailingCommaPostFormatVisitor(settings).process(source)
+    override fun processElement(source: PsiElement, settings: CodeStyleSettings): PsiElement {
+        if (source.language != KotlinLanguage.INSTANCE) return source
 
-    override fun processText(source: PsiFile, rangeToReformat: TextRange, settings: CodeStyleSettings): TextRange =
-        TrailingCommaPostFormatVisitor(settings).processText(source, rangeToReformat)
+        return TrailingCommaPostFormatVisitor(settings).process(source)
+    }
+
+    override fun processText(source: PsiFile, rangeToReformat: TextRange, settings: CodeStyleSettings): TextRange {
+        if (source.language != KotlinLanguage.INSTANCE) return rangeToReformat
+
+        return TrailingCommaPostFormatVisitor(settings).processText(source, rangeToReformat)
+    }
 }
 
 private class TrailingCommaPostFormatVisitor(private val settings: CodeStyleSettings) : TrailingCommaVisitor() {
@@ -87,7 +94,7 @@ private class TrailingCommaPostFormatVisitor(private val settings: CodeStyleSett
         val oldLength = element.parent.textLength
         if (!updater()) return
 
-        val resultElement = CodeStyleManager.getInstance(element.project).reformat(element, true)
+        val resultElement = element.reformatted(true)
         myPostProcessor.updateResultRange(oldLength, resultElement.parent.textLength)
     }
 

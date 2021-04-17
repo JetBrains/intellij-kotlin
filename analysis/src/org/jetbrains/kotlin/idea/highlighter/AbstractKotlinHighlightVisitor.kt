@@ -5,6 +5,7 @@ import com.intellij.codeInsight.daemon.impl.HighlightInfo
 import com.intellij.codeInsight.daemon.impl.HighlightVisitor
 import com.intellij.codeInsight.daemon.impl.analysis.HighlightInfoHolder
 import com.intellij.codeInsight.intention.IntentionAction
+import com.intellij.openapi.diagnostic.ControlFlowException
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.TextRange
@@ -34,7 +35,7 @@ import org.jetbrains.kotlin.resolve.diagnostics.Diagnostics
 import org.jetbrains.kotlin.types.KotlinType
 import java.lang.reflect.*
 import java.util.*
-import kotlin.collections.ArrayList
+import java.util.concurrent.TimeUnit
 
 abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
     private var afterAnalysisVisitor: Array<AfterAnalysisHighlightingVisitor>? = null
@@ -52,7 +53,20 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
             analyze(file, holder)
 
             action.run()
-        } finally {
+        } catch (e: Throwable) {
+            if (e is ControlFlowException) throw e
+
+            val timestamp = System.currentTimeMillis()
+            // daemon is restarted when exception is thrown
+            // if there is a recurred error (e.g. within a resolve) it could lead to infinite highlighting loop
+            // so, do not rethrow exception too often to disable HL for a while (1 minute)
+            if (timestamp - lastThrownExceptionTimestamp > TimeUnit.MINUTES.toMillis(1)) {
+                lastThrownExceptionTimestamp = timestamp
+                throw e
+            } else {
+                LOG.warn(e)
+            }
+        }  finally {
           afterAnalysisVisitor = null
         }
 
@@ -106,6 +120,7 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
         afterAnalysisVisitor = getAfterAnalysisVisitor(holder, bindingContext)
 
         cleanUpCalculatingAnnotations(highlightInfoByTextRange)
+        if (!KotlinHighlightingUtil.shouldHighlightErrors(file)) return
 
         annotateDuplicateJvmSignature(file, holder, bindingContext.diagnostics)
 
@@ -117,12 +132,12 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
             if (diagnostic in highlightInfoByDiagnostic) continue
 
             // annotate diagnostics those were not possible to report (and therefore render) on-the-fly
-            annotateDiagnostic(file, psiElement, holder, diagnostic, highlightInfoByDiagnostic, calculatingInProgress = false)
+            annotateDiagnostic(psiElement, holder, diagnostic, highlightInfoByDiagnostic, calculatingInProgress = false)
         }
 
         // apply quick fixes for all diagnostics grouping by element
         highlightInfoByDiagnostic.keys.groupBy { it.psiElement }.forEach {
-            annotateQuickFixes(file, it.key, it.value, highlightInfoByDiagnostic)
+            annotateQuickFixes(it.key, it.value, highlightInfoByDiagnostic)
         }
     }
 
@@ -135,14 +150,21 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
     }
 
     private fun annotateDiagnostic(
-        file: KtFile,
         element: PsiElement,
         holder: HighlightInfoHolder,
         diagnostic: Diagnostic,
         highlightInfoByDiagnostic: MutableMap<Diagnostic, HighlightInfo>? = null,
         highlightInfoByTextRange: MutableMap<TextRange, HighlightInfo>? = null,
         calculatingInProgress: Boolean = true
-    ) = annotateDiagnostics(file, element, holder, listOf(diagnostic), highlightInfoByDiagnostic, highlightInfoByTextRange, true, calculatingInProgress)
+    ) = annotateDiagnostics(
+        element,
+        holder,
+        listOf(diagnostic),
+        highlightInfoByDiagnostic,
+        highlightInfoByTextRange,
+        true,
+        calculatingInProgress
+    )
 
     private fun cleanUpCalculatingAnnotations(highlightInfoByTextRange: Map<TextRange, HighlightInfo>) {
         highlightInfoByTextRange.values.forEach { annotation ->
@@ -153,7 +175,6 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
     }
 
     private fun annotateDiagnostics(
-        file: KtFile,
         element: PsiElement,
         holder: HighlightInfoHolder,
         diagnostics: List<Diagnostic>,
@@ -162,16 +183,15 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
         noFixes: Boolean = false,
         calculatingInProgress: Boolean = false
     ) = annotateDiagnostics(
-        file, element, holder, diagnostics, highlightInfoByDiagnostic, highlightInfoByTextRange,
-        ::shouldSuppressUnusedParameter,
-        noFixes = noFixes, calculatingInProgress = calculatingInProgress
+        element, holder, diagnostics, highlightInfoByDiagnostic, highlightInfoByTextRange, ::shouldSuppressUnusedParameter,
+        noFixes = noFixes,
+        calculatingInProgress = calculatingInProgress
     )
 
     /**
      * [diagnostics] has to belong to the same element
      */
     private fun annotateQuickFixes(
-        file: KtFile,
         element: PsiElement,
         diagnostics: List<Diagnostic>,
         highlightInfoByDiagnostic: MutableMap<Diagnostic, HighlightInfo>
@@ -180,16 +200,9 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
 
         assertBelongsToTheSameElement(element, diagnostics)
 
-        val shouldHighlightErrors =
-            KotlinHighlightingUtil.shouldHighlightErrors(
-                if (element.isPhysical) file else element
-            )
-
-        if (shouldHighlightErrors) {
-            ElementAnnotator(element) { param ->
-                shouldSuppressUnusedParameter(param)
-            }.registerDiagnosticsQuickFixes(diagnostics, highlightInfoByDiagnostic)
-        }
+        ElementAnnotator(element) { param ->
+            shouldSuppressUnusedParameter(param)
+        }.registerDiagnosticsQuickFixes(diagnostics, highlightInfoByDiagnostic)
     }
 
     protected open fun shouldSuppressUnusedParameter(parameter: KtParameter): Boolean = false
@@ -216,11 +229,16 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
 
             val diagnosticsForElement = diagnostics.forElement(element).toSet()
 
-            annotateDiagnostics(file, element, holder, diagnosticsForElement)
+            annotateDiagnostics(element, holder, diagnosticsForElement)
         }
     }
 
     companion object {
+        private val LOG = Logger.getInstance(AbstractKotlinHighlightVisitor::class.java)
+
+        @Volatile
+        private var lastThrownExceptionTimestamp: Long = 0
+
         private val UNRESOLVED_KEY = Key<Unit>("KotlinHighlightVisitor.UNRESOLVED_KEY")
 
         fun getAfterAnalysisVisitor(holder: HighlightInfoHolder, bindingContext: BindingContext) = arrayOf(
@@ -240,7 +258,6 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
         }
 
         fun annotateDiagnostics(
-            file: KtFile,
             element: PsiElement,
             holder: HighlightInfoHolder,
             diagnostics: Collection<Diagnostic>,
@@ -259,23 +276,14 @@ abstract class AbstractKotlinHighlightVisitor: HighlightVisitor {
                 element.putUserData(UNRESOLVED_KEY, if (unresolved) Unit else null)
             }
 
-            val shouldHighlightErrors =
-                KotlinHighlightingUtil.shouldHighlightErrors(
-                    if (element.isPhysical) file else element
-                )
-
-            if (shouldHighlightErrors) {
-                val elementAnnotator = ElementAnnotator(element) { param ->
-                    shouldSuppressUnusedParameter(param)
-                }
-                elementAnnotator.registerDiagnosticsAnnotations(
-                    holder, diagnostics, highlightInfoByDiagnostic,
-                    highlightInfoByTextRange,
-                    noFixes = noFixes, calculatingInProgress = calculatingInProgress
-                )
-            }
+            ElementAnnotator(element) { param ->
+                shouldSuppressUnusedParameter(param)
+            }.registerDiagnosticsAnnotations(
+                holder, diagnostics, highlightInfoByDiagnostic,
+                highlightInfoByTextRange,
+                noFixes = noFixes, calculatingInProgress = calculatingInProgress
+            )
         }
-
     }
 }
 

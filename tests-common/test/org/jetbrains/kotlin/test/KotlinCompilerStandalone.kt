@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2015 JetBrains s.r.o.
+ * Copyright 2010-2021 JetBrains s.r.o.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,8 @@ class KotlinCompilerStandalone @JvmOverloads constructor(
     private val options: List<String> = emptyList(),
     classpath: List<File> = emptyList(),
     includeKotlinStdlib: Boolean = true,
-    private val compileKotlinSourcesBeforeJava: Boolean = true
+    private val compileKotlinSourcesBeforeJava: Boolean = true,
+    private val jarWithSources: Boolean = false,
 ) {
     sealed class Platform {
         class JavaScript(val moduleName: String, val packageName: String) : Platform() {
@@ -63,6 +64,37 @@ class KotlinCompilerStandalone @JvmOverloads constructor(
                 // TODO: [VD][to be fixed by Yan] as it affects test runs - jar is deleted while file reference is in use
                 //.also { it.deleteOnExit() }
                 .canonicalFile
+        }
+
+        fun copyToJar(sources: List<File>, prefix: String): File {
+            with(File.createTempFile(prefix, ".jar").canonicalFile) {
+                copyToJar(sources, this)
+                return this
+            }
+        }
+
+        fun copyToJar(sources: List<File>, target: File) {
+            target.outputStream().buffered().use { os ->
+                ZipOutputStream(os).use { zos ->
+                    for (source in sources) {
+                        for (file in source.walk()) {
+                            if (file.isFile) {
+                                val path = FileUtil.toSystemIndependentName(file.toRelativeString(source))
+                                zos.putNextEntry(ZipEntry(path))
+                                zos.write(file.readBytes())
+                                zos.closeEntry()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        fun copyToDirectory(sources: List<File>, target: File) {
+            target.mkdirs()
+            assert(target.isDirectory) { "Can't create target directory" }
+            assert(target.listFiles().orEmpty().isEmpty()) { "Target directory is not empty" }
+            sources.forEach { it.copyRecursively(target) }
         }
     }
 
@@ -119,6 +151,14 @@ class KotlinCompilerStandalone @JvmOverloads constructor(
         fun compileKotlin() {
             if (ktFiles.isNotEmpty()) {
                 val targetForKotlin = KotlinTestUtils.tmpDirForReusableFolder("compile-kt")
+                if (jarWithSources) {
+                    // simple implementation
+                    val src = File(targetForKotlin, "src")
+                    for (file in ktFiles) {
+                        file.copyTo(File(src, file.name))
+                    }
+                }
+
                 when (platform) {
                     is Jvm -> compileKotlin(ktFiles, javaFiles.isNotEmpty(), targetForKotlin)
                     is JavaScript -> {
@@ -198,29 +238,6 @@ class KotlinCompilerStandalone @JvmOverloads constructor(
         assert(compileFun(files, args)) { "Java files are not compiled successfully" }
     }
 
-    private fun copyToJar(sources: List<File>, target: File) {
-        target.outputStream().buffered().use { os ->
-            ZipOutputStream(os).use { zos ->
-                for (source in sources) {
-                    for (file in source.walk()) {
-                        if (file.isFile) {
-                            val path = FileUtil.toSystemIndependentName(file.toRelativeString(source))
-                            zos.putNextEntry(ZipEntry(path))
-                            zos.write(file.readBytes())
-                            zos.closeEntry()
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun copyToDirectory(sources: List<File>, target: File) {
-        target.mkdirs()
-        assert(target.isDirectory) { "Can't create target directory" }
-        assert(target.listFiles().orEmpty().isEmpty()) { "Target directory is not empty" }
-        sources.forEach { it.copyRecursively(target) }
-    }
 }
 
 object KotlinCliCompilerFacade {

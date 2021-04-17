@@ -6,8 +6,6 @@
 package org.jetbrains.kotlin.idea.configuration
 
 import com.intellij.build.events.MessageEvent
-import com.intellij.ide.plugins.PluginManagerCore
-import com.intellij.openapi.extensions.PluginId
 import com.intellij.openapi.externalSystem.model.DataNode
 import com.intellij.openapi.externalSystem.model.ProjectKeys
 import com.intellij.openapi.externalSystem.model.project.*
@@ -39,7 +37,7 @@ import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.gradle.*
 import org.jetbrains.kotlin.idea.PlatformVersion
 import org.jetbrains.kotlin.idea.configuration.GradlePropertiesFileFacade.Companion.KOTLIN_NOT_IMPORTED_COMMON_SOURCE_SETS_SETTING
-import org.jetbrains.kotlin.idea.configuration.mpp.createPopulateModuleDependenciesContext
+import org.jetbrains.kotlin.idea.configuration.mpp.createKotlinMppPopulateModuleDependenciesContext
 import org.jetbrains.kotlin.idea.configuration.mpp.getCompilations
 import org.jetbrains.kotlin.idea.configuration.mpp.populateModuleDependenciesByCompilations
 import org.jetbrains.kotlin.idea.configuration.mpp.populateModuleDependenciesBySourceSetVisibilityGraph
@@ -79,10 +77,15 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
 
     override fun getExtraProjectModelClasses(): Set<Class<out Any>> = setOf(KotlinMPPGradleModel::class.java)
 
-    override fun getExtraCommandLineArgs(): List<String> = if (!androidPluginPresent)
-        listOf("-Pkotlin.include.android.dependencies=true")
-    else
-        emptyList()
+    override fun getExtraCommandLineArgs(): List<String> =
+        /**
+         * The Kotlin Gradle plugin might want to use this intransitive metadata configuration to tell the IDE, that specific
+         * dependencies shall not be passed on to dependsOn source sets. (e.g. some commonized libraries).
+         * By default, the Gradle plugin does not use this configuration and instead places the dependencies into a previously
+         * supported configuration.
+         * This will tell the Gradle plugin that this version of the IDE plugin does support importing this special configuraiton.
+         */
+        listOf("-Pkotlin.mpp.enableIntransitiveMetadataConfiguration=true")
 
     override fun populateModuleExtraModels(gradleModule: IdeaModule, ideModule: DataNode<ModuleData>) {
         if (ExternalSystemApiUtil.find(ideModule, BuildScriptClasspathData.KEY) == null) {
@@ -122,7 +125,7 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
         val moduleOutputsMap = projectDataNode.getUserData(MODULES_OUTPUTS)!!
         val outputDirs = HashSet<String>()
         getCompilations(gradleModule, mppModel, ideModule, resolverCtx)
-            .filterNot { (_, compilation) -> delegateToAndroidPlugin(compilation) }
+            .filterNot { (_, compilation) -> shouldDelegateToOtherPlugin(compilation) }
             .forEach { (dataNode, compilation) ->
                 var gradleOutputMap = dataNode.getUserData(GradleProjectResolver.GRADLE_OUTPUTS)
                 if (gradleOutputMap == null) {
@@ -205,7 +208,6 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
                 by NotNullableCopyableDataNodeUserDataProperty(Key.create<Boolean>("IS_MPP_DATA_INITIALIZED"), false)
 
         private var nativeDebugAdvertised = false
-        private val androidPluginPresent = PluginManagerCore.getPlugin(PluginId.findId("org.jetbrains.android"))?.isEnabled ?: false
 
         private fun ExternalDependency.getDependencyArtifacts(): Collection<File> =
             when (this) {
@@ -323,7 +325,7 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
 
             val sourceSetToCompilationData = LinkedHashMap<String, MutableSet<GradleSourceSetData>>()
             for (target in mppModel.targets) {
-                if (delegateToAndroidPlugin(target)) continue
+                if (shouldDelegateToOtherPlugin(target)) continue
                 if (target.name == KotlinTarget.METADATA_TARGET_NAME) continue
                 val targetData = KotlinTargetData(target.name).also {
                     it.archiveFile = target.jar?.archiveFile
@@ -407,7 +409,7 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
 
             val ignoreCommonSourceSets by lazy { externalProject.notImportedCommonSourceSets() }
             for (sourceSet in mppModel.sourceSetsByName.values) {
-                if (delegateToAndroidPlugin(sourceSet)) continue
+                if (shouldDelegateToOtherPlugin(sourceSet)) continue
                 if (sourceSet.actualPlatforms.platforms.singleOrNull() == KotlinPlatform.COMMON && ignoreCommonSourceSets) continue
                 val moduleId = getKotlinModuleId(gradleModule, sourceSet, resolverCtx)
                 val existingSourceSetDataNode = sourceSetMap[moduleId]?.first
@@ -534,7 +536,7 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
                 .toMap()
             if (resolverCtx.getExtraProject(gradleModule, ExternalProject::class.java) == null) return
             processSourceSets(gradleModule, mppModel, ideModule, resolverCtx) { dataNode, sourceSet ->
-                if (dataNode == null || delegateToAndroidPlugin(sourceSet)) return@processSourceSets
+                if (dataNode == null || shouldDelegateToOtherPlugin(sourceSet)) return@processSourceSets
 
                 createContentRootData(
                     sourceSet.sourceDirs,
@@ -591,7 +593,7 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
             ideModule: DataNode<ModuleData>,
             resolverCtx: ProjectResolverContext
         ) {
-            val context = createPopulateModuleDependenciesContext(
+            val context = createKotlinMppPopulateModuleDependenciesContext(
                 gradleModule = gradleModule,
                 ideProject = ideProject,
                 ideModule = ideModule,
@@ -866,14 +868,14 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
                 ignoreCase = true
             ) ?: false
 
-        internal fun delegateToAndroidPlugin(compilation: KotlinCompilation): Boolean =
-            androidPluginPresent && compilation.platform == KotlinPlatform.ANDROID
+        internal fun shouldDelegateToOtherPlugin(compilation: KotlinCompilation): Boolean =
+            compilation.platform == KotlinPlatform.ANDROID
 
-        internal fun delegateToAndroidPlugin(kotlinTarget: KotlinTarget): Boolean =
-            androidPluginPresent && kotlinTarget.platform == KotlinPlatform.ANDROID
+        internal fun shouldDelegateToOtherPlugin(kotlinTarget: KotlinTarget): Boolean =
+            kotlinTarget.platform == KotlinPlatform.ANDROID
 
-        internal fun delegateToAndroidPlugin(kotlinSourceSet: KotlinSourceSet): Boolean =
-            androidPluginPresent && kotlinSourceSet.actualPlatforms.platforms.singleOrNull() == KotlinPlatform.ANDROID
+        internal fun shouldDelegateToOtherPlugin(kotlinSourceSet: KotlinSourceSet): Boolean =
+            kotlinSourceSet.actualPlatforms.platforms.singleOrNull() == KotlinPlatform.ANDROID
     }
 }
 

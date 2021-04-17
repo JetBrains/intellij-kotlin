@@ -28,19 +28,17 @@ import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.idea.codeInsight.DescriptorToSourceUtilsIde
 import org.jetbrains.kotlin.idea.core.util.CodeInsightUtils
+import org.jetbrains.kotlin.idea.intentions.isInvokeOperator
 import org.jetbrains.kotlin.idea.util.expectedDescriptor
 import org.jetbrains.kotlin.load.java.descriptors.JavaCallableMemberDescriptor
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
 
 class KotlinChangeSignatureHandler : ChangeSignatureHandler {
-
-    override fun findTargetMember(file: PsiFile, editor: Editor) =
-        file.findElementAt(editor.caretModel.offset)?.let { findTargetMember(it) }
-
     override fun findTargetMember(element: PsiElement) = findTargetForRefactoring(element)
 
     override fun invoke(project: Project, editor: Editor, file: PsiFile, dataContext: DataContext) {
@@ -71,21 +69,17 @@ class KotlinChangeSignatureHandler : ChangeSignatureHandler {
     companion object {
         fun findTargetForRefactoring(element: PsiElement): PsiElement? {
             val elementParent = element.parent
-
-            if ((elementParent is KtNamedFunction || elementParent is KtClass || elementParent is KtProperty)
-                && (elementParent as KtNamedDeclaration).nameIdentifier === element
+            if ((elementParent is KtNamedFunction || elementParent is KtClass || elementParent is KtProperty) &&
+                (elementParent as KtNamedDeclaration).nameIdentifier === element
             ) return elementParent
 
             if (elementParent is KtParameter &&
                 elementParent.hasValOrVar() &&
                 elementParent.parentOfType<KtPrimaryConstructor>()?.valueParameterList === elementParent.parent
-            ) {
-                return elementParent
-            }
+            ) return elementParent
 
             if (elementParent is KtProperty && elementParent.valOrVarKeyword === element) return elementParent
-            if (elementParent is KtPrimaryConstructor && elementParent.getConstructorKeyword() === element) return elementParent
-            if (elementParent is KtSecondaryConstructor && elementParent.getConstructorKeyword() === element) return elementParent
+            if (elementParent is KtConstructor<*> && elementParent.getConstructorKeyword() === element) return elementParent
 
             element.parentOfType<KtParameterList>()?.let { parameterList ->
                 return PsiTreeUtil.getParentOfType(parameterList, KtFunction::class.java, KtProperty::class.java, KtClass::class.java)
@@ -108,11 +102,11 @@ class KotlinChangeSignatureHandler : ChangeSignatureHandler {
             } ?: element.parentOfType<KtSimpleNameExpression>()
 
             if (calleeExpr is KtSimpleNameExpression || calleeExpr is KtConstructorDelegationReferenceExpression) {
-                val jetElement = element.parentOfType<KtElement>() ?: return null
+                val bindingContext = element.parentOfType<KtElement>()?.analyze(BodyResolveMode.FULL) ?: return null
 
-                val bindingContext = jetElement.analyze(BodyResolveMode.FULL)
+                if (call?.getResolvedCall(bindingContext)?.resultingDescriptor?.isInvokeOperator == true) return call
+
                 val descriptor = bindingContext[BindingContext.REFERENCE_TARGET, calleeExpr as KtReferenceExpression]
-
                 if (descriptor is ClassDescriptor || descriptor is CallableDescriptor) return calleeExpr
             }
 
@@ -173,6 +167,7 @@ class KotlinChangeSignatureHandler : ChangeSignatureHandler {
             val descriptor = when {
                 element is KtParameter && element.hasValOrVar() -> bindingContext[BindingContext.PRIMARY_CONSTRUCTOR_PARAMETER, element]
                 element is KtReferenceExpression -> bindingContext[BindingContext.REFERENCE_TARGET, element]
+                element is KtCallExpression -> element.getResolvedCall(bindingContext)?.resultingDescriptor
                 else -> bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, element]
             }
 
@@ -188,6 +183,7 @@ class KotlinChangeSignatureHandler : ChangeSignatureHandler {
             }
 
             return when (descriptor) {
+                is PropertyDescriptor -> descriptor
                 is FunctionDescriptor -> {
                     if (descriptor.valueParameters.any { it.varargElementType != null }) {
                         val message = KotlinBundle.message("error.cant.refactor.vararg.functions")
@@ -215,8 +211,6 @@ class KotlinChangeSignatureHandler : ChangeSignatureHandler {
 
                     descriptor
                 }
-
-                is PropertyDescriptor, is ValueParameterDescriptor -> descriptor as CallableDescriptor
 
                 else -> {
                     val message = RefactoringBundle.getCannotRefactorMessage(

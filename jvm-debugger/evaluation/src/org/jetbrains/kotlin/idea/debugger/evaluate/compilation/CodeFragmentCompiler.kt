@@ -5,6 +5,7 @@
 
 package org.jetbrains.kotlin.idea.debugger.evaluate.compilation
 
+import com.intellij.openapi.application.ReadAction
 import org.jetbrains.kotlin.backend.common.output.OutputFile
 import org.jetbrains.kotlin.codegen.*
 import org.jetbrains.kotlin.codegen.CodeFragmentCodegen.Companion.getSharedTypeIfApplicable
@@ -24,7 +25,6 @@ import org.jetbrains.kotlin.idea.debugger.evaluate.classLoading.GENERATED_FUNCTI
 import org.jetbrains.kotlin.idea.debugger.evaluate.compilation.CompiledDataDescriptor.MethodSignature
 import org.jetbrains.kotlin.idea.debugger.evaluate.getResolutionFacadeForCodeFragment
 import org.jetbrains.kotlin.idea.project.languageVersionSettings
-import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.incremental.components.LookupLocation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -59,7 +59,12 @@ class CodeFragmentCompiler(private val executionContext: ExecutionContext, priva
         codeFragment: KtCodeFragment, filesToCompile: List<KtFile>,
         bindingContext: BindingContext, moduleDescriptor: ModuleDescriptor
     ): CompilationResult {
-        return runReadAction { doCompile(codeFragment, filesToCompile, bindingContext, moduleDescriptor) }
+        val result = ReadAction.nonBlocking<Result<CompilationResult>> {
+            runCatching {
+                doCompile(codeFragment, filesToCompile, bindingContext, moduleDescriptor)
+            }
+        }.executeSynchronously()
+        return result.getOrThrow()
     }
 
     private fun doCompile(
@@ -75,7 +80,7 @@ class CodeFragmentCompiler(private val executionContext: ExecutionContext, priva
 
         @OptIn(FrontendInternals::class)
         val resolveSession = resolutionFacade.getFrontendService(ResolveSession::class.java)
-        val moduleDescriptorWrapper = EvaluatorModuleDescriptor(codeFragment, moduleDescriptor, resolveSession)
+        val moduleDescriptorWrapper = EvaluatorModuleDescriptor(codeFragment, moduleDescriptor, filesToCompile, resolveSession)
 
         val defaultReturnType = moduleDescriptor.builtIns.unitType
         val returnType = getReturnType(codeFragment, bindingContext, defaultReturnType)
@@ -100,7 +105,8 @@ class CodeFragmentCompiler(private val executionContext: ExecutionContext, priva
         try {
             KotlinCodegenFacade.compileCorrectFiles(generationState)
 
-            val classes = generationState.factory.asList().filterClassFiles()
+            val classes = generationState.factory.asList()
+                .filterCodeFragmentClassFiles()
                 .map { ClassToLoad(it.internalClassName, it.relativePath, it.asByteArray()) }
 
             val methodSignature = getMethodSignature(methodDescriptor, parameterInfo, generationState)
@@ -116,11 +122,18 @@ class CodeFragmentCompiler(private val executionContext: ExecutionContext, priva
         }
     }
 
+    private fun List<OutputFile>.filterCodeFragmentClassFiles(): List<OutputFile> {
+        return filter { classFile ->
+            val path = classFile.relativePath
+            path == "$GENERATED_CLASS_NAME.class" || (path.startsWith("$GENERATED_CLASS_NAME\$") && path.endsWith(".class"))
+        }
+    }
+
     private class GeneratedClassFilterForCodeFragment(private val codeFragment: KtCodeFragment) : GenerationState.GenerateClassFilter() {
         override fun shouldGeneratePackagePart(@Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE") file: KtFile) = file == codeFragment
         override fun shouldAnnotateClass(processingClassOrObject: KtClassOrObject) = true
         override fun shouldGenerateClass(processingClassOrObject: KtClassOrObject) = processingClassOrObject.containingFile == codeFragment
-        override fun shouldGenerateCodeFragment(codeFragment: KtCodeFragment) = codeFragment == this.codeFragment
+        override fun shouldGenerateCodeFragment(script: KtCodeFragment) = script == this.codeFragment
         override fun shouldGenerateScript(script: KtScript) = false
     }
 
@@ -255,11 +268,15 @@ private class EvaluatorMemberScopeForMethod(private val methodDescriptor: Simple
 private class EvaluatorModuleDescriptor(
     val codeFragment: KtCodeFragment,
     val moduleDescriptor: ModuleDescriptor,
+    filesToCompile: List<KtFile>,
     resolveSession: ResolveSession
 ) : ModuleDescriptor by moduleDescriptor {
     private val declarationProvider = object : PackageMemberDeclarationProvider {
-        override fun getPackageFiles() = listOf(codeFragment)
-        override fun containsFile(file: KtFile) = file == codeFragment
+        private val rootPackageFiles =
+            filesToCompile.filter { it.packageFqName == FqName.ROOT } + codeFragment
+
+        override fun getPackageFiles() = rootPackageFiles
+        override fun containsFile(file: KtFile) = file in rootPackageFiles
 
         override fun getDeclarationNames() = emptySet<Name>()
         override fun getDeclarations(kindFilter: DescriptorKindFilter, nameFilter: (Name) -> Boolean) = emptyList<KtDeclaration>()
@@ -273,17 +290,13 @@ private class EvaluatorModuleDescriptor(
     }
 
     val packageFragmentForEvaluator = LazyPackageDescriptor(this, FqName.ROOT, resolveSession, declarationProvider)
+    val rootPackageDescriptorWrapper: PackageViewDescriptor =
+        object : DeclarationDescriptorImpl(Annotations.EMPTY, FqName.ROOT.shortNameOrSpecial()), PackageViewDescriptor {
+            private val rootPackageDescriptor = moduleDescriptor.getPackage(FqName.ROOT)
 
-    override fun getPackage(fqName: FqName): PackageViewDescriptor {
-        val originalPackageDescriptor = moduleDescriptor.getPackage(fqName)
-        if (fqName != FqName.ROOT) {
-            return originalPackageDescriptor
-        }
+            override fun getContainingDeclaration() = rootPackageDescriptor.containingDeclaration
 
-        return object : DeclarationDescriptorImpl(Annotations.EMPTY, fqName.shortNameOrSpecial()), PackageViewDescriptor {
-            override fun getContainingDeclaration() = originalPackageDescriptor.containingDeclaration
-
-            override val fqName get() = originalPackageDescriptor.fqName
+            override val fqName get() = rootPackageDescriptor.fqName
             override val module get() = this@EvaluatorModuleDescriptor
 
             override val memberScope by lazy {
@@ -295,12 +308,18 @@ private class EvaluatorModuleDescriptor(
                 }
             }
 
-            override val fragments by lazy { originalPackageDescriptor.fragments + packageFragmentForEvaluator }
+            override val fragments = listOf(packageFragmentForEvaluator)
 
             override fun <R, D> accept(visitor: DeclarationDescriptorVisitor<R, D>, data: D): R {
                 return visitor.visitPackageViewDescriptor(this, data)
             }
         }
+
+    override fun getPackage(fqName: FqName): PackageViewDescriptor {
+        if (fqName != FqName.ROOT) {
+            return moduleDescriptor.getPackage(fqName)
+        }
+        return rootPackageDescriptorWrapper
     }
 }
 

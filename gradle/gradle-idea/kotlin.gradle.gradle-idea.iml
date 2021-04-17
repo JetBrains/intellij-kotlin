@@ -43,12 +43,12 @@
     <orderEntry type="module" module-name="kotlin.jps-common" />
     <orderEntry type="module" module-name="kotlin.jvm" />
     <orderEntry type="module" module-name="kotlin.idea" />
+    <orderEntry type="module" module-name="kotlin.idea.tests" scope="TEST" />
     <orderEntry type="module" module-name="kotlin.formatter" />
     <orderEntry type="module" module-name="kotlin.gradle.gradle-tooling" />
     <orderEntry type="module" module-name="kotlin.jvm-debugger.core" />
     <orderEntry type="module" module-name="kotlin.jvm-debugger.coroutines" />
     <orderEntry type="module" module-name="kotlin.native" />
-    <orderEntry type="module" module-name="kotlin.gradle.gradle-native" scope="TEST" />
     <orderEntry type="module" module-name="kotlin.compiler-plugins.kapt" scope="RUNTIME" />
     <orderEntry type="module" module-name="kotlin.compiler-plugins.scripting" scope="RUNTIME" />
     <orderEntry type="module" module-name="kotlin.project-wizard.idea" scope="RUNTIME" />

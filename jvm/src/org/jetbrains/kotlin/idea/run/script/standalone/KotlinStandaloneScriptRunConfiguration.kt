@@ -26,6 +26,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.refactoring.listeners.RefactoringElementAdapter
 import com.intellij.refactoring.listeners.RefactoringElementListener
+import com.intellij.util.PathUtil
 import org.jdom.Element
 import org.jetbrains.kotlin.idea.KotlinJvmBundle
 import org.jetbrains.kotlin.idea.artifacts.KotlinArtifacts
@@ -46,62 +47,6 @@ class KotlinStandaloneScriptRunConfiguration(
     @JvmField
     var filePath: String? = null
 
-    @JvmField
-    var vmParameters: String? = null
-
-    @JvmField
-    var alternativeJrePath: String? = null
-
-    @JvmField
-    var programParameters: String? = null
-
-    @JvmField
-    var envs: MutableMap<String, String> = LinkedHashMap()
-
-    @JvmField
-    var passParentEnvs: Boolean = true
-
-    @JvmField
-    var workingDirectory: String? = null
-
-    @JvmField
-    var isAlternativeJrePathEnabled: Boolean = false
-
-    override fun getVMParameters() = vmParameters
-    override fun setVMParameters(value: String?) {
-        vmParameters = value
-    }
-
-    override fun getAlternativeJrePath() = alternativeJrePath
-    override fun setAlternativeJrePath(path: String?) {
-        alternativeJrePath = path
-    }
-
-    override fun getProgramParameters() = programParameters
-    override fun setProgramParameters(value: String?) {
-        programParameters = value
-    }
-
-    override fun getEnvs() = envs
-    override fun setEnvs(envs: MutableMap<String, String>) {
-        this.envs = envs
-    }
-
-    override fun getWorkingDirectory() = workingDirectory
-    override fun setWorkingDirectory(value: String?) {
-        workingDirectory = value
-    }
-
-    override fun isPassParentEnvs() = passParentEnvs
-    override fun setPassParentEnvs(passParentEnvs: Boolean) {
-        this.passParentEnvs = passParentEnvs
-    }
-
-    override fun isAlternativeJrePathEnabled() = isAlternativeJrePathEnabled
-    override fun setAlternativeJrePathEnabled(enabled: Boolean) {
-        isAlternativeJrePathEnabled = enabled
-    }
-
     override fun getState(executor: Executor, environment: ExecutionEnvironment): RunProfileState =
         ScriptCommandLineState(environment, this)
 
@@ -121,16 +66,12 @@ class KotlinStandaloneScriptRunConfiguration(
         super.writeExternal(element)
         JavaRunConfigurationExtensionManager.instance.writeExternal(this, element)
         DefaultJDOMExternalizer.writeExternal(this, element)
-        EnvironmentVariablesComponent.writeExternal(element, getEnvs())
-        PathMacroManager.getInstance(project).collapsePathsRecursively(element)
     }
 
     override fun readExternal(element: Element) {
-        PathMacroManager.getInstance(project).expandPaths(element)
         super.readExternal(element)
         JavaRunConfigurationExtensionManager.instance.readExternal(this, element)
         DefaultJDOMExternalizer.readExternal(this, element)
-        EnvironmentVariablesComponent.readExternal(element, getEnvs())
     }
 
     override fun getModules(): Array<Module> {
@@ -180,8 +121,8 @@ class KotlinStandaloneScriptRunConfiguration(
         }
     }
 
-    fun defaultWorkingDirectory(): String? {
-        return com.intellij.util.PathUtil.getParentPath(filePath ?: return null)
+    override fun defaultWorkingDirectory(): String? {
+        return PathUtil.getParentPath(filePath ?: return null)
     }
 
     fun setupFilePath(filePath: String) {

@@ -12,6 +12,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.util.elementType
 import org.jetbrains.kotlin.idea.inspections.UseExpressionBodyInspection
 import org.jetbrains.kotlin.idea.intentions.MergeIfsIntention
+import org.jetbrains.kotlin.idea.util.reformatted
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
@@ -55,12 +56,13 @@ class JoinBlockIntoSingleStatementHandler : JoinLinesHandlerDelegate {
             }
         }
 
-        return if (oneLineReturnFunction != null) {
+        val resultExpression = if (oneLineReturnFunction != null) {
             useExpressionBodyInspection.simplify(oneLineReturnFunction, false)
-            oneLineReturnFunction.bodyExpression!!.startOffset
+            oneLineReturnFunction.bodyExpression ?: return CANNOT_JOIN
         } else {
-            val newStatement = block.replace(statement)
-            newStatement.textRange!!.startOffset
+            block.replace(statement)
         }
+
+        return resultExpression.reformatted(true).startOffset
     }
 }

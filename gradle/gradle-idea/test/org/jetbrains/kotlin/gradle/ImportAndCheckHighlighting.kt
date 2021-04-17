@@ -8,7 +8,7 @@ package org.jetbrains.kotlin.gradle
 import org.jetbrains.kotlin.idea.codeInsight.gradle.MultiplePluginVersionGradleImportingTestCase
 import org.jetbrains.plugins.gradle.tooling.annotation.PluginTargetVersions
 import org.junit.Test
-
+import java.io.PrintStream
 
 class ImportAndCheckHighlighting : MultiplePluginVersionGradleImportingTestCase() {
     @Test
@@ -29,6 +29,18 @@ class ImportAndCheckHighlighting : MultiplePluginVersionGradleImportingTestCase(
         importAndCheckHighlighting()
     }
 
+    @Test
+    @PluginTargetVersions(pluginVersion = "1.4.0+")
+    fun testHmppStdlibUsageInAllBackends() {
+        importAndCheckHighlighting()
+    }
+
+    @Test
+    @PluginTargetVersions(pluginVersion = "1.5.20+")
+    fun testCommonizeDummyCInterop() {
+        importAndCheckHighlighting()
+    }
+
     private fun importAndCheckHighlighting(testLineMarkers: Boolean = true, checkWarnings: Boolean = true) {
         val files = configureByFiles()
         importProject()
@@ -41,11 +53,17 @@ class ImportAndCheckHighlighting : MultiplePluginVersionGradleImportingTestCase(
                 checkWarnings = checkWarnings,
                 checkInfos = false,
                 rootDisposable = testRootDisposable
-            ) {}
+            ) {
+                init {
+                  allowTreeAccessForAllFiles()
+                }
+            }
         )
     }
 
     override fun testDataDirName(): String {
         return "importAndCheckHighlighting"
     }
+
+    override fun printOutput(stream: PrintStream, text: String) = stream.println(text)
 }
