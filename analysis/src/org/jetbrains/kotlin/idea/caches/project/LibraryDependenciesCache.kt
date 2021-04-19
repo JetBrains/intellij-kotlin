@@ -150,7 +150,7 @@ internal data class DependencyCandidate(
         }
 
         private fun isInteropLibrary(libraryInfo: LibraryInfo): Boolean {
-            return (libraryInfo as? AbstractKlibLibraryInfo)?.resolvedKotlinLibrary?.isInterop == true
+            return (libraryInfo as? AbstractKlibLibraryInfo)?.isInterop == true
         }
     }
 }
