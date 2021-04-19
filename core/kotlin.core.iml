@@ -59,6 +59,5 @@
     <orderEntry type="module" module-name="intellij.java.manifest" />
     <orderEntry type="library" scope="TEST" name="kotlin-test" level="project" />
     <orderEntry type="module" module-name="kotlin.tests-common" scope="TEST" />
-    <orderEntry type="module" module-name="kotlin.test-framework" scope="TEST" />
   </component>
 </module>
