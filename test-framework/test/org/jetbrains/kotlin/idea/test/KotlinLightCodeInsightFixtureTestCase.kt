@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2000-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -178,7 +178,7 @@ abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFix
     }
 
     protected fun getProjectDescriptorFromFileDirective(): LightProjectDescriptor {
-        val file = File(testDataPath, fileName())
+        val file = mainFile()
         if (!file.exists()) {
             return KotlinLightProjectDescriptor.INSTANCE
         }
@@ -242,6 +242,8 @@ abstract class KotlinLightCodeInsightFixtureTestCase : KotlinLightCodeInsightFix
             throw rethrow(e)
         }
     }
+
+    protected open fun mainFile() = File(testDataDirectory, fileName())
 
     private fun sdk(javaVersion: Int): Sdk {
         return when (javaVersion) {
