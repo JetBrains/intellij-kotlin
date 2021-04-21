@@ -678,7 +678,8 @@ class QuickFixRegistrar : QuickFixContributor {
         COMPATIBILITY_WARNING.registerFactory(UseFullyQualifiedCallFix)
 
         INLINE_CLASS_CONSTRUCTOR_NOT_FINAL_READ_ONLY_PARAMETER.registerFactory(InlineClassConstructorNotValParameterFactory)
-        INLINE_CLASS_DEPRECATED.registerFactory(InlineClassDeprecatedFix)
+
+//        INLINE_CLASS_DEPRECATED.registerFactory(InlineClassDeprecatedFix)
 
         SEALED_INHERITOR_IN_DIFFERENT_PACKAGE.registerFactory(MoveToSealedMatchingPackageFix)
         SEALED_INHERITOR_IN_DIFFERENT_MODULE.registerFactory(MoveToSealedMatchingPackageFix)
