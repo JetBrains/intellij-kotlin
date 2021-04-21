@@ -268,6 +268,8 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
     }
 
     override fun dispose() {
+        super.dispose()
+
         clearCache()
 
         definitionsBySource.clear()
