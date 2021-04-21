@@ -78,6 +78,7 @@ class LoadScriptDefinitionsStartupActivity : StartupActivity {
 }
 
 class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinitionProvider(), Disposable {
+    private val definitionsLock = ReentrantLock()
     private val definitionsBySource = mutableMapOf<ScriptDefinitionsSource, List<ScriptDefinition>>()
 
     @Volatile
@@ -130,12 +131,12 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
     fun reloadDefinitionsBy(source: ScriptDefinitionsSource) {
         if (definitions == null) return // not loaded yet
 
-        lock.write {
+        definitionsLock.withLock {
             if (source !in definitionsBySource) error("Unknown script definition source: $source")
         }
 
         val safeGetDefinitions = source.safeGetDefinitions()
-        lock.write {
+        definitionsLock.withLock {
             definitionsBySource[source] = safeGetDefinitions
 
             definitions = definitionsBySource.values.flattenTo(mutableListOf())
@@ -173,7 +174,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
 
         val newDefinitionsBySource = getSources().associateWith { it.safeGetDefinitions() }
 
-        lock.write {
+        definitionsLock.withLock {
             definitionsBySource.putAll(newDefinitionsBySource)
             definitions = definitionsBySource.values.flattenTo(mutableListOf())
 
@@ -185,11 +186,11 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
         val scriptingSettings = kotlinScriptingSettingsSafe() ?: return
         definitions?.forEach {
             val order = scriptingSettings.getScriptDefinitionOrder(it)
-            lock.write {
+            definitionsLock.withLock {
                 it.order = order
             }
         }
-        lock.write {
+        definitionsLock.withLock {
             definitions = definitions?.sortedBy { it.order }
 
             updateDefinitions()
@@ -207,7 +208,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
 
     fun isReady(): Boolean {
         if (definitions == null) return false
-        val keys = lock.write { definitionsBySource.keys }
+        val keys = definitionsLock.withLock { definitionsBySource.keys }
         return keys.all { source ->
             // TODO: implement another API for readiness checking
             (source as? ScriptDefinitionContributor)?.isReady() != false
@@ -221,7 +222,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
     }
 
     private fun updateDefinitions() {
-        assert(lock.isWriteLocked) { "updateDefinitions should only be called under the write lock" }
+        assert(definitionsLock.isLocked) { "updateDefinitions should only be called under the lock" }
         if (project.isDisposed) return
 
         val fileTypeManager = FileTypeManager.getInstance()
