@@ -22,11 +22,11 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.classOrObjectVisitor
 import org.jetbrains.kotlin.psi.psiUtil.hasExpectModifier
-import org.jetbrains.kotlin.resolve.checkers.ExpectedActualDeclarationChecker
 import org.jetbrains.kotlin.resolve.checkers.ExpectedActualDeclarationChecker.Companion.allStrongIncompatibilities
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.multiplatform.ExpectedActualResolver
 import org.jetbrains.kotlin.platform.oldFashionedDescription
+import org.jetbrains.kotlin.resolve.multiplatform.OptionalAnnotationUtil
 
 class OptionalExpectationInspection : AbstractKotlinInspection() {
     override fun buildVisitor(holder: ProblemsHolder, isOnTheFly: Boolean, session: LocalInspectionToolSession): PsiElementVisitor {
@@ -35,7 +35,7 @@ class OptionalExpectationInspection : AbstractKotlinInspection() {
             if (!classOrObject.hasExpectModifier()) return
 
             val descriptor = classOrObject.resolveToDescriptorIfAny() ?: return
-            if (!descriptor.annotations.hasAnnotation(ExpectedActualDeclarationChecker.OPTIONAL_EXPECTATION_FQ_NAME)) return
+            if (!descriptor.annotations.hasAnnotation(OptionalAnnotationUtil.OPTIONAL_EXPECTATION_FQ_NAME)) return
 
             // FIXME(dsavvinov): this is wrong in HMPP model, use logic similar to ExpectedActualDeclarationChecker
             val implementingModules = classOrObject.findModuleDescriptor().implementingDescriptors
