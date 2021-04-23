@@ -7,9 +7,8 @@
           <option name="additionalArguments" value="-version -Xstrict-java-nullability-assertions -Xjvm-default=enable -Xskip-prerelease-check" />
         </compilerSettings>
         <compilerArguments>
-          <option name="jvmTarget" value="1.8" />
-          <option name="languageVersion" value="1.4" />
-          <option name="apiVersion" value="1.4" />
+          <option name="languageVersion" value="1.5" />
+          <option name="apiVersion" value="1.5" />
         </compilerArguments>
       </configuration>
     </facet>
@@ -48,5 +47,5 @@
     <orderEntry type="module" module-name="intellij.gradle.common" />
     <orderEntry type="module" module-name="intellij.platform.core.ui" />
     <orderEntry type="module" module-name="kotlin.resources-descriptors" scope="TEST" />
-</component>
+  </component>
 </module>
