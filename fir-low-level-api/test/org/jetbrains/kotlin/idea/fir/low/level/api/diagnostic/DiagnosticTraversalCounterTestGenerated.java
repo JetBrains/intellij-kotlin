@@ -33,17 +33,17 @@ public class DiagnosticTraversalCounterTestGenerated extends AbstractDiagnosticT
 
     @TestMetadata("declarationsInPropertyInit.kt")
     public void testDeclarationsInPropertyInit() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/diagnosticTraversalCounter/declarationsInPropertyInit.kt");
+        runTest("testdata/diagnosticTraversalCounter/declarationsInPropertyInit.kt");
     }
 
     @TestMetadata("enumClass.kt")
     public void testEnumClass() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/diagnosticTraversalCounter/enumClass.kt");
+        runTest("testdata/diagnosticTraversalCounter/enumClass.kt");
     }
 
     @TestMetadata("enumClassWithBody.kt")
     public void testEnumClassWithBody() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/diagnosticTraversalCounter/enumClassWithBody.kt");
+        runTest("testdata/diagnosticTraversalCounter/enumClassWithBody.kt");
     }
 
     @TestMetadata("functionalType.kt")
@@ -53,12 +53,12 @@ public class DiagnosticTraversalCounterTestGenerated extends AbstractDiagnosticT
 
     @TestMetadata("initBlock.kt")
     public void testInitBlock() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/diagnosticTraversalCounter/initBlock.kt");
+        runTest("testdata/diagnosticTraversalCounter/initBlock.kt");
     }
 
     @TestMetadata("localDeclarationsInAccessor.kt")
     public void testLocalDeclarationsInAccessor() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/diagnosticTraversalCounter/localDeclarationsInAccessor.kt");
+        runTest("testdata/diagnosticTraversalCounter/localDeclarationsInAccessor.kt");
     }
 
     @TestMetadata("localFunctionWithImplicitType.kt")
@@ -83,7 +83,7 @@ public class DiagnosticTraversalCounterTestGenerated extends AbstractDiagnosticT
 
     @TestMetadata("memberTypeAlias.kt")
     public void testMemberTypeAlias() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/diagnosticTraversalCounter/memberTypeAlias.kt");
+        runTest("testdata/diagnosticTraversalCounter/memberTypeAlias.kt");
     }
 
     @TestMetadata("multipleTopLevelClasses.kt")
@@ -108,12 +108,12 @@ public class DiagnosticTraversalCounterTestGenerated extends AbstractDiagnosticT
 
     @TestMetadata("nestedClasesWithFun.kt")
     public void testNestedClasesWithFun() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/diagnosticTraversalCounter/nestedClasesWithFun.kt");
+        runTest("testdata/diagnosticTraversalCounter/nestedClasesWithFun.kt");
     }
 
     @TestMetadata("propertyAccessors.kt")
     public void testPropertyAccessors() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/diagnosticTraversalCounter/propertyAccessors.kt");
+        runTest("testdata/diagnosticTraversalCounter/propertyAccessors.kt");
     }
 
     @TestMetadata("propertyWithGetterAndSetter.kt")
@@ -128,6 +128,6 @@ public class DiagnosticTraversalCounterTestGenerated extends AbstractDiagnosticT
 
     @TestMetadata("typeAlias.kt")
     public void testTypeAlias() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/diagnosticTraversalCounter/typeAlias.kt");
+        runTest("testdata/diagnosticTraversalCounter/typeAlias.kt");
     }
 }

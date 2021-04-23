@@ -33,9 +33,29 @@ public class HLLocalInspectionTestGenerated extends AbstractHLLocalInspectionTes
             runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/internalInPrivateClass.kt");
         }
 
+        @TestMetadata("onlyPrivateIsOkForSealedConstructor.kt")
+        public void testOnlyPrivateIsOkForSealedConstructor() throws Exception {
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/onlyPrivateIsOkForSealedConstructor.kt");
+        }
+
         @TestMetadata("overridePropertySetter.kt")
         public void testOverridePropertySetter() throws Exception {
             runTest("../idea/testData/inspectionsLocal/redundantVisibilityModifier/overridePropertySetter.kt");
+        }
+
+        @TestMetadata("privateIsDefaultForSealedConstructor.kt")
+        public void testPrivateIsDefaultForSealedConstructor() throws Exception {
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/privateIsDefaultForSealedConstructor.kt");
+        }
+
+        @TestMetadata("privateIsOkForSealedConstructor.kt")
+        public void testPrivateIsOkForSealedConstructor() throws Exception {
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/privateIsOkForSealedConstructor.kt");
+        }
+
+        @TestMetadata("protectedIsDefaultForSealedConstructor.kt")
+        public void testProtectedIsDefaultForSealedConstructor() throws Exception {
+            runTest("../idea/tests/testData/inspectionsLocal/redundantVisibilityModifier/protectedIsDefaultForSealedConstructor.kt");
         }
 
         @TestMetadata("publicOverrideProtectedSetter.kt")
