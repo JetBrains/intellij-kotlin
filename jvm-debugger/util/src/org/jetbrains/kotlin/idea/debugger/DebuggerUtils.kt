@@ -101,7 +101,7 @@ object DebuggerUtils {
     }
 
     fun isKotlinSourceFile(fileName: String): Boolean {
-        val extension = FileUtilRt.getExtension(fileName).lowercase()
+        val extension = FileUtilRt.getExtension(fileName).toLowerCase()
         return extension in KotlinFileTypeFactoryUtils.KOTLIN_EXTENSIONS
     }
 
