@@ -88,7 +88,7 @@ private fun checkConflicts(
             targetClassDescriptor.renderForConflicts(),
             context.sourceClassDescriptor.renderForConflicts()
         )
-        conflicts.putValue(targetClass, message.replaceFirstChar(Char::uppercaseChar))
+        conflicts.putValue(targetClass, message.capitalize())
     }
 
     for (member in membersToPush) {
@@ -146,7 +146,7 @@ private fun checkMemberClashing(
                         targetClassDescriptor.renderForConflicts(),
                         CommonRefactoringUtil.htmlEmphasize(member.name ?: "")
                     )
-                    conflicts.putValue(it, message.replaceFirstChar(Char::uppercaseChar))
+                    conflicts.putValue(it, message.capitalize())
                 }
         }
     }
@@ -217,7 +217,7 @@ private fun checkVisibility(
                 targetDescriptor.renderForConflicts(),
                 targetClassDescriptor.renderForConflicts()
             )
-            conflicts.putValue(target, message.replaceFirstChar(Char::uppercaseChar))
+            conflicts.putValue(target, message.capitalize())
         }
     }
 
