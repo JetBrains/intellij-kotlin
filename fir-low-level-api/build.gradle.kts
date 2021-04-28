@@ -36,13 +36,11 @@ repositories {
 
 dependencies {
     implementation(toolsJarApi())
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.fir", JpsDepScope.TEST)
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-for-ide"), JpsDepScope.COMPILE)
     jpsLikeJarDependency("com.google.code.gson:gson:2.8.6", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-fir", JpsDepScope.TEST)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-fir", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-api", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.tests-common", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.test-framework", JpsDepScope.TEST)
