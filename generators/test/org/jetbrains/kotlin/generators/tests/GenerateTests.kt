@@ -172,7 +172,9 @@ import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractProjectTemplateBuild
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractYamlBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractProjectTemplateNewWizardProjectImportTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractYamlNewWizardProjectImportTest
+import org.jetbrains.uast.test.kotlin.AbstractFE1LegacyUastDeclarationTest
 import org.jetbrains.uast.test.kotlin.AbstractFE1UastDeclarationTest
+import org.jetbrains.uast.test.kotlin.AbstractFirLegacyUastDeclarationTest
 import org.jetbrains.uast.test.kotlin.AbstractFirUastDeclarationTest
 
 fun main() {
@@ -1507,14 +1509,24 @@ private fun assembleWorkspace(): TWorkspace = workspace {
     testGroup("plugins/uast-kotlin-fir/tests", "plugins/uast-kotlin-fir/testData") {
         testClass<AbstractFirUastDeclarationTest> {
             model("declaration")
-            model("legacy")
+        }
+    }
+
+    testGroup("plugins/uast-kotlin-fir/tests", "plugins/uast-kotlin/testData") {
+        testClass<AbstractFirLegacyUastDeclarationTest> {
+            model("")
         }
     }
 
     testGroup("plugins/uast-kotlin-fir/tests", "plugins/uast-kotlin-fir/testData") {
         testClass<AbstractFE1UastDeclarationTest> {
             model("declaration")
-            model("legacy")
+        }
+    }
+
+    testGroup("plugins/uast-kotlin-fir/tests", "plugins/uast-kotlin/testData") {
+        testClass<AbstractFE1LegacyUastDeclarationTest> {
+            model("")
         }
     }
 
