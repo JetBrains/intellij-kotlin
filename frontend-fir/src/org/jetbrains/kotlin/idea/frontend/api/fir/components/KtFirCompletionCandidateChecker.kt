@@ -9,7 +9,7 @@ import com.jetbrains.rd.util.getOrCreate
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.resolve.calls.ImplicitReceiverValue
-import org.jetbrains.kotlin.idea.fir.low.level.api.api.LowLevelFirApiFacadeForDependentCopy.getTowerContextProvider
+import org.jetbrains.kotlin.idea.fir.low.level.api.api.LowLevelFirApiFacadeForResolveOnAir.getTowerContextProvider
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.getFirFile
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.getOrBuildFirOfType
 import org.jetbrains.kotlin.idea.fir.low.level.api.resolver.ResolutionParameters
