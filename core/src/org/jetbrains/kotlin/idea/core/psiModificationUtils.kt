@@ -374,6 +374,7 @@ fun KtModifierListOwner.canBeProtected(): Boolean {
     return when (parent) {
         is KtClassBody -> parent.parent is KtClass
         is KtParameterList -> parent.parent is KtPrimaryConstructor
+        is KtClass -> !this.isAnnotationClassPrimaryConstructor()
         else -> false
     }
 }
