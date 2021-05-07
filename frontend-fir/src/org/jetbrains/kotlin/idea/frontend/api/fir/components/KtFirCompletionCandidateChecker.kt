@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.expressions.FirExpression
 import org.jetbrains.kotlin.fir.resolve.calls.ImplicitReceiverValue
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.LowLevelFirApiFacadeForResolveOnAir.getTowerContextProvider
-import org.jetbrains.kotlin.idea.fir.low.level.api.api.getFirFile
+import org.jetbrains.kotlin.idea.fir.low.level.api.api.getOrBuildFirFile
 import org.jetbrains.kotlin.idea.fir.low.level.api.api.getOrBuildFirOfType
 import org.jetbrains.kotlin.idea.fir.low.level.api.resolver.ResolutionParameters
 import org.jetbrains.kotlin.idea.fir.low.level.api.resolver.SingleCandidateResolutionMode
@@ -62,7 +62,7 @@ internal class KtFirCompletionCandidateChecker(
         nameExpression: KtSimpleNameExpression,
         possibleExplicitReceiver: KtExpression?,
     ): Boolean {
-        val file = originalFile.getFirFile(firResolveState)
+        val file = originalFile.getOrBuildFirFile(firResolveState)
         val explicitReceiverExpression = possibleExplicitReceiver?.getOrBuildFirOfType<FirExpression>(firResolveState)
         val resolver = SingleCandidateResolver(firResolveState.rootModuleSession, file)
         val implicitReceivers = getImplicitReceivers(originalFile, file, nameExpression)
