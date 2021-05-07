@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.findUsages.AbstractKotlinFindUsagesWithLibraryTest
 import org.jetbrains.kotlin.findUsages.AbstractKotlinFindUsagesWithStdlibTest
 import org.jetbrains.kotlin.formatter.AbstractFormatterTest
 import org.jetbrains.kotlin.formatter.AbstractTypingIndentationTestBase
-import org.jetbrains.kotlin.generators.util.TestGeneratorUtil
 import org.jetbrains.kotlin.idea.AbstractExpressionSelectionTest
 import org.jetbrains.kotlin.idea.AbstractSmartSelectionTest
 import org.jetbrains.kotlin.idea.actions.AbstractGotoTestOrCodeActionTest
