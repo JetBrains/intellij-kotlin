@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.idea.artifacts.KotlinArtifacts.Companion.instance as
 class CoroutineNonBlockingContextDetectionTest : KotlinLightCodeInsightFixtureTestCase() {
     override fun getProjectDescriptor(): LightProjectDescriptor =
         object : KotlinWithJdkAndRuntimeLightProjectDescriptor(
-            listOf(KotlinArtifacts.kotlinStdlib, KotlinArtifacts.kotlinCoroutinesExperimentalCompat),
+            listOf(KotlinArtifacts.kotlinStdlib),
             listOf(KotlinArtifacts.kotlinStdlibSources)
         ) {
             override fun configureModule(module: Module, model: ModifiableRootModel, contentEntry: ContentEntry) {
