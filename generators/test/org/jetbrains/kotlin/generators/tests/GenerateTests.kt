@@ -71,8 +71,7 @@ import org.jetbrains.kotlin.idea.highlighter.*
 import org.jetbrains.kotlin.idea.imports.AbstractJsOptimizeImportsTest
 import org.jetbrains.kotlin.idea.imports.AbstractJvmOptimizeImportsTest
 import org.jetbrains.kotlin.idea.index.AbstractKotlinTypeAliasByExpansionShortNameIndexTest
-import org.jetbrains.kotlin.idea.inspections.AbstractLocalInspectionTest
-import org.jetbrains.kotlin.idea.inspections.AbstractMultiFileLocalInspectionTest
+import org.jetbrains.kotlin.idea.inspections.*
 import org.jetbrains.kotlin.idea.intentions.*
 import org.jetbrains.kotlin.idea.intentions.declarations.AbstractJoinLinesTest
 import org.jetbrains.kotlin.idea.internal.AbstractBytecodeToolWindowTest
@@ -1141,6 +1140,13 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
     */
+
+    testGroup("idea/idea-fir-fe10-binding/tests", "idea") {
+        testClass<AbstractFe10BindingIntentionTest> {
+            val pattern = "^([\\w\\-_]+)\\.(kt|kts)$"
+            model("testData/intentions/conventionNameCalls/replaceContains", pattern = pattern)
+        }
+    }
 
     testGroup("scripting-support") {
         testClass<AbstractScratchRunActionTest> {
