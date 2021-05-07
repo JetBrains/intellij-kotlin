@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -964,6 +964,129 @@ public class HighLevelBasicCompletionHandlerTestGenerated extends AbstractHighLe
         @TestMetadata("TypeArgumentsFromParameters.kt")
         public void testTypeArgumentsFromParameters() throws Exception {
             runTest("../completion/tests/testData/handlers/basic/typeArgsForCall/TypeArgumentsFromParameters.kt");
+        }
+    }
+
+    @RunWith(JUnit3RunnerWithInners.class)
+    @TestMetadata("../completion/tests/testData/handlers/basic/typeArgsForGenericFun")
+    public static class TypeArgsForGenericFun extends AbstractHighLevelBasicCompletionHandlerTest {
+        private void runTest(String testDataFilePath) throws Exception {
+            KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+        }
+
+        @TestMetadata("ChainOfCalls.kt")
+        public void testChainOfCalls() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/ChainOfCalls.kt");
+        }
+
+        @TestMetadata("ChainOfCallsWithInvoke.kt")
+        public void testChainOfCallsWithInvoke() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/ChainOfCallsWithInvoke.kt");
+        }
+
+        @TestMetadata("Extension_receiverInsufficient.kt")
+        public void testExtension_receiverInsufficient() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/Extension_receiverInsufficient.kt");
+        }
+
+        @TestMetadata("Extension_receiverSufficient.kt")
+        public void testExtension_receiverSufficient() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/Extension_receiverSufficient.kt");
+        }
+
+        @TestMetadata("NoDuplicate.kt")
+        public void testNoDuplicate() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/NoDuplicate.kt");
+        }
+
+        @TestMetadata("NotGeneric.kt")
+        public void testNotGeneric() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/NotGeneric.kt");
+        }
+
+        @TestMetadata("WithMultipleParam.kt")
+        public void testWithMultipleParam() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithMultipleParam.kt");
+        }
+
+        @TestMetadata("WithNoParams.kt")
+        public void testWithNoParams() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithNoParams.kt");
+        }
+
+        @TestMetadata("WithParamFunc_FunRef.kt")
+        public void testWithParamFunc_FunRef() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_FunRef.kt");
+        }
+
+        @TestMetadata("WithParamFunc_LambdaDefaultArgument.kt")
+        public void testWithParamFunc_LambdaDefaultArgument() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_LambdaDefaultArgument.kt");
+        }
+
+        @TestMetadata("WithParamFunc_LambdaDefaultArgument2.kt")
+        public void testWithParamFunc_LambdaDefaultArgument2() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_LambdaDefaultArgument2.kt");
+        }
+
+        @TestMetadata("WithParamFunc_LambdaDefaultOverriddenArgument.kt")
+        public void testWithParamFunc_LambdaDefaultOverriddenArgument() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_LambdaDefaultOverriddenArgument.kt");
+        }
+
+        @TestMetadata("WithParamFunc_LambdaDefaultOverriddenArgument2.kt")
+        public void testWithParamFunc_LambdaDefaultOverriddenArgument2() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_LambdaDefaultOverriddenArgument2.kt");
+        }
+
+        @TestMetadata("WithParamFunc_LambdaExplicitInferrable.kt")
+        public void testWithParamFunc_LambdaExplicitInferrable() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_LambdaExplicitInferrable.kt");
+        }
+
+        @TestMetadata("WithParamFunc_LambdaExplicitNonInferrable.kt")
+        public void testWithParamFunc_LambdaExplicitNonInferrable() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_LambdaExplicitNonInferrable.kt");
+        }
+
+        @TestMetadata("WithParamFunc_LambdaSingleExplicitArgument.kt")
+        public void testWithParamFunc_LambdaSingleExplicitArgument() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_LambdaSingleExplicitArgument.kt");
+        }
+
+        @TestMetadata("WithParamFunc_LambdaSingleTrailing.kt")
+        public void testWithParamFunc_LambdaSingleTrailing() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_LambdaSingleTrailing.kt");
+        }
+
+        @TestMetadata("WithParamFunc_LambdaTrailing.kt")
+        public void testWithParamFunc_LambdaTrailing() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_LambdaTrailing.kt");
+        }
+
+        @TestMetadata("WithParamFunc_Variable.kt")
+        public void testWithParamFunc_Variable() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamFunc_Variable.kt");
+        }
+
+        @TestMetadata("WithParamNonGeneric.kt")
+        public void testWithParamNonGeneric() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamNonGeneric.kt");
+        }
+
+        @TestMetadata("WithParamSimple.kt")
+        public void testWithParamSimple() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamSimple.kt");
+        }
+
+        @TestMetadata("WithParamSimple_DefaultArgument.kt")
+        public void testWithParamSimple_DefaultArgument() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamSimple_DefaultArgument.kt");
+        }
+
+        @TestMetadata("WithParamSimple_DefaultOverriddenArgument.kt")
+        public void testWithParamSimple_DefaultOverriddenArgument() throws Exception {
+            runTest("../completion/tests/testData/handlers/basic/typeArgsForGenericFun/WithParamSimple_DefaultOverriddenArgument.kt");
         }
     }
 }

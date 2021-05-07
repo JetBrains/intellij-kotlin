@@ -173,7 +173,7 @@ public class MultiplatformAnalysisTestGenerated extends AbstractMultiplatformAna
 
     @TestMetadata("kt44898")
     public void testKt44898() throws Exception {
-        runTest("idea/testData/multiplatform/kt44898/");
+        runTest("testData/multiplatform/kt44898/");
     }
 
     @TestMetadata("lambdas")
@@ -208,7 +208,7 @@ public class MultiplatformAnalysisTestGenerated extends AbstractMultiplatformAna
 
     @TestMetadata("platformDependencyInCommon")
     public void testPlatformDependencyInCommon() throws Exception {
-        runTest("idea/testData/multiplatform/platformDependencyInCommon/");
+        runTest("testData/multiplatform/platformDependencyInCommon/");
     }
 
     @TestMetadata("platformSpecificChecksInCommon")
@@ -278,6 +278,6 @@ public class MultiplatformAnalysisTestGenerated extends AbstractMultiplatformAna
 
     @TestMetadata("whenExhaustivenessForSealed")
     public void testWhenExhaustivenessForSealed() throws Exception {
-        runTest("idea/testData/multiplatform/whenExhaustivenessForSealed/");
+        runTest("testData/multiplatform/whenExhaustivenessForSealed/");
     }
 }

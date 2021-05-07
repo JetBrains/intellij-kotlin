@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 @TestRoot("fir")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-public class HighLevelJvmBasicCompletionTestGenerated extends AbstractHighLevelJvmBasicCompletionTest {
+public abstract class HighLevelJvmBasicCompletionTestGenerated extends AbstractHighLevelJvmBasicCompletionTest {
     @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("../completion/tests/testData/basic/common")
     public static class Common extends AbstractHighLevelJvmBasicCompletionTest {
@@ -2220,16 +2220,6 @@ public class HighLevelJvmBasicCompletionTestGenerated extends AbstractHighLevelJ
                 runTest("../completion/tests/testData/basic/common/primitiveCompletion/insideFunctionWithParameters.kt");
             }
 
-            @TestMetadata("localClassConstructor.kt")
-            public void testLocalClassConstructor() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/primitiveCompletion/localClassConstructor.kt");
-            }
-
-            @TestMetadata("localClassMember.kt")
-            public void testLocalClassMember() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/primitiveCompletion/localClassMember.kt");
-            }
-
             @TestMetadata("localVariablesAndFunctions.kt")
             public void testLocalVariablesAndFunctions() throws Exception {
                 runTest("../completion/tests/testData/basic/common/primitiveCompletion/localVariablesAndFunctions.kt");
@@ -2732,26 +2722,6 @@ public class HighLevelJvmBasicCompletionTestGenerated extends AbstractHighLevelJ
             @TestMetadata("VisibilityInSubclassForce.kt")
             public void testVisibilityInSubclassForce() throws Exception {
                 runTest("../completion/tests/testData/basic/common/visibility/VisibilityInSubclassForce.kt");
-            }
-
-            @TestMetadata("VisibilityOfClassMembersFromLocalClassConstructor.kt")
-            public void testVisibilityOfClassMembersFromLocalClassConstructor() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/visibility/VisibilityOfClassMembersFromLocalClassConstructor.kt");
-            }
-
-            @TestMetadata("VisibilityOfClassMembersFromLocalClassMember.kt")
-            public void testVisibilityOfClassMembersFromLocalClassMember() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/visibility/VisibilityOfClassMembersFromLocalClassMember.kt");
-            }
-
-            @TestMetadata("VisibilityOfCompanionObjectMembersFromOutside.kt")
-            public void testVisibilityOfCompanionObjectMembersFromOutside() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/visibility/VisibilityOfCompanionObjectMembersFromOutside.kt");
-            }
-
-            @TestMetadata("VisibilityOfCompanionObjectMembersFromSubclass.kt")
-            public void testVisibilityOfCompanionObjectMembersFromSubclass() throws Exception {
-                runTest("idea/idea-completion/testData/basic/common/visibility/VisibilityOfCompanionObjectMembersFromSubclass.kt");
             }
 
             @TestMetadata("VisibilityPrivateToThis.kt")

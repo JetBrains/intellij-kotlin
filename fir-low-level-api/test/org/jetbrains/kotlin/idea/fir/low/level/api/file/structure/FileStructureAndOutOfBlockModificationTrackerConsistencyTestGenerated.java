@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -38,12 +38,12 @@ public class FileStructureAndOutOfBlockModificationTrackerConsistencyTestGenerat
 
     @TestMetadata("memberFunWithType.kt")
     public void testMemberFunWithType() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/outOfBlockProjectWide/memberFunWithType.kt");
+        runTest("testdata/outOfBlockProjectWide/memberFunWithType.kt");
     }
 
     @TestMetadata("memberPropertyWithType.kt")
     public void testMemberPropertyWithType() throws Exception {
-        runTest("idea/idea-frontend-fir/idea-fir-low-level-api/testdata/outOfBlockProjectWide/memberPropertyWithType.kt");
+        runTest("testdata/outOfBlockProjectWide/memberPropertyWithType.kt");
     }
 
     @TestMetadata("topLevelExpressionBodyFunWithType.kt")

@@ -318,11 +318,6 @@ public abstract class IncrementalJvmJpsTestGenerated extends AbstractIncremental
             runTest("testData/incremental/pureKotlin/companionConstantChanged/");
         }
 
-        @TestMetadata("companionConstantChanged")
-        public void testCompanionConstantChanged() throws Exception {
-            runTest("jps-plugin/testData/incremental/pureKotlin/companionConstantChanged/");
-        }
-
         @TestMetadata("compilationErrorThenFixedOtherPackage")
         public void testCompilationErrorThenFixedOtherPackage() throws Exception {
             runTest("testData/incremental/pureKotlin/compilationErrorThenFixedOtherPackage/");
@@ -1009,6 +1004,11 @@ public abstract class IncrementalJvmJpsTestGenerated extends AbstractIncremental
                     KotlinTestUtils.runTest(this::doTest, this, TargetBackend.JVM_IR, testDataFilePath);
                 }
 
+                @TestMetadata("methodAddDefault")
+                public void testMethodAddDefault() throws Exception {
+                    runTest("testData/incremental/withJava/javaUsedInKotlin/samConversions/methodAddDefault/");
+                }
+
                 @TestMetadata("methodAdded")
                 public void testMethodAdded() throws Exception {
                     runTest("testData/incremental/withJava/javaUsedInKotlin/samConversions/methodAdded/");
@@ -1223,7 +1223,7 @@ public abstract class IncrementalJvmJpsTestGenerated extends AbstractIncremental
 
             @TestMetadata("multifileDependantUsage")
             public void testMultifileDependantUsage() throws Exception {
-                runTest("jps-plugin/testData/incremental/withJava/other/multifileDependantUsage/");
+                runTest("testData/incremental/withJava/other/multifileDependantUsage/");
             }
 
             @TestMetadata("multifilePackagePartMethodAdded")

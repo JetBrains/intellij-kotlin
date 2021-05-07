@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 @TestRoot("fir")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-public class FindUsagesFirTestGenerated extends AbstractFindUsagesFirTest {
+public abstract class FindUsagesFirTestGenerated extends AbstractFindUsagesFirTest {
     @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("../idea/tests/testData/findUsages/kotlin")
     public abstract static class Kotlin extends AbstractFindUsagesFirTest {
@@ -94,6 +94,11 @@ public class FindUsagesFirTestGenerated extends AbstractFindUsagesFirTest {
                 runTest("../idea/tests/testData/findUsages/kotlin/conventions/getAsPropertyDelegate.0.kt");
             }
 
+            @TestMetadata("getInObject.0.kt")
+            public void testGetInObject() throws Exception {
+                runTest("../idea/tests/testData/findUsages/kotlin/conventions/getInObject.0.kt");
+            }
+
             @TestMetadata("inc.0.kt")
             public void testInc() throws Exception {
                 runTest("../idea/tests/testData/findUsages/kotlin/conventions/inc.0.kt");
@@ -107,6 +112,11 @@ public class FindUsagesFirTestGenerated extends AbstractFindUsagesFirTest {
             @TestMetadata("invokeExtension.0.kt")
             public void testInvokeExtension() throws Exception {
                 runTest("../idea/tests/testData/findUsages/kotlin/conventions/invokeExtension.0.kt");
+            }
+
+            @TestMetadata("invokeInObject.0.kt")
+            public void testInvokeInObject() throws Exception {
+                runTest("../idea/tests/testData/findUsages/kotlin/conventions/invokeInObject.0.kt");
             }
 
             @TestMetadata("invokeWithVarArg.0.kt")
@@ -1600,6 +1610,21 @@ public class FindUsagesFirTestGenerated extends AbstractFindUsagesFirTest {
                 runTest("../idea/tests/testData/findUsages/java/findJavaMethodUsages/OverriddenMethodSyntheticAccessor.0.java");
             }
 
+            @TestMetadata("OverridenArrayType.0.java")
+            public void testOverridenArrayType() throws Exception {
+                runTest("../idea/tests/testData/findUsages/java/findJavaMethodUsages/OverridenArrayType.0.java");
+            }
+
+            @TestMetadata("OverridenBoxedType.0.java")
+            public void testOverridenBoxedType() throws Exception {
+                runTest("../idea/tests/testData/findUsages/java/findJavaMethodUsages/OverridenBoxedType.0.java");
+            }
+
+            @TestMetadata("OverridenFlexibleCollection.0.java")
+            public void testOverridenFlexibleCollection() throws Exception {
+                runTest("../idea/tests/testData/findUsages/java/findJavaMethodUsages/OverridenFlexibleCollection.0.java");
+            }
+
             @TestMetadata("OverridenRawGenericSignatureBase.0.java")
             public void testOverridenRawGenericSignatureBase() throws Exception {
                 runTest("../idea/tests/testData/findUsages/java/findJavaMethodUsages/OverridenRawGenericSignatureBase.0.java");
@@ -1608,6 +1633,11 @@ public class FindUsagesFirTestGenerated extends AbstractFindUsagesFirTest {
             @TestMetadata("OverridenRawGenericSignatureBase2.0.java")
             public void testOverridenRawGenericSignatureBase2() throws Exception {
                 runTest("../idea/tests/testData/findUsages/java/findJavaMethodUsages/OverridenRawGenericSignatureBase2.0.java");
+            }
+
+            @TestMetadata("OverridenRawType.0.java")
+            public void testOverridenRawType() throws Exception {
+                runTest("../idea/tests/testData/findUsages/java/findJavaMethodUsages/OverridenRawType.0.java");
             }
 
             @TestMetadata("SyntheticProperties.0.java")
