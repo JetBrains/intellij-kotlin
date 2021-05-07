@@ -167,11 +167,11 @@ class KotlinGradleModelBuilder : AbstractKotlinGradleModelBuilder(), ModelBuilde
         return buildAll(project, null)
     }
 
-    override fun buildAll(modelName: String, project: Project, builderContext: ModelBuilderContext): KotlinGradleModelImpl {
+    override fun buildAll(modelName: String, project: Project, builderContext: ModelBuilderContext): KotlinGradleModelImpl? {
         return buildAll(project, builderContext)
     }
 
-    private fun buildAll(project: Project, builderContext: ModelBuilderContext?): KotlinGradleModelImpl {
+    private fun buildAll(project: Project, builderContext: ModelBuilderContext?): KotlinGradleModelImpl? {
         // When running in Android Studio, Android Studio would request specific source sets only to avoid syncing
         // currently not active build variants. We convert names to the lower case to avoid ambiguity with build variants
         // accidentally named starting with upper case.

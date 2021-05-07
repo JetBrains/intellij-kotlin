@@ -79,6 +79,7 @@ class GradleKtsImportTest : KotlinGradleImportingTestCase() {
         assert(result is AssertionFailedError) { "Exception should be thrown" }
         assertNotNull(context)
         assert(context?.cancellationTokenSource?.token()?.isCancellationRequested == true)
+        checkConfiguration("build.gradle.kts")
     }
 
     @Test

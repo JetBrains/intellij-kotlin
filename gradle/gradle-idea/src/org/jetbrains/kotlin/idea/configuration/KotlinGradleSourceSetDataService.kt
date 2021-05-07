@@ -119,7 +119,7 @@ class KotlinGradleSourceSetDataService : AbstractProjectDataService<GradleSource
     override fun getTargetDataKey() = GradleSourceSetData.KEY
 
     override fun postProcess(
-        toImport: Collection<out DataNode<GradleSourceSetData>>,
+        toImport: Collection<DataNode<GradleSourceSetData>>,
         projectData: ProjectData?,
         project: Project,
         modelsProvider: IdeModifiableModelsProvider

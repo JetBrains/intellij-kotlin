@@ -34,12 +34,6 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
         return File(baseDir, getTestName(true).substringBefore("_").substringBefore(" "))
     }
 
-    override fun setUp() {
-        Assume.assumeFalse(AndroidStudioTestUtils.skipIncompatibleTestAgainstAndroidStudio())
-        super.setUp()
-        GradleProcessOutputInterceptor.install(testRootDisposable)
-    }
-
     protected fun configureKotlinVersionAndProperties(text: String, properties: Map<String, String>? = null): String {
         var result = text
         (properties ?: mapOf("kotlin_plugin_version" to LATEST_STABLE_GRADLE_PLUGIN_VERSION)).forEach { (key, value) ->
@@ -120,6 +114,12 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
                 sourceFolder.url.replace(projectPath, "") to sourceFolder.rootType
             }
         }
+    }
+
+    override fun setUp() {
+        Assume.assumeFalse(AndroidStudioTestUtils.skipIncompatibleTestAgainstAndroidStudio())
+        super.setUp()
+        GradleProcessOutputInterceptor.install(testRootDisposable)
     }
 
     override fun handleImportFailure(errorMessage: String, errorDetails: String?) {

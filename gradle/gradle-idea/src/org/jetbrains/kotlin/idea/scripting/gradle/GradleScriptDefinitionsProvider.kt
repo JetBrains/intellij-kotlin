@@ -5,7 +5,6 @@
 
 package org.jetbrains.kotlin.idea.scripting.gradle
 
-import com.intellij.execution.configurations.CommandLineTokenizer
 import com.intellij.openapi.externalSystem.util.ExternalSystemApiUtil
 import com.intellij.openapi.project.Project
 import com.intellij.util.EnvironmentUtil

@@ -1,3 +1,8 @@
+/*
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package org.jetbrains.kotlin.idea.configuration.utils
 
 import com.google.common.graph.EndpointPair
@@ -162,7 +167,8 @@ class KotlinSourceSetGraphUtilTest {
 
 private fun createKotlinSourceSetPair(
     name: String,
-    dependsOnSourceSets: Set<String> = emptySet(),
+    declaredDependsOnSourceSets: Set<String> = emptySet(),
+    allDependsOnSourceSets: Set<String> = declaredDependsOnSourceSets,
     platforms: Set<KotlinPlatform> = emptySet(),
     isTestModule: Boolean = false,
 ): Pair<String, KotlinSourceSet> = name to KotlinSourceSetImpl(
@@ -180,8 +186,9 @@ private fun createKotlinSourceSetPair(
     sourceDirs = emptySet(),
     resourceDirs = emptySet(),
     dependencies = emptyArray(),
-    dependsOnSourceSets = dependsOnSourceSets,
-    defaultPlatform = KotlinPlatformContainerImpl().apply { addSimplePlatforms(platforms) },
+    declaredDependsOnSourceSets = declaredDependsOnSourceSets,
+    allDependsOnSourceSets = allDependsOnSourceSets,
+    defaultActualPlatforms = KotlinPlatformContainerImpl().apply { pushPlatforms(platforms) },
     defaultIsTestModule = isTestModule
 )
 

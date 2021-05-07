@@ -359,7 +359,7 @@ class KotlinMPPGradleModelBuilder : ModelBuilderService {
         val nativeMainRunTasks =
             if (platform == KotlinPlatform.NATIVE) buildNativeMainRunTasks(gradleTarget)
             else emptyList()
-        val artifacts = konanArtifacts(gradleTarget, dependencyResolver, project, dependencyMapper)
+        val artifacts = konanArtifacts(gradleTarget, dependencyResolver, importingContext.project, dependencyMapper)
         val target = KotlinTargetImpl(
             gradleTarget.name,
             targetPresetName,
@@ -735,11 +735,11 @@ class KotlinMPPGradleModelBuilder : ModelBuilderService {
         for (sourceSet in importingContext.sourceSets) {
             if (!importingContext.getProperty(IS_HMPP_ENABLED)) {
                 val name = sourceSet.name
-                if (name == KotlinSourceSet.COMMON_MAIN_SOURCE_SET_NAME) {
+                if (name == COMMON_MAIN_SOURCE_SET_NAME) {
                     sourceSet.isTestModule = false
                     continue
                 }
-                if (name == KotlinSourceSet.COMMON_TEST_SOURCE_SET_NAME) {
+                if (name == COMMON_TEST_SOURCE_SET_NAME) {
                     sourceSet.isTestModule = true
                     continue
                 }
@@ -760,24 +760,24 @@ class KotlinMPPGradleModelBuilder : ModelBuilderService {
             // Explicitly set platform of orphan source-sets to only used platforms, not all supported platforms
             // Otherwise, the tooling might be upset after trying to provide some support for a target which actually
             // doesn't exist in this project (e.g. after trying to draw gutters, while test tasks do not exist)
-            sourceSet.actualPlatforms.addSimplePlatforms(projectPlatforms)
+            sourceSet.actualPlatforms.pushPlatforms(projectPlatforms)
             return
         }
 
-        if (shouldCoerceToCommon(sourceSet)) {
-            sourceSet.actualPlatforms.addSimplePlatforms(listOf(KotlinPlatform.COMMON))
+        if (sourceSet.shouldCoerceToCommon(this)) {
+            sourceSet.actualPlatforms.pushPlatforms(KotlinPlatform.COMMON)
             return
         }
 
-        if (!getProperty(IS_HMPP_ENABLED) && !isDefaultSourceSet(sourceSet)) {
+        if (!getProperty(IS_HMPP_ENABLED) && !isDeclaredSourceSet(sourceSet)) {
             // intermediate source sets should be common if HMPP is disabled
-            sourceSet.actualPlatforms.addSimplePlatforms(listOf(KotlinPlatform.COMMON))
+            sourceSet.actualPlatforms.pushPlatforms(KotlinPlatform.COMMON)
             return
         }
 
         compilationsBySourceSet(sourceSet)?.let { compilations ->
             val platforms = compilations.map { it.platform }
-            sourceSet.actualPlatforms.addSimplePlatforms(platforms)
+            sourceSet.actualPlatforms.pushPlatforms(platforms)
         }
     }
 

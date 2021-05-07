@@ -1,3 +1,8 @@
+/*
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
+ */
+
 package org.jetbrains.kotlin.idea.configuration.mpp
 
 import com.intellij.openapi.externalSystem.model.DataNode
@@ -20,15 +25,15 @@ internal typealias ModuleId = String
 internal typealias ArtifactPath = String
 
 internal data class PopulateModuleDependenciesContext(
-  val resolverCtx: ProjectResolverContext,
-  val mppModel: KotlinMPPGradleModel,
-  val gradleModule: IdeaModule,
-  val ideProject: DataNode<ProjectData>,
-  val ideModule: DataNode<ModuleData>,
-  val dependenciesPreprocessor: KotlinDependenciesPreprocessor,
-  val sourceSetMap: Map<ModuleId, IntelliJPair<DataNode<GradleSourceSetData>, ExternalSourceSet>>,
-  val artifactsMap: Map<ArtifactPath, ModuleId>,
-  val processedModuleIds: MutableSet<ModuleId> = mutableSetOf()
+    val resolverCtx: ProjectResolverContext,
+    val mppModel: KotlinMPPGradleModel,
+    val gradleModule: IdeaModule,
+    val ideProject: DataNode<ProjectData>,
+    val ideModule: DataNode<ModuleData>,
+    val dependenciesPreprocessor: KotlinDependenciesPreprocessor,
+    val sourceSetMap: Map<ModuleId, IntelliJPair<DataNode<GradleSourceSetData>, ExternalSourceSet>>,
+    val artifactsMap: Map<ArtifactPath, ModuleId>,
+    val processedModuleIds: MutableSet<ModuleId> = mutableSetOf()
 )
 
 internal fun KotlinMPPGradleProjectResolver.Companion.createPopulateModuleDependenciesContext(
@@ -68,13 +73,13 @@ internal fun PopulateModuleDependenciesContext.getCompilationsWithDependencies(
 }
 
 internal fun KotlinCompilation.dependsOnSourceSet(mppModel: KotlinMPPGradleModel, sourceSet: KotlinSourceSet): Boolean {
-    return sourceSets.any { containedSourceSet -> sourceSet.isOrDependsOnSourceSet(mppModel, containedSourceSet) }
+    return declaredSourceSets.any { containedSourceSet -> sourceSet.isOrDependsOnSourceSet(mppModel, containedSourceSet) }
 }
 
 internal fun KotlinSourceSet.isOrDependsOnSourceSet(mppModel: KotlinMPPGradleModel, sourceSet: KotlinSourceSet): Boolean {
     if (this == sourceSet) return true
-    return this.dependsOnSourceSets
-        .map { dependencySourceSetName -> mppModel.sourceSets.getValue(dependencySourceSetName) }
+    return this.declaredDependsOnSourceSets
+        .map { dependencySourceSetName -> mppModel.sourceSetsByName.getValue(dependencySourceSetName) }
         .any { dependencySourceSet -> dependencySourceSet.isOrDependsOnSourceSet(mppModel, sourceSet) }
 }
 
