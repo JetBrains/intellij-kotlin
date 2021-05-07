@@ -30,6 +30,7 @@
     <orderEntry type="module" module-name="kotlin.common" />
     <orderEntry type="module" module-name="kotlin.jps-common" scope="TEST" />
     <orderEntry type="module" module-name="kotlin.maven" />
+    <orderEntry type="module" module-name="kotlin.compiler-plugins.base-compiler-plugins-ide-support" />
     <orderEntry type="module" module-name="kotlin.gradle.gradle-idea" />
     <orderEntry type="module" module-name="kotlin.gradle.gradle-tooling" />
     <orderEntry type="module" module-name="kotlin.compiler-plugins.annotation-based-compiler-support" />
