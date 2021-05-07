@@ -123,7 +123,7 @@ public class StubBuilderTestGenerated extends AbstractStubBuilderTest {
 
     @TestMetadata("InnerClassInEnumEntry.kt")
     public void testInnerClassInEnumEntry() throws Exception {
-        runTest("idea/testData/stubs/InnerClassInEnumEntry.kt");
+        runTest("testData/stubs/InnerClassInEnumEntry.kt");
     }
 
     @TestMetadata("LocalClass.kt")
