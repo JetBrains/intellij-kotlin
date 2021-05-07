@@ -71,16 +71,10 @@ public class PluginTestCaseBase {
         switch (kind) {
             case MOCK_JDK:
                 return IdeaTestUtil.getMockJdk18();
-            case MODIFIED_MOCK_JDK:
-                return jdkByVersion("MODIFIED MOCK", KtTestUtil.findMockJdkRtModified());
-            case FULL_JDK_6:
-                return jdkByVersion("6", KtTestUtil.getJdk6Home());
             case FULL_JDK_9:
                 return jdkByVersion("9", KotlinTestUtils.getJdk9Home());
             case FULL_JDK:
                 return fullJdk();
-            case FULL_JDK_15:
-                return jdkByVersion("15", KtTestUtil.getJdk15Home());
             default:
                 throw new UnsupportedOperationException(kind.toString());
         }
@@ -91,16 +85,10 @@ public class PluginTestCaseBase {
         switch (kind) {
             case MOCK_JDK:
                 return LanguageLevel.JDK_1_8;
-            case MODIFIED_MOCK_JDK:
-                return LanguageLevel.JDK_11;
-            case FULL_JDK_6:
-                return LanguageLevel.JDK_1_6;
             case FULL_JDK_9:
                 return LanguageLevel.JDK_1_9;
             case FULL_JDK:
                 return LanguageLevel.JDK_1_8;
-            case FULL_JDK_15:
-                return LanguageLevel.JDK_15_PREVIEW;
             default:
                 throw new UnsupportedOperationException(kind.toString());
         }
