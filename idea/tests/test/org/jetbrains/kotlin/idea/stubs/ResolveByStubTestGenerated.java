@@ -44,6 +44,11 @@ public abstract class ResolveByStubTestGenerated extends AbstractResolveByStubTe
             runTest("testData/compiler/loadJava/compiledKotlin/annotations/AnnotationInAnnotationArguments.kt");
         }
 
+        @TestMetadata("AnnotationInArray.kt")
+        public void testAnnotationInArray() throws Exception {
+            runTest("testData/compiler/loadJava/compiledKotlin/annotations/AnnotationInArray.kt");
+        }
+
         @TestMetadata("ClassLiteralArguments.kt")
         public void testClassLiteralArguments() throws Exception {
             runTest("testData/compiler/loadJava/compiledKotlin/annotations/ClassLiteralArguments.kt");
@@ -394,6 +399,11 @@ public abstract class ResolveByStubTestGenerated extends AbstractResolveByStubTe
             @TestMetadata("ClassLiteralArgument.kt")
             public void testClassLiteralArgument() throws Exception {
                 runTest("testData/compiler/loadJava/compiledKotlin/annotations/types/ClassLiteralArgument.kt");
+            }
+
+            @TestMetadata("DefinitelyNotNull.kt")
+            public void testDefinitelyNotNull() throws Exception {
+                runTest("testData/compiler/loadJava/compiledKotlin/annotations/types/DefinitelyNotNull.kt");
             }
 
             @TestMetadata("ReceiverParameter.kt")
