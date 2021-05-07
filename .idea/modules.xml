@@ -833,7 +833,6 @@
       <module fileurl="file://$PROJECT_DIR$/intellij/plugins/textmate/intellij.textmate.iml" filepath="$PROJECT_DIR$/intellij/plugins/textmate/intellij.textmate.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/plugins/textmate/core/intellij.textmate.core.iml" filepath="$PROJECT_DIR$/intellij/plugins/textmate/core/intellij.textmate.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/build/dependencies/intellij.tools.dependencies.iml" filepath="$PROJECT_DIR$/intellij/build/dependencies/intellij.tools.dependencies.iml" />
-      <module fileurl="file://$PROJECT_DIR$/intellij/build/dependencies/androidSdkUpload/intellij.tools.dependencies.androidSdkUpload.iml" filepath="$PROJECT_DIR$/intellij/build/dependencies/androidSdkUpload/intellij.tools.dependencies.androidSdkUpload.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/build/dependencies/gradle-api-deps/intellij.tools.dependencies.gradle.iml" filepath="$PROJECT_DIR$/intellij/build/dependencies/gradle-api-deps/intellij.tools.dependencies.gradle.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/build/dependencies/kotlin-deps/intellij.tools.dependencies.kotlin.iml" filepath="$PROJECT_DIR$/intellij/build/dependencies/kotlin-deps/intellij.tools.dependencies.kotlin.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/tools/index-tools/intellij.tools.index.iml" filepath="$PROJECT_DIR$/intellij/tools/index-tools/intellij.tools.index.iml" />
@@ -893,9 +892,12 @@
       <module fileurl="file://$PROJECT_DIR$/gradle/gradle-native/kotlin.gradle.gradle-native.iml" filepath="$PROJECT_DIR$/gradle/gradle-native/kotlin.gradle.gradle-native.iml" />
       <module fileurl="file://$PROJECT_DIR$/gradle/gradle-tooling/kotlin.gradle.gradle-tooling.iml" filepath="$PROJECT_DIR$/gradle/gradle-tooling/kotlin.gradle.gradle-tooling.iml" />
       <module fileurl="file://$PROJECT_DIR$/idea/kotlin.idea.iml" filepath="$PROJECT_DIR$/idea/kotlin.idea.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idea/tests/kotlin.idea.tests.iml" filepath="$PROJECT_DIR$/idea/tests/kotlin.idea.tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/j2k/idea/kotlin.j2k.idea.iml" filepath="$PROJECT_DIR$/j2k/idea/kotlin.j2k.idea.iml" />
       <module fileurl="file://$PROJECT_DIR$/j2k/new/kotlin.j2k.new.iml" filepath="$PROJECT_DIR$/j2k/new/kotlin.j2k.new.iml" />
+      <module fileurl="file://$PROJECT_DIR$/j2k/new/tests/kotlin.j2k.new.tests.iml" filepath="$PROJECT_DIR$/j2k/new/tests/kotlin.j2k.new.tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/j2k/old/kotlin.j2k.old.iml" filepath="$PROJECT_DIR$/j2k/old/kotlin.j2k.old.iml" />
+      <module fileurl="file://$PROJECT_DIR$/j2k/old/tests/kotlin.j2k.old.tests.iml" filepath="$PROJECT_DIR$/j2k/old/tests/kotlin.j2k.old.tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/j2k/services/kotlin.j2k.services.iml" filepath="$PROJECT_DIR$/j2k/services/kotlin.j2k.services.iml" />
       <module fileurl="file://$PROJECT_DIR$/jps/jps-common/kotlin.jps-common.iml" filepath="$PROJECT_DIR$/jps/jps-common/kotlin.jps-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/jps/jps-plugin/kotlin.jps-plugin.iml" filepath="$PROJECT_DIR$/jps/jps-plugin/kotlin.jps-plugin.iml" />
