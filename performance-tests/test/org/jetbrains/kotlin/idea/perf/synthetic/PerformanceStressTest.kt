@@ -34,7 +34,7 @@ class PerformanceStressTest : UsefulTestCase() {
                 project {
                     descriptor {
                         name("kt-35135")
-                        buildGradle(IDEA_TEST_DATA_DIR.resolve("perfTest/simpleTemplate/"))
+                        buildGradle(IDEA_TEST_DATA_DIR.resolve("perfTest/simpleTemplate/").path)
 
                         kotlinFile("OverloadX") {
                             pkg("pkg")

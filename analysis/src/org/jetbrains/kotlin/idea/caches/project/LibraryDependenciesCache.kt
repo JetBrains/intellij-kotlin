@@ -70,7 +70,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
         val libraries = LinkedHashSet<DependencyCandidate>()
         val sdks = LinkedHashSet<SdkInfo>()
 
-        for (module in getLibraryUsageIndex().modulesLibraryIsUsedIn[libraryInfo.library.wrap()]) {
+        for (module in getLibraryUsageIndex().getModulesLibraryIsUsedIn(libraryInfo)) {
             if (!processedModules.add(module)) continue
 
             ModuleRootManager.getInstance(module).orderEntries().recursively().satisfying(condition).process(object : RootPolicy<Unit>() {
@@ -119,7 +119,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
 
         fun getModulesLibraryIsUsedIn(libraryInfo: LibraryInfo) = sequence<Module> {
             val ideaModelInfosCache = getIdeaModelInfosCache(project)
-            for (module in modulesLibraryIsUsedIn[libraryInfo.library]) {
+            for (module in modulesLibraryIsUsedIn[libraryInfo.library.wrap()]) {
                 val mappedModuleInfos = ideaModelInfosCache.getModuleInfosForModule(module)
                 if (mappedModuleInfos.any { it.platform.canDependOn(libraryInfo, module.isHMPPEnabled) }) {
                     yield(module)

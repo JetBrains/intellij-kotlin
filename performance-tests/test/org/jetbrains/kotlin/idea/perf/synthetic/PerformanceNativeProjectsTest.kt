@@ -35,8 +35,6 @@ import org.jetbrains.kotlin.idea.testFramework.suggestOsNeutralFileName
 import org.jetbrains.kotlin.idea.util.projectStructure.allModules
 import org.jetbrains.kotlin.library.KOTLIN_STDLIB_NAME
 import org.jetbrains.kotlin.platform.konan.isNative
-import org.jetbrains.kotlin.test.KotlinRoot
-import java.io.File
 
 class PerformanceNativeProjectsTest : AbstractPerformanceProjectsTest() {
 
@@ -174,7 +172,7 @@ class PerformanceNativeProjectsTest : AbstractPerformanceProjectsTest() {
         enableCommonizer: Boolean,
         note: String = ""
     ): Project {
-        val nativeTestsRoot = File(KotlinRoot.DIR, TEST_DATA_PATH)
+        val nativeTestsRoot = IDEA_TEST_DATA_DIR.resolve("perfTest/native")
 
         val commonRoot = nativeTestsRoot.resolve("_common")
         val targetRoot = nativeTestsRoot.resolve("_${testTarget.alias}")
