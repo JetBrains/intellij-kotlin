@@ -1,0 +1,7 @@
+package
+
+public typealias <no name provided> = [ERROR : No type element]
+public typealias A1 = [ERROR : No type element]
+public typealias A2 = [ERROR : No type element]
+public typealias Valid = kotlin.String
+

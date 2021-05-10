@@ -1,0 +1,5 @@
+package
+
+package foo {
+    public fun main(): kotlin.Unit
+}

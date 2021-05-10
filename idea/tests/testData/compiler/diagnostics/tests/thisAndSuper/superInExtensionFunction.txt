@@ -1,0 +1,3 @@
+package
+
+public fun kotlin.String.f(): kotlin.Unit

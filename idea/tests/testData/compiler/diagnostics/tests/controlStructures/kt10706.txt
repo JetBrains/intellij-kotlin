@@ -1,0 +1,3 @@
+package
+
+public fun fn(/*0*/ c: kotlin.Char?): kotlin.Any?

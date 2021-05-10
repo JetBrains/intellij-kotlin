@@ -1,0 +1,3 @@
+package
+
+public fun foo(): [ERROR : No type, no body]

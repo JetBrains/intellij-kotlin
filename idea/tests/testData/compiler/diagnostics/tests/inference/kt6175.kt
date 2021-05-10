@@ -1,0 +1,49 @@
+// !WITH_NEW_INFERENCE
+// !DIAGNOSTICS: -UNUSED_PARAMETER -UNUSED_ANONYMOUS_PARAMETER
+
+fun <T, R : Any> foo(body: (R?) -> T): T = fail()
+
+fun test1() {
+    <!NEW_INFERENCE_NO_INFORMATION_FOR_PARAMETER{NI}, TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER{OI}!>foo<!> {
+        true
+    }
+    <!NEW_INFERENCE_NO_INFORMATION_FOR_PARAMETER{NI}, TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER{OI}!>foo<!> { <!CANNOT_INFER_PARAMETER_TYPE!>x<!> ->
+        true
+    }
+}
+
+
+fun <T, R> bar(body: (R) -> T): T = fail()
+
+fun test2() {
+    <!NEW_INFERENCE_NO_INFORMATION_FOR_PARAMETER{NI}, TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER{OI}!>bar<!> {
+        true
+    }
+    <!NEW_INFERENCE_NO_INFORMATION_FOR_PARAMETER{NI}, TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER{OI}!>bar<!> { <!CANNOT_INFER_PARAMETER_TYPE!>x<!> ->
+        true
+    }
+}
+
+fun <T, R> baz(body: (List<R>) -> T): T = fail()
+
+fun test3() {
+    <!NEW_INFERENCE_NO_INFORMATION_FOR_PARAMETER{NI}, TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER{OI}!>baz<!> {
+        true
+    }
+    <!NEW_INFERENCE_NO_INFORMATION_FOR_PARAMETER{NI}, TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER{OI}!>baz<!> { <!CANNOT_INFER_PARAMETER_TYPE!>x<!> ->
+        true
+    }
+}
+
+fun <T, R : Any> brr(body: (List<R?>) -> T): T = fail()
+
+fun test4() {
+    <!NEW_INFERENCE_NO_INFORMATION_FOR_PARAMETER{NI}, TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER{OI}!>brr<!> {
+        true
+    }
+    <!NEW_INFERENCE_NO_INFORMATION_FOR_PARAMETER{NI}, TYPE_INFERENCE_NO_INFORMATION_FOR_PARAMETER{OI}!>brr<!> { <!CANNOT_INFER_PARAMETER_TYPE!>x<!> ->
+        true
+    }
+}
+
+fun fail(): Nothing = throw Exception()

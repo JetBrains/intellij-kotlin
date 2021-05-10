@@ -1,0 +1,5 @@
+package
+
+public fun testCompound(): kotlin.Unit
+public fun testCompound1(): kotlin.Unit
+public fun todo(): kotlin.Nothing
