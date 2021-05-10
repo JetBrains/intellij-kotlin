@@ -7,8 +7,8 @@ package org.jetbrains.kotlin.asJava.classes
 
 import com.intellij.testFramework.LightProjectDescriptor
 import org.jetbrains.kotlin.asJava.LightClassGenerationSupport
-import org.jetbrains.kotlin.asJava.PsiClassRenderer
-import org.jetbrains.kotlin.asJava.PsiClassRenderer.renderClass
+import org.jetbrains.kotlin.idea.asJava.PsiClassRenderer
+import org.jetbrains.kotlin.idea.asJava.PsiClassRenderer.renderClass
 import org.jetbrains.kotlin.idea.perf.UltraLightChecker
 import org.jetbrains.kotlin.idea.perf.UltraLightChecker.checkByJavaFile
 import org.jetbrains.kotlin.idea.perf.UltraLightChecker.checkDescriptorsLeak
@@ -16,8 +16,8 @@ import org.jetbrains.kotlin.idea.test.KotlinLightCodeInsightFixtureTestCase
 import org.jetbrains.kotlin.idea.test.KotlinWithJdkAndRuntimeLightProjectDescriptor
 import org.jetbrains.kotlin.idea.test.withCustomCompilerOptions
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.test.InTextDirectivesUtils
-import org.jetbrains.kotlin.test.KotlinTestUtils
+import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils
+import org.jetbrains.kotlin.idea.test.KotlinTestUtils
 import java.io.File
 
 abstract class AbstractUltraLightClassLoadingTest : KotlinLightCodeInsightFixtureTestCase() {

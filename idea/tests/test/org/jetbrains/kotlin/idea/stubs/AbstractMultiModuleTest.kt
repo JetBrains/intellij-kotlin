@@ -35,8 +35,8 @@ import org.jetbrains.kotlin.idea.facet.initializeIfNeeded
 import org.jetbrains.kotlin.idea.project.KotlinLibraryToSourceAnalysisComponent
 import org.jetbrains.kotlin.idea.test.*
 import org.jetbrains.kotlin.platform.TargetPlatform
-import org.jetbrains.kotlin.test.KotlinTestUtils.*
-import org.jetbrains.kotlin.test.util.slashedPath
+import org.jetbrains.kotlin.idea.test.KotlinTestUtils.*
+import org.jetbrains.kotlin.idea.test.util.slashedPath
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 import org.junit.Assert
 import java.io.File

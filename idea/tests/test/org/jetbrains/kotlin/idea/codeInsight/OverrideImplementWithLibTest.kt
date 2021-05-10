@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.idea.test.IDEA_TEST_DATA_DIR
 import org.jetbrains.kotlin.idea.test.MockLibraryFacility
 import org.jetbrains.kotlin.idea.test.runAll
 import org.jetbrains.kotlin.test.TestMetadata
-import org.jetbrains.kotlin.test.TestRoot
+import org.jetbrains.kotlin.idea.test.TestRoot
 import org.junit.internal.runners.JUnit38ClassRunner
 import org.junit.runner.RunWith
 

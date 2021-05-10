@@ -4,7 +4,7 @@ import com.intellij.openapi.module.Module
 import com.intellij.openapi.roots.OrderRootType
 import org.jetbrains.kotlin.idea.framework.JSLibraryKind
 import org.jetbrains.kotlin.platform.js.JsPlatform
-import org.jetbrains.kotlin.test.KotlinCompilerStandalone
+import org.jetbrains.kotlin.idea.test.KotlinCompilerStandalone
 import java.io.File
 
 data class MockLibraryFacility(

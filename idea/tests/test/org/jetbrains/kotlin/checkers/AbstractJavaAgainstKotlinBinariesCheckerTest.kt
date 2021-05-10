@@ -10,8 +10,8 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.io.FileUtilRt
 import org.jetbrains.kotlin.idea.test.AstAccessControl
 import org.jetbrains.kotlin.idea.test.PluginTestCaseBase
-import org.jetbrains.kotlin.test.InTextDirectivesUtils
-import org.jetbrains.kotlin.test.KotlinCompilerStandalone
+import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils
+import org.jetbrains.kotlin.idea.test.KotlinCompilerStandalone
 import java.io.File
 
 abstract class AbstractJavaAgainstKotlinBinariesCheckerTest : AbstractJavaAgainstKotlinCheckerTest() {

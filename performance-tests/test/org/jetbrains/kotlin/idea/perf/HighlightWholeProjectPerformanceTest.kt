@@ -10,7 +10,7 @@ import com.intellij.openapi.module.impl.ProjectLoadingErrorsHeadlessNotifier
 import com.intellij.testFramework.UsefulTestCase
 import org.jetbrains.kotlin.idea.perf.util.*
 import org.jetbrains.kotlin.idea.testFramework.ProjectOpenAction
-import org.jetbrains.kotlin.test.JUnit3RunnerWithInners
+import org.jetbrains.kotlin.idea.test.JUnit3RunnerWithInners
 import org.junit.runner.RunWith
 import java.io.File
 

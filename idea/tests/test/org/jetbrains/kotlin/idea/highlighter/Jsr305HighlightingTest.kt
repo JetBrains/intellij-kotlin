@@ -20,6 +20,9 @@ import org.jetbrains.kotlin.test.*
 import org.jetbrains.kotlin.utils.ReportLevel
 import org.junit.internal.runners.JUnit38ClassRunner
 import org.junit.runner.RunWith
+import org.jetbrains.kotlin.idea.test.KotlinCompilerStandalone
+import org.jetbrains.kotlin.test.TestMetadata
+import org.jetbrains.kotlin.idea.test.TestRoot
 import java.io.File
 
 @TestRoot("idea/tests")

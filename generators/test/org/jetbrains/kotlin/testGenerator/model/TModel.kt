@@ -1,6 +1,6 @@
 package org.jetbrains.kotlin.testGenerator.model
 
-import org.jetbrains.kotlin.test.TargetBackend
+import org.jetbrains.kotlin.idea.test.TargetBackend
 import java.io.File
 
 typealias ModelMatcher = (String) -> ModelMatchingResult?
