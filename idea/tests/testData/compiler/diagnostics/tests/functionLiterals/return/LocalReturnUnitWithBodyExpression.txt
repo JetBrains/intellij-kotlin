@@ -1,0 +1,4 @@
+package
+
+public val a: () -> kotlin.Unit
+public val flag: kotlin.Boolean = true

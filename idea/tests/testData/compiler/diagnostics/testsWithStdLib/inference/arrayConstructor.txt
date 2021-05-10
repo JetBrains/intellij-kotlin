@@ -1,0 +1,5 @@
+package
+
+package b {
+    public fun bar(): kotlin.Unit
+}

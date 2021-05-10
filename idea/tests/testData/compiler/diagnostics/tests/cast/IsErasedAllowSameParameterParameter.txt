@@ -1,0 +1,3 @@
+package
+
+public fun </*0*/ T> ff(/*0*/ l: kotlin.collections.MutableCollection<T>): kotlin.Boolean

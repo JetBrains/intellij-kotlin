@@ -1,0 +1,1 @@
+fun f(x: Any) = x <!UNCHECKED_CAST!>as Array<String><!>

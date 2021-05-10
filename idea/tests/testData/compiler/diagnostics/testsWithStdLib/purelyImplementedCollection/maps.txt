@@ -1,0 +1,7 @@
+package
+
+public val nullableInt: kotlin.Int? = null
+public fun bar(): kotlin.String?
+public fun concurrentHashMapTest(): kotlin.Unit
+public fun hashMapTest(): kotlin.Unit
+public fun treeMapTest(): kotlin.Unit

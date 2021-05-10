@@ -1,0 +1,6 @@
+package
+
+package a {
+    public fun bar(): [ERROR : Error function type]
+    public fun foo(): kotlin.Unit
+}

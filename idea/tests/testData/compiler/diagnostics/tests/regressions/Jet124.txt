@@ -1,0 +1,4 @@
+package
+
+public fun foo(): kotlin.Unit
+public fun foo1(): (kotlin.Int) -> kotlin.Int

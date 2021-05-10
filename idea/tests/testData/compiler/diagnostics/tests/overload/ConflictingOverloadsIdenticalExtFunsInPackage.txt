@@ -1,0 +1,6 @@
+package
+
+package extensionFunctions {
+    public fun kotlin.Int.qwe(/*0*/ a: kotlin.Float): kotlin.Int
+    public fun kotlin.Int.qwe(/*0*/ a: kotlin.Float): kotlin.Int
+}

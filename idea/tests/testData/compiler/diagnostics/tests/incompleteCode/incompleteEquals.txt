@@ -1,0 +1,5 @@
+package
+
+package a {
+    public fun foo(/*0*/ a: kotlin.Any): kotlin.Boolean
+}

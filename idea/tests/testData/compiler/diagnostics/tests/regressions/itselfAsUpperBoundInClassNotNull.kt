@@ -1,0 +1,2 @@
+// FIR_IDENTICAL
+class MyClass<T: <!CYCLIC_GENERIC_UPPER_BOUND!>T<!>>
