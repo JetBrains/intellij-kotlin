@@ -1459,25 +1459,25 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("plugins/uast-kotlin-fir/tests", "plugins/uast-kotlin-fir/testData") {
+    testGroup("uast/uast-kotlin-fir") {
         testClass<AbstractFirUastDeclarationTest> {
             model("declaration")
         }
     }
 
-    testGroup("plugins/uast-kotlin-fir/tests", "plugins/uast-kotlin/testData") {
+    testGroup("uast/uast-kotlin-fir", testDataPath = "../uast-kotlin/testData") {
         testClass<AbstractFirLegacyUastDeclarationTest> {
             model("")
         }
     }
 
-    testGroup("plugins/uast-kotlin-fir/tests", "plugins/uast-kotlin-fir/testData") {
+    testGroup("uast/uast-kotlin-fir") {
         testClass<AbstractFE1UastDeclarationTest> {
             model("declaration")
         }
     }
 
-    testGroup("plugins/uast-kotlin-fir/tests", "plugins/uast-kotlin/testData") {
+    testGroup("uast/uast-kotlin-fir", testDataPath = "../uast-kotlin/testData") {
         testClass<AbstractFE1LegacyUastDeclarationTest> {
             model("")
         }
