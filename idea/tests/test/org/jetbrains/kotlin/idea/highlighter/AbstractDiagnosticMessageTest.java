@@ -24,10 +24,10 @@ import org.jetbrains.kotlin.load.kotlin.PackagePartProvider;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.ErrorsJvm;
-import org.jetbrains.kotlin.resolve.lazy.JvmResolveUtil;
-import org.jetbrains.kotlin.test.Directives;
-import org.jetbrains.kotlin.test.InTextDirectivesUtils;
-import org.jetbrains.kotlin.test.KotlinTestUtils;
+import org.jetbrains.kotlin.idea.resolve.lazy.JvmResolveUtil;
+import org.jetbrains.kotlin.idea.test.Directives;
+import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils;
+import org.jetbrains.kotlin.idea.test.KotlinTestUtils;
 
 import java.io.File;
 import java.lang.reflect.Field;

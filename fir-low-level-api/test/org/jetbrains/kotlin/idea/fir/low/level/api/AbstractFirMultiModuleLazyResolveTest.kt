@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.idea.jsonUtils.getString
 import org.jetbrains.kotlin.idea.stubs.AbstractMultiModuleTest
 import org.jetbrains.kotlin.idea.util.sourceRoots
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.test.KotlinTestUtils
+import org.jetbrains.kotlin.idea.test.KotlinTestUtils
 import java.io.File
 import java.nio.file.Paths
 

@@ -6,7 +6,7 @@
 package org.jetbrains.kotlin.idea.fir.low.level.api
 
 import org.jetbrains.kotlin.fir.declarations.*
-import org.jetbrains.kotlin.test.KotlinTestUtils
+import org.jetbrains.kotlin.idea.test.KotlinTestUtils
 import org.jetbrains.kotlin.types.typeUtil.closure
 import java.io.File
 

@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.formatter.FormatSettingsUtil
 import org.jetbrains.kotlin.idea.test.KotlinLightCodeInsightFixtureTestCase
 import org.jetbrains.kotlin.idea.test.configureCodeStyleAndRun
 import org.jetbrains.kotlin.idea.testFramework.dispatchAllInvocationEvents
-import org.jetbrains.kotlin.test.KotlinTestUtils
+import org.jetbrains.kotlin.idea.test.KotlinTestUtils
 import java.io.File
 
 

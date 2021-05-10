@@ -6,7 +6,7 @@
 package org.jetbrains.kotlin.checkers
 
 import com.intellij.testFramework.LightProjectDescriptor
-import org.jetbrains.kotlin.test.JUnit3RunnerWithInners
+import org.jetbrains.kotlin.idea.test.JUnit3RunnerWithInners
 import org.jetbrains.kotlin.test.TestMetadata
 import org.junit.runner.RunWith
 

@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.idea.hierarchy.overrides.KotlinOverrideTreeStructure
 import org.jetbrains.kotlin.idea.test.KotlinWithJdkAndRuntimeLightProjectDescriptor
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.test.KotlinTestUtils
+import org.jetbrains.kotlin.idea.test.KotlinTestUtils
 import java.io.File
 import java.util.*
 

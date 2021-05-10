@@ -5,7 +5,7 @@
 
 package org.jetbrains.kotlin.idea.debugger.test.util
 
-import org.jetbrains.kotlin.test.KotlinBaseTest.TestFile
+import org.jetbrains.kotlin.idea.test.KotlinBaseTest.TestFile
 
 enum class SteppingInstructionKind(val directiveName: String) {
     StepInto("STEP_INTO"),

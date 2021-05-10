@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.idea.invalidateCaches
 import org.jetbrains.kotlin.idea.test.withCustomCompilerOptions
 import org.jetbrains.kotlin.idea.withPossiblyDisabledDuplicatedFirSourceElementsException
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.test.InTextDirectivesUtils
+import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils
 import org.jetbrains.kotlin.test.uitls.IgnoreTests
 import org.jetbrains.kotlin.test.uitls.IgnoreTests.DIRECTIVES
 import org.jetbrains.kotlin.test.uitls.IgnoreTests.cleanUpIdenticalFirTestFile

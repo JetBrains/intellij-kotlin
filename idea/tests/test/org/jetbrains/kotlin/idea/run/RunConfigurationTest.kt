@@ -16,7 +16,7 @@ import com.intellij.psi.PsiManager
 import com.intellij.refactoring.RefactoringFactory
 import com.intellij.testFramework.IdeaTestUtil
 import com.intellij.testFramework.MapDataContext
-import org.jetbrains.kotlin.checkers.languageVersionSettingsFromText
+import org.jetbrains.kotlin.idea.checkers.languageVersionSettingsFromText
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.jetbrains.kotlin.idea.MainFunctionDetector
