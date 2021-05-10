@@ -1,6 +1,6 @@
 package org.jetbrains.kotlin.testGenerator.generator.methods
 
-import org.jetbrains.kotlin.idea.test.TargetBackend
+import org.jetbrains.kotlin.test.TargetBackend
 import org.jetbrains.kotlin.testGenerator.generator.Code
 import org.jetbrains.kotlin.testGenerator.generator.TestMethod
 import org.jetbrains.kotlin.testGenerator.generator.appendBlock
