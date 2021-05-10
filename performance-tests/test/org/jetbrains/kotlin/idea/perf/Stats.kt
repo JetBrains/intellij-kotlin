@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.idea.perf.util.*
 import org.jetbrains.kotlin.idea.perf.whole.WholeProjectPerformanceTest.Companion.nsToMs
 import org.jetbrains.kotlin.idea.testFramework.suggestOsNeutralFileName
 import org.jetbrains.kotlin.test.KotlinRoot
-import org.jetbrains.kotlin.test.KotlinTestUtils
+import org.jetbrains.kotlin.idea.test.KotlinTestUtils
 import org.jetbrains.kotlin.util.PerformanceCounter
 import java.io.*
 import java.lang.ref.WeakReference

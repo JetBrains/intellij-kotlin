@@ -11,7 +11,6 @@ import com.intellij.openapi.roots.OrderRootType
 import org.jetbrains.kotlin.idea.artifacts.AdditionalKotlinArtifacts
 import org.jetbrains.kotlin.idea.test.ConfigLibraryUtil
 import org.jetbrains.kotlin.idea.test.addRoot
-import org.jetbrains.kotlin.test.KotlinTestUtils
 import java.io.File
 
 fun addParcelizeLibraries(module: Module) {

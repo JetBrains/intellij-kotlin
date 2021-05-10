@@ -21,7 +21,7 @@ import com.intellij.testFramework.registerServiceInstance
 import org.jetbrains.kotlin.idea.test.KotlinLightCodeInsightFixtureTestCase
 import org.jetbrains.kotlin.idea.test.KotlinWithJdkAndRuntimeLightProjectDescriptor
 import org.junit.internal.runners.JUnit38ClassRunner
-import org.jetbrains.kotlin.test.KotlinTestUtils
+import org.jetbrains.kotlin.idea.test.KotlinTestUtils
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.evaluateString
 import org.jetbrains.uast.toUElementOfType
