@@ -1,0 +1,3 @@
+package
+
+public fun ff(/*0*/ l: kotlin.Any): kotlin.Boolean

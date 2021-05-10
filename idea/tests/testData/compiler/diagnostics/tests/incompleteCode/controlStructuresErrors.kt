@@ -1,0 +1,26 @@
+// !WITH_NEW_INFERENCE
+
+fun test1() {
+    if (<!UNRESOLVED_REFERENCE!>rr<!>) {
+        if (<!UNRESOLVED_REFERENCE!>l<!>) {
+            <!UNRESOLVED_REFERENCE!>a<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE{OI}, DEBUG_INFO_MISSING_UNRESOLVED{NI}!>q<!>()
+        }
+        else {
+            <!UNRESOLVED_REFERENCE!>a<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE{OI}, DEBUG_INFO_MISSING_UNRESOLVED{NI}!>w<!>()
+        }
+    }
+    else {
+        if (<!UNRESOLVED_REFERENCE!>n<!>) {
+            <!UNRESOLVED_REFERENCE!>a<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE{OI}, DEBUG_INFO_MISSING_UNRESOLVED{NI}!>t<!>()
+        }
+        else {
+            <!UNRESOLVED_REFERENCE!>a<!>.<!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE{OI}, DEBUG_INFO_MISSING_UNRESOLVED{NI}!>u<!>()
+        }
+    }
+}
+
+fun test2(l: List<<!UNRESOLVED_REFERENCE!>AA<!>>) {
+    <!DEBUG_INFO_ELEMENT_WITH_ERROR_TYPE!>l<!>.<!UNRESOLVED_REFERENCE!>map<!> {
+        <!UNRESOLVED_REFERENCE!>it<!>!!
+    }
+}

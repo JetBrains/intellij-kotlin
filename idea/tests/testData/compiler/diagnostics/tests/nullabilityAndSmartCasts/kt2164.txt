@@ -1,0 +1,6 @@
+package
+
+package kt2164 {
+    public fun foo(/*0*/ x: kotlin.Int): kotlin.Int
+    public fun main(): kotlin.Unit
+}
