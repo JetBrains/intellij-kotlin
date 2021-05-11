@@ -1124,6 +1124,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractHighLevelMultiFileJvmBasicCompletionTest> {
             model("basic/multifile", pattern = DIRECTORY, isRecursive = false)
         }
+
+        testClass<AbstractFirKeywordCompletionTest> {
+            model("keywords", recursive = false)
+        }
     }
 
     testGroup("idea/idea-fir/tests", "idea/tests/testData/findUsages") {
