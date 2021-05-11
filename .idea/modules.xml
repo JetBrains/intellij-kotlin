@@ -852,8 +852,10 @@
       <module fileurl="file://$PROJECT_DIR$/common/kotlin.common.iml" filepath="$PROJECT_DIR$/common/kotlin.common.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/allopen/kotlin.compiler-plugins.allopen.iml" filepath="$PROJECT_DIR$/compiler-plugins/allopen/kotlin.compiler-plugins.allopen.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/annotation-based-compiler-support/kotlin.compiler-plugins.annotation-based-compiler-support.iml" filepath="$PROJECT_DIR$/compiler-plugins/annotation-based-compiler-support/kotlin.compiler-plugins.annotation-based-compiler-support.iml" />
+      <module fileurl="file://$PROJECT_DIR$/compiler-plugins/base-compiler-plugins-ide-support/kotlin.compiler-plugins.base-compiler-plugins-ide-support.iml" filepath="$PROJECT_DIR$/compiler-plugins/base-compiler-plugins-ide-support/kotlin.compiler-plugins.base-compiler-plugins-ide-support.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/kapt/kotlin.compiler-plugins.kapt.iml" filepath="$PROJECT_DIR$/compiler-plugins/kapt/kotlin.compiler-plugins.kapt.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/kotlinx-serialization/kotlin.compiler-plugins.kotlinx-serialization.iml" filepath="$PROJECT_DIR$/compiler-plugins/kotlinx-serialization/kotlin.compiler-plugins.kotlinx-serialization.iml" />
+      <module fileurl="file://$PROJECT_DIR$/compiler-plugins/lombok/kotlin.compiler-plugins.lombok.iml" filepath="$PROJECT_DIR$/compiler-plugins/lombok/kotlin.compiler-plugins.lombok.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/noarg/kotlin.compiler-plugins.noarg.iml" filepath="$PROJECT_DIR$/compiler-plugins/noarg/kotlin.compiler-plugins.noarg.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/parcelize/kotlin.compiler-plugins.parcelize.iml" filepath="$PROJECT_DIR$/compiler-plugins/parcelize/kotlin.compiler-plugins.parcelize.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/sam-with-receiver/kotlin.compiler-plugins.sam-with-receiver.iml" filepath="$PROJECT_DIR$/compiler-plugins/sam-with-receiver/kotlin.compiler-plugins.sam-with-receiver.iml" />
@@ -874,9 +876,12 @@
       <module fileurl="file://$PROJECT_DIR$/gradle/gradle-native/kotlin.gradle.gradle-native.iml" filepath="$PROJECT_DIR$/gradle/gradle-native/kotlin.gradle.gradle-native.iml" />
       <module fileurl="file://$PROJECT_DIR$/gradle/gradle-tooling/kotlin.gradle.gradle-tooling.iml" filepath="$PROJECT_DIR$/gradle/gradle-tooling/kotlin.gradle.gradle-tooling.iml" />
       <module fileurl="file://$PROJECT_DIR$/idea/kotlin.idea.iml" filepath="$PROJECT_DIR$/idea/kotlin.idea.iml" />
+      <module fileurl="file://$PROJECT_DIR$/idea/tests/kotlin.idea.tests.iml" filepath="$PROJECT_DIR$/idea/tests/kotlin.idea.tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/j2k/idea/kotlin.j2k.idea.iml" filepath="$PROJECT_DIR$/j2k/idea/kotlin.j2k.idea.iml" />
       <module fileurl="file://$PROJECT_DIR$/j2k/new/kotlin.j2k.new.iml" filepath="$PROJECT_DIR$/j2k/new/kotlin.j2k.new.iml" />
+      <module fileurl="file://$PROJECT_DIR$/j2k/new/tests/kotlin.j2k.new.tests.iml" filepath="$PROJECT_DIR$/j2k/new/tests/kotlin.j2k.new.tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/j2k/old/kotlin.j2k.old.iml" filepath="$PROJECT_DIR$/j2k/old/kotlin.j2k.old.iml" />
+      <module fileurl="file://$PROJECT_DIR$/j2k/old/tests/kotlin.j2k.old.tests.iml" filepath="$PROJECT_DIR$/j2k/old/tests/kotlin.j2k.old.tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/j2k/services/kotlin.j2k.services.iml" filepath="$PROJECT_DIR$/j2k/services/kotlin.j2k.services.iml" />
       <module fileurl="file://$PROJECT_DIR$/jps/jps-common/kotlin.jps-common.iml" filepath="$PROJECT_DIR$/jps/jps-common/kotlin.jps-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/jps/jps-plugin/kotlin.jps-plugin.iml" filepath="$PROJECT_DIR$/jps/jps-plugin/kotlin.jps-plugin.iml" />
