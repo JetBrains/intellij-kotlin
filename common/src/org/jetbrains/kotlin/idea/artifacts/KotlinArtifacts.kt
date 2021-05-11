@@ -64,6 +64,7 @@ abstract class KotlinArtifacts(val kotlincDistDir: File) {
     val kotlinScriptingJvm = File(kotlincLibDirectory, KotlinArtifactNames.KOTLIN_SCRIPTING_JVM)
     val kotlinCompiler: File = File(kotlincLibDirectory, KotlinArtifactNames.KOTLIN_COMPILER)
     val kotlinAnnotationsJvm: File = File(kotlincLibDirectory, KotlinArtifactNames.KOTLIN_ANNOTATIONS_JVM)
+    val lombokCompilerPlugin: File = File(kotlincLibDirectory, KotlinArtifactNames.LOMBOK_COMPILER_PLUGIN)
     val trove4j = File(kotlincLibDirectory, KotlinArtifactNames.TROVE4J)
     val kotlinDaemon = File(kotlincLibDirectory, KotlinArtifactNames.KOTLIN_DAEMON)
     val kotlinScriptingCompiler = File(kotlincLibDirectory, KotlinArtifactNames.KOTLIN_SCRIPTING_COMPILER)
