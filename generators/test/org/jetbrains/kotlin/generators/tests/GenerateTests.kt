@@ -30,6 +30,7 @@ import org.jetbrains.kotlin.idea.codeInsight.moveUpDown.AbstractMoveStatementTes
 import org.jetbrains.kotlin.idea.codeInsight.postfix.AbstractPostfixTemplateProviderTest
 import org.jetbrains.kotlin.idea.codeInsight.surroundWith.AbstractSurroundWithTest
 import org.jetbrains.kotlin.idea.codeInsight.unwrap.AbstractUnwrapRemoveTest
+import org.jetbrains.kotlin.idea.completion.AbstractFirKeywordCompletionTest
 import org.jetbrains.kotlin.idea.completion.AbstractHighLevelJvmBasicCompletionTest
 import org.jetbrains.kotlin.idea.completion.AbstractHighLevelMultiFileJvmBasicCompletionTest
 import org.jetbrains.kotlin.idea.completion.test.*
@@ -1170,6 +1171,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
 
         testClass<AbstractHighLevelMultiFileJvmBasicCompletionTest> {
             model("basic/multifile", pattern = DIRECTORY, isRecursive = false)
+        }
+
+        testClass<AbstractFirKeywordCompletionTest> {
+            model("keywords", recursive = false)
         }
     }
 
