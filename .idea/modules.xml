@@ -847,8 +847,10 @@
       <module fileurl="file://$PROJECT_DIR$/common/kotlin.common.iml" filepath="$PROJECT_DIR$/common/kotlin.common.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/allopen/kotlin.compiler-plugins.allopen.iml" filepath="$PROJECT_DIR$/compiler-plugins/allopen/kotlin.compiler-plugins.allopen.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/annotation-based-compiler-support/kotlin.compiler-plugins.annotation-based-compiler-support.iml" filepath="$PROJECT_DIR$/compiler-plugins/annotation-based-compiler-support/kotlin.compiler-plugins.annotation-based-compiler-support.iml" />
+      <module fileurl="file://$PROJECT_DIR$/compiler-plugins/base-compiler-plugins-ide-support/kotlin.compiler-plugins.base-compiler-plugins-ide-support.iml" filepath="$PROJECT_DIR$/compiler-plugins/base-compiler-plugins-ide-support/kotlin.compiler-plugins.base-compiler-plugins-ide-support.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/kapt/kotlin.compiler-plugins.kapt.iml" filepath="$PROJECT_DIR$/compiler-plugins/kapt/kotlin.compiler-plugins.kapt.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/kotlinx-serialization/kotlin.compiler-plugins.kotlinx-serialization.iml" filepath="$PROJECT_DIR$/compiler-plugins/kotlinx-serialization/kotlin.compiler-plugins.kotlinx-serialization.iml" />
+      <module fileurl="file://$PROJECT_DIR$/compiler-plugins/lombok/kotlin.compiler-plugins.lombok.iml" filepath="$PROJECT_DIR$/compiler-plugins/lombok/kotlin.compiler-plugins.lombok.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/noarg/kotlin.compiler-plugins.noarg.iml" filepath="$PROJECT_DIR$/compiler-plugins/noarg/kotlin.compiler-plugins.noarg.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/sam-with-receiver/kotlin.compiler-plugins.sam-with-receiver.iml" filepath="$PROJECT_DIR$/compiler-plugins/sam-with-receiver/kotlin.compiler-plugins.sam-with-receiver.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/scripting/kotlin.compiler-plugins.scripting.iml" filepath="$PROJECT_DIR$/compiler-plugins/scripting/kotlin.compiler-plugins.scripting.iml" />

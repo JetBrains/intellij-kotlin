@@ -205,6 +205,15 @@
         <element id="archive" name="parcelize-compiler-plugin-for-ide.jar">
           <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/1.5.20-dev-local/parcelize-compiler-plugin-for-ide-1.5.20-dev-local.jar" path-in-jar="/" />
         </element>
+        <element id="archive" name="kotlin-compiler-plugins-lombok.jar">
+          <element id="module-output" name="kotlin.compiler-plugins.lombok" />
+        </element>
+        <element id="archive" name="lombok-compiler-plugin-for-ide.jar">
+          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/1.5.20-dev-local/lombok-compiler-plugin-for-ide-1.5.20-dev-local.jar" path-in-jar="/" />
+        </element>
+        <element id="archive" name="base-compiler-plugins-ide-support.jar">
+          <element id="module-output" name="kotlin.compiler-plugins.base-compiler-plugins-ide-support" />
+        </element>
       </element>
       <element id="directory" name="kotlinc">
         <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-dist-for-ide/1.5.20-dev-local/kotlin-dist-for-ide-1.5.20-dev-local.jar" path-in-jar="/" />
