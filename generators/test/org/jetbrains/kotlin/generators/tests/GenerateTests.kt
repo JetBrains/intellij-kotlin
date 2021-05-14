@@ -64,7 +64,6 @@ import org.jetbrains.kotlin.idea.editor.backspaceHandler.AbstractBackspaceHandle
 import org.jetbrains.kotlin.idea.editor.quickDoc.AbstractQuickDocProviderTest
 import org.jetbrains.kotlin.idea.externalAnnotations.AbstractExternalAnnotationTest
 import org.jetbrains.kotlin.idea.filters.AbstractKotlinExceptionFilterTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.diagnostic.compiler.based.AbstractDiagnosisCompilerTestDataTest
 import org.jetbrains.kotlin.idea.folding.AbstractKotlinFoldingTest
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyTest
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyWithLibTest
@@ -144,10 +143,6 @@ import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractProjectTemplateBuild
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractYamlBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractProjectTemplateNewWizardProjectImportTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractYamlNewWizardProjectImportTest
-import org.jetbrains.uast.test.kotlin.AbstractFE1LegacyUastDeclarationTest
-import org.jetbrains.uast.test.kotlin.AbstractFE1UastDeclarationTest
-import org.jetbrains.uast.test.kotlin.AbstractFirLegacyUastDeclarationTest
-import org.jetbrains.uast.test.kotlin.AbstractFirUastDeclarationTest
 
 fun main() {
     System.setProperty("java.awt.headless", "true")
@@ -1459,6 +1454,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
+    /*
     testGroup("uast/uast-kotlin-fir") {
         testClass<AbstractFirUastDeclarationTest> {
             model("declaration")
@@ -1482,6 +1478,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("")
         }
     }
+     */
 
     testGroup("performance-tests", testDataPath = "../idea/tests/testData") {
         testClass<AbstractPerformanceJavaToKotlinCopyPasteConversionTest> {
