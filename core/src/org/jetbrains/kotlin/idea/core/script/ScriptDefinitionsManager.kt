@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.idea.caches.project.getScriptRelatedModuleInfo
 import org.jetbrains.kotlin.idea.core.script.configuration.CompositeScriptConfigurationManager
 import org.jetbrains.kotlin.idea.core.script.settings.KotlinScriptingSettings
 import org.jetbrains.kotlin.idea.core.util.withCheckCanceledLock
-import org.jetbrains.kotlin.idea.core.util.writeWithCheckCanceled
 import org.jetbrains.kotlin.idea.util.application.getServiceSafe
 import org.jetbrains.kotlin.idea.util.application.isUnitTestMode
 import org.jetbrains.kotlin.idea.util.getProjectJdkTableSafe
@@ -45,7 +44,6 @@ import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
 import java.io.File
 import java.net.URLClassLoader
 import java.util.concurrent.locks.ReentrantLock
-import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.script.dependencies.Environment
 import kotlin.script.dependencies.ScriptContents
 import kotlin.script.experimental.api.SourceCode
@@ -79,7 +77,7 @@ class LoadScriptDefinitionsStartupActivity : StartupActivity {
 }
 
 class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinitionProvider(), Disposable {
-    private val definitionsLock = ReentrantReadWriteLock()
+    private val definitionsLock = ReentrantLock()
     private val definitionsBySource = mutableMapOf<ScriptDefinitionsSource, List<ScriptDefinition>>()
 
     @Volatile
@@ -131,7 +129,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
     override fun findScriptDefinition(fileName: String): KotlinScriptDefinition? = findDefinition(File(fileName).toScriptSource())?.legacyDefinition
 
     fun reloadDefinitionsBy(source: ScriptDefinitionsSource) {
-        definitionsLock.writeWithCheckCanceled {
+        definitionsLock.withCheckCanceledLock {
             if (definitions == null) {
                 sourcesToReload.add(source)
                 return // not loaded yet
@@ -140,7 +138,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
         }
 
         val safeGetDefinitions = source.safeGetDefinitions()
-        val updateDefinitionsResult = definitionsLock.writeWithCheckCanceled {
+        val updateDefinitionsResult = definitionsLock.withCheckCanceledLock {
             definitionsBySource[source] = safeGetDefinitions
 
             definitions = definitionsBySource.values.flattenTo(mutableListOf())
@@ -179,7 +177,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
 
         val newDefinitionsBySource = getSources().associateWith { it.safeGetDefinitions() }
 
-        val updateDefinitionsResult = definitionsLock.writeWithCheckCanceled {
+        val updateDefinitionsResult = definitionsLock.withCheckCanceledLock {
             definitionsBySource.putAll(newDefinitionsBySource)
             definitions = definitionsBySource.values.flattenTo(mutableListOf())
 
@@ -187,7 +185,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
         }
         updateDefinitionsResult?.apply()
 
-        definitionsLock.writeWithCheckCanceled {
+        definitionsLock.withCheckCanceledLock {
             sourcesToReload.takeIf { it.isNotEmpty() }?.let {
                 val copy = ArrayList<ScriptDefinitionsSource>(it)
                 it.clear()
@@ -198,7 +196,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
 
     fun reorderScriptDefinitions() {
         val scriptingSettings = kotlinScriptingSettingsSafe() ?: return
-        val updateDefinitionsResult = definitionsLock.writeWithCheckCanceled {
+        val updateDefinitionsResult = definitionsLock.withCheckCanceledLock {
             definitions?.let { list ->
                 list.forEach {
                     it.order = scriptingSettings.getScriptDefinitionOrder(it)
@@ -222,7 +220,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
 
     fun isReady(): Boolean {
         if (definitions == null) return false
-        val keys = definitionsLock.writeWithCheckCanceled { definitionsBySource.keys }
+        val keys = definitionsLock.withCheckCanceledLock { definitionsBySource.keys }
         return keys.all { source ->
             // TODO: implement another API for readiness checking
             (source as? ScriptDefinitionContributor)?.isReady() != false
@@ -236,7 +234,7 @@ class ScriptDefinitionsManager(private val project: Project) : LazyScriptDefinit
     }
 
     private fun updateDefinitions(): UpdateDefinitionsResult? {
-        assert(definitionsLock.isWriteLocked) { "updateDefinitions should only be called under the write lock" }
+        assert(definitionsLock.isLocked) { "updateDefinitions should only be called under the write lock" }
         if (project.isDisposed) return null
 
         val fileTypeManager = FileTypeManager.getInstance()
