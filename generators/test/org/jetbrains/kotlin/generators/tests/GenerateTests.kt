@@ -190,10 +190,23 @@ import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractProjectTemplateBuild
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractYamlBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractProjectTemplateNewWizardProjectImportTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractYamlNewWizardProjectImportTest
+<<<<<<< HEAD
 import org.jetbrains.uast.test.kotlin.AbstractFE1LegacyUastDeclarationTest
 import org.jetbrains.uast.test.kotlin.AbstractFE1UastDeclarationTest
 import org.jetbrains.uast.test.kotlin.AbstractFirLegacyUastDeclarationTest
 import org.jetbrains.uast.test.kotlin.AbstractFirUastDeclarationTest
+||||||| parent of 3c02c1fe5c6 (FIR UAST: introduce identifiers and refNames tests)
+import org.jetbrains.kotlinx.serialization.idea.AbstractSerializationPluginIdeDiagnosticTest
+import org.jetbrains.kotlinx.serialization.idea.AbstractSerializationQuickFixTest
+import org.jetbrains.uast.test.kotlin.AbstractFE1LegacyUastDeclarationTest
+import org.jetbrains.uast.test.kotlin.AbstractFE1UastDeclarationTest
+import org.jetbrains.uast.test.kotlin.AbstractFirLegacyUastDeclarationTest
+import org.jetbrains.uast.test.kotlin.AbstractFirUastDeclarationTest
+=======
+import org.jetbrains.kotlinx.serialization.idea.AbstractSerializationPluginIdeDiagnosticTest
+import org.jetbrains.kotlinx.serialization.idea.AbstractSerializationQuickFixTest
+import org.jetbrains.uast.test.kotlin.*
+>>>>>>> 3c02c1fe5c6 (FIR UAST: introduce identifiers and refNames tests)
 
 fun main() {
     System.setProperty("java.awt.headless", "true")
@@ -1562,6 +1575,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractFirLegacyUastDeclarationTest> {
             model("")
         }
+
+        testClass<AbstractFirLegacyUastIdentifiersTest> {
+            model("")
+        }
     }
 
     testGroup("uast/uast-kotlin-fir") {
@@ -1572,6 +1589,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
 
     testGroup("uast/uast-kotlin-fir", testDataPath = "../uast-kotlin/testData") {
         testClass<AbstractFE1LegacyUastDeclarationTest> {
+            model("")
+        }
+
+        testClass<AbstractFE1LegacyUastIdentifiersTest> {
             model("")
         }
     }
