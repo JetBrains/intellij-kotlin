@@ -297,7 +297,7 @@ class KotlinPlatformContainerImpl() : KotlinPlatformContainer {
         myPlatforms = HashSet(platform.platforms)
     }
 
-    override val platforms: Collection<KotlinPlatform>
+    override val platforms: Set<KotlinPlatform>
         get() = myPlatforms ?: defaultCommonPlatform
 
     override fun supports(simplePlatform: KotlinPlatform): Boolean = platforms.contains(simplePlatform)
