@@ -1165,6 +1165,12 @@ private fun assembleWorkspace(): TWorkspace = workspace {
 
         testClass<AbstractFirKeywordCompletionTest> {
             model("keywords", isRecursive = false, pattern = KT_WITHOUT_FIR_PREFIX)
+            model(
+                "../../idea-fir/testData/completion/keywords",
+                testClassName = "KeywordsFir",
+                recursive = false,
+                pattern = KT_WITHOUT_FIR_PREFIX
+            )
         }
     }
 
