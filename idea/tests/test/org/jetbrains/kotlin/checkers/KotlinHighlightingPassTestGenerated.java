@@ -883,5 +883,10 @@ public class KotlinHighlightingPassTestGenerated extends AbstractKotlinHighlight
         public void testOperatorCallDiagnosticsOnInOperator() throws Exception {
             runTest("testData/checker/diagnosticsMessage/operatorCallDiagnosticsOnInOperator.kt");
         }
+
+        @TestMetadata("valOrVarOnParameter.kt")
+        public void testValOrVarOnParameter() throws Exception {
+            runTest("idea/testData/checker/diagnosticsMessage/valOrVarOnParameter.kt");
+        }
     }
 }
