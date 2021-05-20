@@ -767,5 +767,10 @@ public abstract class FirKotlinHighlightingPassTestGenerated extends AbstractFir
         public void testOperatorCallDiagnosticsOnInOperator() throws Exception {
             runTest("../idea/tests/testData/checker/diagnosticsMessage/operatorCallDiagnosticsOnInOperator.kt");
         }
+
+        @TestMetadata("valOrVarOnParameter.kt")
+        public void testValOrVarOnParameter() throws Exception {
+            runTest("idea/testData/checker/diagnosticsMessage/valOrVarOnParameter.kt");
+        }
     }
 }
