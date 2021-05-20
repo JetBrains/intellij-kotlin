@@ -271,15 +271,13 @@ open class MultiModuleHighlightingTest : AbstractMultiModuleHighlightingTest() {
     }
 
     fun testResolutionAnchorsAndBuiltins() {
-        val jarForCompositeLibrary = MockLibraryUtilExt.compileJvmLibraryToJar(
-            sourcesPath = "$testDataPath${getTestName(true)}/compositeLibraryPart",
-            jarName = "compositeLibraryPart"
-        )
-        val stdlibJarForCompositeLibrary = ForTestCompileRuntime.runtimeJarForTests()
-        val jarForSourceDependentLibrary = MockLibraryUtilExt.compileJvmLibraryToJar(
-            sourcesPath = "$testDataPath${getTestName(true)}/sourceDependentLibrary",
-            jarName = "sourceDependentLibrary"
-        )
+        val jarForCompositeLibrary = KotlinCompilerStandalone(
+            listOf(File("$testDataPath${getTestName(true)}/compositeLibraryPart")),
+        ).compile()
+        val jarForSourceDependentLibrary = KotlinCompilerStandalone(
+            listOf(File("$testDataPath${getTestName(true)}/sourceDependentLibrary")),
+        ).compile()
+        val stdlibJarForCompositeLibrary = KotlinArtifacts.instance.kotlinStdlib
 
         val dependencyModule = module("dependencyModule")
         val anchorModule = module("anchor")

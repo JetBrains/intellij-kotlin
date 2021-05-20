@@ -167,7 +167,7 @@ abstract class AbstractMultiModuleTest : DaemonAnalyzerTestCase() {
         anchors: Map<String, String>,
         block: () -> Unit
     ) {
-        val resolutionAnchorService = ResolutionAnchorCacheService.getInstance(project).safeAs<ResolutionAnchorCacheServiceImpl>()
+        val resolutionAnchorService = ResolutionAnchorCacheService.getInstance(project) as? ResolutionAnchorCacheServiceImpl
             ?: error("Anchor service missing")
         val oldResolutionAnchorMappingState = resolutionAnchorService.state
         val oldLibraryToSourceAnalysisState = KotlinLibraryToSourceAnalysisComponent.isEnabled(project)
