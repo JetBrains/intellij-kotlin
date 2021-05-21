@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="ArtifactManager">
-  <artifact name="KotlinPluginCommunity">
-    <output-path>$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity</output-path>
+  <artifact name="KotlinPluginCommunityFir">
+    <output-path>$PROJECT_DIR$/out/artifacts/KotlinPluginCommunityFir</output-path>
     <root id="root">
       <element id="directory" name="lib">
         <element id="archive" name="android-extensions-compiler-plugin-for-ide.jar">
           <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/android-extensions-compiler-plugin-for-ide/1.5.255-SNAPSHOT/android-extensions-compiler-plugin-for-ide-1.5.255-SNAPSHOT.jar" path-in-jar="/" />
+        </element>
+        <element id="archive" name="kotlin-android-extensions-runtime.jar">
+          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-android-extensions-runtime/1.5.255-SNAPSHOT/kotlin-android-extensions-runtime-1.5.255-SNAPSHOT.jar" path-in-jar="/" />
         </element>
         <element id="archive" name="allopen-compiler-plugin-for-ide.jar">
           <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/allopen-compiler-plugin-for-ide/1.5.255-SNAPSHOT/allopen-compiler-plugin-for-ide-1.5.255-SNAPSHOT.jar" path-in-jar="/" />
@@ -31,7 +34,6 @@
         </element>
         <element id="archive" name="kotlin-compiler-plugins-allopen.jar">
           <element id="module-output" name="kotlin.compiler-plugins.allopen" />
-          <element id="module-output" name="kotlin.compiler-plugins.android-extensions-stubs" />
         </element>
         <element id="archive" name="kotlin-compiler-plugins-annotation-based-compiler-support.jar">
           <element id="module-output" name="kotlin.compiler-plugins.annotation-based-compiler-support" />
@@ -114,6 +116,9 @@
         <element id="archive" name="kotlin-uast-kotlin-idea.jar">
           <element id="module-output" name="kotlin.uast.uast-kotlin-idea" />
         </element>
+        <element id="archive" name="kotlin-analysis.jar">
+          <element id="module-output" name="kotlin.analysis" />
+        </element>
         <element id="archive" name="kotlin-common.jar">
           <element id="module-output" name="kotlin.common" />
         </element>
@@ -122,6 +127,9 @@
         </element>
         <element id="archive" name="kotlin-eval4j.jar">
           <element id="module-output" name="kotlin.eval4j" />
+        </element>
+        <element id="archive" name="kotlin-fir.jar">
+          <element id="module-output" name="kotlin.fir" />
         </element>
         <element id="archive" name="kotlin-formatter.jar">
           <element id="module-output" name="kotlin.formatter" />
@@ -142,6 +150,9 @@
         </element>
         <element id="archive" name="kotlin-jvm.jar">
           <element id="module-output" name="kotlin.jvm" />
+        </element>
+        <element id="archive" name="kotlin-live-templates.jar">
+          <element id="module-output" name="kotlin.live-templates" />
         </element>
         <element id="archive" name="kotlin-maven.jar">
           <element id="module-output" name="kotlin.maven" />
@@ -188,26 +199,17 @@
         <element id="library" level="module" name="intellij-markdown" module-name="intellij.markdown" />
         <element id="library" level="project" name="kotlinx-coroutines-jdk8" />
         <element id="library" level="project" name="completion-ranking-kotlin" />
-        <element id="archive" name="kotlin-resources-descriptors.jar">
-          <element id="module-output" name="kotlin.resources-descriptors" />
+        <element id="archive" name="kotlin.fir-low-level-api.jar">
+          <element id="module-output" name="kotlin.fir.fir-low-level-api" />
         </element>
-        <element id="archive" name="kotlin-parcelize.jar">
-          <element id="module-output" name="kotlin.compiler-plugins.parcelize" />
+        <element id="archive" name="kotlin.frontend-api.jar">
+          <element id="module-output" name="kotlin.fir.frontend-api" />
         </element>
-        <element id="archive" name="parcelize-compiler-plugin-for-ide.jar">
-          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/parcelize-compiler-plugin-for-ide/1.5.255-SNAPSHOT/parcelize-compiler-plugin-for-ide-1.5.255-SNAPSHOT.jar" path-in-jar="/" />
+        <element id="archive" name="kotlin.frontend-fir.jar">
+          <element id="module-output" name="kotlin.fir.frontend-fir" />
         </element>
-        <element id="archive" name="kotlin-uast-kotlin-base.jar">
-          <element id="module-output" name="kotlin.uast.uast-kotlin-base" />
-        </element>
-        <element id="archive" name="kotlin-compiler-plugins-lombok.jar">
-          <element id="module-output" name="kotlin.compiler-plugins.lombok" />
-        </element>
-        <element id="archive" name="lombok-compiler-plugin-for-ide.jar">
-          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/lombok-compiler-plugin-for-ide/1.5.255-SNAPSHOT/lombok-compiler-plugin-for-ide-1.5.255-SNAPSHOT.jar" path-in-jar="/" />
-        </element>
-        <element id="archive" name="base-compiler-plugins-ide-support.jar">
-          <element id="module-output" name="kotlin.compiler-plugins.base-compiler-plugins-ide-support" />
+        <element id="archive" name="kotlin-resources-fir.jar">
+          <element id="module-output" name="kotlin.resources-fir" />
         </element>
       </element>
       <element id="directory" name="kotlinc">
