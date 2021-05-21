@@ -7,7 +7,7 @@
 //
 //import com.intellij.testFramework.LightProjectDescriptor
 //import org.jetbrains.kotlin.idea.test.KotlinWithJdkAndRuntimeLightProjectDescriptor
-//import org.jetbrains.kotlin.test.JUnit3WithIdeaConfigurationRunner
+//import org.junit.internal.runners.JUnit38ClassRunner
 //import org.jetbrains.kotlin.test.uitls.IgnoreTests
 //import org.junit.runner.RunWith
 //import java.nio.file.Paths
