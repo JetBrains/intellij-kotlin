@@ -71,7 +71,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
 
         for (module in getLibraryUsageIndex().getModulesLibraryIsUsedIn(libraryInfo)) {
             val (moduleLibraries, moduleSdks) = moduleDependenciesCache.getOrPut(module) {
-                computeLibrariesAndSdksUsedIn(module)
+                computeLibrariesAndSdksUsedIn(libraryInfo, module)
             }
 
             libraries.addAll(moduleLibraries)
@@ -81,7 +81,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
         return libraries to sdks
     }
 
-    private fun computeLibrariesAndSdksUsedIn(module: Module): Pair<Set<DependencyCandidate>, Set<SdkInfo>> {
+    private fun computeLibrariesAndSdksUsedIn(libraryInfo: LibraryInfo, module: Module): Pair<Set<DependencyCandidate>, Set<SdkInfo>> {
         val libraries = LinkedHashSet<DependencyCandidate>()
         val sdks = LinkedHashSet<SdkInfo>()
 
@@ -115,7 +115,9 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
             }
         }, Unit)
 
-        return libraries to sdks
+        val filteredLibraries = filterForBuiltins(libraryInfo, libraries)
+
+        return filteredLibraries to sdks
     }
 
     private fun getLibraryUsageIndex(): LibraryUsageIndex {
