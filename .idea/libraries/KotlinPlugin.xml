@@ -4,6 +4,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/allopen-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/android-extensions-compiler-plugin-for-ide.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/base-compiler-plugins-ide-support.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/completion-ranking-kotlin-0.1.3.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/javaslang-2.0.6.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/javaslang-match-2.0.6.jar!/" />
@@ -15,6 +16,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-annotation-based-compiler-support.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-kapt.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-kotlinx-serialization.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-lombok.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-noarg.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-sam-with-receiver.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-scripting.jar!/" />
@@ -61,6 +63,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib-jdk7.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib-jdk8.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin-base.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin-idea.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-ultimate-common-cidr-native.jar!/" />
@@ -72,6 +75,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlinx-coroutines-core-1.3.9.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlinx-coroutines-jdk8-1.3.9.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlinx-serialization-compiler-plugin-for-ide.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/lombok-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/noarg-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/parcelize-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/sam-with-receiver-compiler-plugin-for-ide.jar!/" />
@@ -81,6 +85,7 @@
     <excluded>
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/allopen-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/android-extensions-compiler-plugin-for-ide.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/base-compiler-plugins-ide-support.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/completion-ranking-kotlin-0.1.3.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/javaslang-2.0.6.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/javaslang-match-2.0.6.jar!/" />
@@ -92,6 +97,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-annotation-based-compiler-support.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-kapt.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-kotlinx-serialization.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-lombok.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-noarg.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-sam-with-receiver.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-compiler-plugins-scripting.jar!/" />
@@ -138,6 +144,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib-jdk7.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib-jdk8.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin-base.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin-idea.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-ultimate-common-cidr-native.jar!/" />
@@ -149,6 +156,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlinx-coroutines-core-1.3.9.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlinx-coroutines-jdk8-1.3.9.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlinx-serialization-compiler-plugin-for-ide.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/lombok-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/noarg-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/parcelize-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/sam-with-receiver-compiler-plugin-for-ide.jar!/" />
