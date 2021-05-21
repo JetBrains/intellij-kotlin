@@ -26,7 +26,7 @@
 //    }
 //
 //    public void testAllFilesPresentInQuickfix() throws Exception {
-//        KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("plugins/kotlin-serialization/kotlin-serialization-ide/testData/quickfix"), Pattern.compile("^([\\w\\-_]+)\\.kt$"), null, true);
+
 //    }
 //
 //    @TestMetadata("DefaultFormat.kt")
