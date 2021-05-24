@@ -1161,12 +1161,14 @@ private fun assembleWorkspace(): TWorkspace = workspace {
     }
     */
 
+    /*
     testGroup("fir-fe10-binding", testDataPath = "../idea/tests") {
         testClass<AbstractFe10BindingIntentionTest> {
             val pattern = Patterns.forRegex("^([\\w\\-_]+)\\.(kt|kts)$")
             model("testData/intentions/conventionNameCalls", pattern = pattern)
         }
     }
+     */
 
     testGroup("scripting-support") {
         testClass<AbstractScratchRunActionTest> {
