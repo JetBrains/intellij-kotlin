@@ -39,6 +39,7 @@ dependencies {
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-for-ide"), JpsDepScope.COMPILE)
+    jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-cli-for-ide"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-scripting-compiler"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-scripting-common"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-scripting-jvm"), JpsDepScope.COMPILE)

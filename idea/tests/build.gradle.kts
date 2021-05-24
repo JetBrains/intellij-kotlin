@@ -46,16 +46,18 @@ dependencies {
     jpsLikeJarDependency("com.google.guava:guava:29.0-jre", JpsDepScope.TEST)
     jpsLikeJarDependency("org.jetbrains.intellij.deps.fastutil:intellij-deps-fastutil:8.4.1-4", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.jvm", JpsDepScope.TEST)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.test-framework", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.test-framework", JpsDepScope.TEST, exported = true)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.tests-common", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.repl", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.line-indent-provider", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.jvm-debugger.util", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.native", JpsDepScope.TEST)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-for-ide"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-cli-for-ide"), JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.core", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.common", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent.tests", JpsDepScope.TEST)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:sam-with-receiver-compiler-plugin-for-ide"), JpsDepScope.TEST)
     jpsLikeJarDependency(project(":kotlin-reflect"), JpsDepScope.TEST)
     jpsLikeJarDependency(project(":kotlin-script-runtime"), JpsDepScope.TEST)
@@ -128,9 +130,9 @@ sourceSets {
         
     }
     "test" {
-        java.srcDir("../../live-templates/tests/test")
         java.srcDir("../../completion/tests/test")
         java.srcDir("test")
+        java.srcDir("../../live-templates/tests/test")
     }
 }
 
@@ -141,7 +143,7 @@ java {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
-    kotlinOptions.freeCompilerArgs = listOf("-version", "-Xstrict-java-nullability-assertions", "-Xjvm-default=enable")
+    kotlinOptions.freeCompilerArgs = listOf("-version", "-Xstrict-java-nullability-assertions", "-Xjvm-default=enable", "-Xskip-prerelease-check")
     kotlinOptions.jdkHome = rootProject.extra["JDK_11"] as String
     kotlinOptions.useOldBackend = true // KT-45697
 }

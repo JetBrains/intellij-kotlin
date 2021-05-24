@@ -65,8 +65,6 @@ dependencies {
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("intellij-xml") })
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-core-ui") })
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-reflect:1.4.0", JpsDepScope.COMPILE)
-    jpsLikeJarDependency("junit:junit:4.12", JpsDepScope.TEST)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.tests-common", JpsDepScope.TEST)
 }
 
 configurations.all {
@@ -79,7 +77,7 @@ sourceSets {
         java.srcDir("src")
     }
     "test" {
-        java.srcDir("test")
+        
     }
 }
 
