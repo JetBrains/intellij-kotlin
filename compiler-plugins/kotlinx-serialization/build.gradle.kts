@@ -44,6 +44,7 @@ dependencies {
     jpsLikeModuleDependency(":kotlin-ide.kotlin.core", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.jps-common", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.idea", JpsDepScope.COMPILE)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.compiler-plugins.base-compiler-plugins-ide-support", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.idea.tests", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.maven", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.gradle.gradle-idea", JpsDepScope.COMPILE)

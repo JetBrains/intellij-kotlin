@@ -48,6 +48,8 @@ dependencies {
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("util") }) // Exported transitive dependency
     jpsLikeJarDependency("org.jetbrains:annotations:20.1.0", JpsDepScope.COMPILE) // Exported transitive dependency
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.0", JpsDepScope.COMPILE) // Exported transitive dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-core-ui") })
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-util-ui") })
     jpsLikeJarDependency(intellijPluginDep("java", forIde = true), JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent", JpsDepScope.COMPILE)
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-reflect:1.4.0", JpsDepScope.COMPILE)

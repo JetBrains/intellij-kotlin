@@ -44,6 +44,7 @@ dependencies {
     jpsLikeJarDependency("com.google.guava:guava:29.0-jre", JpsDepScope.TEST)
     jpsLikeJarDependency("org.jetbrains.intellij.deps:jb-jdi:2.3", JpsDepScope.TEST)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-for-ide"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-cli-for-ide"), JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.common", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.core", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent", JpsDepScope.TEST)
