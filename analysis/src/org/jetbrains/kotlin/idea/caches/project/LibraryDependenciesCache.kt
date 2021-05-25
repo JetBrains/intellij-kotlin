@@ -69,28 +69,36 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
         val libraries = LinkedHashSet<DependencyCandidate>()
         val sdks = LinkedHashSet<SdkInfo>()
 
-        for (module in getLibraryUsageIndex().getModulesLibraryIsUsedIn(libraryInfo)) {
-            val (moduleLibraries, moduleSdks) = moduleDependenciesCache.getOrPut(module) {
-                computeLibrariesAndSdksUsedIn(libraryInfo, module)
-            }
-
-            libraries.addAll(moduleLibraries)
-            sdks.addAll(moduleSdks)
-        }
-
-        return libraries to sdks
-    }
-
-    private fun computeLibrariesAndSdksUsedIn(libraryInfo: LibraryInfo, module: Module): Pair<Set<DependencyCandidate>, Set<SdkInfo>> {
-        val libraries = LinkedHashSet<DependencyCandidate>()
-        val sdks = LinkedHashSet<SdkInfo>()
-
         val processedModules = HashSet<Module>()
         val condition = Condition<OrderEntry> { orderEntry ->
             orderEntry.safeAs<ModuleOrderEntry>()?.let {
                 it.module?.run { this !in processedModules } ?: false
             } ?: true
         }
+
+        for (module in getLibraryUsageIndex().getModulesLibraryIsUsedIn(libraryInfo)) {
+            if (!processedModules.add(module)) continue
+
+            val (moduleLibraries, moduleSdks) = moduleDependenciesCache.getOrPut(module) {
+                computeLibrariesAndSdksUsedIn(module, processedModules, condition)
+            }
+
+            libraries.addAll(moduleLibraries)
+            sdks.addAll(moduleSdks)
+        }
+
+        val filteredLibraries = filterForBuiltins(libraryInfo, libraries)
+
+        return filteredLibraries to sdks
+    }
+
+    private fun computeLibrariesAndSdksUsedIn(
+        module: Module,
+        processedModules: HashSet<Module>,
+        condition: Condition<OrderEntry>
+    ): Pair<Set<DependencyCandidate>, Set<SdkInfo>> {
+        val libraries = LinkedHashSet<DependencyCandidate>()
+        val sdks = LinkedHashSet<SdkInfo>()
 
         ModuleRootManager.getInstance(module).orderEntries().recursively().satisfying(condition).process(object : RootPolicy<Unit>() {
             override fun visitModuleSourceOrderEntry(moduleSourceOrderEntry: ModuleSourceOrderEntry, value: Unit) {
@@ -99,12 +107,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
 
             override fun visitLibraryOrderEntry(libraryOrderEntry: LibraryOrderEntry, value: Unit) {
                 libraryOrderEntry.library.safeAs<LibraryEx>()?.takeIf { !it.isDisposed }?.let {
-                    libraries += createLibraryInfo(project, it).mapNotNull { libraryInfo ->
-                        DependencyCandidate.fromLibraryOrNull(
-                            project,
-                            libraryInfo.library
-                        )
-                    }
+                    libraries += DependencyCandidate.fromLibraryOrNull(project, it) ?: return
                 }
             }
 
@@ -115,9 +118,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
             }
         }, Unit)
 
-        val filteredLibraries = filterForBuiltins(libraryInfo, libraries)
-
-        return filteredLibraries to sdks
+        return libraries to sdks
     }
 
     private fun getLibraryUsageIndex(): LibraryUsageIndex {
