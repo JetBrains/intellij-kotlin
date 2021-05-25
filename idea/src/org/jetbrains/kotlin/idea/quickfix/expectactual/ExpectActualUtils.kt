@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.hasActualModifier
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.checkers.ExpectedActualDeclarationChecker
-import org.jetbrains.kotlin.resolve.checkers.ExperimentalUsageChecker
+import org.jetbrains.kotlin.resolve.checkers.OptInNames
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.source.KotlinSourceElement
 import org.jetbrains.kotlin.types.KotlinType
@@ -262,8 +262,8 @@ private fun KtPsiFactory.repairSuperTypeList(
 private val forbiddenAnnotationFqNames = setOf(
     ExpectedActualDeclarationChecker.OPTIONAL_EXPECTATION_FQ_NAME,
     FqName("kotlin.ExperimentalMultiplatform"),
-    ExperimentalUsageChecker.OPT_IN_FQ_NAME,
-    ExperimentalUsageChecker.OLD_USE_EXPERIMENTAL_FQ_NAME
+    OptInNames.OPT_IN_FQ_NAME,
+    OptInNames.OLD_USE_EXPERIMENTAL_FQ_NAME
 )
 
 internal fun generateCallable(
