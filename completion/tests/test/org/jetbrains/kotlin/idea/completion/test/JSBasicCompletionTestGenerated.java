@@ -648,6 +648,11 @@ public class JSBasicCompletionTestGenerated extends AbstractJSBasicCompletionTes
             runTest("testData/basic/common/RecieverMembersFromExtFun.kt");
         }
 
+        @TestMetadata("SecondTypeArg.kt")
+        public void testSecondTypeArg() throws Exception {
+            runTest("idea/idea-completion/testData/basic/common/SecondTypeArg.kt");
+        }
+
         @TestMetadata("SetPrefixForProperties.kt")
         public void testSetPrefixForProperties() throws Exception {
             runTest("testData/basic/common/SetPrefixForProperties.kt");
