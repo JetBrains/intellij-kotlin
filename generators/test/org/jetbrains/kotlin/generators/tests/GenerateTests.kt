@@ -124,6 +124,7 @@ import org.jetbrains.kotlin.idea.refactoring.inline.AbstractInlineTestWithSomeDe
 import org.jetbrains.kotlin.nj2k.*
 import org.jetbrains.kotlin.search.AbstractInheritorsSearchTest
 import org.jetbrains.kotlin.shortenRefs.AbstractShortenRefsTest
+import org.jetbrains.kotlin.spec.utils.GeneralConfiguration
 import org.jetbrains.kotlin.test.TargetBackend
 import org.jetbrains.kotlin.testGenerator.generator.TestGenerator
 import org.jetbrains.kotlin.testGenerator.model.*
@@ -136,6 +137,7 @@ import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_OR_KTS_WITHOUT_DOTS
 import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_WITHOUT_DOTS
 import org.jetbrains.kotlin.testGenerator.model.Patterns.TEST
 import org.jetbrains.kotlin.testGenerator.model.Patterns.WS_KTS
+import org.jetbrains.kotlin.test.runners.AbstractFirDiagnosticTestSpec
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractProjectTemplateBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractYamlBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractProjectTemplateNewWizardProjectImportTest
@@ -166,6 +168,7 @@ import org.jetbrains.uast.test.kotlin.AbstractFirUastDeclarationTest
 import org.jetbrains.kotlinx.serialization.idea.AbstractSerializationPluginIdeDiagnosticTest
 import org.jetbrains.kotlinx.serialization.idea.AbstractSerializationQuickFixTest
 import org.jetbrains.uast.test.kotlin.*
+import org.jetbrains.kotlin.spec.utils.tasks.detectDirsWithTestsMapFileOnly
 
 fun main() {
     System.setProperty("java.awt.headless", "true")
@@ -1084,7 +1087,65 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
+<<<<<<< HEAD
     testGroup("idea/idea-fir/tests", "idea/testData") {
+||||||| parent of ca53960fda3 (FIR IDE: add tests based on compiler spec tests for ide)
+    testGroup(
+        "fir-low-level-api",
+        testDataPath = "../idea/tests/testData/compiler",
+    ) {
+        testClass<AbstractDiagnosisCompilerTestDataTest>(
+            generatedClassName = "${AbstractDiagnosisCompilerTestDataTest::class.java.`package`.name}.DiagnosisCompilerFirTestdataTestGenerated"
+        ) {
+            model("diagnostics/tests")
+            model("diagnostics/testsWithStdLib")
+        }
+    }
+
+    testGroup("fir", testDataPath = "../idea/tests/testData") {
+        testClass<AbstractFirReferenceResolveTest> {
+            model("resolve/references", pattern = KT_WITHOUT_DOTS)
+        }
+
+        testClass<AbstractFirHighlightingTest> {
+            model("highlighter")
+            model("../../../fir/testData/highlighterFir", pattern = KT_WITHOUT_DOTS)
+        }
+
+=======
+    testGroup(
+        "fir-low-level-api",
+        testDataPath = "../idea/tests/testData/compiler",
+    ) {
+        testClass<AbstractDiagnosisCompilerTestDataTest>(
+            generatedClassName = "${AbstractDiagnosisCompilerTestDataTest::class.java.`package`.name}.DiagnosisCompilerFirTestdataTestGenerated"
+        ) {
+            model("diagnostics/tests")
+            model("diagnostics/testsWithStdLib")
+        }
+    }
+
+    testGroup("idea/idea-frontend-fir/idea-fir-low-level-api/tests", testDataRoot = GeneralConfiguration.SPEC_TESTDATA_PATH) {
+        testClass<AbstractDiagnosisCompilerTestDataSpecTest> {
+            model(
+                "diagnostics",
+                excludeDirs = listOf("helpers") + detectDirsWithTestsMapFileOnly("diagnostics"),
+                excludedPattern = excludedFirTestdataPattern
+            )
+        }
+    }
+
+    testGroup("fir", testDataPath = "../idea/tests/testData") {
+        testClass<AbstractFirReferenceResolveTest> {
+            model("resolve/references", pattern = KT_WITHOUT_DOTS)
+        }
+
+        testClass<AbstractFirHighlightingTest> {
+            model("highlighter")
+            model("../../../fir/testData/highlighterFir", pattern = KT_WITHOUT_DOTS)
+        }
+
+>>>>>>> ca53960fda3 (FIR IDE: add tests based on compiler spec tests for ide)
         testClass<AbstractFirKotlinHighlightingPassTest> {
             model("checker", isRecursive = false, pattern = KT.withPrecondition(excludedFirPrecondition))
             model("checker/regression", pattern = KT.withPrecondition(excludedFirPrecondition))
