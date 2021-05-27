@@ -1145,6 +1145,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractHighLevelJvmBasicCompletionTest> {
             model("basic/common")
             model("basic/java")
+            model("../../idea-fir/testData/completion/basic/common", testClassName = "CommonFir")
         }
 
         testClass<AbstractHighLevelBasicCompletionHandlerTest> {
