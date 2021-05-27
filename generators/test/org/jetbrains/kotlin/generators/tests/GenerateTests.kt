@@ -87,6 +87,7 @@ import org.jetbrains.kotlin.idea.fir.inspections.AbstractHLInspectionTest
 import org.jetbrains.kotlin.idea.fir.inspections.AbstractHLLocalInspectionTest
 import org.jetbrains.kotlin.idea.fir.intentions.AbstractHLIntentionTest
 import org.jetbrains.kotlin.idea.fir.low.level.api.*
+import org.jetbrains.kotlin.idea.fir.low.level.api.diagnostic.compiler.based.AbstractDiagnosisCompilerTestDataSpecTest
 import org.jetbrains.kotlin.idea.fir.low.level.api.diagnostic.compiler.based.AbstractDiagnosisCompilerTestDataTest
 import org.jetbrains.kotlin.idea.fir.low.level.api.file.structure.AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest
 import org.jetbrains.kotlin.idea.fir.low.level.api.file.structure.AbstractFileStructureTest
@@ -171,6 +172,7 @@ import org.jetbrains.kotlin.nj2k.*
 import org.jetbrains.kotlin.search.AbstractInheritorsSearchTest
 import org.jetbrains.kotlin.idea.fir.shortenRefs.AbstractFirShortenRefsTest
 import org.jetbrains.kotlin.shortenRefs.AbstractShortenRefsTest
+import org.jetbrains.kotlin.spec.utils.GeneralConfiguration
 import org.jetbrains.kotlin.test.TargetBackend
 import org.jetbrains.kotlin.testGenerator.generator.TestGenerator
 import org.jetbrains.kotlin.testGenerator.model.*
@@ -184,6 +186,7 @@ import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_WITHOUT_DOTS
 import org.jetbrains.kotlin.testGenerator.model.Patterns.TEST
 import org.jetbrains.kotlin.testGenerator.model.Patterns.TXT
 import org.jetbrains.kotlin.testGenerator.model.Patterns.WS_KTS
+import org.jetbrains.kotlin.test.runners.AbstractFirDiagnosticTestSpec
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractProjectTemplateBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractYamlBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractProjectTemplateNewWizardProjectImportTest
@@ -192,6 +195,7 @@ import org.jetbrains.uast.test.kotlin.AbstractFE1LegacyUastDeclarationTest
 import org.jetbrains.uast.test.kotlin.AbstractFE1UastDeclarationTest
 import org.jetbrains.uast.test.kotlin.AbstractFirLegacyUastDeclarationTest
 import org.jetbrains.uast.test.kotlin.AbstractFirUastDeclarationTest
+import org.jetbrains.kotlin.spec.utils.tasks.detectDirsWithTestsMapFileOnly
 
 fun main() {
     System.setProperty("java.awt.headless", "true")
@@ -1115,6 +1119,16 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         ) {
             model("diagnostics/tests")
             model("diagnostics/testsWithStdLib")
+        }
+    }
+
+    testGroup("idea/idea-frontend-fir/idea-fir-low-level-api/tests", testDataRoot = GeneralConfiguration.SPEC_TESTDATA_PATH) {
+        testClass<AbstractDiagnosisCompilerTestDataSpecTest> {
+            model(
+                "diagnostics",
+                excludeDirs = listOf("helpers") + detectDirsWithTestsMapFileOnly("diagnostics"),
+                excludedPattern = excludedFirTestdataPattern
+            )
         }
     }
 
