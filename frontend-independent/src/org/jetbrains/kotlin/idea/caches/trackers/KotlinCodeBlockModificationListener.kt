@@ -71,7 +71,7 @@ class KotlinCodeBlockModificationListener(project: Project) : PsiTreeChangePrepr
         }
 
         if (outOfCodeBlock) {
-            kotlinOutOfCodeBlockTrackerImpl.incModificationCount()
+            incModificationCount()
         }
     }
 
@@ -286,7 +286,7 @@ class KotlinCodeBlockModificationListener(project: Project) : PsiTreeChangePrepr
                         messageBusConnection.deliverImmediately()
 
                         if (physical && !isReplLine(ktFile.virtualFile) && ktFile !is KtTypeCodeFragment) {
-                            kotlinOutOfCodeBlockTrackerImpl.incModificationCount()
+                            incModificationCount()
                             perModuleOutOfCodeBlockTrackerUpdater.onKotlinPhysicalFileOutOfBlockChange(ktFile, true)
                         }
 
@@ -305,13 +305,17 @@ class KotlinCodeBlockModificationListener(project: Project) : PsiTreeChangePrepr
             val kotlinTrackerInternalIDECount = modificationTrackerImpl.forLanguage(KotlinLanguage.INSTANCE).modificationCount
             if (kotlinModificationTracker == kotlinTrackerInternalIDECount) {
                 // Some update that we are not sure is from Kotlin language, as Kotlin language tracker wasn't changed
-                kotlinOutOfCodeBlockTrackerImpl.incModificationCount()
+                incModificationCount()
             } else {
                 kotlinModificationTracker = kotlinTrackerInternalIDECount
             }
 
             perModuleOutOfCodeBlockTrackerUpdater.onPsiModificationTrackerUpdate()
         })
+    }
+
+    fun incModificationCount() {
+        kotlinOutOfCodeBlockTrackerImpl.incModificationCount()
     }
 
     override fun dispose() = Unit
