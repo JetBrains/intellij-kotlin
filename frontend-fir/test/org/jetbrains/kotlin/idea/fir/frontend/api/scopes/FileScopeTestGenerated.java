@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.kotlin.idea.fir.asJava.classes;
+package org.jetbrains.kotlin.idea.fir.frontend.api.scopes;
 
 import com.intellij.testFramework.TestDataPath;
 import org.jetbrains.kotlin.idea.test.JUnit3RunnerWithInners;
@@ -17,10 +17,17 @@ import org.junit.runner.RunWith;
  * DO NOT MODIFY MANUALLY.
  */
 @SuppressWarnings("all")
-@TestRoot("fir")
+@TestRoot("frontend-fir")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-@TestMetadata("../compiler/testData/compiler/asJava/lightClasses")
-public abstract class FirLightClassTestGenerated extends AbstractFirLightClassTest {
+@TestMetadata("testData/fileScopeTest")
+public class FileScopeTestGenerated extends AbstractFileScopeTest {
+    private void runTest(String testDataFilePath) throws Exception {
+        KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+    }
 
+    @TestMetadata("simpleFileScope.kt")
+    public void testSimpleFileScope() throws Exception {
+        runTest("testData/fileScopeTest/simpleFileScope.kt");
+    }
 }
