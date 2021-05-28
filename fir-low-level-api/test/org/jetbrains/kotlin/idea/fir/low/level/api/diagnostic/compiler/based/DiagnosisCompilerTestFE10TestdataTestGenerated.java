@@ -18316,8 +18316,9 @@ public class DiagnosisCompilerTestFE10TestdataTestGenerated extends AbstractDiag
                     KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
                 }
 
-                public void testAllFilesPresentInGenericVarianceViolation() throws Exception {
-                    KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("compiler/testData/diagnostics/tests/platformTypes/genericVarianceViolation"), Pattern.compile("^(.+)\\.kt$"), Pattern.compile("^(.+)\\.fir\\.kts?$"), true);
+                @TestMetadata("inferenceFrom.kt")
+                public void testInferenceFrom() throws Exception {
+                    runTest(compilerTestData("compiler/testData/diagnostics/tests/platformTypes/genericVarianceViolation/inferenceFrom.kt"));
                 }
 
                 @TestMetadata("listSuperType.kt")
