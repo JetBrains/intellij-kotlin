@@ -9,8 +9,8 @@ import com.intellij.openapi.editor.CaretState
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.LightCodeInsightTestCase
-import org.jetbrains.kotlin.idea.addExternalTestFiles
-import org.jetbrains.kotlin.idea.executeOnPooledThreadInReadAction
+import org.jetbrains.kotlin.idea.fir.addExternalTestFiles
+import org.jetbrains.kotlin.executeOnPooledThreadInReadAction
 import org.jetbrains.kotlin.idea.frontend.api.KtAnalysisSession
 import org.jetbrains.kotlin.idea.frontend.api.analyse
 import org.jetbrains.kotlin.idea.frontend.api.calls.KtCall
@@ -66,7 +66,7 @@ abstract class AbstractResolveCallTest : @Suppress("DEPRECATION") LightCodeInsig
                     }
                 }
             }
-        }
+        }!!
         KotlinTestUtils.assertEqualsToFile(File(path), actualText)
     }
 
