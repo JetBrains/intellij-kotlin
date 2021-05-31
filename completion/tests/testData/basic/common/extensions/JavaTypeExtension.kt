@@ -1,11 +1,11 @@
 // FIR_COMPARISON
-fun <T> Iterable<T>.first() : T? {
+fun <T> Iterable<T>.foobarbaz() : T? {
     return this.iterator()?.next()
 }
 
 fun main(args : Array<String>) {
-    val test = HashSet<Int>() // aliased in JVM to java.util.HashSet
+    val test = ArrayList<Int>() // aliased in JVM to java.util.ArrayList
     test.<caret>
 }
 
-// EXIST: first
+// EXIST: foobarbaz
