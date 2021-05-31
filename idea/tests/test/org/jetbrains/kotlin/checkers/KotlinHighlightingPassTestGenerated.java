@@ -886,7 +886,7 @@ public class KotlinHighlightingPassTestGenerated extends AbstractKotlinHighlight
 
         @TestMetadata("valOrVarOnParameter.kt")
         public void testValOrVarOnParameter() throws Exception {
-            runTest("idea/testData/checker/diagnosticsMessage/valOrVarOnParameter.kt");
+            runTest("testData/checker/diagnosticsMessage/valOrVarOnParameter.kt");
         }
     }
 }
