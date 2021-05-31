@@ -6,7 +6,6 @@
 package org.jetbrains.kotlin.idea.fir.checkers;
 
 import com.intellij.testFramework.TestDataPath;
-import org.jetbrains.kotlin.idea.fir.checkers.AbstractFirKotlinHighlightingPassTest;
 import org.jetbrains.kotlin.idea.test.JUnit3RunnerWithInners;
 import org.jetbrains.kotlin.idea.test.KotlinTestUtils;
 import org.jetbrains.kotlin.test.TestMetadata;
@@ -771,7 +770,7 @@ public class FirKotlinHighlightingPassTestGenerated extends AbstractFirKotlinHig
 
         @TestMetadata("valOrVarOnParameter.kt")
         public void testValOrVarOnParameter() throws Exception {
-            runTest("idea/testData/checker/diagnosticsMessage/valOrVarOnParameter.kt");
+            runTest("../idea/tests/testData/checker/diagnosticsMessage/valOrVarOnParameter.kt");
         }
     }
 }
