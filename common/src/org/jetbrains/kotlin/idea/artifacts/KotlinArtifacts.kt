@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.utils.PathUtil
 import java.io.File
 import java.io.FileNotFoundException
 
-abstract class KotlinArtifacts(val kotlincDistDir: File) {
+abstract class KotlinArtifacts(val kotlincDirectory: File) {
     companion object {
         @get:JvmStatic
         val instance: KotlinArtifacts by lazy {
@@ -42,7 +42,6 @@ abstract class KotlinArtifacts(val kotlincDistDir: File) {
         }
     }
 
-    val kotlincDirectory = File(kotlincDistDir, "kotlinc")
     val kotlincLibDirectory = File(kotlincDirectory, "lib")
 
     val jetbrainsAnnotations = File(kotlincLibDirectory, KotlinArtifactNames.JETBRAINS_ANNOTATIONS)
@@ -86,6 +85,6 @@ private object ProductionKotlinArtifacts : KotlinArtifacts(run {
         // KotlinArtifacts but won't actually use it. E.g. KotlinPluginMacros does it
         File("<invalid_kotlinc_path>")
     } else {
-        libFile.parentFile
+        libFile.parentFile.resolve("kotlinc")
     }
 })

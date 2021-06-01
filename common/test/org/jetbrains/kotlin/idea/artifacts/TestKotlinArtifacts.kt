@@ -17,27 +17,23 @@ import java.security.MessageDigest
  */
 @Suppress("unused")
 private class TestKotlinArtifacts : KotlinArtifacts(run {
-    val outDir = File(PathManager.getHomePath(), "out")
-    val kotlincDistDir = outDir.resolve("kotlinc-dist")
-    val hashFile = outDir.resolve("kotlinc-dist/kotlinc-dist.md5")
-    val kotlincJar = findLibrary(
-        RepoLocation.MAVEN_REPOSITORY,
-        "kotlinc_kotlin_dist.xml",
-        "org.jetbrains.kotlin",
-        "kotlin-dist-for-ide"
-    )
-    val hash = kotlincJar.md5()
-    if (hashFile.exists() && hashFile.readText() == hash && kotlincDistDir.exists()) {
-        return@run kotlincDistDir
-    }
-    val dirWhereToExtractKotlinc = kotlincDistDir.resolve("kotlinc").also {
-        it.deleteRecursively()
-        it.mkdirs()
-    }
-    hashFile.writeText(hash)
-    Decompressor.Zip(kotlincJar).extract(dirWhereToExtractKotlinc)
-    return@run kotlincDistDir
+    val jar = findLibrary(RepoLocation.MAVEN_REPOSITORY, "kotlinc_kotlin_dist.xml", "org.jetbrains.kotlin", "kotlin-dist-for-ide")
+    lazyUnpackJar(jar, File(PathManager.getHomePath(), "out").resolve("kotlinc-dist"), "kotlinc")
 })
+
+private fun lazyUnpackJar(jar: File, holderDir: File, dirName: String): File {
+    val hashFile = holderDir.resolve("md5")
+    val hash = jar.md5()
+    val dirWhereToExtract = holderDir.resolve(dirName)
+    if (hashFile.exists() && hashFile.readText() == hash) {
+        return dirWhereToExtract
+    }
+    dirWhereToExtract.deleteRecursively()
+    dirWhereToExtract.mkdirs()
+    hashFile.writeText(hash)
+    Decompressor.Zip(jar).extract(dirWhereToExtract)
+    return dirWhereToExtract
+}
 
 private fun File.md5(): String {
     return MessageDigest.getInstance("MD5").digest(readBytes()).joinToString("") { "%02x".format(it) }
@@ -101,11 +97,11 @@ object AdditionalKotlinArtifacts {
     }
 
     val parcelizeRuntime: File by lazy {
-        KotlinArtifacts.instance.kotlincDistDir.resolve("kotlinc/lib/parcelize-runtime.jar").also { check(it.exists()) }
+        KotlinArtifacts.instance.kotlincDirectory.resolve("lib/parcelize-runtime.jar").also { check(it.exists()) }
     }
 
     val androidExtensionsRuntime by lazy {
-        KotlinArtifacts.instance.kotlincDistDir.resolve("kotlinc/lib/android-extensions-runtime.jar").also { check(it.exists()) }
+        KotlinArtifacts.instance.kotlincDirectory.resolve("lib/android-extensions-runtime.jar").also { check(it.exists()) }
     }
 }
 
