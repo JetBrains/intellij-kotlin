@@ -1590,6 +1590,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractFirUastDeclarationTest> {
             model("declaration")
         }
+
+        testClass<AbstractFirUastTypesTest> {
+            model("type")
+        }
     }
 
     testGroup("uast/uast-kotlin-fir", testDataPath = "../uast-kotlin/testData") {
@@ -1613,6 +1617,10 @@ private fun assembleWorkspace(): TWorkspace = workspace {
     testGroup("uast/uast-kotlin-fir") {
         testClass<AbstractFE1UastDeclarationTest> {
             model("declaration")
+        }
+
+        testClass<AbstractFE1UastTypesTest> {
+            model("type")
         }
     }
 
