@@ -151,7 +151,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
     }
 
     private inner class LibraryUsageIndex {
-        val modulesLibraryIsUsedIn: MultiMap<Library, Module> = MultiMap.createSet()
+        val modulesLibraryIsUsedIn: MultiMap<LibraryWrapper, Module> = MultiMap.createSet()
 
         init {
             for (module in ModuleManager.getInstance(project).modules) {
@@ -159,7 +159,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
                     if (entry is LibraryOrderEntry) {
                         val library = entry.library
                         if (library != null) {
-                            modulesLibraryIsUsedIn.putValue(library, module)
+                            modulesLibraryIsUsedIn.putValue(library.wrap(), module)
                         }
                     }
                 }
@@ -168,7 +168,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
 
         fun getModulesLibraryIsUsedIn(libraryInfo: LibraryInfo) = sequence<Module> {
             val ideaModelInfosCache = getIdeaModelInfosCache(project)
-            for (module in modulesLibraryIsUsedIn[libraryInfo.library]) {
+            for (module in modulesLibraryIsUsedIn[libraryInfo.library.wrap()]) {
                 val mappedModuleInfos = ideaModelInfosCache.getModuleInfosForModule(module)
                 if (mappedModuleInfos.any { it.platform.canDependOn(libraryInfo, module.isHMPPEnabled) }) {
                     yield(module)
