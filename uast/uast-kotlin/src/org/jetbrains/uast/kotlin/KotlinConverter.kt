@@ -112,7 +112,7 @@ internal object KotlinConverter : BaseKotlinConverter {
             is KtWhenCondition -> convertWhenCondition(element, givenParent, expectedTypes)
             is KtTypeReference ->
                 expectedTypes.accommodate(
-                    alternative { LazyKotlinUTypeReferenceExpression(element, givenParent) },
+                    alternative { KotlinUTypeReferenceExpression(element, givenParent) },
                     alternative { convertReceiverParameter(element) }
                 ).firstOrNull()
             is KtConstructorDelegationCall ->
@@ -316,7 +316,7 @@ internal object KotlinConverter : BaseKotlinConverter {
                         }
                         val typeRef = condition.typeReference
                         typeReference = typeRef?.let {
-                            LazyKotlinUTypeReferenceExpression(it, this) { typeRef.toPsiType(this, boxed = true) }
+                            KotlinUTypeReferenceExpression(it, this) { typeRef.toPsiType(this, boxed = true) }
                         }
                     }
                 }
