@@ -316,6 +316,11 @@ public class HighLevelQuickFixTestGenerated extends AbstractHighLevelQuickFixTes
             runTest("../idea/tests/testData/quickfix/addExclExclCall/nullExpression.kt");
         }
 
+        @TestMetadata("nullReceiver.kt")
+        public void testNullReceiver() throws Exception {
+            runTest("idea/testData/quickfix/addExclExclCall/nullReceiver.kt");
+        }
+
         @TestMetadata("operationBinary.kt")
         public void testOperationBinary() throws Exception {
             runTest("../idea/tests/testData/quickfix/addExclExclCall/operationBinary.kt");
