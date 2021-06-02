@@ -99,6 +99,26 @@ object AdditionalKotlinArtifacts {
     val androidExtensionsRuntime by lazy {
         KotlinArtifacts.instance.kotlincDirectory.resolve("lib/android-extensions-runtime.jar").also { check(it.exists()) }
     }
+
+    @JvmStatic
+    val compilerTestDataDir = run {
+        val testDataJar = findLibrary(
+            RepoLocation.MAVEN_REPOSITORY,
+            "kotlinc_kotlin_compiler_testdata.xml",
+            "org.jetbrains.kotlin",
+            "kotlin-compiler-testdata-for-ide"
+        )
+        lazyUnpackJar(
+            testDataJar,
+            File(PathManager.getHomePath(), "out").resolve("kotlinc-testdata"),
+            "testData"
+        )
+    }
+
+    @JvmStatic
+    fun compilerTestData(compilerTestDataPath: String): String {
+        return compilerTestDataDir.resolve(compilerTestDataPath).canonicalPath
+    }
 }
 
 private enum class RepoLocation {
