@@ -84,6 +84,10 @@ private fun findLibrary(
 }
 
 object AdditionalKotlinArtifacts {
+    val jetbrainsAnnotations: File by lazy {
+        findLibrary(RepoLocation.MAVEN_REPOSITORY, "jetbrains_annotations.xml", "org.jetbrains", "annotations")
+    }
+
     val kotlinStdlibCommon: File by lazy {
         findLibrary(RepoLocation.MAVEN_REPOSITORY, "kotlinc_kotlin_stdlib_common.xml", "org.jetbrains.kotlin", "kotlin-stdlib-common")
     }
