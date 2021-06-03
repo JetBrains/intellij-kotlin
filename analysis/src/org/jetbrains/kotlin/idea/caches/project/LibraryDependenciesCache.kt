@@ -171,7 +171,10 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
             val ideaModelInfosCache = getIdeaModelInfosCache(project)
             for (module in modulesLibraryIsUsedIn[libraryInfo.library.wrap()]) {
                 val mappedModuleInfos = ideaModelInfosCache.getModuleInfosForModule(module)
-                if (mappedModuleInfos.any { it.platform.canDependOn(libraryInfo, module.isHMPPEnabled) }) {
+
+                if (mappedModuleInfos.any {
+                        ModuleDependencyFilter(it.platform, module.isHMPPEnabled).isSupportedDependency(libraryInfo)
+                }) {
                     yield(module)
                 }
             }
