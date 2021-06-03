@@ -1,4 +1,0 @@
-// WITH_EXTENDED_CHECKERS
-
-@Suppress("REDUNDANT_VISIBILITY_MODIFIER")
-public fun foo() {}
