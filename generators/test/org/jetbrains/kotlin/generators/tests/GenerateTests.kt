@@ -1101,6 +1101,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
+    /*
     testGroup("fir-low-level-api", testDataPath = AdditionalKotlinArtifacts.compilerTestData(GeneralConfiguration.SPEC_TESTDATA_PATH)) {
         testClass<AbstractDiagnosisCompilerTestDataSpecTest> {
             model(
@@ -1110,6 +1111,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             )
         }
     }
+    */
 
     testGroup("fir", testDataPath = "../idea/tests/testData") {
         testClass<AbstractFirReferenceResolveTest> {
