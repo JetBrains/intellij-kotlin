@@ -39,6 +39,7 @@ dependencies {
     jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-fir", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.fir-low-level-api", JpsDepScope.COMPILE)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.fir-fe10-binding", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-api", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-fir", JpsDepScope.COMPILE)
 }

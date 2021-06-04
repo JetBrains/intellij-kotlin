@@ -80,6 +80,7 @@ configurations.all {
 sourceSets {
     "main" {
         java.srcDir("src")
+        resources.srcDir("resources")
     }
     "test" {
         java.srcDir("test")
