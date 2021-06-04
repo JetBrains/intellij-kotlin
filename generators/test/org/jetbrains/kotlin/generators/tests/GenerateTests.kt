@@ -184,6 +184,7 @@ import org.jetbrains.kotlin.testGenerator.model.Patterns.KT
 import org.jetbrains.kotlin.testGenerator.model.Patterns.KTS
 import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_OR_KTS
 import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_OR_KTS_WITHOUT_DOTS
+import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_WITHOUT_FIR_PREFIX
 import org.jetbrains.kotlin.testGenerator.model.Patterns.KT_WITHOUT_DOTS
 import org.jetbrains.kotlin.testGenerator.model.Patterns.TEST
 import org.jetbrains.kotlin.testGenerator.model.Patterns.TXT
@@ -193,11 +194,8 @@ import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractProjectTemplateBuild
 import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractYamlBuildFileGenerationTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractProjectTemplateNewWizardProjectImportTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractYamlNewWizardProjectImportTest
-import org.jetbrains.uast.test.kotlin.AbstractFE1LegacyUastDeclarationTest
-import org.jetbrains.uast.test.kotlin.AbstractFE1UastDeclarationTest
-import org.jetbrains.uast.test.kotlin.AbstractFirLegacyUastDeclarationTest
-import org.jetbrains.uast.test.kotlin.AbstractFirUastDeclarationTest
 import org.jetbrains.kotlin.spec.utils.tasks.detectDirsWithTestsMapFileOnly
+import org.jetbrains.uast.test.kotlin.*
 
 fun main() {
     System.setProperty("java.awt.headless", "true")
@@ -1124,12 +1122,12 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("idea/idea-frontend-fir/idea-fir-low-level-api/tests", testDataRoot = GeneralConfiguration.SPEC_TESTDATA_PATH) {
+    testGroup("fir-low-level-api", testDataPath = AdditionalKotlinArtifacts.compilerTestData(GeneralConfiguration.SPEC_TESTDATA_PATH)) {
         testClass<AbstractDiagnosisCompilerTestDataSpecTest> {
             model(
                 "diagnostics",
-                excludeDirs = listOf("helpers") + detectDirsWithTestsMapFileOnly("diagnostics"),
-                excludedPattern = excludedFirTestdataPattern
+                excludedDirectories = listOf("helpers") + detectDirsWithTestsMapFileOnly("diagnostics", baseDir = AdditionalKotlinArtifacts.compilerTestDataDir.canonicalPath),
+                pattern = KT.withPrecondition(excludedFirPrecondition)
             )
         }
     }
@@ -1162,9 +1160,9 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("quickfix/expressions", pattern = pattern)
             model("quickfix/lateinit", pattern = pattern)
             model("quickfix/modifiers", pattern = pattern, isRecursive = false)
-            model("quickfix/nullables/unsafeInfixCall", pattern = pattern, filenameStartsLowerCase = true)
+            model("quickfix/nullables/unsafeInfixCall", pattern = pattern)
             model("quickfix/override/typeMismatchOnOverride", pattern = pattern, isRecursive = false)
-            model("quickfix/replaceInfixOrOperatorCall", pattern = pattern, filenameStartsLowerCase = true)
+            model("quickfix/replaceInfixOrOperatorCall", pattern = pattern)
             model("quickfix/replaceWithDotCall", pattern = pattern)
             model("quickfix/replaceWithSafeCall", pattern = pattern)
             model("quickfix/variables/changeMutability", pattern = pattern, isRecursive = false)
@@ -1230,7 +1228,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model(
                 "../../idea-fir/testData/completion/keywords",
                 testClassName = "KeywordsFir",
-                recursive = false,
+                isRecursive = false,
                 pattern = KT_WITHOUT_FIR_PREFIX
             )
         }
