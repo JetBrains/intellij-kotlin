@@ -840,17 +840,17 @@ public class DiagnosisCompilerTestFE10TestdataTestGenerated extends AbstractDiag
 
             @TestMetadata("AnnotationForClassTypeParameter_15.kt")
             public void testAnnotationForClassTypeParameter_15() throws Exception {
-                runTest("compiler/testData/diagnostics/tests/annotations/AnnotationForClassTypeParameter_15.kt");
+                runTest(compilerTestData("compiler/testData/diagnostics/tests/annotations/AnnotationForClassTypeParameter_15.kt"));
             }
 
             @TestMetadata("AnnotationForClassTypeParameter_16.kt")
             public void testAnnotationForClassTypeParameter_16() throws Exception {
-                runTest("compiler/testData/diagnostics/tests/annotations/AnnotationForClassTypeParameter_16.kt");
+                runTest(compilerTestData("compiler/testData/diagnostics/tests/annotations/AnnotationForClassTypeParameter_16.kt"));
             }
 
             @TestMetadata("AnnotationForClassTypeParameter_typeUseFlag.kt")
             public void testAnnotationForClassTypeParameter_typeUseFlag() throws Exception {
-                runTest("compiler/testData/diagnostics/tests/annotations/AnnotationForClassTypeParameter_typeUseFlag.kt");
+                runTest(compilerTestData("compiler/testData/diagnostics/tests/annotations/AnnotationForClassTypeParameter_typeUseFlag.kt"));
             }
 
             @TestMetadata("AnnotationForFunctionTypeParameter.kt")
@@ -16743,7 +16743,7 @@ public class DiagnosisCompilerTestFE10TestdataTestGenerated extends AbstractDiag
 
             @TestMetadata("augmentedAssignment.kt")
             public void testAugmentedAssignment() throws Exception {
-                runTest("compiler/testData/diagnostics/tests/nullabilityAndSmartCasts/augmentedAssignment.kt");
+                runTest(compilerTestData("compiler/testData/diagnostics/tests/nullabilityAndSmartCasts/augmentedAssignment.kt"));
             }
 
             @TestMetadata("dataFlowInfoAfterExclExcl.kt")
