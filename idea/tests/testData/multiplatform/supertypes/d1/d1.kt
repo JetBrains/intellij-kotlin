@@ -2,6 +2,6 @@
 
 package foo
 
-expect interface <!LINE_MARKER("descr='Is subclassed by A  Click or press ... to navigate'")!>Supertype<!>
+expect interface <!LINE_MARKER("descr='Is subclassed by A'")!>Supertype<!>
 
 class A : Supertype
