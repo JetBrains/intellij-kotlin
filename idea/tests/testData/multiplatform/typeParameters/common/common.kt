@@ -2,7 +2,7 @@
 
 package foo
 
-expect interface <!LINE_MARKER("descr='Has actuals in JVM'"), LINE_MARKER("descr='Is subclassed by AImpl  Click or press ... to navigate'")!>A<!> {
+expect interface <!LINE_MARKER("descr='Has actuals in JVM'"), LINE_MARKER("descr='Is subclassed by AImpl'")!>A<!> {
     fun <!LINE_MARKER("descr='Has actuals in JVM'"), LINE_MARKER("descr='Is overridden in foo.AImpl'")!>commonFun<!>()
 }
 
