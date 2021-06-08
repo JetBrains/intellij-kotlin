@@ -90,4 +90,5 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
     kotlinOptions.useOldBackend = true // KT-45697
 }
 
-testsJar()
+// Fake empty configuration in order to make `DependencyHandler.projectTests(name: String)` work
+configurations.getOrCreate("tests-jar")
