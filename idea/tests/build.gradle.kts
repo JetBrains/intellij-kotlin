@@ -95,7 +95,6 @@ dependencies {
     jpsLikeModuleDependency(":kotlin-ide.kotlin.uast.uast-kotlin", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.formatter", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.jps-common", JpsDepScope.TEST)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.uast.uast-kotlin-idea", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.jvm-debugger.evaluation", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.j2k.services", JpsDepScope.TEST)
     jpsLikeJarDependency(intellijPluginDep("IntelliLang", forIde = true), JpsDepScope.TEST) // 'intellij.platform.langInjection' dependency
