@@ -8,6 +8,7 @@ package org.jetbrains.kotlin.idea.caches.project
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleManager
+import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.*
 import com.intellij.openapi.roots.impl.libraries.LibraryEx
@@ -78,6 +79,7 @@ class LibraryDependenciesCacheImpl(private val project: Project) : LibraryDepend
         }
 
         for (module in getLibraryUsageIndex().getModulesLibraryIsUsedIn(libraryInfo)) {
+            ProgressManager.checkCanceled()
             if (!processedModules.add(module)) continue
 
             val (moduleLibraries, moduleSdks) = moduleDependenciesCache.getOrPut(module) {
