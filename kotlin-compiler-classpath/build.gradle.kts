@@ -38,15 +38,15 @@ dependencies {
     implementation(toolsJarApi())
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.COMPILE)
-    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.1", JpsDepScope.COMPILE)
+    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.1", JpsDepScope.COMPILE, { isTransitive = false })
     jpsLikeJarDependency("com.google.guava:guava:30.1-jre", JpsDepScope.COMPILE)
     jpsLikeJarDependency("org.jetbrains.intellij.deps:java-compatibility:1.0.1", JpsDepScope.COMPILE)
-    jpsLikeJarDependency("javax.inject:javax.inject:1", JpsDepScope.COMPILE)
+    jpsLikeJarDependency("javax.inject:javax.inject:1", JpsDepScope.COMPILE, { isTransitive = false })
     jpsLikeJarDependency("io.javaslang:javaslang:2.0.6", JpsDepScope.COMPILE)
     jpsLikeJarDependency("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.4.2", JpsDepScope.COMPILE)
     jpsLikeJarDependency("org.jetbrains.intellij.deps.jna:jna-platform:5.7.0.23", JpsDepScope.COMPILE)
     jpsLikeJarDependency("org.lz4:lz4-java:1.7.1", JpsDepScope.COMPILE)
-    jpsLikeJarDependency("com.google.code.findbugs:jsr305:3.0.2", JpsDepScope.COMPILE)
+    jpsLikeJarDependency("com.google.code.findbugs:jsr305:3.0.2", JpsDepScope.COMPILE, { isTransitive = false })
     jpsLikeJarDependency(intellijPluginDep("java", forIde = true), JpsDepScope.COMPILE) // 'intellij.java.psi.impl' dependency
     jpsLikeJarDependency(intellijCoreDep(), JpsDepScope.COMPILE) // 'intellij.java.psi.impl' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("intellij-core-analysis-deprecated") }) // 'intellij.java.psi.impl' dependency

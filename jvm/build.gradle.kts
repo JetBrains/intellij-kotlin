@@ -68,9 +68,9 @@ dependencies {
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("external-system-rt") }) // 'intellij.platform.externalSystem' dependency
     jpsLikeJarDependency(intellijPluginDep("coverage", forIde = true), JpsDepScope.COMPILE) // 'intellij.java.coverage' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("coverage-common") }) // 'intellij.java.coverage' dependency
-    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.1", JpsDepScope.COMPILE) // 'intellij.java.coverage' dependency
-    jpsLikeJarDependency("org.jetbrains.intellij.deps:intellij-coverage-agent:1.0.579", JpsDepScope.COMPILE) // 'intellij.java.coverage' dependency
-    jpsLikeJarDependency("org.jetbrains.intellij.deps:intellij-test-discovery-agent:1.0.579", JpsDepScope.COMPILE) // 'intellij.java.coverage' dependency
+    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.1", JpsDepScope.COMPILE, { isTransitive = false }) // 'intellij.java.coverage' dependency
+    jpsLikeJarDependency("org.jetbrains.intellij.deps:intellij-coverage-agent:1.0.579", JpsDepScope.COMPILE, { isTransitive = false }) // 'intellij.java.coverage' dependency
+    jpsLikeJarDependency("org.jetbrains.intellij.deps:intellij-test-discovery-agent:1.0.579", JpsDepScope.COMPILE, { isTransitive = false }) // 'intellij.java.coverage' dependency
     jpsLikeJarDependency(intellijPluginDep("IntelliLang", forIde = true), JpsDepScope.COMPILE) // 'intellij.platform.langInjection' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("bootstrap") }) // 'intellij.platform.boot' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("testFramework") }) // 'intellij.platform.testFramework' dependency
@@ -81,7 +81,7 @@ dependencies {
     jpsLikeJarDependency("org.apache.velocity:velocity:1.7", JpsDepScope.COMPILE) // 'intellij.platform.testFramework' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("jps-model") }) // 'intellij.platform.testFramework' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("testFramework.core") }) // 'intellij.platform.testFramework' dependency
-    jpsLikeJarDependency("org.jetbrains:jetCheck:0.2.2", JpsDepScope.COMPILE) // 'intellij.platform.testFramework' dependency
+    jpsLikeJarDependency("org.jetbrains:jetCheck:0.2.2", JpsDepScope.COMPILE, { isTransitive = false }) // 'intellij.platform.testFramework' dependency
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32", JpsDepScope.COMPILE) // 'intellij.platform.testFramework' dependency
     jpsLikeJarDependency("org.codehaus.groovy:groovy:2.5.11", JpsDepScope.COMPILE) // 'intellij.platform.testFramework' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("intellij-dvcs") }) // 'intellij.platform.vcs.impl' dependency
@@ -91,7 +91,7 @@ dependencies {
     jpsLikeJarDependency(intellijPluginDep("java-i18n", forIde = true), JpsDepScope.COMPILE) // 'intellij.java.i18n' dependency
     jpsLikeJarDependency(intellijPluginDep("properties", forIde = true), JpsDepScope.COMPILE) // 'intellij.java.i18n' dependency
     jpsLikeJarDependency(intellijPluginDep("junit", forIde = true), JpsDepScope.COMPILE) // 'intellij.junit' dependency
-    jpsLikeJarDependency("org.jetbrains.teamcity:serviceMessages:2019.1.4", JpsDepScope.COMPILE) // 'intellij.junit' dependency
+    jpsLikeJarDependency("org.jetbrains.teamcity:serviceMessages:2019.1.4", JpsDepScope.COMPILE, { isTransitive = false }) // 'intellij.junit' dependency
     jpsLikeJarDependency(intellijPluginDep("testng", forIde = true), JpsDepScope.COMPILE) // 'intellij.testng' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("intellij-xml") }) // 'intellij.xml.psi.impl' dependency
 }

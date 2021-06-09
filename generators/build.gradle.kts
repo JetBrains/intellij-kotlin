@@ -70,7 +70,7 @@ dependencies {
     jpsLikeModuleDependency(":kotlin-ide.kotlin.performance-tests", JpsDepScope.TEST)
     jpsLikeJarDependency(intellijPluginDep("java", forIde = true), JpsDepScope.TEST) // 'intellij.platform.jps.build' dependency
     jpsLikeJarDependency(jpsBuildTest(), JpsDepScope.TEST) // 'intellij.platform.jps.build' dependency
-    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.1", JpsDepScope.TEST) // 'intellij.platform.jps.build' dependency
+    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.1", JpsDepScope.TEST, { isTransitive = false }) // 'intellij.platform.jps.build' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("util") }) // 'intellij.platform.jps.build' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("resources_en") }) // 'intellij.platform.jps.build' dependency
     jpsLikeJarDependency(intellijCoreDep(), JpsDepScope.TEST) // 'intellij.platform.jps.build' dependency

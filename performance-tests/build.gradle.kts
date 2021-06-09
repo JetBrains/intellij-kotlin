@@ -76,12 +76,12 @@ dependencies {
     jpsLikeJarDependency("org.jetbrains.intellij.deps:gradle-api:6.8", JpsDepScope.TEST) // 'intellij.gradle.common' dependency
     jpsLikeJarDependency("org.slf4j:slf4j-log4j12:1.7.25", JpsDepScope.TEST) // 'intellij.gradle.common' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("external-system-rt") }) // 'intellij.gradle.common' dependency
-    jpsLikeJarDependency("org.jetbrains.teamcity:serviceMessages:2019.1.4", JpsDepScope.TEST) // 'intellij.gradle.common' dependency
+    jpsLikeJarDependency("org.jetbrains.teamcity:serviceMessages:2019.1.4", JpsDepScope.TEST, { isTransitive = false }) // 'intellij.gradle.common' dependency
     jpsLikeJarDependency("org.codehaus.groovy:groovy-ant:2.4.17", JpsDepScope.TEST) // 'intellij.gradle.common' dependency
     jpsLikeJarDependency("org.codehaus.groovy:groovy:2.4.17", JpsDepScope.TEST) // 'intellij.gradle.common' dependency
     jpsLikeJarDependency("com.fasterxml.jackson.core:jackson-databind:2.12.0", JpsDepScope.TEST)
     jpsLikeJarDependency("com.fasterxml.jackson.core:jackson-core:2.12.0", JpsDepScope.TEST)
-    jpsLikeJarDependency("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.0", JpsDepScope.TEST)
+    jpsLikeJarDependency("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.0", JpsDepScope.TEST, { isTransitive = false })
     jpsLikeJarDependency("khttp:khttp:1.0.0", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-descriptors", JpsDepScope.TEST)
 }

@@ -55,7 +55,7 @@ dependencies {
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("testFramework-java") }, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency(intellijPluginDep("java", forIde = true), JpsDepScope.TEST, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("intellij-core-analysis-deprecated") }, exported = true) // 'intellij.java.testFramework' dependency
-    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.1", JpsDepScope.TEST, exported = true) // 'intellij.java.testFramework' dependency
+    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.1", JpsDepScope.TEST, { isTransitive = false }, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency(intellijCoreDep(), JpsDepScope.TEST, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("platform-impl") }, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("resources_en") }, exported = true) // 'intellij.java.testFramework' dependency
@@ -73,7 +73,7 @@ dependencies {
     jpsLikeJarDependency("org.jetbrains.intellij.deps:log4j:1.2.17.1", JpsDepScope.TEST, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("idea_rt") }, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("testFramework.core") }, exported = true) // 'intellij.java.testFramework' dependency
-    jpsLikeJarDependency("org.jetbrains:jetCheck:0.2.2", JpsDepScope.TEST, exported = true) // 'intellij.java.testFramework' dependency
+    jpsLikeJarDependency("org.jetbrains:jetCheck:0.2.2", JpsDepScope.TEST, { isTransitive = false }, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency("org.jetbrains:annotations:20.1.0", JpsDepScope.TEST, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency("com.jgoodies:forms:1.1-preview", JpsDepScope.TEST, exported = true) // 'intellij.java.testFramework' dependency
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32", JpsDepScope.TEST, exported = true) // 'intellij.java.testFramework' dependency
