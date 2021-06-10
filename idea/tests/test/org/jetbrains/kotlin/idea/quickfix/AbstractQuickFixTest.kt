@@ -24,7 +24,6 @@ import com.intellij.testFramework.LightProjectDescriptor
 import com.intellij.testFramework.UsefulTestCase
 import com.intellij.util.ui.UIUtil
 import junit.framework.TestCase
-import org.jetbrains.annotations.NotNull
 import org.jetbrains.kotlin.idea.caches.resolve.ResolveInDispatchThreadException
 import org.jetbrains.kotlin.idea.caches.resolve.forceCheckForResolveInDispatchThreadInTests
 import org.jetbrains.kotlin.idea.facet.KotlinFacet
@@ -177,6 +176,9 @@ abstract class AbstractQuickFixTest : KotlinLightCodeInsightFixtureTestCase(), Q
             }
 
             val unwrappedIntention = unwrapIntention(intention)
+            if (shouldCheckIntentionActionType) {
+                assertInstanceOf(unwrappedIntention, QuickFixActionBase::class.java)
+            }
             val priorityName = InTextDirectivesUtils.findStringWithPrefixes(contents, "// $PRIORITY_DIRECTIVE: ")
             if (priorityName != null) {
                 val expectedPriority = enumValueOf<PriorityAction.Priority>(priorityName)
@@ -232,6 +234,14 @@ abstract class AbstractQuickFixTest : KotlinLightCodeInsightFixtureTestCase(), Q
     protected open fun getAfterFileName(beforeFileName: String): String {
         return File(beforeFileName).name + ".after"
     }
+
+    /**
+     * If true, the type of the [IntentionAction] to invoke is [QuickFixActionBase]. This ensures that the action is coming from a
+     * quickfix (i.e., diagnostic-based), and not a regular IDE intention.
+     */
+    protected open val shouldCheckIntentionActionType: Boolean
+        // For FE 1.0, many quickfixes are implemented as IntentionActions, which may or may not be used as regular IDE intentions as well
+        get() = false
 
     @Throws(ClassNotFoundException::class)
     private fun checkForUnexpectedActions() {
