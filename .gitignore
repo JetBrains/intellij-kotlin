@@ -7,6 +7,7 @@
 
 # Compiler output
 /out
+/kotlin/**/build/
 
 # Other
 .DS_Store
