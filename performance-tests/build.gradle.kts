@@ -74,7 +74,7 @@ dependencies {
     jpsLikeJarDependency("com.fasterxml.jackson.core:jackson-core:2.12.0", JpsDepScope.TEST)
     jpsLikeJarDependency("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.0", JpsDepScope.TEST, { isTransitive = false })
     jpsLikeJarDependency("khttp:khttp:1.0.0", JpsDepScope.TEST)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-descriptors", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-fe10", JpsDepScope.TEST)
 }
 
 configurations.all {

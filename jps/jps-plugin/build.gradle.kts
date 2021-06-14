@@ -77,7 +77,7 @@ dependencies {
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("jps-model") }) // 'intellij.platform.jps.model.serialization' dependency
     jpsLikeJarDependency("org.jetbrains.intellij.deps:jdom:2.0.6", JpsDepScope.COMPILE) // 'intellij.platform.jps.model.serialization' dependency
     jpsLikeJarDependency(intellijPluginDep("devkit", forIde = true), JpsDepScope.TEST) // 'intellij.devkit.jps' dependency
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-descriptors", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-fe10", JpsDepScope.TEST)
 }
 
 configurations.all {

@@ -99,7 +99,7 @@ dependencies {
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("idea") }) // 'intellij.platform.structuralSearch' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("structuralsearch") }) // 'intellij.platform.structuralSearch' dependency
     jpsLikeJarDependency("org.jetbrains:markdown:0.1.41", JpsDepScope.COMPILE, { isTransitive = false })
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-descriptors", JpsDepScope.COMPILE)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-fe10", JpsDepScope.COMPILE)
 }
 
 configurations.all {

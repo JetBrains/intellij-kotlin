@@ -73,7 +73,7 @@ dependencies {
     jpsLikeModuleDependency(":kotlin-ide.kotlin.compiler-plugins.scripting-ide-services", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.line-indent-provider", JpsDepScope.COMPILE)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-descriptors", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-fe10", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.compiler-plugins.parcelize", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.idea.tests", JpsDepScope.COMPILE)
 }

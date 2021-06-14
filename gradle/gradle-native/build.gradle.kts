@@ -80,7 +80,7 @@ dependencies {
     jpsLikeModuleDependency(":kotlin-ide.intellij.platform.lang.tests", JpsDepScope.TEST) // 'intellij.platform.externalSystem.tests' dependency
     jpsLikeModuleDependency(":kotlin-ide.intellij.gradle.toolingExtension.tests", JpsDepScope.TEST) // 'intellij.gradle.toolingExtension.tests' dependency
     jpsLikeModuleDependency(":kotlin-ide.intellij.gradle.tests", JpsDepScope.TEST) // 'intellij.gradle.tests' dependency
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-descriptors", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-fe10", JpsDepScope.TEST)
 }
 
 configurations.all {

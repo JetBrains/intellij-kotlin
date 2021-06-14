@@ -46,7 +46,7 @@ dependencies {
     jpsLikeJarDependency("commons-logging:commons-logging:1.2", JpsDepScope.COMPILE) // 'intellij.java.aetherDependencyResolver' dependency
     jpsLikeJarDependency("org.apache.httpcomponents:httpmime:4.5.13", JpsDepScope.COMPILE) // 'intellij.java.aetherDependencyResolver' dependency
     jpsLikeJarDependency("org.apache.maven:maven-resolver-provider:3.6.3", JpsDepScope.COMPILE) // 'intellij.java.aetherDependencyResolver' dependency
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-descriptors", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-fe10", JpsDepScope.TEST)
 }
 
 configurations.all {
