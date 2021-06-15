@@ -22,6 +22,7 @@ import com.intellij.debugger.engine.evaluation.EvaluateException
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil
 import com.intellij.debugger.engine.evaluation.EvaluationContextImpl
 import com.intellij.debugger.engine.evaluation.expression.*
+import com.intellij.openapi.application.invokeAndWaitIfNeeded
 import com.intellij.openapi.diagnostic.Attachment
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.progress.ProcessCanceledException
@@ -262,7 +263,7 @@ class KotlinEvaluator(val codeFragment: KtCodeFragment, private val sourcePositi
                 val expressionText = expression.text
                 KtPsiFactory(expression.project).createExpression("($expressionText).toString()")
             }
-            runInEdtAndWait {
+            invokeAndWaitIfNeeded {
                 expression.project.executeWriteCommand(KotlinDebuggerEvaluationBundle.message("wrap.with.tostring")) {
                     expression.replace(newExpression)
                 }
