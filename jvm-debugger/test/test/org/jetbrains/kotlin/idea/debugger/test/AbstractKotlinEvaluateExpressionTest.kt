@@ -14,9 +14,11 @@ import com.intellij.debugger.engine.evaluation.expression.EvaluatorBuilderImpl
 import com.intellij.debugger.engine.managerThread.DebuggerCommand
 import com.intellij.debugger.impl.DebuggerContextImpl
 import com.intellij.debugger.impl.DebuggerContextImpl.createDebuggerContext
+import com.intellij.debugger.impl.OutputChecker
 import com.intellij.debugger.ui.impl.watch.NodeDescriptorImpl
 import com.intellij.execution.process.ProcessOutputTypes
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.ex.PathManagerEx.getTestDataPath
 import com.intellij.openapi.util.io.FileUtil
 import com.intellij.ui.treeStructure.Tree
 import com.intellij.xdebugger.impl.ui.tree.ValueMarkup
@@ -27,6 +29,7 @@ import org.jetbrains.eval4j.jdi.asValue
 import org.jetbrains.kotlin.idea.KotlinFileType
 import org.jetbrains.kotlin.idea.debugger.evaluate.KotlinCodeFragmentFactory
 import org.jetbrains.kotlin.idea.debugger.test.preference.DebuggerPreferenceKeys
+import org.jetbrains.kotlin.idea.debugger.evaluate.compilation.CodeFragmentCompiler
 import org.jetbrains.kotlin.idea.debugger.test.preference.DebuggerPreferences
 import org.jetbrains.kotlin.idea.debugger.test.util.FramePrinter
 import org.jetbrains.kotlin.idea.debugger.test.util.FramePrinterDelegate
@@ -37,7 +40,6 @@ import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils
 import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils.findLinesWithPrefixesRemoved
 import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils.findStringWithPrefixes
 import org.jetbrains.kotlin.idea.test.KotlinBaseTest
-import org.jetbrains.kotlin.test.TargetBackend
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import javax.swing.tree.TreeNode
@@ -104,8 +106,6 @@ abstract class AbstractKotlinEvaluateExpressionTest : KotlinDescriptorTestCaseWi
 
         doOnBreakpoint {
             createDebugLabels(data.debugLabels)
-
-            val exceptions = linkedMapOf<String, Throwable>()
 
             for ((expression, expected, kind) in data.fragments) {
                 mayThrow(expression) {
@@ -181,6 +181,11 @@ abstract class AbstractKotlinEvaluateExpressionTest : KotlinDescriptorTestCaseWi
 
         val contextElement = ContextUtil.getContextElement(debuggerContext)!!
 
+        evaluationContext.debugProcess.putUserData(
+            CodeFragmentCompiler.KOTLIN_EVALUATOR_FRAGMENT_COMPILER_BACKEND,
+            fragmentCompilerBackend()
+        )
+
         assert(KotlinCodeFragmentFactory().isContextAccepted(contextElement)) {
             val text = runReadAction { contextElement.text }
             "KotlinCodeFragmentFactory should be accepted for context element otherwise default evaluator will be called. " +
@@ -243,12 +248,20 @@ abstract class AbstractKotlinEvaluateExpressionTest : KotlinDescriptorTestCaseWi
         }
     }
 
+    override fun initOutputChecker(): OutputChecker {
+        return KotlinOutputChecker(
+            getTestDataPath(),
+            testAppPath,
+            appOutputPath,
+            targetBackend(),
+            getExpectedOutputFile()
+        )
+    }
+
     override fun throwExceptionsIfAny() {
         if (exceptions.isNotEmpty()) {
-            val isIgnored = InTextDirectivesUtils.isIgnoredTarget(
-                if (useIrBackend()) TargetBackend.JVM_IR else TargetBackend.JVM,
-                getExpectedOutputFile()
-            )
+            val outputFile = getExpectedOutputFile()
+            val isIgnored = outputFile.exists() && InTextDirectivesUtils.isIgnoredTarget(targetBackend(), outputFile)
 
             if (!isIgnored) {
                 for (exc in exceptions.values) {
