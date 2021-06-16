@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.addImport.AbstractAddImportTest
 import org.jetbrains.kotlin.addImportAlias.AbstractAddImportAliasTest
 import org.jetbrains.kotlin.asJava.classes.*
 import org.jetbrains.kotlin.checkers.*
+import org.jetbrains.kotlin.idea.artifacts.AdditionalKotlinArtifacts
 import org.jetbrains.kotlin.copyright.AbstractUpdateKotlinCopyrightTest
 import org.jetbrains.kotlin.findUsages.*
 import org.jetbrains.kotlin.formatter.AbstractFormatterTest
@@ -1044,6 +1045,12 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
+    testGroup("fir-low-level-api", testDataPath = AdditionalKotlinArtifacts.compilerTestData("compiler/fir/raw-fir/psi2fir/testData")) {
+        testClass<AbstractFirLazyBodiesCalculatorTest> {
+            model("rawBuilder", testMethodName = "doTest")
+        }
+    }
+
     testGroup("fir-low-level-api", testDataPath = "testdata") {
         testClass<AbstractFirMultiModuleLazyResolveTest> {
             model("multiModuleLazyResolve", pattern = DIRECTORY, isRecursive = false)
@@ -1098,7 +1105,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
 
     testGroup(
         "fir-low-level-api",
-        testDataPath = "../idea/tests/testData/compiler/fir/analysis-tests",
+        testDataPath = AdditionalKotlinArtifacts.compilerTestData("compiler/fir/analysis-tests/testData"),
     ) {
         testClass<AbstractDiagnosisCompilerTestDataTest>(
             generatedClassName = "${AbstractDiagnosisCompilerTestDataTest::class.java.`package`.name}.DiagnosisCompilerFirTestdataTestGenerated"
@@ -1110,13 +1117,13 @@ private fun assembleWorkspace(): TWorkspace = workspace {
 
     testGroup(
         "fir-low-level-api",
-        testDataPath = "../idea/tests/testData/compiler",
+        testDataPath = AdditionalKotlinArtifacts.compilerTestData("compiler/testData"),
     ) {
         testClass<AbstractDiagnosisCompilerTestDataTest>(
-            generatedClassName = "${AbstractDiagnosisCompilerTestDataTest::class.java.`package`.name}.DiagnosisCompilerFirTestdataTestGenerated"
+            generatedClassName = "${AbstractDiagnosisCompilerTestDataTest::class.java.`package`.name}.DiagnosisCompilerTestFE10TestdataTestGenerated"
         ) {
-            model("diagnostics/tests")
-            model("diagnostics/testsWithStdLib")
+            model("diagnostics/tests", pattern = KT.withPrecondition(excludedFirPrecondition))
+            model("diagnostics/testsWithStdLib", pattern = KT.withPrecondition(excludedFirPrecondition))
         }
     }
 

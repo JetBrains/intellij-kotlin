@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 @TestRoot("fir")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-public abstract class FirKeywordCompletionTestGenerated extends AbstractFirKeywordCompletionTest {
+public class FirKeywordCompletionTestGenerated extends AbstractFirKeywordCompletionTest {
     @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("../completion/tests/testData/keywords")
     public static class Keywords extends AbstractFirKeywordCompletionTest {
