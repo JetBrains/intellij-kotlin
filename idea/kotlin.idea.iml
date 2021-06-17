@@ -81,6 +81,6 @@
     <orderEntry type="module" module-name="intellij.completionMlRanking" />
     <orderEntry type="module" module-name="intellij.platform.structuralSearch" />
     <orderEntry type="module" module-name="intellij.platform.duplicates.analysis" />
-    <orderEntry type="module" module-name="kotlin.resources-descriptors" />
+    <orderEntry type="module" module-name="kotlin.resources-fe10" />
   </component>
 </module>

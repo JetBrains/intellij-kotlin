@@ -44,6 +44,6 @@
     <orderEntry type="module" module-name="intellij.platform.jps.model" />
     <orderEntry type="module" module-name="intellij.platform.jps.model.serialization" />
     <orderEntry type="module" module-name="intellij.devkit.jps" scope="TEST" />
-    <orderEntry type="module" module-name="kotlin.resources-descriptors" scope="TEST" />
+    <orderEntry type="module" module-name="kotlin.resources-fe10" scope="TEST" />
   </component>
 </module>
