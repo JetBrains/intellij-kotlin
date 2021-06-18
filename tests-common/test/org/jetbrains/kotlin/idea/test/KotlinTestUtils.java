@@ -68,6 +68,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -334,6 +335,10 @@ public class KotlinTestUtils {
         String afterText = TagsTestDataUtil.insertTagsInText(tags, editor.getDocument().getText(), (TagsTestDataUtil.TagInfo t) -> null);
 
         assertEqualsToFile(expectedFile, afterText);
+    }
+
+    public static void assertEqualsToFile(@NotNull Path expectedFile, @NotNull String actual) {
+        assertEqualsToFile(expectedFile.toFile(), actual);
     }
 
     public static void assertEqualsToFile(@NotNull File expectedFile, @NotNull String actual) {
