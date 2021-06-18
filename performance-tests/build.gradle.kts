@@ -28,15 +28,13 @@ repositories {
 
 dependencies {
     implementation(toolsJarApi())
-    runtimeOnly(intellijDep(forIde = true))
-    testRuntimeOnly(intellijDep(forIde = true))
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.TEST)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.TEST)
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-test:1.4.0", JpsDepScope.TEST)
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-test-junit:1.3.70", JpsDepScope.TEST)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-for-ide"), JpsDepScope.TEST)
-    jpsLikeJarDependency(project(":kotlin-scripting-compiler"), JpsDepScope.TEST, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-compiler-impl"), JpsDepScope.TEST, { isTransitive = false })
+    jpsLikeJarDependency(project(":kotlin-scripting-compiler"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":kotlin-scripting-compiler-impl"), JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.common", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.core", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent", JpsDepScope.TEST)
@@ -110,4 +108,3 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
 }
 
 testsJar()
-projectTest()

@@ -28,19 +28,17 @@ repositories {
 
 dependencies {
     implementation(toolsJarApi())
-    runtimeOnly(intellijDep(forIde = true))
-    testRuntimeOnly(intellijDep(forIde = true))
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.COMPILE)
-    jpsLikeJarDependency(project(":kotlin-reflect"), JpsDepScope.TEST, { isTransitive = false })
+    jpsLikeJarDependency(project(":kotlin-reflect"), JpsDepScope.TEST)
     jpsLikeJarDependency("junit:junit:4.12", JpsDepScope.TEST)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-for-ide"), JpsDepScope.TEST)
-    jpsLikeJarDependency(project(":kotlin-scripting-compiler"), JpsDepScope.TEST, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-compiler-impl"), JpsDepScope.TEST, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-jvm"), JpsDepScope.TEST, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-script-runtime"), JpsDepScope.TEST, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-script-util"), JpsDepScope.TEST, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-common"), JpsDepScope.TEST, { isTransitive = false })
+    jpsLikeJarDependency(project(":kotlin-scripting-compiler"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":kotlin-scripting-compiler-impl"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":kotlin-scripting-jvm"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":kotlin-script-runtime"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":kotlin-script-util"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":kotlin-scripting-common"), JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.common", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.core", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent", JpsDepScope.TEST)
@@ -93,4 +91,3 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
 }
 
 testsJar()
-projectTest()

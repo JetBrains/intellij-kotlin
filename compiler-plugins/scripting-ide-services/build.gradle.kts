@@ -28,16 +28,14 @@ repositories {
 
 dependencies {
     implementation(toolsJarApi())
-    runtimeOnly(intellijDep(forIde = true))
-    testRuntimeOnly(intellijDep(forIde = true))
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-for-ide"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-cli-for-ide"), JpsDepScope.COMPILE)
-    jpsLikeJarDependency(project(":kotlin-scripting-compiler"), JpsDepScope.COMPILE, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-common"), JpsDepScope.COMPILE, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-jvm"), JpsDepScope.COMPILE, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-compiler-impl"), JpsDepScope.COMPILE, { isTransitive = false })
+    jpsLikeJarDependency(project(":kotlin-scripting-compiler"), JpsDepScope.COMPILE)
+    jpsLikeJarDependency(project(":kotlin-scripting-common"), JpsDepScope.COMPILE)
+    jpsLikeJarDependency(project(":kotlin-scripting-jvm"), JpsDepScope.COMPILE)
+    jpsLikeJarDependency(project(":kotlin-scripting-compiler-impl"), JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.common", JpsDepScope.COMPILE)
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-impl") }) // 'intellij.platform.core.impl' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("resources_en") }) // 'intellij.platform.core.impl' dependency

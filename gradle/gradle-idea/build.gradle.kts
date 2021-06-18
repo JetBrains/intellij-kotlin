@@ -28,8 +28,6 @@ repositories {
 
 dependencies {
     implementation(toolsJarApi())
-    runtimeOnly(intellijDep(forIde = true))
-    testRuntimeOnly(intellijDep(forIde = true))
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.COMPILE)
     jpsLikeJarDependency("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.9", JpsDepScope.COMPILE)
@@ -37,11 +35,11 @@ dependencies {
     jpsLikeJarDependency("org.jetbrains.intellij.deps:trove4j:1.0.20200330", JpsDepScope.COMPILE)
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-test:1.4.0", JpsDepScope.TEST)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-for-ide"), JpsDepScope.COMPILE)
-    jpsLikeJarDependency(project(":kotlin-scripting-compiler"), JpsDepScope.COMPILE, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-compiler-impl"), JpsDepScope.COMPILE, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-script-runtime"), JpsDepScope.COMPILE, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-common"), JpsDepScope.COMPILE, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-jvm"), JpsDepScope.COMPILE, { isTransitive = false })
+    jpsLikeJarDependency(project(":kotlin-scripting-compiler"), JpsDepScope.COMPILE)
+    jpsLikeJarDependency(project(":kotlin-scripting-compiler-impl"), JpsDepScope.COMPILE)
+    jpsLikeJarDependency(project(":kotlin-script-runtime"), JpsDepScope.COMPILE)
+    jpsLikeJarDependency(project(":kotlin-scripting-common"), JpsDepScope.COMPILE)
+    jpsLikeJarDependency(project(":kotlin-scripting-jvm"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-gradle-statistics-for-ide"), JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.common", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.core", JpsDepScope.COMPILE)
@@ -153,4 +151,3 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
 }
 
 testsJar()
-projectTest()

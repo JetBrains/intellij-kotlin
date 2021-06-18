@@ -28,8 +28,6 @@ repositories {
 
 dependencies {
     implementation(toolsJarApi())
-    runtimeOnly(intellijDep(forIde = true))
-    testRuntimeOnly(intellijDep(forIde = true))
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.COMPILE)
     jpsLikeJarDependency("com.google.guava:guava:29.0-jre", JpsDepScope.COMPILE)
@@ -79,4 +77,3 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
 }
 
 testsJar()
-projectTest()

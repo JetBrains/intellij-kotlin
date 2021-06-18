@@ -28,8 +28,6 @@ repositories {
 
 dependencies {
     implementation(toolsJarApi())
-    runtimeOnly(intellijDep(forIde = true))
-    testRuntimeOnly(intellijDep(forIde = true))
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.COMPILE)
     jpsLikeJarDependency("io.javaslang:javaslang:2.0.6", JpsDepScope.TEST)
@@ -53,10 +51,10 @@ dependencies {
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent.tests", JpsDepScope.TEST)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:sam-with-receiver-compiler-plugin-for-ide"), JpsDepScope.TEST)
-    jpsLikeJarDependency(project(":kotlin-reflect"), JpsDepScope.TEST, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-script-runtime"), JpsDepScope.TEST, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-common"), JpsDepScope.TEST, { isTransitive = false })
-    jpsLikeJarDependency(project(":kotlin-scripting-jvm"), JpsDepScope.TEST, { isTransitive = false })
+    jpsLikeJarDependency(project(":kotlin-reflect"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":kotlin-script-runtime"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":kotlin-scripting-common"), JpsDepScope.TEST)
+    jpsLikeJarDependency(project(":kotlin-scripting-jvm"), JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.idea", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.gradle.gradle-idea", JpsDepScope.RUNTIME)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.gradle.gradle-native", JpsDepScope.RUNTIME)
@@ -143,4 +141,3 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
 }
 
 testsJar()
-projectTest()
