@@ -4,38 +4,31 @@
 
 plugins {
     kotlin("jvm")
+    `java-library` // Add `compileOnlyApi` configuration
     id("jps-compatible")
 }
 
 repositories {
     maven { setUrl("https://cache-redirector.jetbrains.com/maven-central") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/jetbrains.bintray.com/intellij-third-party-dependencies") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/jetbrains.bintray.com/dekaf") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/jcenter.bintray.com") }
+    maven { setUrl("https://cache-redirector.jetbrains.com/intellij-third-party-dependencies") }
+    maven { setUrl("https://cache-redirector.jetbrains.com/jcenter") }
     maven { setUrl("https://cache-redirector.jetbrains.com/dl.google.com/dl/android/maven2") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/repo.spring.io/milestone") }
     maven { setUrl("https://cache-redirector.jetbrains.com/repo.jenkins-ci.org/releases") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/jetbrains.bintray.com/test-discovery") }
+    maven { setUrl("https://cache-redirector.jetbrains.com/dl.bintray.com/groovy/maven/") }
+    maven { setUrl("https://cache-redirector.jetbrains.com/jetbrains.bintray.com/jediterm/") }
     maven { setUrl("https://cache-redirector.jetbrains.com/jetbrains.bintray.com/markdown") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/www.myget.org/F/intellij-go-snapshots/maven") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/dl.bintray.com/groovy/maven") }
+    maven { setUrl("https://cache-redirector.jetbrains.com/jetbrains.bintray.com/markdown") }
     maven { setUrl("https://cache-redirector.jetbrains.com/www.myget.org/F/rd-snapshots/maven") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/www.myget.org/F/rd-model-snapshots/maven") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/jetbrains.bintray.com/jediterm") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/jetbrains.bintray.com/intellij-terraform") }
     maven { setUrl("https://cache-redirector.jetbrains.com/download.jetbrains.com/teamcity-repository") }
     maven { setUrl("https://cache-redirector.jetbrains.com/kotlin.bintray.com/kotlin-plugin/") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/repo.maven.apache.org/maven2/") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/clojars.org/repo") }
     maven { setUrl("https://cache-redirector.jetbrains.com/jetbrains.bintray.com/space") }
     maven { setUrl("https://cache-redirector.jetbrains.com/kotlin.bintray.com/kotlin-ide-plugin-dependencies") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide") }
-    maven { setUrl("https://cache-redirector.jetbrains.com/kotlin.bintray.com/kotlin-ide-plugin-dependencies") }
-    maven { setUrl("https://repo.labs.intellij.net/artifactory/mobile-ide-tmp") }
 }
 
 dependencies {
     implementation(toolsJarApi())
+    runtimeOnly(intellijDep(forIde = true))
+    testRuntimeOnly(intellijDep(forIde = true))
     jpsLikeJarDependency(kotlinStdlib(), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":kotlin-stdlib-jdk7"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-for-ide"), JpsDepScope.COMPILE)
@@ -43,29 +36,29 @@ dependencies {
     jpsLikeModuleDependency(":kotlin-ide.kotlin.core", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent", JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.j2k.old", JpsDepScope.COMPILE)
-    jpsLikeJarDependency(intellijPluginDep("java", forIde = true), JpsDepScope.COMPILE)
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("intellij-core-analysis-deprecated") }) // Exported transitive dependency
-    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.0", JpsDepScope.COMPILE) // Exported transitive dependency
-    jpsLikeJarDependency(intellijCoreDep(), JpsDepScope.COMPILE) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-impl") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("resources_en") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-api") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("extensions") }) // Exported transitive dependency
-    jpsLikeJarDependency("org.apache.velocity:velocity:1.7", JpsDepScope.COMPILE) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("javac2") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("forms_rt") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-ide-util-io") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-concurrency") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("jps-model") }) // Exported transitive dependency
-    jpsLikeJarDependency("org.jetbrains.intellij.deps:jdom:2.0.6", JpsDepScope.COMPILE) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("resources") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("util") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-util-ex") }) // Exported transitive dependency
-    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-util-ui") }) // Exported transitive dependency
-    jpsLikeJarDependency("org.jetbrains:annotations:20.1.0", JpsDepScope.COMPILE) // Exported transitive dependency
-    jpsLikeJarDependency("com.jgoodies:forms:1.1-preview", JpsDepScope.COMPILE) // Exported transitive dependency
-    jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.0", JpsDepScope.COMPILE) // Exported transitive dependency
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.resources-descriptors", JpsDepScope.TEST)
+    jpsLikeJarDependency(intellijPluginDep("java", forIde = true), JpsDepScope.COMPILE) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("intellij-core-analysis-deprecated") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:8.0.1", JpsDepScope.COMPILE, { isTransitive = false }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijCoreDep(), JpsDepScope.COMPILE) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-impl") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("resources_en") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-api") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("extensions") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency("org.apache.velocity:velocity:1.7", JpsDepScope.COMPILE) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("javac2") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("forms_rt") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-concurrency") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-core-ui") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-ide-util-io") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("jps-model") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency("org.jetbrains.intellij.deps:jdom:2.0.6", JpsDepScope.COMPILE) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("resources") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("util") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-util-ex") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-util-ui") }) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency("org.jetbrains:annotations:19.0.0", JpsDepScope.COMPILE) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency("com.jgoodies:forms:1.1-preview", JpsDepScope.COMPILE) // 'intellij.java.impl' dependency
+    jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.70", JpsDepScope.COMPILE) // 'intellij.java.impl' dependency
 }
 
 configurations.all {
@@ -94,4 +87,5 @@ tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
     kotlinOptions.useOldBackend = true // KT-45697
 }
 
-testsJar()
+// Fake empty configuration in order to make `DependencyHandler.projectTests(name: String)` work
+configurations.getOrCreate("tests-jar")
