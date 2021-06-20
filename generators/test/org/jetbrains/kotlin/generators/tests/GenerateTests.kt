@@ -921,73 +921,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    /*testGroup("frontend-fir") {
-        testClass<AbstractKtDeclarationAndFirDeclarationEqualityChecker> {
-            model("ktDeclarationAndFirDeclarationEqualityChecker")
-        }
-
-        testClass<AbstractResolveCallTest> {
-            model("analysisSession/resolveCall")
-        }
-
-        testClass<AbstractSymbolsByPsiBuildingTest> {
-            model("symbolsByPsi")
-        }
-
-        testClass<AbstractSymbolsByFqNameBuildingTest> {
-            model("symbolsByFqName", pattern = TXT)
-        }
-
-        testClass<AbstractSymbolByReferenceTest> {
-            model("symbolByReference")
-        }
-
-        testClass<AbstractMemberScopeByFqNameTest> {
-            model("memberScopeByFqName", pattern = TXT)
-        }
-
-        testClass<AbstractFileScopeTest> {
-            model("fileScopeTest")
-        }
-
-        testClass<AbstractSymbolByPsiTest> {
-            model("symbols/symbolByPsi")
-        }
-
-        testClass<AbstractSymbolFromLibraryPointerRestoreTest> {
-            model("resoreSymbolFromLibrary", pattern = TXT)
-        }
-
-        testClass<AbstractSymbolByReferenceTest> {
-            model("symbols/symbolByReference")
-        }
-
-        testClass<AbstractMemoryLeakInSymbolsTest> {
-            model("symbolMemoryLeak")
-        }
-
-        testClass<AbstractReturnExpressionTargetTest> {
-            model("components/returnExpressionTarget")
-        }
-
-        testClass<AbstractExpectedExpressionTypeTest> {
-            model("components/expectedExpressionType")
-        }
-
-        testClass<AbstractOverriddenDeclarationProviderTest> {
-            model("components/overridenDeclarations")
-        }
-
-        testClass<AbstractHLExpressionTypeTest> {
-            model("components/expressionType")
-        }
-
-        testClass<AbstractRendererTest> {
-            model("components/declarationRenderer")
-        }
-    }
-
-    testGroup("idea/idea-fir/tests", "compiler/testData") {
+    /*testGroup("fir", testDataPath = AdditionalKotlinArtifacts.compilerTestData("compiler/testData")) {
         testClass<AbstractFirLightClassTest> {
             model("asJava/lightClasses", excludeDirs = listOf("delegation", "script"), pattern = KT_WITHOUT_DOTS_IN_NAME)
         }
