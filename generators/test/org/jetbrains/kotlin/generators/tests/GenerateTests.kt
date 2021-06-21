@@ -201,13 +201,13 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
 
         testClass<AbstractKotlinEvaluateExpressionWithIRFragmentCompilerTest> {
-            model("evaluation/singleBreakpoint", testMethod = "doSingleBreakpointTest", targetBackend = TargetBackend.JVM_WITH_IR_EVALUATOR)
-            model("evaluation/multipleBreakpoints", testMethod = "doMultipleBreakpointsTest", targetBackend = TargetBackend.JVM_WITH_IR_EVALUATOR)
+            model("evaluation/singleBreakpoint", testMethodName = "doSingleBreakpointTest", targetBackend = TargetBackend.JVM_WITH_IR_EVALUATOR)
+            model("evaluation/multipleBreakpoints", testMethodName = "doMultipleBreakpointsTest", targetBackend = TargetBackend.JVM_WITH_IR_EVALUATOR)
         }
 
         testClass<AbstractIrKotlinEvaluateExpressionWithIRFragmentCompilerTest> {
-            model("evaluation/singleBreakpoint", testMethod = "doSingleBreakpointTest", targetBackend = TargetBackend.JVM_IR_WITH_IR_EVALUATOR)
-            model("evaluation/multipleBreakpoints", testMethod = "doMultipleBreakpointsTest", targetBackend = TargetBackend.JVM_IR_WITH_IR_EVALUATOR)
+            model("evaluation/singleBreakpoint", testMethodName = "doSingleBreakpointTest", targetBackend = TargetBackend.JVM_IR_WITH_IR_EVALUATOR)
+            model("evaluation/multipleBreakpoints", testMethodName = "doMultipleBreakpointsTest", targetBackend = TargetBackend.JVM_IR_WITH_IR_EVALUATOR)
         }
 
         testClass<AbstractSelectExpressionForDebuggerTest> {
@@ -935,11 +935,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("fir-low-level-api", testDataPath = "../idea/testData") {
-        testClass<AbstractFirMultiModuleResolveTest> {
-            model("fir/multiModule", isRecursive = false, pattern = DIRECTORY)
-        }
-
     testGroup("idea/idea-frontend-fir/fir-low-level-api-ide-impl/tests", "idea/idea-frontend-fir/idea-fir-low-level-api/testdata") {
         testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
             model("outOfBlockProjectWide")
@@ -1092,7 +1087,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("quickfix/lateinit", pattern = pattern)
             model("quickfix/modifiers", pattern = pattern, isRecursive = false)
             model("quickfix/nullables", pattern = pattern)
-            model("quickfix/override", pattern = pattern, filenameStartsLowerCase = true, isRecursive = false)
+            model("quickfix/override", pattern = pattern, isRecursive = false)
             model("quickfix/override/typeMismatchOnOverride", pattern = pattern, isRecursive = false)
             model("quickfix/replaceInfixOrOperatorCall", pattern = pattern)
             model("quickfix/replaceWithDotCall", pattern = pattern)
@@ -1103,7 +1098,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("quickfix/wrapWithSafeLetCall", pattern = pattern)
             model("quickfix/typeMismatch/componentFunctionReturnTypeMismatch", pattern = pattern)
             model("quickfix/typeMismatch/typeMismatchOnReturnedExpression", pattern = pattern)
-            model("quickfix/toString", pattern = pattern, filenameStartsLowerCase = true)
+            model("quickfix/toString", pattern = pattern)
         }
 
         testClass<AbstractHighLevelQuickFixMultiFileTest> {
