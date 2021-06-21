@@ -39,6 +39,7 @@ import org.jetbrains.kotlin.scripting.resolve.classId
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.asFlexibleType
 import org.jetbrains.kotlin.types.isFlexible
+import org.jetbrains.kotlin.util.firstNotNullResult
 import java.io.File
 import kotlin.script.experimental.api.ScriptCompilationConfiguration
 import kotlin.script.experimental.api.SourceCodeCompletionVariant
@@ -335,7 +336,7 @@ private class KJvmReplCompleter(
             getDescriptorsDefault,
         )
 
-        val result = descriptorsGetters.firstNotNullOfOrNull { it.get(element, options) }
+        val result = descriptorsGetters.firstNotNullResult { it.get(element, options) }
         return renderResult(element, options, result)
     }
 
