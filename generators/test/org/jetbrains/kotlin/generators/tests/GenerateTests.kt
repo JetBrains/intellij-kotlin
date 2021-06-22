@@ -935,18 +935,19 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("idea/idea-frontend-fir/fir-low-level-api-ide-impl/tests", "idea/idea-frontend-fir/idea-fir-low-level-api/testdata") {
-        testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
-            model("outOfBlockProjectWide")
-        }
-//
-//      testClass<AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest> {
-//          model("outOfBlockProjectWide")
-//      }
-        testClass<AbstractSessionsInvalidationTest> {
-            model("sessionInvalidation", pattern = DIRECTORY, isRecursive = false)
-        }
-    }
+    // TODO temporarily disable until testdata is migrated from kotlin repo to kotlin-ide
+//    testGroup("idea/idea-frontend-fir/fir-low-level-api-ide-impl/tests", "idea/idea-frontend-fir/idea-fir-low-level-api/testdata") {
+//        testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
+//            model("outOfBlockProjectWide")
+//        }
+////
+////      testClass<AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest> {
+////          model("outOfBlockProjectWide")
+////      }
+//        testClass<AbstractSessionsInvalidationTest> {
+//            model("sessionInvalidation", pattern = DIRECTORY, isRecursive = false)
+//        }
+//    }
 
     testGroup("idea/idea-fir/tests", "idea") {
         testClass<AbstractFirReferenceResolveTest> {
