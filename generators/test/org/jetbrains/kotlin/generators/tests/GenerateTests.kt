@@ -98,7 +98,6 @@ import org.jetbrains.kotlin.idea.fir.frontend.api.components.AbstractRendererTes
 import org.jetbrains.kotlin.idea.fir.frontend.api.fir.AbstractResolveCallTest
 import org.jetbrains.kotlin.idea.fir.frontend.api.scopes.AbstractFileScopeTest
 import org.jetbrains.kotlin.idea.fir.frontend.api.scopes.AbstractMemberScopeByFqNameTest
-import org.jetbrains.kotlin.idea.fir.low.level.api.trackers.AbstractProjectWideOutOfBlockKotlinModificationTrackerTest
 import org.jetbrains.kotlin.idea.frontend.api.symbols.*
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyTest
 import org.jetbrains.kotlin.idea.hierarchy.AbstractHierarchyWithLibTest
@@ -979,18 +978,19 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("idea/idea-frontend-fir/fir-low-level-api-ide-impl/tests", "idea/idea-frontend-fir/idea-fir-low-level-api/testdata") {
-        testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
-            model("outOfBlockProjectWide")
-        }
-//
-//      testClass<AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest> {
-//          model("outOfBlockProjectWide")
-//      }
-        testClass<AbstractSessionsInvalidationTest> {
-            model("sessionInvalidation", pattern = DIRECTORY, isRecursive = false)
-        }
-    }
+    // TODO temporarily disable until testdata is migrated from kotlin repo to kotlin-ide
+//    testGroup("idea/idea-frontend-fir/fir-low-level-api-ide-impl/tests", "idea/idea-frontend-fir/idea-fir-low-level-api/testdata") {
+//        testClass<AbstractProjectWideOutOfBlockKotlinModificationTrackerTest> {
+//            model("outOfBlockProjectWide")
+//        }
+////
+////      testClass<AbstractFileStructureAndOutOfBlockModificationTrackerConsistencyTest> {
+////          model("outOfBlockProjectWide")
+////      }
+//        testClass<AbstractSessionsInvalidationTest> {
+//            model("sessionInvalidation", pattern = DIRECTORY, isRecursive = false)
+//        }
+//    }
 
 
    /* testGroup("idea/idea-fir-performance-tests/tests", "idea") {
