@@ -230,7 +230,7 @@ public class KotlinHighlightingPassTestGenerated extends AbstractKotlinHighlight
 
         @TestMetadata("PackageInExpressionPosition.kt")
         public void testPackageInExpressionPosition() throws Exception {
-            runTest("idea/testData/checker/PackageInExpressionPosition.kt");
+            runTest("testData/checker/PackageInExpressionPosition.kt");
         }
 
         @TestMetadata("PackageQualified.kt")
