@@ -1952,7 +1952,7 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
 
             @TestMetadata("caretNotOnName.kt")
             public void testCaretNotOnName() throws Exception {
-                runTest("idea/testData/intentions/addPropertyAccessors/both/caretNotOnName.kt");
+                runTest("testData/intentions/addPropertyAccessors/both/caretNotOnName.kt");
             }
 
             @TestMetadata("delegate.kt")
@@ -1962,7 +1962,7 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
 
             @TestMetadata("expect.kt")
             public void testExpect() throws Exception {
-                runTest("idea/testData/intentions/addPropertyAccessors/both/expect.kt");
+                runTest("testData/intentions/addPropertyAccessors/both/expect.kt");
             }
 
             @TestMetadata("hasAccessor.kt")
@@ -2030,12 +2030,12 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
 
             @TestMetadata("caretNotOnName.kt")
             public void testCaretNotOnName() throws Exception {
-                runTest("idea/testData/intentions/addPropertyAccessors/getter/caretNotOnName.kt");
+                runTest("testData/intentions/addPropertyAccessors/getter/caretNotOnName.kt");
             }
 
             @TestMetadata("const.kt")
             public void testConst() throws Exception {
-                runTest("idea/testData/intentions/addPropertyAccessors/getter/const.kt");
+                runTest("testData/intentions/addPropertyAccessors/getter/const.kt");
             }
 
             @TestMetadata("delegate.kt")
@@ -2045,7 +2045,7 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
 
             @TestMetadata("expect.kt")
             public void testExpect() throws Exception {
-                runTest("idea/testData/intentions/addPropertyAccessors/getter/expect.kt");
+                runTest("testData/intentions/addPropertyAccessors/getter/expect.kt");
             }
 
             @TestMetadata("hasAccessor.kt")
@@ -2113,7 +2113,7 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
 
             @TestMetadata("caretNotOnName.kt")
             public void testCaretNotOnName() throws Exception {
-                runTest("idea/testData/intentions/addPropertyAccessors/setter/caretNotOnName.kt");
+                runTest("testData/intentions/addPropertyAccessors/setter/caretNotOnName.kt");
             }
 
             @TestMetadata("delegate.kt")
@@ -2123,7 +2123,7 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
 
             @TestMetadata("expect.kt")
             public void testExpect() throws Exception {
-                runTest("idea/testData/intentions/addPropertyAccessors/setter/expect.kt");
+                runTest("testData/intentions/addPropertyAccessors/setter/expect.kt");
             }
 
             @TestMetadata("hasAccessor.kt")

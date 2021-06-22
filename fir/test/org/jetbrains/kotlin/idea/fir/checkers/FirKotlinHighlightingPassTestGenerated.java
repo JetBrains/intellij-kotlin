@@ -230,7 +230,7 @@ public abstract class FirKotlinHighlightingPassTestGenerated extends AbstractFir
 
         @TestMetadata("PackageInExpressionPosition.kt")
         public void testPackageInExpressionPosition() throws Exception {
-            runTest("idea/testData/checker/PackageInExpressionPosition.kt");
+            runTest("../idea/tests/testData/checker/PackageInExpressionPosition.kt");
         }
 
         @TestMetadata("PackageQualified.kt")
