@@ -11,6 +11,7 @@ import com.intellij.navigation.NavigationItem
 import com.intellij.psi.PsiAnonymousClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiPackage
+import com.intellij.psi.PsiParameter
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.idea.util.module
 import org.jetbrains.kotlin.psi.KtClass
@@ -49,8 +50,13 @@ fun PsiElement.renderAsGotoImplementation(renderModule: Boolean = false): String
     if (renderModule) {
         locationString = "[${navigationElement.module?.name ?: ""}] $locationString"
     }
-    return if (locationString == null || navigationElement is PsiPackage)
-        presentableText!!
-    else
-        locationString + "." + presentableText// for PsiPackage, presentableText is FQ name of current package
+
+    return when {
+        // Special case for PsiParameter (a parameter in method, for example), since package doesn't make any sense for it
+        navigationElement is PsiParameter -> "${navigationElement.type.presentableText} $presentableText"
+
+        locationString == null || navigationElement is PsiPackage -> presentableText!!
+
+        else -> "$locationString.$presentableText"
+    } // for PsiPackage, presentableText is FQ name of current package
 }
