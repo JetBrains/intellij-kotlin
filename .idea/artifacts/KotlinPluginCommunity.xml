@@ -136,6 +136,7 @@
               <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-compiler-for-ide/1.5.255-SNAPSHOT/kotlin-compiler-for-ide-1.5.255-SNAPSHOT.jar" path-in-jar="/META-INF/extensions/" />
             </element>
           </element>
+          <element id="module-output" name="kotlin.resources-fe10" />
         </element>
         <element id="archive" name="kotlin-jps-common.jar">
           <element id="module-output" name="kotlin.jps-common" />
@@ -188,9 +189,6 @@
         <element id="library" level="module" name="intellij-markdown" module-name="intellij.markdown" />
         <element id="library" level="project" name="kotlinx-coroutines-jdk8" />
         <element id="library" level="project" name="completion-ranking-kotlin" />
-        <element id="archive" name="kotlin-resources-descriptors.jar">
-          <element id="module-output" name="kotlin.resources-descriptors" />
-        </element>
         <element id="archive" name="kotlin-parcelize.jar">
           <element id="module-output" name="kotlin.compiler-plugins.parcelize" />
         </element>
@@ -208,6 +206,9 @@
         </element>
         <element id="archive" name="base-compiler-plugins-ide-support.jar">
           <element id="module-output" name="kotlin.compiler-plugins.base-compiler-plugins-ide-support" />
+        </element>
+        <element id="archive" name="uast-kotlin-idea-base.jar">
+          <element id="module-output" name="kotlin.uast.uast-kotlin-idea-base" />
         </element>
       </element>
       <element id="directory" name="kotlinc">

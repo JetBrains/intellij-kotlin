@@ -833,7 +833,6 @@
       <module fileurl="file://$PROJECT_DIR$/intellij/plugins/textmate/intellij.textmate.iml" filepath="$PROJECT_DIR$/intellij/plugins/textmate/intellij.textmate.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/plugins/textmate/core/intellij.textmate.core.iml" filepath="$PROJECT_DIR$/intellij/plugins/textmate/core/intellij.textmate.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/build/dependencies/intellij.tools.dependencies.iml" filepath="$PROJECT_DIR$/intellij/build/dependencies/intellij.tools.dependencies.iml" />
-      <module fileurl="file://$PROJECT_DIR$/intellij/build/dependencies/androidSdkUpload/intellij.tools.dependencies.androidSdkUpload.iml" filepath="$PROJECT_DIR$/intellij/build/dependencies/androidSdkUpload/intellij.tools.dependencies.androidSdkUpload.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/build/dependencies/gradle-api-deps/intellij.tools.dependencies.gradle.iml" filepath="$PROJECT_DIR$/intellij/build/dependencies/gradle-api-deps/intellij.tools.dependencies.gradle.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/build/dependencies/kotlin-deps/intellij.tools.dependencies.kotlin.iml" filepath="$PROJECT_DIR$/intellij/build/dependencies/kotlin-deps/intellij.tools.dependencies.kotlin.iml" />
       <module fileurl="file://$PROJECT_DIR$/intellij/tools/index-tools/intellij.tools.index.iml" filepath="$PROJECT_DIR$/intellij/tools/index-tools/intellij.tools.index.iml" />
@@ -887,9 +886,6 @@
       <module fileurl="file://$PROJECT_DIR$/fir/kotlin.fir.iml" filepath="$PROJECT_DIR$/fir/kotlin.fir.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.fir-all-tests/kotlin.fir-all-tests.iml" filepath="$PROJECT_DIR$/kotlin.fir-all-tests/kotlin.fir-all-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/fir-fe10-binding/kotlin.fir.fir-fe10-binding.iml" filepath="$PROJECT_DIR$/fir-fe10-binding/kotlin.fir.fir-fe10-binding.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fir-low-level-api/kotlin.fir.fir-low-level-api.iml" filepath="$PROJECT_DIR$/fir-low-level-api/kotlin.fir.fir-low-level-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/frontend-api/kotlin.fir.frontend-api.iml" filepath="$PROJECT_DIR$/frontend-api/kotlin.fir.frontend-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/frontend-fir/kotlin.fir.frontend-fir.iml" filepath="$PROJECT_DIR$/frontend-fir/kotlin.fir.frontend-fir.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend-independent/kotlin.fir.frontend-independent.iml" filepath="$PROJECT_DIR$/frontend-independent/kotlin.fir.frontend-independent.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend-independent/tests/kotlin.fir.frontend-independent.tests.iml" filepath="$PROJECT_DIR$/frontend-independent/tests/kotlin.fir.frontend-independent.tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/formatter/kotlin.formatter.iml" filepath="$PROJECT_DIR$/formatter/kotlin.formatter.iml" />
@@ -923,7 +919,7 @@
       <module fileurl="file://$PROJECT_DIR$/project-wizard/core/kotlin.project-wizard.core.iml" filepath="$PROJECT_DIR$/project-wizard/core/kotlin.project-wizard.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/project-wizard/idea/kotlin.project-wizard.idea.iml" filepath="$PROJECT_DIR$/project-wizard/idea/kotlin.project-wizard.idea.iml" />
       <module fileurl="file://$PROJECT_DIR$/repl/kotlin.repl.iml" filepath="$PROJECT_DIR$/repl/kotlin.repl.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.resources-descriptors.iml" filepath="$PROJECT_DIR$/kotlin.resources-descriptors.iml" />
+      <module fileurl="file://$PROJECT_DIR$/resources-fe10/kotlin.resources-fe10.iml" filepath="$PROJECT_DIR$/resources-fe10/kotlin.resources-fe10.iml" />
       <module fileurl="file://$PROJECT_DIR$/resources-fir/kotlin.resources-fir.iml" filepath="$PROJECT_DIR$/resources-fir/kotlin.resources-fir.iml" />
       <module fileurl="file://$PROJECT_DIR$/scripting/kotlin.scripting.iml" filepath="$PROJECT_DIR$/scripting/kotlin.scripting.iml" />
       <module fileurl="file://$PROJECT_DIR$/scripting-support/kotlin.scripting-support.iml" filepath="$PROJECT_DIR$/scripting-support/kotlin.scripting-support.iml" />
