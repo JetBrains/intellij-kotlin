@@ -63,6 +63,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib-jdk7.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib-jdk8.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin-base.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin-idea.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-ultimate-common-cidr-native.jar!/" />
@@ -143,6 +144,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib-jdk7.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib-jdk8.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-stdlib.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin-base.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin-idea.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-uast-kotlin.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-ultimate-common-cidr-native.jar!/" />
