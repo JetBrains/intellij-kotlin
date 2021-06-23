@@ -199,18 +199,15 @@
         <element id="library" level="module" name="intellij-markdown" module-name="intellij.markdown" />
         <element id="library" level="project" name="kotlinx-coroutines-jdk8" />
         <element id="library" level="project" name="completion-ranking-kotlin" />
-        <element id="archive" name="kotlin.fir-low-level-api.jar">
-          <element id="module-output" name="kotlin.fir.fir-low-level-api" />
-        </element>
-        <element id="archive" name="kotlin.frontend-api.jar">
-          <element id="module-output" name="kotlin.fir.frontend-api" />
-        </element>
-        <element id="archive" name="kotlin.frontend-fir.jar">
-          <element id="module-output" name="kotlin.fir.frontend-fir" />
-        </element>
         <element id="archive" name="kotlin-resources-fir.jar">
           <element id="module-output" name="kotlin.resources-fir" />
         </element>
+        <element id="archive" name="fir-low-level-api-ide-impl.jar">
+          <element id="module-output" name="kotlin.fir.fir-low-level-api-ide-impl" />
+        </element>
+        <element id="library" level="project" name="kotlinc.high-level-api" />
+        <element id="library" level="project" name="kotlinc.high-level-api-fir" />
+        <element id="library" level="project" name="kotlinc.low-level-api-fir" />
       </element>
       <element id="directory" name="kotlinc">
         <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-dist-for-ide/1.5.255-SNAPSHOT/kotlin-dist-for-ide-1.5.255-SNAPSHOT.jar" path-in-jar="/" />
