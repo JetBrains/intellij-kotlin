@@ -47,7 +47,9 @@ internal class DeclarationProviderByIndexesImpl(
 
 
     override fun getClassesByClassId(classId: ClassId): Collection<KtClassOrObject> {
-        return listOfNotNull(getClassByClassId(classId))//todo
+        return KotlinFullClassNameIndex
+            .getInstance()[classId.asStringForIndexes(), project, searchScope]
+            .filter { candidate -> candidate.containingKtFile.packageFqName == classId.packageFqName }
     }
 
     override fun getTypeAliasesByClassId(classId: ClassId): Collection<KtTypeAlias> {
@@ -71,11 +73,6 @@ internal class DeclarationProviderByIndexesImpl(
             .getInstance()[packageFqName.asStringForIndexes(), project, searchScope]
             .mapNotNullTo(mutableSetOf()) { it.nameAsName }
     }
-
-    private fun getClassByClassId(classId: ClassId) = firstMatchingOrNull(
-        KotlinFullClassNameIndex.KEY,
-        classId.asStringForIndexes(),
-    ) { candidate -> candidate.containingKtFile.packageFqName == classId.packageFqName }
 
     private fun getTypeAliasByClassId(classId: ClassId): KtTypeAlias? = firstMatchingOrNull<String, KtTypeAlias>(
         KotlinTopLevelTypeAliasFqNameIndex.KEY,
