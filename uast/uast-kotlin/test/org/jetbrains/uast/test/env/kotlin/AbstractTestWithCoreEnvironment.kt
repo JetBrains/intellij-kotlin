@@ -15,6 +15,7 @@ import com.intellij.psi.PsiNameHelper
 import com.intellij.psi.impl.PsiNameHelperImpl
 import com.intellij.rt.execution.junit.FileComparisonFailure
 import junit.framework.TestCase
+import org.jetbrains.uast.UastContext
 import org.jetbrains.uast.UastLanguagePlugin
 import org.jetbrains.uast.evaluation.UEvaluatorExtension
 import org.jetbrains.uast.java.JavaUastLanguagePlugin
@@ -60,6 +61,7 @@ abstract class AbstractTestWithCoreEnvironment : TestCase() {
         )
 
         project.registerService(PsiNameHelper::class.java, PsiNameHelperImpl(project))
+        project.registerService(UastContext::class.java)
         registerUastLanguagePlugins()
     }
 
