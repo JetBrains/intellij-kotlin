@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.checkers.AbstractKotlinHighlightingPassTest
 import org.jetbrains.kotlin.idea.highlighter.AbstractHighlightingTest
 import org.jetbrains.kotlin.idea.fir.invalidateCaches
 import org.jetbrains.kotlin.idea.test.withCustomCompilerOptions
-import org.jetbrains.kotlin.idea.fir.withPossiblyDisabledDuplicatedFirSourceElementsException
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils
 import org.jetbrains.kotlin.test.utils.IgnoreTests
@@ -54,9 +53,7 @@ abstract class AbstractFirKotlinHighlightingPassTest : AbstractKotlinHighlightin
         AbstractHighlightingTest.withExpectedDuplicatedHighlighting(isDuplicatedHighlightingExpected, /*isFirPlugin*/true) {
             withCustomCompilerOptions(fileText, project, module) {
                 try {
-                    withPossiblyDisabledDuplicatedFirSourceElementsException(fileText) {
-                        result = myFixture.checkHighlighting(checkWarnings, checkInfos, checkWeakWarnings)
-                    }
+                    result = myFixture.checkHighlighting(checkWarnings, checkInfos, checkWeakWarnings)
                 } catch (e: FileComparisonFailure) {
                     throw FileComparisonFailure(e.message, e.expected, e.actual, File(e.filePath).absolutePath)
                 }
