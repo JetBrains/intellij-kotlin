@@ -3,11 +3,12 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.uast.kotlin
+package org.jetbrains.uast.kotlin.expressions
 
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UastBinaryOperator
+import org.jetbrains.uast.kotlin.KotlinAbstractUBinaryExpression
 
 class FirKotlinUBinaryExpression(
     override val sourcePsi: KtBinaryExpression,

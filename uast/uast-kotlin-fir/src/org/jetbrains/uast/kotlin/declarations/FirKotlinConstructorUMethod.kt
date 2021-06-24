@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.uast.kotlin
+package org.jetbrains.uast.kotlin.declarations
 
 import com.intellij.psi.PsiMethod
 import org.jetbrains.kotlin.asJava.elements.KtLightMethod
@@ -14,6 +14,8 @@ import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UParameter
 import org.jetbrains.uast.UastEmptyExpression
+import org.jetbrains.uast.kotlin.BaseKotlinConstructorUMethod
+import org.jetbrains.uast.kotlin.lz
 
 class FirKotlinConstructorUMethod(
     ktClass: KtClassOrObject?,

@@ -162,6 +162,8 @@ import org.jetbrains.kotlin.idea.refactoring.inline.AbstractInlineTestWithSomeDe
 import org.jetbrains.kotlin.nj2k.*
 import org.jetbrains.kotlin.search.AbstractInheritorsSearchTest
 import org.jetbrains.kotlin.idea.fir.shortenRefs.AbstractFirShortenRefsTest
+import org.jetbrains.kotlin.idea.fir.uast.*
+import org.jetbrains.kotlin.idea.fir.uast.test.*
 import org.jetbrains.kotlin.shortenRefs.AbstractShortenRefsTest
 import org.jetbrains.kotlin.spec.utils.GeneralConfiguration
 import org.jetbrains.kotlin.test.TargetBackend
