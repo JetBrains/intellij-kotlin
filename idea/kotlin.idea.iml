@@ -28,7 +28,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../live-templates/src" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../resources-fe10">
-      <sourceFolder url="file://$MODULE_DIR$/../resources-fe10" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/../resources-fe10/resources" type="java-resource" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
