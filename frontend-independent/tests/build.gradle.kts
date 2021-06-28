@@ -34,6 +34,7 @@ dependencies {
     jpsLikeJarDependency(intellijCoreDep(), JpsDepScope.TEST) // 'intellij.platform.util' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.TEST, { includeJars("intellij-core-analysis-deprecated") }) // 'intellij.platform.util' dependency
     jpsLikeJarDependency("org.jetbrains:annotations:20.1.0", JpsDepScope.TEST) // 'intellij.platform.util' dependency
+    jpsLikeJarDependency("org.slf4j:slf4j-log4j12:1.7.25", JpsDepScope.TEST)
 }
 
 configurations.all {
