@@ -16,6 +16,7 @@
 package org.jetbrains.uast
 
 import com.intellij.psi.PsiElement
+import org.jetbrains.uast.kotlin.BaseKotlinUastResolveProviderService
 import org.jetbrains.uast.kotlin.BaseResolveProviderServiceSupplier
 import org.jetbrains.uast.kotlin.KotlinAbstractUExpression
 import org.jetbrains.uast.kotlin.doConvertParent
@@ -23,6 +24,7 @@ import org.jetbrains.uast.kotlin.doConvertParent
 open class KotlinUDeclarationsExpression(
     override val psi: PsiElement?,
     givenParent: UElement?,
+    override val baseResolveProviderService: BaseKotlinUastResolveProviderService,
     val psiAnchor: PsiElement? = null,
     baseResolveProviderServiceSupplier: BaseResolveProviderServiceSupplier? = null,
 ) : KotlinAbstractUExpression(givenParent, baseResolveProviderServiceSupplier), UDeclarationsExpression {
@@ -33,7 +35,8 @@ open class KotlinUDeclarationsExpression(
     override fun convertParent(): UElement? =
             psiAnchor?.let { doConvertParent(this, it.parent) } ?: super.convertParent()
 
-    constructor(uastParent: UElement?) : this(null, uastParent)
+    constructor(uastParent: UElement?, baseResolveProviderService: BaseKotlinUastResolveProviderService) :
+            this(null, uastParent, baseResolveProviderService)
 
     override lateinit var declarations: List<UDeclaration>
         internal set
@@ -41,8 +44,9 @@ open class KotlinUDeclarationsExpression(
 
 class KotlinUDestructuringDeclarationExpression(
     givenParent: UElement?,
-    psiAnchor: PsiElement
-) : KotlinUDeclarationsExpression(null, givenParent, psiAnchor) {
+    psiAnchor: PsiElement,
+    baseResolveProviderService: BaseKotlinUastResolveProviderService,
+) : KotlinUDeclarationsExpression(null, givenParent,baseResolveProviderService,  psiAnchor) {
 
     val tempVarAssignment get() = declarations.first()
 }

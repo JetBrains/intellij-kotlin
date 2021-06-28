@@ -94,7 +94,7 @@ abstract class AbstractKotlinUVariable(givenParent: UElement?) : KotlinAbstractU
     protected abstract fun acceptsAnnotationTarget(target: AnnotationUseSiteTarget?): Boolean
 
     override val typeReference: UTypeReferenceExpression? by lz {
-        KotlinUTypeReferenceExpression((sourcePsi as? KtCallableDeclaration)?.typeReference, this) { type }
+        KotlinUTypeReferenceExpression((sourcePsi as? KtCallableDeclaration)?.typeReference, this, baseResolveProviderService) { type }
     }
 
     override val uastAnchor: UIdentifier?
@@ -428,7 +428,7 @@ class KotlinUEnumConstant(
         get() = null
 
     override val classReference: UReferenceExpression?
-        get() = KotlinEnumConstantClassReference(psi, sourcePsi, this)
+        get() = KotlinEnumConstantClassReference(psi, sourcePsi, baseResolveProviderService, this)
 
     override val typeArgumentCount: Int
         get() = 0
@@ -458,6 +458,7 @@ class KotlinUEnumConstant(
     private class KotlinEnumConstantClassReference(
             override val psi: PsiEnumConstant,
             override val sourcePsi: KtElement?,
+            override val baseResolveProviderService: BaseKotlinUastResolveProviderService,
             givenParent: UElement?
     ) : KotlinAbstractUExpression(givenParent), USimpleNameReferenceExpression {
         override val javaPsi: PsiElement?
