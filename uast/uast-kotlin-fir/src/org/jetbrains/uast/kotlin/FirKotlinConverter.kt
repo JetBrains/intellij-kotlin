@@ -5,6 +5,7 @@
 
 package org.jetbrains.uast.kotlin
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.asJava.LightClassUtil
@@ -193,6 +194,14 @@ internal object FirKotlinConverter : BaseKotlinConverter {
         givenParent: UElement?,
         requiredTypes: Array<out Class<out UElement>>
     ): UElement? {
+        val project = element.project
+        val service = ServiceManager.getService(project, BaseKotlinUastResolveProviderService::class.java)
+
+        fun <P : PsiElement> build(ctor: (P, UElement?, BaseKotlinUastResolveProviderService) -> UElement): () -> UElement? = {
+            @Suppress("UNCHECKED_CAST")
+            ctor(element as P, givenParent, service)
+        }
+
         fun <P : PsiElement> build(ctor: (P, UElement?) -> UElement): () -> UElement? = {
             @Suppress("UNCHECKED_CAST")
             ctor(element as P, givenParent)
@@ -215,7 +224,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 }
                 is KtTypeReference ->
                     requiredTypes.accommodate(
-                        alternative { KotlinUTypeReferenceExpression(element, givenParent) },
+                        alternative { KotlinUTypeReferenceExpression(element, givenParent, service) },
                         alternative { convertReceiverParameter(element) }
                     ).firstOrNull()
                 is KtImportDirective -> {
