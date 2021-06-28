@@ -1,5 +1,6 @@
 package org.jetbrains.uast.kotlin.expressions
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiExpression
 import com.intellij.psi.PsiType
@@ -52,8 +53,10 @@ internal class KotlinLocalFunctionULambdaExpressionImpl(
     }
 
     override fun asRenderString(): String {
-        val renderedValueParameters = valueParameters.joinToString(prefix = "(", postfix = ")",
-                transform = KotlinUParameter::asRenderString)
+        val renderedValueParameters = valueParameters.joinToString(
+            prefix = "(", postfix = ")",
+            transform = KotlinUParameter::asRenderString
+        )
         val expressions = (body as? UBlockExpression)?.expressions?.joinToString("\n") {
             it.asRenderString().withMargin
         } ?: body.asRenderString()
@@ -63,7 +66,12 @@ internal class KotlinLocalFunctionULambdaExpressionImpl(
 
 
 fun createLocalFunctionDeclaration(function: KtFunction, parent: UElement?): UDeclarationsExpression {
-    return KotlinUDeclarationsExpression(null, parent, function).apply {
+    return KotlinUDeclarationsExpression(
+        null,
+        parent,
+        ServiceManager.getService(function.project, BaseKotlinUastResolveProviderService::class.java),
+        function
+    ).apply {
         val functionVariable = UastKotlinPsiVariable.create(function.name.orAnonymous(), function, this)
         declarations = listOf(KotlinLocalFunctionUVariable(function, functionVariable, this))
     }

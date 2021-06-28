@@ -46,7 +46,7 @@ sealed class AbstractFirKotlinUVariable(
 
     override val typeReference: UTypeReferenceExpression? by lz {
         (sourcePsi as? KtCallableDeclaration)?.typeReference?.let {
-            KotlinUTypeReferenceExpression(it, this) { type }
+            KotlinUTypeReferenceExpression(it, this, baseResolveProviderService) { type }
         }
     }
 
