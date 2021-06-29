@@ -56,9 +56,9 @@ dependencies {
     jpsLikeJarDependency("org.jetbrains:annotations:20.1.0", JpsDepScope.TEST) // 'intellij.platform.uast.tests' dependency
     jpsLikeJarDependency(intellijDep(forIde = true), JpsDepScope.COMPILE, { includeJars("platform-impl") }) // 'intellij.java.psi.impl' dependency
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32", JpsDepScope.COMPILE) // 'intellij.java.psi.impl' dependency
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.native", JpsDepScope.TEST)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.gradle.gradle-idea", JpsDepScope.TEST)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.uast.uast-kotlin-idea", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.native", JpsDepScope.RUNTIME)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.gradle.gradle-idea", JpsDepScope.RUNTIME)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.uast.uast-kotlin-idea", JpsDepScope.RUNTIME)
 }
 
 configurations.all {
