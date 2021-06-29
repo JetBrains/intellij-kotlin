@@ -66,6 +66,7 @@ dependencies {
     jpsLikeJarDependency("org.jetbrains:annotations:20.1.0", JpsDepScope.TEST) // 'intellij.platform.jps.build' dependency
     jpsLikeModuleDependency(":kotlin-ide.kotlin.common", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.compiler-plugins.parcelize", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.uast.uast-kotlin", JpsDepScope.TEST)
 }
 
 configurations.all {

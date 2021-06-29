@@ -3,8 +3,9 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.kotlin.idea.fir.uast
+package org.jetbrains.uast.test.comparasion
 
 import org.jetbrains.uast.test.common.kotlin.LegacyUastTypesTestBase
 
-abstract class AbstractFirLegacyUastTypesTest : AbstractFirUastTypesTest(), LegacyUastTypesTestBase
+
+abstract class AbstractFE1LegacyUastTypesTest : AbstractFE1UastTypesTest(), LegacyUastTypesTestBase

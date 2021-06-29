@@ -3,8 +3,11 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.kotlin.idea.fir.uast
+package org.jetbrains.uast.test.common.kotlin
 
-import org.jetbrains.uast.test.common.kotlin.LegacyUastTypesTestBase
+object UastTestSuffix {
+    internal const val FE10_SUFFIX = ".fe10"
+    internal const val FIR_SUFFIX = ".fir"
 
-abstract class AbstractFirLegacyUastTypesTest : AbstractFirUastTypesTest(), LegacyUastTypesTestBase
+    internal const val TXT = ".txt"
+}

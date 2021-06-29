@@ -3,20 +3,16 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.kotlin.idea.fir.uast
+package org.jetbrains.uast.test.comparasion
 
 import org.jetbrains.uast.UFile
-import org.jetbrains.kotlin.idea.fir.uast.env.kotlin.AbstractFirUastTest
 import org.jetbrains.uast.test.common.kotlin.UastRenderLogTestBase
+import org.jetbrains.uast.test.kotlin.org.jetbrains.uast.test.env.kotlin.AbstractFE1UastTest
 
-abstract class AbstractFirUastDeclarationTest : AbstractFirUastTest(), UastRenderLogTestBase {
-    override val isFirUastPlugin: Boolean = true
+abstract class AbstractFE1UastDeclarationTest : AbstractFE1UastTest(), UastRenderLogTestBase {
+    override val isFirUastPlugin: Boolean = false
 
     override fun check(filePath: String, file: UFile) {
-        super.check(filePath, file)
-    }
-
-    fun doTest(filePath: String) {
-        doCheck(filePath)
+        super<UastRenderLogTestBase>.check(filePath, file)
     }
 }

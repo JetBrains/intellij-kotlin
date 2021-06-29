@@ -6,9 +6,9 @@
 package org.jetbrains.kotlin.idea.fir.uast
 
 import org.jetbrains.uast.UFile
-import org.jetbrains.kotlin.idea.fir.uast.common.kotlin.FirLegacyUastIdentifiersTestBase
+import org.jetbrains.uast.test.common.kotlin.LegacyUastIdentifiersTestBase
 
-abstract class AbstractFirLegacyUastIdentifiersTest : AbstractFirUastIdentifiersTest(), FirLegacyUastIdentifiersTestBase {
+abstract class AbstractFirLegacyUastIdentifiersTest : AbstractFirUastIdentifiersTest(), LegacyUastIdentifiersTestBase {
     override fun isExpectedToFail(filePath: String): Boolean {
         // TODO: Implement parent conversion in FIR UAST
         return true
@@ -21,6 +21,6 @@ abstract class AbstractFirLegacyUastIdentifiersTest : AbstractFirUastIdentifiers
             //   whereas FIR UAST conversion took a path to look up non-local FIR declaration for now.
             return
         }
-        super<FirLegacyUastIdentifiersTestBase>.check(filePath, file)
+        super<LegacyUastIdentifiersTestBase>.check(filePath, file)
     }
 }
