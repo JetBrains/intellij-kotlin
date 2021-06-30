@@ -6,6 +6,7 @@
 package org.jetbrains.uast.kotlin
 
 import com.intellij.openapi.components.ServiceManager
+import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.asJava.LightClassUtil
@@ -14,6 +15,7 @@ import org.jetbrains.kotlin.asJava.elements.*
 import org.jetbrains.kotlin.asJava.findFacadeClass
 import org.jetbrains.kotlin.asJava.toLightClass
 import org.jetbrains.kotlin.asJava.toPsiParameters
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
@@ -194,11 +196,13 @@ internal object FirKotlinConverter : BaseKotlinConverter {
             *convertToPropertyAlternatives(LightClassUtil.getLightClassPropertyMethods(element), givenParent)
         )
 
-    internal fun convertPsiElement(
-        element: PsiElement,
+    override fun convertPsiElement(
+        element: PsiElement?,
         givenParent: UElement?,
         requiredTypes: Array<out Class<out UElement>>
     ): UElement? {
+        if (element == null) return null
+
         val project = element.project
         val service = ServiceManager.getService(project, BaseKotlinUastResolveProviderService::class.java)
 
@@ -234,6 +238,16 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                     ).firstOrNull()
                 is KtImportDirective -> {
                     el<UImportStatement>(build(::KotlinUImportStatement))
+                }
+                is PsiComment -> el<UComment>(build(::UComment))
+                is KDocName -> {
+                    if (element.getQualifier() == null)
+                        el<USimpleNameReferenceExpression> {
+                            element.lastChild?.let { psiIdentifier ->
+                                KotlinStringUSimpleReferenceExpression(psiIdentifier.text, givenParent, service, element, element)
+                            }
+                        }
+                    else el<UQualifiedReferenceExpression>(build(::KotlinDocUQualifiedReferenceExpression))
                 }
                 is LeafPsiElement -> {
                     when {
