@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiType
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
 
@@ -38,6 +39,8 @@ interface BaseKotlinUastResolveProviderService {
     fun getType(ktDeclaration: KtDeclaration, parent: UElement): PsiType?
 
     fun getFunctionType(ktFunction: KtFunction, parent: UElement): PsiType?
+
+    fun nullability(psiElement: PsiElement): TypeNullability?
 
     fun evaluate(uExpression: UExpression): Any?
 }
