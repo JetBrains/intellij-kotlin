@@ -28,6 +28,8 @@ import org.jetbrains.uast.kotlin.expressions.FirKotlinUBinaryExpression
 import org.jetbrains.uast.kotlin.expressions.FirKotlinUBlockExpression
 import org.jetbrains.uast.kotlin.expressions.FirKotlinUSimpleReferenceExpression
 import org.jetbrains.uast.kotlin.internal.firKotlinUastPlugin
+import org.jetbrains.uast.kotlin.psi.UastKotlinPsiParameter
+import org.jetbrains.uast.kotlin.psi.UastKotlinPsiParameterBase
 import org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable
 
 internal object FirKotlinConverter : BaseKotlinConverter {
@@ -101,6 +103,12 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 }
                 is KtParameter -> {
                     convertParameter(original, givenParent, requiredTypes).firstOrNull()
+                }
+                is UastKotlinPsiParameter -> {
+                    el<UParameter>(buildKt(original.ktParameter, ::FirKotlinUParameter))
+                }
+                is UastKotlinPsiParameterBase<*> -> el<UParameter> {
+                    original.ktOrigin.safeAs<KtTypeReference>()?.let { convertReceiverParameter(it) }
                 }
                 is KtProperty -> {
                     // TODO: differentiate local
@@ -226,8 +234,9 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                     el<UDeclarationsExpression> {
                         val declarationsExpression = KotlinUDeclarationsExpression(null, givenParent, service, null) { service }
                         declarationsExpression.apply {
-                            // TODO: fill declarations with UParameter
-                            declarations = listOf()
+                            declarations = element.parameters.mapIndexed { i, p ->
+                                FirKotlinUParameter(UastKotlinPsiParameter.create(service, p, element, declarationsExpression, i), p, this)
+                            }
                         }
                     }
                 }
