@@ -5,7 +5,6 @@
 
 package org.jetbrains.uast.test.common.kotlin
 
-import org.jetbrains.uast.test.common.kotlin.UastValuesTestBase
 import java.io.File
 
 interface LegacyUastValuesTestBase : UastValuesTestBase {
