@@ -25,6 +25,10 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
         return null
     }
 
+    override fun convertParent(uElement: UElement, parent: PsiElement?): UElement? {
+        TODO("Not yet implemented")
+    }
+
     override fun resolveCall(ktElement: KtElement): PsiMethod? {
         when (ktElement) {
             is KtBinaryExpression -> {

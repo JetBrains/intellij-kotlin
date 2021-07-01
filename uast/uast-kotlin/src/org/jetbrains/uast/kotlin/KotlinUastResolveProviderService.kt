@@ -29,6 +29,10 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
         return convertParentImpl(uElement)
     }
 
+    override fun convertParent(uElement: UElement, parent: PsiElement?): UElement? {
+        return convertParentImpl(uElement, parent)
+    }
+
     override fun resolveCall(ktElement: KtElement): PsiMethod? {
         return resolveToPsiMethod(ktElement)
     }
