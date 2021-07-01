@@ -77,8 +77,7 @@ internal object KotlinConverter : BaseKotlinConverter {
 
         return with (requiredTypes) { when (element) {
             is KtParameterList -> el<UDeclarationsExpression> {
-                val resolveProviderService = ServiceManager.getService(project, KotlinUastResolveProviderService::class.java)
-                val declarationsExpression = KotlinUDeclarationsExpression(null, givenParent, service, null) { resolveProviderService }
+                val declarationsExpression = KotlinUDeclarationsExpression(null, givenParent, service, null) { service }
                 declarationsExpression.apply {
                     declarations = element.parameters.mapIndexed { i, p ->
                         KotlinUParameter(UastKotlinPsiParameter.create(p, element, declarationsExpression, i), p, this)
@@ -93,7 +92,7 @@ internal object KotlinConverter : BaseKotlinConverter {
                 }
                 else {
                     el<UVariable> { convertVariablesDeclaration(element, givenParent).declarations.singleOrNull() }
-                        ?: expr<UDeclarationsExpression> { KotlinConverter.convertExpression(element, givenParent, requiredTypes) }
+                        ?: expr<UDeclarationsExpression> { convertExpression(element, givenParent, requiredTypes) }
                 }
 
             is KtExpression -> convertExpression(element, givenParent, requiredTypes)
