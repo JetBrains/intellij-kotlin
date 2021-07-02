@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
+import org.jetbrains.kotlin.renderer.render
 
 open class AddAnnotationFix(
     element: KtDeclaration,
@@ -38,7 +39,7 @@ open class AddAnnotationFix(
     override fun invoke(project: Project, editor: Editor?, file: KtFile) {
         val declaration = element ?: return
         val annotationEntry = existingAnnotationEntry?.element
-        val annotationInnerText = argumentClassFqName?.let { "$it::class" }
+        val annotationInnerText = argumentClassFqName?.let { "${it.render()}::class" }
         if (annotationEntry != null) {
             if (annotationInnerText == null) return
             val psiFactory = KtPsiFactory(declaration)
