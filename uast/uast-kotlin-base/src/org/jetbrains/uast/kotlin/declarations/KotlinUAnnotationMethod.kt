@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.asJava.elements.KtLightMethod
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.uast.*
 
-abstract class BaseKotlinUAnnotationMethod(
+class KotlinUAnnotationMethod(
     psi: KtLightMethod,
     givenParent: UElement?
 ) : BaseKotlinUMethod(psi, psi.kotlinOrigin, givenParent), UAnnotationMethod {
