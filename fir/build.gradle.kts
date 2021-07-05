@@ -62,8 +62,6 @@ dependencies {
     jpsLikeJarDependency("com.jgoodies:forms:1.1-preview", JpsDepScope.COMPILE) // 'intellij.platform.lang' dependency
     jpsLikeJarDependency("org.jetbrains.intellij.deps:asm-all:9.1", JpsDepScope.COMPILE, { isTransitive = false }) // 'intellij.java.analysis.impl' dependency
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.fir-low-level-api-ide-impl", JpsDepScope.RUNTIME)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.uast.uast-kotlin-idea-fir", JpsDepScope.COMPILE)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.uast.uast-kotlin-fir", JpsDepScope.RUNTIME)
 }
 
 configurations.all {
@@ -87,7 +85,6 @@ java {
 
 tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
     kotlinOptions.freeCompilerArgs = listOf("-version", "-Xstrict-java-nullability-assertions", "-Xjvm-default=enable", "-Xskip-prerelease-check")
-    kotlinOptions.jdkHome = rootProject.extra["JDK_11"] as String
     kotlinOptions.useOldBackend = true // KT-45697
 }
 
