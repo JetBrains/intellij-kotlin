@@ -73,5 +73,10 @@ java {
     }
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile> {
+    kotlinOptions.freeCompilerArgs = listOf("-version", "-Xstrict-java-nullability-assertions", "-Xjvm-default=enable", "-Xskip-prerelease-check")
+    kotlinOptions.useOldBackend = true // KT-45697
+}
+
 
 testsJar()
