@@ -35,7 +35,7 @@ dependencies {
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:high-level-api-for-ide"), JpsDepScope.COMPILE)
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:high-level-api-fir-for-ide"), JpsDepScope.COMPILE)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.fir.frontend-independent", JpsDepScope.COMPILE)
-    jpsLikeModuleDependency(":kotlin-ide.kotlin.fir", JpsDepScope.TEST)
+    jpsLikeModuleDependency(":kotlin-ide.kotlin.fir", JpsDepScope.RUNTIME)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.tests-common", JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.test-framework", JpsDepScope.TEST)
     jpsLikeJarDependency(intellijPluginDep("java", forIde = true), JpsDepScope.COMPILE) // 'intellij.platform.uast' dependency
@@ -70,6 +70,7 @@ dependencies {
     jpsLikeJarDependency("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.32", JpsDepScope.COMPILE) // 'intellij.java.psi.impl' dependency
     jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:kotlin-compiler-cli-for-ide"), JpsDepScope.TEST)
     jpsLikeModuleDependency(":kotlin-ide.kotlin.uast.uast-kotlin-idea-fir", JpsDepScope.RUNTIME)
+    jpsLikeJarDependency(project(":prepare:ide-plugin-dependencies:low-level-api-fir-for-ide"), JpsDepScope.COMPILE)
 }
 
 configurations.all {
