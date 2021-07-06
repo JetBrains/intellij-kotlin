@@ -5,10 +5,8 @@
 
 package org.jetbrains.kotlin.idea.codeMetaInfo.renderConfigurations
 
-import com.intellij.openapi.util.text.StringUtil
 import org.jetbrains.kotlin.codeMetaInfo.model.CodeMetaInfo
 import org.jetbrains.kotlin.codeMetaInfo.renderConfigurations.AbstractCodeMetaInfoRenderConfiguration
-import org.jetbrains.kotlin.diagnostics.rendering.*
 import org.jetbrains.kotlin.idea.codeMetaInfo.models.HighlightingCodeMetaInfo
 import org.jetbrains.kotlin.idea.codeMetaInfo.models.LineMarkerCodeMetaInfo
 
@@ -42,10 +40,14 @@ open class LineMarkerRenderConfiguration(var renderDescription: Boolean = true) 
 }
 
 open class HighlightingRenderConfiguration(
-    val renderDescription: Boolean = true,
+    val descriptionRenderingOption: DescriptionRenderingOption = DescriptionRenderingOption.ALWAYS,
     val renderTextAttributesKey: Boolean = true,
-    val renderSeverity: Boolean = true
+    val renderSeverity: Boolean = true,
 ) : AbstractCodeMetaInfoRenderConfiguration() {
+
+    enum class DescriptionRenderingOption {
+        ALWAYS, NEVER, IF_NOT_NULL
+    }
 
     override fun asString(codeMetaInfo: CodeMetaInfo): String {
         if (codeMetaInfo !is HighlightingCodeMetaInfo) return ""
@@ -58,17 +60,25 @@ open class HighlightingRenderConfiguration(
         if (!renderParams) return ""
 
         val params = mutableListOf<String>()
+
         if (renderSeverity) {
             params.add("severity='${highlightingCodeMetaInfo.highlightingInfo.severity}'")
         }
-        if (renderDescription) {
-            val description = highlightingCodeMetaInfo.highlightingInfo.description
-            if (description != null) {
-                params.add("descr='${sanitizeLineBreaks(description)}'")
-            } else {
-                params.add("descr='null'")
+
+        when (descriptionRenderingOption) {
+            DescriptionRenderingOption.NEVER -> {}
+
+            DescriptionRenderingOption.ALWAYS, DescriptionRenderingOption.IF_NOT_NULL -> {
+                val description = highlightingCodeMetaInfo.highlightingInfo.description
+
+                if (description != null) {
+                    params.add("descr='${sanitizeLineBreaks(description)}'")
+                } else if (descriptionRenderingOption == DescriptionRenderingOption.ALWAYS) {
+                    params.add("descr='null'")
+                }
             }
         }
+
         if (renderTextAttributesKey) {
             params.add("textAttributesKey='${highlightingCodeMetaInfo.highlightingInfo.forcedTextAttributesKey}'")
         }
