@@ -61,7 +61,8 @@ import java.nio.file.Paths
 @Ignore
 class CodeMetaInfoTestCase(
     val codeMetaInfoTypes: Collection<AbstractCodeMetaInfoRenderConfiguration>,
-    val checkNoDiagnosticError: Boolean = false
+    val checkNoDiagnosticError: Boolean = false,
+    private val filterMetaInfo: (CodeMetaInfo) -> Boolean = { true },
 ) : DaemonAnalyzerTestCase() {
 
     fun getDiagnosticCodeMetaInfos(
@@ -87,7 +88,7 @@ class CodeMetaInfoTestCase(
             moduleDescriptor = moduleDescriptor as ModuleDescriptorImpl
         ).map { it.diagnostic }.filter { !parseDirective || diagnosticsFilter.value(it) }
         configuration.renderParams = directives.contains(AbstractMultiModuleIdeResolveTest.RENDER_DIAGNOSTICS_MESSAGES)
-        return getCodeMetaInfo(diagnostics, configuration)
+        return getCodeMetaInfo(diagnostics, configuration, filterMetaInfo)
     }
 
     fun getLineMarkerCodeMetaInfos(configuration: LineMarkerRenderConfiguration): Collection<CodeMetaInfo> {
@@ -96,13 +97,13 @@ class CodeMetaInfoTestCase(
 
         CodeInsightTestFixtureImpl.instantiateAndRun(file, editor, TIntArrayList().toNativeArray(), false)
         val lineMarkers = DaemonCodeAnalyzerImpl.getLineMarkers(getDocument(file), project)
-        return getCodeMetaInfo(lineMarkers, configuration)
+        return getCodeMetaInfo(lineMarkers, configuration, filterMetaInfo)
     }
 
     fun getHighlightingCodeMetaInfos(configuration: HighlightingRenderConfiguration): Collection<CodeMetaInfo> {
         val infos = CodeInsightTestFixtureImpl.instantiateAndRun(file, editor, TIntArrayList().toNativeArray(), false)
 
-        return getCodeMetaInfo(infos, configuration)
+        return getCodeMetaInfo(infos, configuration, filterMetaInfo)
     }
 
     fun checkFile(expectedFile: File, project: Project, editor: Editor) {
