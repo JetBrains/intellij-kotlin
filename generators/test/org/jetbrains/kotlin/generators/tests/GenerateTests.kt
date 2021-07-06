@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.idea.AbstractSmartSelectionTest
 import org.jetbrains.kotlin.idea.actions.AbstractGotoTestOrCodeActionTest
 import org.jetbrains.kotlin.idea.caches.resolve.*
 import org.jetbrains.kotlin.idea.codeInsight.*
-import org.jetbrains.kotlin.idea.fir.inspections.AbstractFe10BindingIntentionTest
 import org.jetbrains.kotlin.idea.fir.frontend.api.symbols.AbstractSymbolByReferenceTest
 import org.jetbrains.kotlin.idea.codeInsight.codevision.AbstractKotlinCodeVisionProviderTest
 import org.jetbrains.kotlin.idea.codeInsight.generate.AbstractCodeInsightActionTest
@@ -183,7 +182,6 @@ import org.jetbrains.kotlin.tools.projectWizard.cli.AbstractYamlBuildFileGenerat
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractProjectTemplateNewWizardProjectImportTest
 import org.jetbrains.kotlin.tools.projectWizard.wizard.AbstractYamlNewWizardProjectImportTest
 import org.jetbrains.kotlin.spec.utils.tasks.detectDirsWithTestsMapFileOnly
-import org.jetbrains.uast.test.kotlin.*
 
 fun main() {
     System.setProperty("java.awt.headless", "true")
@@ -1130,13 +1128,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         }
     }
 
-    testGroup("fir-fe10-binding", testDataPath = "../idea/tests") {
-        testClass<AbstractFe10BindingIntentionTest> {
-            val pattern = Patterns.forRegex("^([\\w\\-_]+)\\.(kt|kts)$")
-            model("testData/intentions/conventionNameCalls", pattern = pattern)
-        }
-    }
-
     testGroup("scripting-support") {
         testClass<AbstractScratchRunActionTest> {
             model("scratch", pattern = KTS, testMethodName = "doScratchCompilingTest", testClassName = "ScratchCompiling", isRecursive = false)
@@ -1446,62 +1437,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractJsProtoComparisonTest> {
             commonProtoComparisonTests()
             model("comparison/jsOnly", pattern = DIRECTORY)
-        }
-    }
-
-    testGroup("uast/uast-kotlin-fir") {
-        testClass<AbstractFirUastDeclarationTest> {
-            model("declaration")
-        }
-
-        testClass<AbstractFirUastTypesTest> {
-            model("type")
-        }
-    }
-
-    testGroup("uast/uast-kotlin-fir", testDataPath = "../uast-kotlin/testData") {
-        testClass<AbstractFirLegacyUastDeclarationTest> {
-            model("")
-        }
-
-        testClass<AbstractFirLegacyUastIdentifiersTest> {
-            model("")
-        }
-
-        testClass<AbstractFirLegacyUastTypesTest> {
-            model("")
-        }
-
-        testClass<AbstractFirLegacyUastValuesTest> {
-            model("")
-        }
-    }
-
-    testGroup("uast/uast-kotlin-fir") {
-        testClass<AbstractFE1UastDeclarationTest> {
-            model("declaration")
-        }
-
-        testClass<AbstractFE1UastTypesTest> {
-            model("type")
-        }
-    }
-
-    testGroup("uast/uast-kotlin-fir", testDataPath = "../uast-kotlin/testData") {
-        testClass<AbstractFE1LegacyUastDeclarationTest> {
-            model("")
-        }
-
-        testClass<AbstractFE1LegacyUastIdentifiersTest> {
-            model("")
-        }
-
-        testClass<AbstractFE1LegacyUastTypesTest> {
-            model("")
-        }
-
-        testClass<AbstractFE1LegacyUastValuesTest> {
-            model("")
         }
     }
 
