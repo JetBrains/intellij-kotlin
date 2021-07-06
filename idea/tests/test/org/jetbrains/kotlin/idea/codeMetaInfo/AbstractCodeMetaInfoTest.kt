@@ -155,7 +155,13 @@ class CodeMetaInfoTestCase(
                 getDiagnosticCodeMetaInfos(DiagnosticCodeMetaInfoRenderConfiguration(), false).filterIsInstance<DiagnosticCodeMetaInfo>()
             )
         }
-        val parsedMetaInfo = CodeMetaInfoParser.getCodeMetaInfoFromText(expectedFile.readText()).toMutableList()
+
+        val parsedMetaInfo = if (expectedFile.exists()) {
+            CodeMetaInfoParser.getCodeMetaInfoFromText(expectedFile.readText()).toMutableList()
+        } else {
+            mutableListOf()
+        }
+
         codeMetaInfoForCheck.forEach { codeMetaInfo ->
             val correspondingParsed = parsedMetaInfo.firstOrNull { it == codeMetaInfo }
             if (correspondingParsed != null) {
