@@ -18,6 +18,7 @@ import java.util.*
 const val mppImportTestMinVersionForMaster = "6.0+"
 const val legacyMppImportTestMinVersionForMaster = "5.3+"
 
+@Suppress("ACCIDENTAL_OVERRIDE")
 abstract class MultiplePluginVersionGradleImportingTestCase : KotlinGradleImportingTestCase() {
     @Rule
     @JvmField
