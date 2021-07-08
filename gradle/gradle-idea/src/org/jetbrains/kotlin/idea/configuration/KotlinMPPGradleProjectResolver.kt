@@ -55,7 +55,6 @@ import org.jetbrains.kotlin.idea.configuration.utils.predictedProductionSourceSe
 import org.jetbrains.kotlin.idea.platform.IdePlatformKindTooling
 import org.jetbrains.kotlin.idea.util.NotNullableCopyableDataNodeUserDataProperty
 import org.jetbrains.kotlin.util.removeSuffixIfPresent
-import org.jetbrains.kotlin.utils.addToStdlib.firstNotNullResult
 import org.jetbrains.plugins.gradle.model.*
 import org.jetbrains.plugins.gradle.model.data.BuildScriptClasspathData
 import org.jetbrains.plugins.gradle.model.data.GradleSourceSetData
@@ -374,7 +373,7 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
                         resolverCtx
                     ) ?: continue
                     kotlinSourceSet.externalSystemRunTasks =
-                        compilation.declaredSourceSets.firstNotNullResult { sourceSetToRunTasks[it] } ?: emptyList()
+                        compilation.declaredSourceSets.firstNotNullOfOrNull { sourceSetToRunTasks[it] } ?: emptyList()
 
                     if (compilation.platform == KotlinPlatform.JVM || compilation.platform == KotlinPlatform.ANDROID) {
                         compilationData.targetCompatibility = (kotlinSourceSet.compilerArguments as? K2JVMCompilerArguments)?.jvmTarget

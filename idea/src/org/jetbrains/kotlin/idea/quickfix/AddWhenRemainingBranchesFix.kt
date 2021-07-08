@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.idea.intentions.ImportAllMembersIntention
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
-import org.jetbrains.kotlin.utils.addToStdlib.firstNotNullResult
 
 class AddWhenRemainingBranchesFix(
     expression: KtWhenExpression,
@@ -122,7 +121,7 @@ class AddWhenRemainingBranchesFix(
                 element.entries
                     .map { it.conditions.toList() }
                     .flatten()
-                    .firstNotNullResult {
+                    .firstNotNullOfOrNull {
                         (it as? KtWhenConditionWithExpression)?.expression as? KtDotQualifiedExpression
                     }?.importReceiverMembers()
             }
