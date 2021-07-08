@@ -36,6 +36,16 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
         TODO("Not yet implemented")
     }
 
+    override fun getImplicitReturn(ktLambdaExpression: KtLambdaExpression, parent: UElement): KotlinUImplicitReturnExpression? {
+        // TODO("Not yet implemented")
+        return null
+    }
+
+    override fun getImplicitParameters(ktLambdaExpression: KtLambdaExpression, parent: UElement): List<KotlinUParameter> {
+        // TODO("Not yet implemented")
+        return emptyList()
+    }
+
     override fun resolveCall(ktElement: KtElement): PsiMethod? {
         when (ktElement) {
             is KtBinaryExpression -> {
@@ -106,6 +116,11 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
     }
 
     override fun getFunctionType(ktFunction: KtFunction, parent: UElement): PsiType? {
+        // TODO("Not yet implemented")
+        return null
+    }
+
+    override fun getFunctionalInterfaceType(uLambdaExpression: KotlinULambdaExpression): PsiType? {
         // TODO("Not yet implemented")
         return null
     }
