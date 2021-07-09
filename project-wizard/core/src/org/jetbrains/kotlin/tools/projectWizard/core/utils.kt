@@ -66,7 +66,8 @@ internal inline fun <T> cached(crossinline createValue: (name: String) -> T) = o
 }
 
 @PublishedApi
-internal inline fun <reified T> Any?.safeAs(): T? = this as? T
+@Suppress("INVISIBLE_REFERENCE", "INVISIBLE_MEMBER")
+internal inline fun <reified T> Any?.safeAs(): @kotlin.internal.NoInfer T? = this as? T
 
 @Suppress("NOTHING_TO_INLINE", "unused")
 inline fun Any?.ignore() = Unit
