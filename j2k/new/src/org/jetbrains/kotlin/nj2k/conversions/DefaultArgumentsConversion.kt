@@ -188,7 +188,7 @@ class DefaultArgumentsConversion(context: NewJ2kConverterContext) : RecursiveApp
             is JKCallExpression -> expression
             is JKQualifiedExpression -> {
                 if (expression.receiver !is JKThisExpression) return null
-                expression.selector.safeAs()
+                expression.selector as? JKCallExpression
             }
             else -> null
         }

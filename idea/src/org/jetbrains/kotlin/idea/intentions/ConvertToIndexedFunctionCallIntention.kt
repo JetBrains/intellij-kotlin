@@ -89,7 +89,7 @@ class ConvertToIndexedFunctionCallIntention : SelfTargetingRangeIntention<KtCall
     }
 
     private fun KtCallExpression.lambda(): KtLambdaExpression? {
-        return lambdaArguments.singleOrNull()?.getArgumentExpression().safeAs() ?: getLastLambdaExpression()
+        return lambdaArguments.singleOrNull()?.getArgumentExpression() as? KtLambdaExpression ?: getLastLambdaExpression()
     }
 
     companion object {
