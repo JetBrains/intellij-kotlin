@@ -51,7 +51,7 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
 
     override fun getArgumentForParameter(ktCallElement: KtCallElement, index: Int, parent: UElement): UExpression? {
         return ktCallElement.getResolvedCall(ktCallElement.analyze())?.let {
-            getArgumentExpressionByIndex(index, it, parent, this)
+            getArgumentExpressionByIndex(index, it, parent)
         }
     }
 
@@ -59,7 +59,6 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
         actualParamIndex: Int,
         resolvedCall: ResolvedCall<out CallableDescriptor>,
         parent: UElement,
-        baseResolveProviderService: BaseKotlinUastResolveProviderService
     ): UExpression? {
         val (parameter, resolvedArgument) = resolvedCall.valueArguments.entries.find { it.key.index == actualParamIndex } ?: return null
         val arguments = resolvedArgument.arguments
@@ -68,19 +67,18 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
             val argument = arguments.single()
             val expression = argument.getArgumentExpression()
             if (parameter.varargElementType != null && argument.getSpreadElement() == null) {
-                return createVarargsHolder(arguments, parent, baseResolveProviderService)
+                return createVarargsHolder(arguments, parent)
             }
             return baseKotlinConverter.convertOrEmpty(expression, parent)
         }
-        return createVarargsHolder(arguments, parent, baseResolveProviderService)
+        return createVarargsHolder(arguments, parent)
     }
 
     private fun createVarargsHolder(
         arguments: List<ValueArgument>,
         parent: UElement?,
-        baseResolveProviderService: BaseKotlinUastResolveProviderService
     ): KotlinUExpressionList =
-        KotlinUExpressionList(null, UastSpecialExpressionKind.VARARGS, parent, baseResolveProviderService).apply {
+        KotlinUExpressionList(null, UastSpecialExpressionKind.VARARGS, parent).apply {
             expressions = arguments.map { baseKotlinConverter.convertOrEmpty(it.getArgumentExpression(), parent) }
         }
 
