@@ -242,6 +242,9 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 is KtClassBody -> {
                     el<UExpressionList>(build(KotlinUExpressionList.Companion::createClassBody))
                 }
+                is KtCatchClause -> {
+                    el<UCatchClause>(build(::KotlinUCatchClause))
+                }
                 is KtVariableDeclaration -> {
                     if (element is KtProperty && !element.isLocal) {
                         convertNonLocalProperty(element, givenParent, this).firstOrNull()
@@ -260,6 +263,8 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                     element.expression?.let { convertExpression(it, givenParent, requiredTypes) }
                         ?: expr<UExpression> { UastEmptyExpression(givenParent) }
                 }
+                is KtWhenEntry -> el<USwitchClauseExpressionWithBody>(build(::KotlinUSwitchEntry))
+                is KtWhenCondition -> convertWhenCondition(element, givenParent, requiredTypes)
                 is KtTypeReference ->
                     requiredTypes.accommodate(
                         alternative { KotlinUTypeReferenceExpression(element, givenParent, service) },
@@ -369,12 +374,15 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 }
                 is KtReturnExpression -> expr<UReturnExpression>(build(::KotlinUReturnExpression))
                 is KtThrowExpression -> expr<UThrowExpression>(build(::KotlinUThrowExpression))
+                is KtTryExpression -> expr<UTryExpression>(build(::KotlinUTryExpression))
 
                 is KtBreakExpression -> expr<UBreakExpression>(build(::KotlinUBreakExpression))
                 is KtContinueExpression -> expr<UContinueExpression>(build(::KotlinUContinueExpression))
                 is KtDoWhileExpression -> expr<UDoWhileExpression>(build(::KotlinUDoWhileExpression))
                 is KtWhileExpression -> expr<UWhileExpression>(build(::KotlinUWhileExpression))
+                is KtForExpression -> expr<UForEachExpression>(build(::KotlinUForEachExpression))
 
+                is KtWhenExpression -> expr<USwitchExpression>(build(::KotlinUSwitchExpression))
                 is KtIfExpression -> expr<UIfExpression>(build(::KotlinUIfExpression))
 
                 is KtBinaryExpressionWithTypeRHS -> expr<UBinaryExpressionWithType>(build(::KotlinUBinaryExpressionWithType))
@@ -391,9 +399,8 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 is KtSimpleNameExpression -> expr<USimpleNameReferenceExpression>(build(::FirKotlinUSimpleReferenceExpression))
 
                 is KtBinaryExpression -> {
-                    // TODO: elvis
                     if (expression.operationToken == KtTokens.ELVIS) {
-                        expr<UExpression>(build(::UnknownKotlinExpression))
+                        expr<UExpressionList>(build(::createElvisExpression))
                     } else {
                         expr<UBinaryExpression>(build(::FirKotlinUBinaryExpression))
                     }
