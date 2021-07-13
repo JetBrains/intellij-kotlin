@@ -32,8 +32,6 @@ import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 import org.jetbrains.uast.*
-import org.jetbrains.uast.kotlin.expressions.KotlinLocalFunctionULambdaExpression
-import org.jetbrains.uast.kotlin.expressions.KotlinUElvisExpression
 import org.jetbrains.uast.kotlin.psi.UastKotlinPsiParameter
 import org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable
 
@@ -163,7 +161,7 @@ fun convertParentImpl(element: UElement, parent: PsiElement?): UElement? {
     val result = KotlinUastLanguagePlugin().convertElementWithParent(parentUnwrapped, null)
 
     if (result is KotlinUBlockExpression && element is UClass) {
-        return KotlinUDeclarationsExpression(result, result.baseResolveProviderService).apply {
+        return KotlinUDeclarationsExpression(result).apply {
             declarations = listOf(element)
         }
     }

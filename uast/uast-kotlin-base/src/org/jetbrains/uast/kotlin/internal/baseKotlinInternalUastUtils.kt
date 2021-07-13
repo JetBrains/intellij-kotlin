@@ -5,19 +5,17 @@
 
 package org.jetbrains.uast.kotlin
 
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
+import com.intellij.psi.*
+import com.intellij.psi.util.PsiTypesUtil
 import org.jetbrains.kotlin.asJava.classes.KtLightClass
 import org.jetbrains.kotlin.asJava.elements.FakeFileForLightClass
 import org.jetbrains.kotlin.asJava.elements.KtLightElement
 import org.jetbrains.kotlin.asJava.elements.KtLightMember
+import org.jetbrains.kotlin.asJava.toLightClass
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.uast.UDeclaration
 import org.jetbrains.uast.UElement
-import java.util.function.Supplier
-
-typealias BaseResolveProviderServiceSupplier = Supplier<BaseKotlinUastResolveProviderService>
+import org.jetbrains.uast.UastErrorType
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun String?.orAnonymous(kind: String = ""): String = this ?: "<anonymous" + (if (kind.isNotBlank()) " $kind" else "") + ">"
@@ -62,3 +60,11 @@ val KtTypeReference.nameElement: PsiElement?
     get() = this.typeElement?.let {
         (it as? KtUserType)?.referenceExpression?.getReferencedNameElement() ?: it.navigationElement
     }
+
+fun KtClassOrObject.toPsiType(): PsiType {
+    val lightClass = toLightClass() ?: return UastErrorType
+    return if (lightClass is PsiAnonymousClass)
+        lightClass.baseClassType
+    else
+        PsiTypesUtil.getClassType(lightClass)
+}

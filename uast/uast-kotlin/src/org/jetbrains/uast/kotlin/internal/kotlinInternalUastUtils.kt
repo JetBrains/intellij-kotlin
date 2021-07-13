@@ -74,7 +74,6 @@ import org.jetbrains.kotlin.utils.addToStdlib.constant
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 import org.jetbrains.uast.*
-import org.jetbrains.uast.kotlin.expressions.KotlinLocalFunctionUVariable
 import org.jetbrains.uast.kotlin.psi.UastDescriptorLightMethod
 import org.jetbrains.uast.kotlin.psi.UastFakeLightMethod
 import org.jetbrains.uast.kotlin.psi.UastFakeLightPrimaryConstructor
@@ -204,11 +203,6 @@ internal fun KotlinType.toPsiType(lightDeclaration: PsiModifierListOwner?, conte
 internal fun KtTypeReference?.toPsiType(source: UElement, boxed: Boolean = false): PsiType {
     if (this == null) return UastErrorType
     return (analyze()[BindingContext.TYPE, this] ?: return UastErrorType).toPsiType(source, this, boxed)
-}
-
-internal fun KtClassOrObject.toPsiType(): PsiType {
-    val lightClass = toLightClass() ?: return UastErrorType
-    return PsiTypesUtil.getClassType(lightClass)
 }
 
 internal fun KtElement.analyze(): BindingContext {

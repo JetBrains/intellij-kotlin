@@ -7,12 +7,15 @@ package org.jetbrains.uast.kotlin
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiMethod
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
 import org.jetbrains.uast.*
 import org.jetbrains.uast.kotlin.internal.KotlinFakeUElement
+import org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable
 
 fun expressionTypes(requiredType: Class<out UElement>?) =
     requiredType?.let { arrayOf(it) } ?: DEFAULT_EXPRESSION_TYPES_LIST
@@ -84,3 +87,20 @@ fun reportConvertFailure(psiMethod: PsiMethod): Nothing {
 
     throw report
 }
+
+fun createKDocNameSimpleNameReference(parentKDocName: KDocName, givenParent: UElement?): USimpleNameReferenceExpression? =
+    parentKDocName.lastChild?.let { psiIdentifier ->
+        parentKDocName.getQualifiedName().lastOrNull()?.let { qualifierText ->
+            KotlinStringUSimpleReferenceExpression(qualifierText, givenParent, psiIdentifier, parentKDocName)
+        }
+    }
+
+fun createLocalFunctionDeclaration(function: KtFunction, parent: UElement?): UDeclarationsExpression {
+    return KotlinUDeclarationsExpression(null, parent, function).apply {
+        val functionVariable = UastKotlinPsiVariable.create(function.name.orAnonymous(), function, this)
+        declarations = listOf(KotlinLocalFunctionUVariable(function, functionVariable, this))
+    }
+}
+
+fun createLocalFunctionLambdaExpression(function: KtFunction, parent: UElement?): ULambdaExpression =
+    KotlinLocalFunctionULambdaExpression(function, parent)

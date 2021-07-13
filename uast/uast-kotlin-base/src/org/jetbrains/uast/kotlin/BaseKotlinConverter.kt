@@ -7,11 +7,32 @@ package org.jetbrains.uast.kotlin
 
 import com.intellij.openapi.components.ServiceManager
 import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.asJava.elements.KtLightParameterList
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.uast.*
 import org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable
 
 interface BaseKotlinConverter {
+    fun unwrapElements(element: PsiElement?): PsiElement? = when (element) {
+        is KtValueArgumentList -> unwrapElements(element.parent)
+        is KtValueArgument -> unwrapElements(element.parent)
+        is KtDeclarationModifierList -> unwrapElements(element.parent)
+        is KtContainerNode -> unwrapElements(element.parent)
+        is KtSimpleNameStringTemplateEntry -> unwrapElements(element.parent)
+        is KtLightParameterList -> unwrapElements(element.parent)
+        is KtTypeElement -> unwrapElements(element.parent)
+        is KtSuperTypeList -> unwrapElements(element.parent)
+        is KtFinallySection -> unwrapElements(element.parent)
+        is KtAnnotatedExpression -> unwrapElements(element.parent)
+        is KtWhenConditionWithExpression -> unwrapElements(element.parent)
+        is KDocLink -> unwrapElements(element.parent)
+        is KDocSection -> unwrapElements(element.parent)
+        is KDocTag -> unwrapElements(element.parent)
+        else -> element
+    }
 
     fun convertAnnotation(
         annotationEntry: KtAnnotationEntry,
@@ -66,14 +87,12 @@ interface BaseKotlinConverter {
             ?: KotlinUDeclarationsExpression(
                 null,
                 parent,
-                ServiceManager.getService(psi.project, BaseKotlinUastResolveProviderService::class.java),
                 psi
             )
         val parentPsiElement = parent?.javaPsi //TODO: looks weird. mb look for the first non-null `javaPsi` in `parents` ?
-        val service = ServiceManager.getService(psi.project, BaseKotlinUastResolveProviderService::class.java)
         val variable =
             KotlinUAnnotatedLocalVariable(
-                UastKotlinPsiVariable.create(service, psi, parentPsiElement, declarationsExpression),
+                UastKotlinPsiVariable.create(psi, parentPsiElement, declarationsExpression),
                 psi,
                 declarationsExpression
             ) { annotationParent ->
@@ -81,6 +100,46 @@ interface BaseKotlinConverter {
             }
         return declarationsExpression.apply { declarations = listOf(variable) }
     }
+
+    fun convertWhenCondition(
+        condition: KtWhenCondition,
+        givenParent: UElement?,
+        requiredType: Array<out Class<out UElement>>
+    ): UExpression? {
+        return with(requiredType) {
+            when (condition) {
+                is KtWhenConditionInRange -> expr<UBinaryExpression> {
+                    KotlinCustomUBinaryExpression(condition, givenParent).apply {
+                        leftOperand = KotlinStringUSimpleReferenceExpression("it", this)
+                        operator = when {
+                            condition.isNegated -> KotlinBinaryOperators.NOT_IN
+                            else -> KotlinBinaryOperators.IN
+                        }
+                        rightOperand = convertOrEmpty(condition.rangeExpression, this)
+                    }
+                }
+                is KtWhenConditionIsPattern -> expr<UBinaryExpression> {
+                    KotlinCustomUBinaryExpressionWithType(condition, givenParent).apply {
+                        operand = KotlinStringUSimpleReferenceExpression("it", this)
+                        operationKind = when {
+                            condition.isNegated -> KotlinBinaryExpressionWithTypeKinds.NEGATED_INSTANCE_CHECK
+                            else -> UastBinaryExpressionWithTypeKind.INSTANCE_CHECK
+                        }
+                        typeReference = condition.typeReference?.let {
+                            val service = ServiceManager.getService(BaseKotlinUastResolveProviderService::class.java)
+                            KotlinUTypeReferenceExpression(it, this) { service.resolveToType(it, this) ?: UastErrorType }
+                        }
+                    }
+                }
+
+                is KtWhenConditionWithExpression ->
+                    condition.expression?.let { convertExpression(it, givenParent, requiredType) }
+
+                else -> expr<UExpression> { UastEmptyExpression(givenParent) }
+            }
+        }
+    }
+
 
     fun convertPsiElement(
         element: PsiElement?,

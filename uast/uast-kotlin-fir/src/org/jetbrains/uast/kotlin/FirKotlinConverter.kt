@@ -24,7 +24,6 @@ import org.jetbrains.uast.*
 import org.jetbrains.uast.expressions.UInjectionHost
 import org.jetbrains.uast.kotlin.expressions.FirKotlinUArrayAccessExpression
 import org.jetbrains.uast.kotlin.expressions.FirKotlinUBinaryExpression
-import org.jetbrains.uast.kotlin.expressions.FirKotlinUBlockExpression
 import org.jetbrains.uast.kotlin.expressions.FirKotlinUSimpleReferenceExpression
 import org.jetbrains.uast.kotlin.internal.firKotlinUastPlugin
 import org.jetbrains.uast.kotlin.psi.UastKotlinPsiParameter
@@ -110,8 +109,11 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                     original.ktOrigin.safeAs<KtTypeReference>()?.let { convertReceiverParameter(it) }
                 }
                 is KtProperty -> {
-                    // TODO: differentiate local
-                    convertNonLocalProperty(original, givenParent, requiredTypes).firstOrNull()
+                    if (original.isLocal) {
+                        convertPsiElement(original, givenParent, requiredTypes)
+                    } else {
+                        convertNonLocalProperty(original, givenParent, requiredTypes).firstOrNull()
+                    }
                 }
                 is KtPropertyAccessor -> {
                     el<UMethod> { FirKotlinUMethod.create(original, givenParent) }
@@ -122,8 +124,26 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                     el<UMethod>(build(FirKotlinUMethod.Companion::create))
                 }
                 is KtFunction -> {
-                    // TODO: differentiate local
-                    el<UMethod> { FirKotlinUMethod.create(original, givenParent) }
+                    if (original.isLocal) {
+                        el<ULambdaExpression> {
+                            val parent = original.parent
+                            when {
+                                parent is KtLambdaExpression -> {
+                                    KotlinULambdaExpression(parent, givenParent) // your parent is the ULambdaExpression
+                                }
+                                original.name.isNullOrEmpty() -> {
+                                    createLocalFunctionLambdaExpression(original, givenParent)
+                                }
+                                else -> {
+                                    val uDeclarationsExpression = createLocalFunctionDeclaration(original, givenParent)
+                                    val localFunctionVar = uDeclarationsExpression.declarations.single() as KotlinLocalFunctionUVariable
+                                    localFunctionVar.uastInitializer
+                                }
+                            }
+                        }
+                    } else {
+                        el<UMethod> { FirKotlinUMethod.create(original, givenParent) }
+                    }
                 }
 
                 // TODO: KtAnnotationEntry
@@ -214,14 +234,6 @@ internal object FirKotlinConverter : BaseKotlinConverter {
     ): UElement? {
         if (element == null) return null
 
-        val project = element.project
-        val service = ServiceManager.getService(project, BaseKotlinUastResolveProviderService::class.java)
-
-        fun <P : PsiElement> build(ctor: (P, UElement?, BaseKotlinUastResolveProviderService) -> UElement): () -> UElement? = {
-            @Suppress("UNCHECKED_CAST")
-            ctor(element as P, givenParent, service)
-        }
-
         fun <P : PsiElement> build(ctor: (P, UElement?) -> UElement): () -> UElement? = {
             @Suppress("UNCHECKED_CAST")
             ctor(element as P, givenParent)
@@ -231,16 +243,19 @@ internal object FirKotlinConverter : BaseKotlinConverter {
             when (element) {
                 is KtParameterList -> {
                     el<UDeclarationsExpression> {
-                        val declarationsExpression = KotlinUDeclarationsExpression(null, givenParent, service, null) { service }
+                        val declarationsExpression = KotlinUDeclarationsExpression(null, givenParent, null)
                         declarationsExpression.apply {
                             declarations = element.parameters.mapIndexed { i, p ->
-                                KotlinUParameter(UastKotlinPsiParameter.create(service, p, element, declarationsExpression, i), p, this)
+                                KotlinUParameter(UastKotlinPsiParameter.create(p, element, declarationsExpression, i), p, this)
                             }
                         }
                     }
                 }
                 is KtClassBody -> {
                     el<UExpressionList>(build(KotlinUExpressionList.Companion::createClassBody))
+                }
+                is KtCatchClause -> {
+                    el<UCatchClause>(build(::KotlinUCatchClause))
                 }
                 is KtVariableDeclaration -> {
                     if (element is KtProperty && !element.isLocal) {
@@ -260,9 +275,11 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                     element.expression?.let { convertExpression(it, givenParent, requiredTypes) }
                         ?: expr<UExpression> { UastEmptyExpression(givenParent) }
                 }
+                is KtWhenEntry -> el<USwitchClauseExpressionWithBody>(build(::KotlinUSwitchEntry))
+                is KtWhenCondition -> convertWhenCondition(element, givenParent, requiredTypes)
                 is KtTypeReference ->
                     requiredTypes.accommodate(
-                        alternative { KotlinUTypeReferenceExpression(element, givenParent, service) },
+                        alternative { KotlinUTypeReferenceExpression(element, givenParent) },
                         alternative { convertReceiverParameter(element) }
                     ).firstOrNull()
                 is KtImportDirective -> {
@@ -273,7 +290,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                     if (element.getQualifier() == null)
                         el<USimpleNameReferenceExpression> {
                             element.lastChild?.let { psiIdentifier ->
-                                KotlinStringUSimpleReferenceExpression(psiIdentifier.text, givenParent, service, element, element)
+                                KotlinStringUSimpleReferenceExpression(psiIdentifier.text, givenParent, element, element)
                             }
                         }
                     else el<UQualifiedReferenceExpression>(build(::KotlinDocUQualifiedReferenceExpression))
@@ -313,8 +330,6 @@ internal object FirKotlinConverter : BaseKotlinConverter {
         givenParent: UElement?,
         requiredTypes: Array<out Class<out UElement>>
     ): UExpression? {
-        val project = expression.project
-        val service = ServiceManager.getService(project, BaseKotlinUastResolveProviderService::class.java)
 
         fun <P : PsiElement> build(ctor: (P, UElement?) -> UExpression): () -> UExpression? {
             return {
@@ -327,10 +342,10 @@ internal object FirKotlinConverter : BaseKotlinConverter {
             when (expression) {
                 is KtVariableDeclaration -> expr<UDeclarationsExpression>(build(::convertVariablesDeclaration))
                 is KtDestructuringDeclaration -> expr<UDeclarationsExpression> {
-                    val declarationsExpression = KotlinUDestructuringDeclarationExpression(givenParent, expression, service)
+                    val declarationsExpression = KotlinUDestructuringDeclarationExpression(givenParent, expression)
                     declarationsExpression.apply {
                         val tempAssignment = KotlinULocalVariable(
-                            UastKotlinPsiVariable.create(service, expression, declarationsExpression),
+                            UastKotlinPsiVariable.create(expression, declarationsExpression),
                             expression,
                             declarationsExpression
                         )
@@ -364,17 +379,25 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 is KtParenthesizedExpression -> expr<UParenthesizedExpression>(build(::KotlinUParenthesizedExpression))
 
                 is KtBlockExpression -> expr<UBlockExpression> {
-                    // TODO: differentiate lambda
-                    FirKotlinUBlockExpression(expression, givenParent)
+                    if (expression.parent is KtFunctionLiteral &&
+                        expression.parent.parent is KtLambdaExpression &&
+                        givenParent !is KotlinULambdaExpression
+                    ) {
+                        KotlinULambdaExpression(expression.parent.parent as KtLambdaExpression, givenParent).body
+                    } else
+                        KotlinUBlockExpression(expression, givenParent)
                 }
                 is KtReturnExpression -> expr<UReturnExpression>(build(::KotlinUReturnExpression))
                 is KtThrowExpression -> expr<UThrowExpression>(build(::KotlinUThrowExpression))
+                is KtTryExpression -> expr<UTryExpression>(build(::KotlinUTryExpression))
 
                 is KtBreakExpression -> expr<UBreakExpression>(build(::KotlinUBreakExpression))
                 is KtContinueExpression -> expr<UContinueExpression>(build(::KotlinUContinueExpression))
                 is KtDoWhileExpression -> expr<UDoWhileExpression>(build(::KotlinUDoWhileExpression))
                 is KtWhileExpression -> expr<UWhileExpression>(build(::KotlinUWhileExpression))
+                is KtForExpression -> expr<UForEachExpression>(build(::KotlinUForEachExpression))
 
+                is KtWhenExpression -> expr<USwitchExpression>(build(::KotlinUSwitchExpression))
                 is KtIfExpression -> expr<UIfExpression>(build(::KotlinUIfExpression))
 
                 is KtBinaryExpressionWithTypeRHS -> expr<UBinaryExpressionWithType>(build(::KotlinUBinaryExpressionWithType))
@@ -386,14 +409,14 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 is KtSuperExpression -> expr<USuperExpression>(build(::KotlinUSuperExpression))
                 is KtCallableReferenceExpression -> expr<UCallableReferenceExpression>(build(::KotlinUCallableReferenceExpression))
                 is KtClassLiteralExpression -> expr<UClassLiteralExpression>(build(::KotlinUClassLiteralExpression))
+                is KtObjectLiteralExpression -> expr<UObjectLiteralExpression>(build(::KotlinUObjectLiteralExpression))
                 is KtDotQualifiedExpression -> expr<UQualifiedReferenceExpression>(build(::KotlinUQualifiedReferenceExpression))
                 is KtSafeQualifiedExpression -> expr<UQualifiedReferenceExpression>(build(::KotlinUSafeQualifiedExpression))
                 is KtSimpleNameExpression -> expr<USimpleNameReferenceExpression>(build(::FirKotlinUSimpleReferenceExpression))
 
                 is KtBinaryExpression -> {
-                    // TODO: elvis
                     if (expression.operationToken == KtTokens.ELVIS) {
-                        expr<UExpression>(build(::UnknownKotlinExpression))
+                        expr<UExpressionList>(build(::createElvisExpression))
                     } else {
                         expr<UBinaryExpression>(build(::FirKotlinUBinaryExpression))
                     }
@@ -403,10 +426,18 @@ internal object FirKotlinConverter : BaseKotlinConverter {
 
                 is KtClassOrObject -> expr<UDeclarationsExpression> {
                     expression.toLightClass()?.let { lightClass ->
-                        KotlinUDeclarationsExpression(givenParent, service).apply {
+                        KotlinUDeclarationsExpression(givenParent).apply {
                             declarations = listOf(FirKotlinUClass.create(lightClass, this))
                         }
                     } ?: UastEmptyExpression(givenParent)
+                }
+                is KtLambdaExpression -> expr<ULambdaExpression>(build(::KotlinULambdaExpression))
+                is KtFunction -> {
+                    if (expression.name.isNullOrEmpty()) {
+                        expr<ULambdaExpression>(build(::createLocalFunctionLambdaExpression))
+                    } else {
+                        expr<UDeclarationsExpression>(build(::createLocalFunctionDeclaration))
+                    }
                 }
 
                 else -> expr<UExpression>(build(::UnknownKotlinExpression))

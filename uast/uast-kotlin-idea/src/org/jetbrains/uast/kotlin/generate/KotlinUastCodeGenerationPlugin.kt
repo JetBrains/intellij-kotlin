@@ -6,7 +6,6 @@
 package org.jetbrains.uast.kotlin.generate
 
 import com.intellij.lang.Language
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.text.StringUtil
@@ -26,7 +25,6 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.*
 import org.jetbrains.kotlin.resolve.scopes.utils.findClassifier
-import org.jetbrains.kotlin.util.firstNotNullResult
 import org.jetbrains.kotlin.utils.addToStdlib.cast
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 import org.jetbrains.uast.*
@@ -335,13 +333,8 @@ class KotlinUastElementFactory(project: Project) : UastElementFactory {
         return createDeclarationExpression(declarations, null)
     }
 
-    override fun createDeclarationExpression(declarations: List<UDeclaration>, context: PsiElement?): UDeclarationsExpression? {
-        val service = when(context) {
-            null  -> declarations.firstNotNullResult { (it as? KotlinAbstractUElement)?.baseResolveProviderService }
-            else -> ServiceManager.getService(context.project, BaseKotlinUastResolveProviderService::class.java)
-        }
-            ?: error("Cannot create BaseKotlinUastResolveProviderService for $declarations")
-        return object : KotlinUDeclarationsExpression(null, service), KotlinFakeUElement {
+    override fun createDeclarationExpression(declarations: List<UDeclaration>, context: PsiElement?): UDeclarationsExpression {
+        return object : KotlinUDeclarationsExpression(null), KotlinFakeUElement {
             override var declarations: List<UDeclaration> = declarations
             override fun unwrapToSourcePsi(): List<PsiElement> = declarations.flatMap { it.toSourcePsiFakeAware() }
         }

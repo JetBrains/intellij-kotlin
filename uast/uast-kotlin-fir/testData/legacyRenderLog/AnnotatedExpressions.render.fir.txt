@@ -5,9 +5,26 @@ public final class AnnotatedExpressionsKt {
         @not-implemented-annotation var b: <ErrorType> = 2
         [!] UnknownKotlinExpression (ANNOTATED_EXPRESSION)
         [!] UnknownKotlinExpression (ANNOTATED_EXPRESSION)
-        var c: <ErrorType> = [!] UnknownKotlinExpression (BINARY_EXPRESSION)
+        var c: <ErrorType> = elvis {
+            var varae507364: int = [!] UnknownKotlinExpression (ANNOTATED_EXPRESSION)
+            if (varae507364 != null) varae507364 else b
+        }
     }
     public static final fun annotatedSwitch(@null str: java.lang.String) : java.lang.Integer {
-        return [!] UnknownKotlinExpression (WHEN)
+        return switch  {
+            [!] UnknownKotlinExpression (ANNOTATED_EXPRESSION) -> {
+                yield null
+            }
+
+            str.[!] UnknownKotlinExpression (CALL_EXPRESSION) != null -> {
+                yield null
+            }
+
+             -> {
+                yield 1
+            }
+
+        }
+
     }
 }
