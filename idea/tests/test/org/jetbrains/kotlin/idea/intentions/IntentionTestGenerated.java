@@ -1544,6 +1544,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/addNameToArgument/mixingPositionedAndNamed.kt");
         }
 
+        @TestMetadata("mixingPositionedAndNamedDisabled.kt")
+        public void testMixingPositionedAndNamedDisabled() throws Exception {
+            runTest("testData/intentions/addNameToArgument/mixingPositionedAndNamedDisabled.kt");
+        }
+
         @TestMetadata("notInsideIndices.kt")
         public void testNotInsideIndices() throws Exception {
             runTest("testData/intentions/addNameToArgument/notInsideIndices.kt");
@@ -1557,11 +1562,6 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("notInsideNestedArgumentList2.kt")
         public void testNotInsideNestedArgumentList2() throws Exception {
             runTest("testData/intentions/addNameToArgument/notInsideNestedArgumentList2.kt");
-        }
-
-        @TestMetadata("notLast.kt")
-        public void testNotLast() throws Exception {
-            runTest("testData/intentions/addNameToArgument/notLast.kt");
         }
 
         @TestMetadata("notResolved.kt")
