@@ -36,19 +36,9 @@ public class FirHighlightingMetaInfoTestGenerated extends AbstractFirHighlightin
         runTest("../idea/tests/testData/highlighterMetaInfo/AutoCreatedItParameter.kt");
     }
 
-    @TestMetadata("DelegatingCtor.kt")
-    public void testDelegatingCtor() throws Exception {
-        runTest("../idea/tests/testData/highlighterMetaInfo/DelegatingCtor.kt");
-    }
-
     @TestMetadata("Destructuring.kt")
     public void testDestructuring() throws Exception {
         runTest("../idea/tests/testData/highlighterMetaInfo/Destructuring.kt");
-    }
-
-    @TestMetadata("Dynamic.kt")
-    public void testDynamic() throws Exception {
-        runTest("../idea/tests/testData/highlighterMetaInfo/Dynamic.kt");
     }
 
     @TestMetadata("Enums.kt")
@@ -64,11 +54,6 @@ public class FirHighlightingMetaInfoTestGenerated extends AbstractFirHighlightin
     @TestMetadata("Functions.kt")
     public void testFunctions() throws Exception {
         runTest("../idea/tests/testData/highlighterMetaInfo/Functions.kt");
-    }
-
-    @TestMetadata("InaccessibleExpression.kt")
-    public void testInaccessibleExpression() throws Exception {
-        runTest("../idea/tests/testData/highlighterMetaInfo/InaccessibleExpression.kt");
     }
 
     @TestMetadata("InvokeCall.kt")
@@ -116,11 +101,6 @@ public class FirHighlightingMetaInfoTestGenerated extends AbstractFirHighlightin
         runTest("../idea/tests/testData/highlighterMetaInfo/PropertiesWithPropertyDeclarations.kt");
     }
 
-    @TestMetadata("RecursiveTypes.kt")
-    public void testRecursiveTypes() throws Exception {
-        runTest("../idea/tests/testData/highlighterMetaInfo/RecursiveTypes.kt");
-    }
-
     @TestMetadata("SmartCast.kt")
     public void testSmartCast() throws Exception {
         runTest("../idea/tests/testData/highlighterMetaInfo/SmartCast.kt");
@@ -139,16 +119,6 @@ public class FirHighlightingMetaInfoTestGenerated extends AbstractFirHighlightin
     @TestMetadata("Todo.kt")
     public void testTodo() throws Exception {
         runTest("../idea/tests/testData/highlighterMetaInfo/Todo.kt");
-    }
-
-    @TestMetadata("TopLevelDestructuring.kt")
-    public void testTopLevelDestructuring() throws Exception {
-        runTest("../idea/tests/testData/highlighterMetaInfo/TopLevelDestructuring.kt");
-    }
-
-    @TestMetadata("TopLevelOpenSuspendFun.kt")
-    public void testTopLevelOpenSuspendFun() throws Exception {
-        runTest("../idea/tests/testData/highlighterMetaInfo/TopLevelOpenSuspendFun.kt");
     }
 
     @TestMetadata("TypeAlias.kt")

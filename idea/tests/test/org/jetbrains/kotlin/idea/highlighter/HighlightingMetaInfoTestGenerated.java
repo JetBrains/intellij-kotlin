@@ -36,19 +36,9 @@ public class HighlightingMetaInfoTestGenerated extends AbstractHighlightingMetaI
         runTest("testData/highlighterMetaInfo/AutoCreatedItParameter.kt");
     }
 
-    @TestMetadata("DelegatingCtor.kt")
-    public void testDelegatingCtor() throws Exception {
-        runTest("testData/highlighterMetaInfo/DelegatingCtor.kt");
-    }
-
     @TestMetadata("Destructuring.kt")
     public void testDestructuring() throws Exception {
         runTest("testData/highlighterMetaInfo/Destructuring.kt");
-    }
-
-    @TestMetadata("Dynamic.kt")
-    public void testDynamic() throws Exception {
-        runTest("testData/highlighterMetaInfo/Dynamic.kt");
     }
 
     @TestMetadata("Enums.kt")
@@ -64,11 +54,6 @@ public class HighlightingMetaInfoTestGenerated extends AbstractHighlightingMetaI
     @TestMetadata("Functions.kt")
     public void testFunctions() throws Exception {
         runTest("testData/highlighterMetaInfo/Functions.kt");
-    }
-
-    @TestMetadata("InaccessibleExpression.kt")
-    public void testInaccessibleExpression() throws Exception {
-        runTest("testData/highlighterMetaInfo/InaccessibleExpression.kt");
     }
 
     @TestMetadata("InvokeCall.kt")
@@ -116,11 +101,6 @@ public class HighlightingMetaInfoTestGenerated extends AbstractHighlightingMetaI
         runTest("testData/highlighterMetaInfo/PropertiesWithPropertyDeclarations.kt");
     }
 
-    @TestMetadata("RecursiveTypes.kt")
-    public void testRecursiveTypes() throws Exception {
-        runTest("testData/highlighterMetaInfo/RecursiveTypes.kt");
-    }
-
     @TestMetadata("SmartCast.kt")
     public void testSmartCast() throws Exception {
         runTest("testData/highlighterMetaInfo/SmartCast.kt");
@@ -139,16 +119,6 @@ public class HighlightingMetaInfoTestGenerated extends AbstractHighlightingMetaI
     @TestMetadata("Todo.kt")
     public void testTodo() throws Exception {
         runTest("testData/highlighterMetaInfo/Todo.kt");
-    }
-
-    @TestMetadata("TopLevelDestructuring.kt")
-    public void testTopLevelDestructuring() throws Exception {
-        runTest("testData/highlighterMetaInfo/TopLevelDestructuring.kt");
-    }
-
-    @TestMetadata("TopLevelOpenSuspendFun.kt")
-    public void testTopLevelOpenSuspendFun() throws Exception {
-        runTest("testData/highlighterMetaInfo/TopLevelOpenSuspendFun.kt");
     }
 
     @TestMetadata("TypeAlias.kt")
