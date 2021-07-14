@@ -1484,6 +1484,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/addNameToArgument/ambiguousCall.kt");
         }
 
+        @TestMetadata("annotationCall.kt")
+        public void testAnnotationCall() throws Exception {
+            runTest("testData/intentions/addNameToArgument/annotationCall.kt");
+        }
+
         @TestMetadata("backtickedArgument.kt")
         public void testBacktickedArgument() throws Exception {
             runTest("testData/intentions/addNameToArgument/backtickedArgument.kt");
@@ -1507,6 +1512,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("beforeOtherNamed.kt")
         public void testBeforeOtherNamed() throws Exception {
             runTest("testData/intentions/addNameToArgument/beforeOtherNamed.kt");
+        }
+
+        @TestMetadata("delegatedConstructor.kt")
+        public void testDelegatedConstructor() throws Exception {
+            runTest("testData/intentions/addNameToArgument/delegatedConstructor.kt");
         }
 
         @TestMetadata("functionLiteralArgument.kt")
@@ -1544,6 +1554,11 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
             runTest("testData/intentions/addNameToArgument/mixingPositionedAndNamed.kt");
         }
 
+        @TestMetadata("mixingPositionedAndNamedDisabled.kt")
+        public void testMixingPositionedAndNamedDisabled() throws Exception {
+            runTest("testData/intentions/addNameToArgument/mixingPositionedAndNamedDisabled.kt");
+        }
+
         @TestMetadata("notInsideIndices.kt")
         public void testNotInsideIndices() throws Exception {
             runTest("testData/intentions/addNameToArgument/notInsideIndices.kt");
@@ -1557,11 +1572,6 @@ public abstract class IntentionTestGenerated extends AbstractIntentionTest {
         @TestMetadata("notInsideNestedArgumentList2.kt")
         public void testNotInsideNestedArgumentList2() throws Exception {
             runTest("testData/intentions/addNameToArgument/notInsideNestedArgumentList2.kt");
-        }
-
-        @TestMetadata("notLast.kt")
-        public void testNotLast() throws Exception {
-            runTest("testData/intentions/addNameToArgument/notLast.kt");
         }
 
         @TestMetadata("notResolved.kt")
