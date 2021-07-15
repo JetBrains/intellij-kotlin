@@ -141,8 +141,9 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
     }
 
     override fun getType(ktDeclaration: KtDeclaration, parent: UElement): PsiType? {
-        // TODO("Not yet implemented")
-        return null
+        analyseForUast(ktDeclaration) {
+            return ktDeclaration.getPsiType(TypeMappingMode.DEFAULT_UAST)
+        }
     }
 
     override fun getFunctionType(ktFunction: KtFunction, parent: UElement): PsiType? {
