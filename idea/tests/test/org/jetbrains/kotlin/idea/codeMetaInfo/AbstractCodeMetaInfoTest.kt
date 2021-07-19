@@ -268,7 +268,7 @@ abstract class AbstractCodeMetaInfoTest : AbstractMultiModuleTest() {
         }
     }
 
-    private fun VirtualFile.findCorrespondingFileInTestDir(containingRoot: VirtualFile, testDir: File): File {
+    protected fun VirtualFile.findCorrespondingFileInTestDir(containingRoot: VirtualFile, testDir: File): File {
         val tempRootPath = Paths.get(containingRoot.path)
         val tempProjectDirPath = tempRootPath.parent
         val tempSourcePath = Paths.get(path)
