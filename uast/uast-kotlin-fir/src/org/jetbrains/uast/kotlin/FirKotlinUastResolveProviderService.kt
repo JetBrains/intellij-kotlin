@@ -81,6 +81,11 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
 
     override fun resolveCall(ktElement: KtElement): PsiMethod? {
         when (ktElement) {
+            is KtCallElement -> {
+                analyseForUast(ktElement) {
+                    return ktElement.resolveCall()?.toPsiMethod()
+                }
+            }
             is KtBinaryExpression -> {
                 analyseForUast(ktElement) {
                     return ktElement.resolveCall()?.toPsiMethod()
