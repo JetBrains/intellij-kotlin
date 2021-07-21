@@ -115,12 +115,12 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                     }
                 }
                 is KtPropertyAccessor -> {
-                    el<UMethod> { FirKotlinUMethod.create(original, givenParent) }
+                    el<UMethod> { KotlinUMethod.create(original, givenParent) }
                 }
 
                 is KtLightMethod -> {
                     // .Companion is needed because of KT-13934
-                    el<UMethod>(build(FirKotlinUMethod.Companion::create))
+                    el<UMethod>(build(KotlinUMethod.Companion::create))
                 }
                 is KtFunction -> {
                     if (original.isLocal) {
@@ -141,7 +141,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                             }
                         }
                     } else {
-                        el<UMethod> { FirKotlinUMethod.create(original, givenParent) }
+                        el<UMethod> { KotlinUMethod.create(original, givenParent) }
                     }
                 }
 
