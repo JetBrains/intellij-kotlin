@@ -19,7 +19,7 @@ open class KotlinConstructorUMethod(
     override val psi: PsiMethod,
     kotlinOrigin: KtDeclaration?,
     givenParent: UElement?
-) : BaseKotlinUMethod(psi, kotlinOrigin, givenParent) {
+) : KotlinUMethod(psi, kotlinOrigin, givenParent) {
 
     constructor(
         ktClass: KtClassOrObject?,
