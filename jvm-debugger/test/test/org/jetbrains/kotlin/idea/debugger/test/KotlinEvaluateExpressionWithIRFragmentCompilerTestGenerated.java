@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.test.TargetBackend;
 @TestRoot("jvm-debugger/test")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-public abstract class KotlinEvaluateExpressionWithIRFragmentCompilerTestGenerated extends AbstractKotlinEvaluateExpressionWithIRFragmentCompilerTest {
+public class KotlinEvaluateExpressionWithIRFragmentCompilerTestGenerated extends AbstractKotlinEvaluateExpressionWithIRFragmentCompilerTest {
     @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("testData/evaluation/singleBreakpoint")
     public static class SingleBreakpoint extends AbstractKotlinEvaluateExpressionWithIRFragmentCompilerTest {
@@ -728,11 +728,6 @@ public abstract class KotlinEvaluateExpressionWithIRFragmentCompilerTestGenerate
                 KotlinTestUtils.runTest(this::doSingleBreakpointTest, this, TargetBackend.JVM_WITH_IR_EVALUATOR, testDataFilePath);
             }
 
-            @TestMetadata("annotationsAreNotShown.kt")
-            public void testAnnotationsAreNotShown() throws Exception {
-                runTest("testData/evaluation/singleBreakpoint/frame/annotationsAreNotShown.kt");
-            }
-
             @TestMetadata("capturedValues1.kt")
             public void testCapturedValues1() throws Exception {
                 runTest("testData/evaluation/singleBreakpoint/frame/capturedValues1.kt");
@@ -898,11 +893,6 @@ public abstract class KotlinEvaluateExpressionWithIRFragmentCompilerTestGenerate
                 runTest("testData/evaluation/singleBreakpoint/frame/frameThis0This0.kt");
             }
 
-            @TestMetadata("gettersAreNotDuplicated.kt")
-            public void testGettersAreNotDuplicated() throws Exception {
-                runTest("testData/evaluation/singleBreakpoint/frame/gettersAreNotDuplicated.kt");
-            }
-
             @TestMetadata("hideContinuationThis.kt")
             public void testHideContinuationThis() throws Exception {
                 runTest("testData/evaluation/singleBreakpoint/frame/hideContinuationThis.kt");
@@ -971,21 +961,6 @@ public abstract class KotlinEvaluateExpressionWithIRFragmentCompilerTestGenerate
             @TestMetadata("remapThis.kt")
             public void testRemapThis() throws Exception {
                 runTest("testData/evaluation/singleBreakpoint/frame/remapThis.kt");
-            }
-
-            @TestMetadata("sourcePositionForGetter.kt")
-            public void testSourcePositionForGetter() throws Exception {
-                runTest("testData/evaluation/singleBreakpoint/frame/sourcePositionForGetter.kt");
-            }
-
-            @TestMetadata("sourcePositionForGetterWithDelegatedInterface.kt")
-            public void testSourcePositionForGetterWithDelegatedInterface() throws Exception {
-                runTest("testData/evaluation/singleBreakpoint/frame/sourcePositionForGetterWithDelegatedInterface.kt");
-            }
-
-            @TestMetadata("sourcePositionForGetterWithDiamondInterfaces.kt")
-            public void testSourcePositionForGetterWithDiamondInterfaces() throws Exception {
-                runTest("testData/evaluation/singleBreakpoint/frame/sourcePositionForGetterWithDiamondInterfaces.kt");
             }
 
             @TestMetadata("suspendContinuation.kt")
@@ -1174,11 +1149,6 @@ public abstract class KotlinEvaluateExpressionWithIRFragmentCompilerTestGenerate
             runTest("testData/evaluation/multipleBreakpoints/extensionMemberProperty.kt");
         }
 
-        @TestMetadata("externalReceiverInLambda.kt")
-        public void testExternalReceiverInLambda() throws Exception {
-            runTest("testData/evaluation/multipleBreakpoints/externalReceiverInLambda.kt");
-        }
-
         @TestMetadata("fieldVariable.kt")
         public void testFieldVariable() throws Exception {
             runTest("testData/evaluation/multipleBreakpoints/fieldVariable.kt");
@@ -1222,11 +1192,6 @@ public abstract class KotlinEvaluateExpressionWithIRFragmentCompilerTestGenerate
         @TestMetadata("mutations.kt")
         public void testMutations() throws Exception {
             runTest("testData/evaluation/multipleBreakpoints/mutations.kt");
-        }
-
-        @TestMetadata("noReceiverOnStack.kt")
-        public void testNoReceiverOnStack() throws Exception {
-            runTest("testData/evaluation/multipleBreakpoints/noReceiverOnStack.kt");
         }
 
         @TestMetadata("nonCapturedVariables.kt")

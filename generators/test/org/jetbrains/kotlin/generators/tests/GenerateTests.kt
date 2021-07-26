@@ -961,7 +961,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("navigationToolbar", isRecursive = false)
         }
     }
-
+    /* Disabled in IJ 203
     testGroup("fir", testDataPath = AdditionalKotlinArtifacts.compilerTestData("compiler/testData")) {
         testClass<AbstractFirLightClassTest> {
             model("compiler/asJava/lightClasses", excludedDirectories = listOf("delegation", "script"), pattern = KT_WITHOUT_DOTS)
@@ -974,7 +974,7 @@ private fun assembleWorkspace(): TWorkspace = workspace {
         testClass<AbstractFirLightFacadeClassTest> {
             model("compiler/asJava//ultraLightFacades", pattern = KT_OR_KTS)
         }
-    }
+    }*/
 
     // TODO temporarily disable until testdata is migrated from kotlin repo to kotlin-ide
 //    testGroup("idea/idea-frontend-fir/fir-low-level-api-ide-impl/tests", "idea/idea-frontend-fir/idea-fir-low-level-api/testdata") {

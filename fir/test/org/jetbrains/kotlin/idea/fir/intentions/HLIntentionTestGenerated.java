@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 @TestRoot("fir")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-public abstract class HLIntentionTestGenerated extends AbstractHLIntentionTest {
+public class HLIntentionTestGenerated extends AbstractHLIntentionTest {
     @RunWith(JUnit3RunnerWithInners.class)
     @TestMetadata("../idea/tests/testData/intentions/addPropertyAccessors")
     public abstract static class AddPropertyAccessors extends AbstractHLIntentionTest {
