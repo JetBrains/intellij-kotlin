@@ -33,10 +33,7 @@ import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.isError
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.kotlin.types.typeUtil.nullability
-import org.jetbrains.uast.UElement
-import org.jetbrains.uast.UExpression
-import org.jetbrains.uast.UastCallKind
-import org.jetbrains.uast.UastSpecialExpressionKind
+import org.jetbrains.uast.*
 import org.jetbrains.uast.kotlin.psi.UastKotlinPsiParameterBase
 
 interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderService {
@@ -53,6 +50,21 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
 
     override fun convertParent(uElement: UElement, parent: PsiElement?): UElement? {
         return convertParentImpl(uElement, parent)
+    }
+
+    override fun convertValueArguments(ktCallElement: KtCallElement, parent: UElement): List<UNamedExpression>? {
+        val resolvedCall = ktCallElement.getResolvedCall(ktCallElement.analyze()) ?: return null
+        return resolvedCall.valueArguments.entries.mapNotNull {
+            val arguments = it.value.arguments
+            val name = it.key.name.asString()
+            when {
+                arguments.size == 1 ->
+                    KotlinUNamedExpression.create(name, arguments.first(), parent)
+                arguments.size > 1 ->
+                    KotlinUNamedExpression.create(name, arguments, parent)
+                else -> null
+            }
+        }
     }
 
     override fun getArgumentForParameter(ktCallElement: KtCallElement, index: Int, parent: UElement): UExpression? {
