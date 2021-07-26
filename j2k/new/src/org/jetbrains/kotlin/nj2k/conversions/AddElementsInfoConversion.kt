@@ -17,8 +17,6 @@ import org.jetbrains.kotlin.nj2k.symbols.JKUniverseMethodSymbol
 import org.jetbrains.kotlin.nj2k.tree.JKMethod
 import org.jetbrains.kotlin.nj2k.tree.JKTreeElement
 import org.jetbrains.kotlin.nj2k.tree.JKTypeElement
-
-
 import org.jetbrains.kotlin.nj2k.types.isCollectionType
 import org.jetbrains.kotlin.nj2k.types.JKCapturedType
 import org.jetbrains.kotlin.nj2k.types.JKParametrizedType

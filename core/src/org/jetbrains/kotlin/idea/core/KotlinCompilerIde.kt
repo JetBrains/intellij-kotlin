@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.backend.common.output.OutputFile
 import org.jetbrains.kotlin.backend.common.phaser.PhaseConfig
 import org.jetbrains.kotlin.backend.jvm.JvmIrCodegenFactory
 import org.jetbrains.kotlin.backend.jvm.jvmPhases
-import org.jetbrains.kotlin.caches.resolve.KotlinCacheService
 import org.jetbrains.kotlin.codegen.ClassBuilderFactories
 import org.jetbrains.kotlin.codegen.ClassBuilderFactory
 import org.jetbrains.kotlin.codegen.DefaultCodegenFactory
@@ -40,7 +39,7 @@ class KotlinCompilerIde(
             }
         }
 
-        private fun getDefaultResolutionFacade(file: KtFile): ResolutionFacade? {
+        private fun getDefaultResolutionFacade(file: KtFile): ResolutionFacade {
             return file.getResolutionFacade()
         }
     }
