@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.name.FqNameUnsafe
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.annotationClass
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameUnsafe
 import org.jetbrains.kotlin.resolve.source.getPsi
@@ -34,8 +33,6 @@ abstract class KotlinUAnnotationBase<T : KtCallElement>(
 
     protected abstract fun annotationUseSiteTarget(): AnnotationUseSiteTarget?
 
-    private val resolvedCall: ResolvedCall<*>? get () = sourcePsi.getResolvedCall(sourcePsi.analyze())
-
     override val qualifiedName: String? by lz {
         computeClassDescriptor().takeUnless(ErrorUtils::isError)
             ?.fqNameUnsafe
@@ -45,17 +42,7 @@ abstract class KotlinUAnnotationBase<T : KtCallElement>(
     }
 
     override val attributeValues: List<UNamedExpression> by lz {
-        resolvedCall?.valueArguments?.entries?.mapNotNull {
-            val arguments = it.value.arguments
-            val name = it.key.name.asString()
-            when {
-                arguments.size == 1 ->
-                    KotlinUNamedExpression.create(name, arguments.first(), this)
-                arguments.size > 1 ->
-                    KotlinUNamedExpression.create(name, arguments, this)
-                else -> null
-            }
-        } ?: emptyList()
+        baseResolveProviderService.convertValueArguments(sourcePsi, this) ?: emptyList()
     }
 
     protected abstract fun computeClassDescriptor(): ClassDescriptor?
