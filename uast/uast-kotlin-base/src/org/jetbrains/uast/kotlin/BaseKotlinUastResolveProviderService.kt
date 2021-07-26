@@ -5,6 +5,7 @@
 
 package org.jetbrains.uast.kotlin
 
+import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiType
@@ -47,7 +48,9 @@ interface BaseKotlinUastResolveProviderService {
 
     fun callKind(ktCallElement: KtCallElement): UastCallKind
 
-    fun resolveToClassIfConstructorCall(ktCallElement: KtCallElement, source: UElement): PsiElement?
+    fun resolveToClassIfConstructorCall(ktCallElement: KtCallElement, source: UElement): PsiClass?
+
+    fun resolveToClass(ktAnnotationEntry: KtAnnotationEntry): PsiClass?
 
     fun resolveToDeclaration(ktExpression: KtExpression): PsiElement?
 
