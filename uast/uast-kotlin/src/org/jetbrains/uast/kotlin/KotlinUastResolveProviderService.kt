@@ -31,6 +31,7 @@ import org.jetbrains.kotlin.resolve.constants.UnsignedErrorValueTypeConstant
 import org.jetbrains.kotlin.resolve.descriptorUtil.annotationClass
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameUnsafe
+import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.kotlin.types.typeUtil.nullability
@@ -66,6 +67,15 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
                 else -> null
             }
         }
+    }
+
+    override fun findDefaultValueForAnnotationAttribute(ktCallElement: KtCallElement, name: String): KtExpression? {
+        val parameter = ktCallElement.resolveToClassDescriptor()
+            ?.unsubstitutedPrimaryConstructor
+            ?.valueParameters
+            ?.find { it.name.asString() == name } ?: return null
+
+        return (parameter.source.getPsi() as? KtParameter)?.defaultValue
     }
 
     override fun getArgumentForParameter(ktCallElement: KtCallElement, index: Int, parent: UElement): UExpression? {
