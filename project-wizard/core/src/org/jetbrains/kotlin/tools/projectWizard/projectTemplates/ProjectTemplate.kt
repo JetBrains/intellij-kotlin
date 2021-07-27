@@ -81,7 +81,6 @@ sealed class ProjectTemplate : DisplayableSettingItem {
             ConsoleApplicationProjectTemplate,
             MultiplatformMobileApplicationProjectTemplate,
             MultiplatformMobileLibraryProjectTemplate,
-            MultiplatformApplicationProjectTemplate,
             MultiplatformLibraryProjectTemplate,
             NativeApplicationProjectTemplate,
             FrontendApplicationProjectTemplate,
@@ -162,23 +161,6 @@ object BackendApplicationProjectTemplate : ProjectTemplate() {
         get() = listOf(
             KotlinPlugin.modules.reference withValue listOf(
                 SingleplatformModule("mainModule", createDefaultSourcesets())
-            )
-        )
-}
-
-object MultiplatformApplicationProjectTemplate : ProjectTemplate() {
-    override val title = KotlinNewProjectWizardBundle.message("project.template.empty.mpp.title")
-    override val description = KotlinNewProjectWizardBundle.message("project.template.empty.mpp.description")
-    override val id = "multiplatformApplication"
-
-    @NonNls
-    override val suggestedProjectName = "myKotlinMultiplatformProject"
-    override val projectKind = ProjectKind.Multiplatform
-
-    override val setsPluginSettings: List<SettingWithValue<*, *>>
-        get() = listOf(
-            KotlinPlugin.modules.reference withValue listOf(
-                MultiplatformModule("mainModule", targets = listOf(ModuleType.common.createDefaultTarget()))
             )
         )
 }

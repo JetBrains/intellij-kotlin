@@ -58,11 +58,6 @@ public abstract class ProjectTemplateNewWizardProjectImportTestGenerated extends
             runTest("../cli/testData/projectTemplatesBuildFileGeneration/fullStackWebApplication/");
         }
 
-        @TestMetadata("multiplatformApplication")
-        public void testMultiplatformApplication() throws Exception {
-            runTest("../cli/testData/projectTemplatesBuildFileGeneration/multiplatformApplication/");
-        }
-
         @TestMetadata("multiplatformLibrary")
         public void testMultiplatformLibrary() throws Exception {
             runTest("../cli/testData/projectTemplatesBuildFileGeneration/multiplatformLibrary/");
@@ -121,11 +116,6 @@ public abstract class ProjectTemplateNewWizardProjectImportTestGenerated extends
             runTest("../cli/testData/projectTemplatesBuildFileGeneration/fullStackWebApplication/");
         }
 
-        @TestMetadata("multiplatformApplication")
-        public void testMultiplatformApplication() throws Exception {
-            runTest("../cli/testData/projectTemplatesBuildFileGeneration/multiplatformApplication/");
-        }
-
         @TestMetadata("multiplatformLibrary")
         public void testMultiplatformLibrary() throws Exception {
             runTest("../cli/testData/projectTemplatesBuildFileGeneration/multiplatformLibrary/");
@@ -182,11 +172,6 @@ public abstract class ProjectTemplateNewWizardProjectImportTestGenerated extends
         @TestMetadata("fullStackWebApplication")
         public void testFullStackWebApplication() throws Exception {
             runTest("../cli/testData/projectTemplatesBuildFileGeneration/fullStackWebApplication/");
-        }
-
-        @TestMetadata("multiplatformApplication")
-        public void testMultiplatformApplication() throws Exception {
-            runTest("../cli/testData/projectTemplatesBuildFileGeneration/multiplatformApplication/");
         }
 
         @TestMetadata("multiplatformLibrary")
