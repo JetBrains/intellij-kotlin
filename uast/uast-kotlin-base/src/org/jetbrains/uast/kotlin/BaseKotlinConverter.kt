@@ -40,7 +40,9 @@ interface BaseKotlinConverter {
     fun convertAnnotation(
         annotationEntry: KtAnnotationEntry,
         givenParent: UElement?
-    ): UAnnotation
+    ): UAnnotation {
+        return KotlinUAnnotation(annotationEntry, givenParent)
+    }
 
     fun convertDeclaration(
         element: PsiElement,
