@@ -1,15 +1,13 @@
 package org.jetbrains.uast.kotlin
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.psi.PsiAnnotation
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import com.intellij.psi.ResolveResult
 import org.jetbrains.kotlin.asJava.toLightAnnotation
-import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
-import org.jetbrains.kotlin.descriptors.ClassKind
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationUseSiteTarget
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 import org.jetbrains.uast.*
@@ -115,15 +113,13 @@ class KotlinUNestedAnnotation private constructor(
     }
 
     companion object {
-        fun tryCreate(original: KtCallExpression, givenParent: UElement?): KotlinUNestedAnnotation? {
-            if (classDescriptor(original)?.kind == ClassKind.ANNOTATION_CLASS)
-                return KotlinUNestedAnnotation(original, givenParent)
+        fun create(ktCallExpression: KtCallExpression, givenParent: UElement?): KotlinUNestedAnnotation? {
+            val service = ServiceManager.getService(BaseKotlinUastResolveProviderService::class.java)
+            return if (service.isAnnotationConstructorCall(ktCallExpression))
+                KotlinUNestedAnnotation(ktCallExpression, givenParent)
             else
-                return null
+                null
         }
-
-        private fun classDescriptor(original: KtCallExpression) =
-            (original.getResolvedCall(original.analyze())?.resultingDescriptor as? ClassConstructorDescriptor)?.constructedClass
     }
 
 }
