@@ -4,7 +4,6 @@
  */
 package org.jetbrains.kotlin.idea.fir.findUsages
 
-import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils
 import org.jetbrains.kotlin.test.utils.IgnoreTests
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -14,7 +13,6 @@ fun doTestWithFIRFlagsByPath(path: String, body: () -> Unit) =
     doTestWithFIRFlags(Paths.get(path), body)
 
 fun doTestWithFIRFlags(testFile: Path, body: () -> Unit) {
-    if (InTextDirectivesUtils.isDirectiveDefined(testFile.toFile().readText(), "FIR_IGNORE")) return
     IgnoreTests.runTestIfEnabledByFileDirective(testFile, IgnoreTests.DIRECTIVES.FIR_COMPARISON) {
         body()
     }
