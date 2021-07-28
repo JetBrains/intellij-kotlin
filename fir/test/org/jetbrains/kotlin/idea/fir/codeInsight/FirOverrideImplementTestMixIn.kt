@@ -3,7 +3,7 @@
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
-package org.jetbrains.kotlin.idea.fir.codeinsight
+package org.jetbrains.kotlin.idea.fir.codeInsight
 
 import org.jetbrains.kotlin.idea.codeInsight.OverrideImplementTestMixIn
 import org.jetbrains.kotlin.idea.core.overrideImplement.AbstractGenerateMembersHandler
@@ -14,10 +14,8 @@ import org.jetbrains.kotlin.idea.frontend.api.analyse
 import org.jetbrains.kotlin.idea.frontend.api.symbols.markers.KtNamedSymbol
 import org.jetbrains.kotlin.idea.frontend.api.tokens.HackToForceAllowRunningAnalyzeOnEDT
 import org.jetbrains.kotlin.idea.frontend.api.tokens.hackyAllowRunningOnEdt
-import org.jetbrains.kotlin.idea.fir.invalidateCaches
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtFile
 
 internal interface FirOverrideImplementTestMixIn : OverrideImplementTestMixIn<KtClassMember> {
     override fun createImplementMembersHandler(): AbstractGenerateMembersHandler<KtClassMember> = KtImplementMembersHandler()
