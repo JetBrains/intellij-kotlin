@@ -123,6 +123,7 @@ class MainKtQuickFixRegistrar : KtQuickFixRegistrar() {
         registerApplicator(TypeMismatchFactories.returnTypeMismatchFactory)
         registerApplicator(TypeMismatchFactories.assignmentTypeMismatch)
         registerApplicator(TypeMismatchFactories.initializerTypeMismatch)
+        registerApplicator(TypeMismatchFactories.smartcastImpossibleFactory)
 
         registerApplicator(WrapWithSafeLetCallFixFactories.forUnsafeCall)
         registerApplicator(WrapWithSafeLetCallFixFactories.forUnsafeImplicitInvokeCall)
