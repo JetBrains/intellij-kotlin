@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsResultOfLambda
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.calls.components.isVararg
+import org.jetbrains.kotlin.resolve.calls.model.ArgumentMatch
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.constants.UnsignedErrorValueTypeConstant
 import org.jetbrains.kotlin.resolve.descriptorUtil.annotationClass
@@ -40,16 +41,11 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
     fun getTypeMapper(element: KtElement): KotlinTypeMapper?
     fun getLanguageVersionSettings(element: KtElement): LanguageVersionSettings
 
+    override val languagePlugin: UastLanguagePlugin
+        get() = kotlinUastPlugin
+
     override val baseKotlinConverter: BaseKotlinConverter
         get() = KotlinConverter
-
-    override fun convertParent(uElement: UElement): UElement? {
-        return convertParentImpl(uElement)
-    }
-
-    override fun convertParent(uElement: UElement, parent: PsiElement?): UElement? {
-        return convertParentImpl(uElement, parent)
-    }
 
     override fun convertValueArguments(ktCallElement: KtCallElement, parent: UElement): List<UNamedExpression>? {
         val resolvedCall = ktCallElement.getResolvedCall(ktCallElement.analyze()) ?: return null
@@ -63,6 +59,16 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
                     KotlinUNamedExpression.create(name, arguments, parent)
                 else -> null
             }
+        }
+    }
+
+    override fun findAttributeValueExpression(uAnnotation: KotlinUAnnotation, arg: ValueArgument): UExpression? {
+        val annotationEntry = uAnnotation.sourcePsi
+        val resolvedCall = annotationEntry.getResolvedCall(annotationEntry.analyze())
+        val mapping = resolvedCall?.getArgumentMapping(arg)
+        return (mapping as? ArgumentMatch)?.let { match ->
+            val namedExpression = uAnnotation.attributeValues.find { it.name == match.valueParameter.name.asString() }
+            namedExpression?.expression as? KotlinUVarargExpression ?: namedExpression
         }
     }
 
