@@ -34,6 +34,7 @@ import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.psi.*
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.GlobalSearchScopes
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.refactoring.listeners.RefactoringElementAdapter
 import com.intellij.refactoring.listeners.RefactoringElementListener
 import com.intellij.util.PathUtil
@@ -43,13 +44,13 @@ import org.jetbrains.kotlin.asJava.elements.KtLightMethod
 import org.jetbrains.kotlin.idea.KotlinJvmBundle.message
 import org.jetbrains.kotlin.idea.MainFunctionDetector
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
+import org.jetbrains.kotlin.idea.caches.resolve.resolveToDescriptorIfAny
 import org.jetbrains.kotlin.idea.core.isInTestSourceContentKotlinAware
 import org.jetbrains.kotlin.idea.project.languageVersionSettings
-import org.jetbrains.kotlin.idea.run.KotlinRunConfigurationProducer.Companion.getEntryPointContainer
 import org.jetbrains.kotlin.idea.run.KotlinRunConfigurationProducer.Companion.getStartClassFqName
+import org.jetbrains.kotlin.idea.util.ProjectRootsUtil
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.KtDeclarationContainer
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 
 open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRunConfigurationModule, factory: ConfigurationFactory?) :
@@ -171,6 +172,7 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
         if (StringUtil.isEmpty(mainClassName)) {
             throw RuntimeConfigurationError(message("run.configuration.error.no.main.class"))
         }
+
         val psiClass = JavaExecutionUtil.findMainClass(module, mainClassName)
         if (psiClass == null) {
             val moduleName = configurationModule!!.moduleName
@@ -178,7 +180,8 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
                 message("run.configuration.error.class.not.found", mainClassName!!, moduleName)
             )
         }
-        if (findMainFun(psiClass) == null) {
+
+        if (KotlinMainFunctionLocatingService.findMainInClass(psiClass) == null) {
             throw RuntimeConfigurationWarning(
                 message(
                     "run.configuration.error.class.no.main.method",
@@ -232,7 +235,7 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
     }
 
     private fun updateMainClassName(element: PsiElement) {
-        val container = getEntryPointContainer(element) ?: return
+        val container = KotlinMainFunctionLocatingService.getEntryPointContainer(element) ?: return
         val name = getStartClassFqName(container)
         if (name != null) {
             runClass = name
@@ -282,12 +285,16 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
             val module = configurationModule!!.module ?: throw CantRunException.noModuleConfigured(configurationModule.moduleName)
             val runClass = myConfiguration.runClass
                 ?: throw CantRunException(String.format("Run class should be defined for configuration '%s'", myConfiguration.name))
-            val psiClass = JavaExecutionUtil.findMainClass(module, runClass) ?: throw CantRunException.classNotFound(runClass, module)
-            val mainFun = findMainFun(psiClass)
+
+            val psiClass = JavaExecutionUtil.findMainClass(module, runClass)
+                ?: throw CantRunException.classNotFound(runClass, module)
+            val mainFun = KotlinMainFunctionLocatingService.findMainInClass(psiClass)
                 ?: throw CantRunException(noFunctionFoundMessage(psiClass))
+
             var classModule = ModuleUtilCore.findModuleForPsiElement(mainFun)
             if (classModule == null) classModule = module
-            val virtualFileForMainFun = mainFun.containingFile.virtualFile ?: throw CantRunException(noFunctionFoundMessage(psiClass))
+            val virtualFileForMainFun = mainFun.containingFile.virtualFile
+                ?: throw CantRunException(noFunctionFoundMessage(psiClass))
             val fileIndex = ModuleRootManager.getInstance(classModule).fileIndex
             if (fileIndex.isInSourceContent(virtualFileForMainFun)) {
                 return if (fileIndex.isInTestSourceContentKotlinAware(virtualFileForMainFun)) {
@@ -328,26 +335,64 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
             }
         }
     }
+}
 
-    companion object {
-        private fun getMainFunCandidates(psiClass: PsiClass): Collection<KtNamedFunction> {
-            return psiClass.allMethods.map { method: PsiMethod ->
-                if (method !is KtLightMethod) return@map null
-                if (method.getName() != "main") return@map null
-                val declaration =
-                    method.kotlinOrigin
-                if (declaration is KtNamedFunction) declaration else null
-            }.filterNotNull()
-        }
-
-        private fun findMainFun(psiClass: PsiClass): KtNamedFunction? {
-            for (function in getMainFunCandidates(psiClass)) {
-                val bindingContext = function.analyze(BodyResolveMode.FULL)
-                val mainFunctionDetector = MainFunctionDetector(bindingContext, function.languageVersionSettings)
-                if (mainFunctionDetector.isMain(function)) return function
-            }
-            return null
-        }
+/**
+ * A service for detecting entry points (like "main" function) in classes and objects.
+ */
+object KotlinMainFunctionLocatingService {
+    private fun getMainFunCandidates(psiClass: PsiClass): Collection<KtNamedFunction> {
+        return psiClass.allMethods.map { method: PsiMethod ->
+            if (method !is KtLightMethod) return@map null
+            if (method.getName() != "main") return@map null
+            val declaration =
+                method.kotlinOrigin
+            if (declaration is KtNamedFunction) declaration else null
+        }.filterNotNull()
     }
 
+    fun findMainInClass(psiClass: PsiClass): KtNamedFunction? {
+        return getMainFunCandidates(psiClass).find { isMain(it) }
+    }
+
+    fun isMain(function: KtNamedFunction): Boolean {
+        val bindingContext = function.analyze(BodyResolveMode.FULL)
+        val mainFunctionDetector = MainFunctionDetector(bindingContext, function.languageVersionSettings)
+        return mainFunctionDetector.isMain(function)
+    }
+
+    fun hasMain(declarations: List<KtDeclaration>): Boolean {
+        if (declarations.isEmpty()) return false
+
+        val languageVersionSettings = declarations.first().languageVersionSettings
+        val mainFunctionDetector =
+            MainFunctionDetector(languageVersionSettings) { it.resolveToDescriptorIfAny(BodyResolveMode.FULL) }
+
+        return mainFunctionDetector.hasMain(declarations)
+    }
+
+    fun getEntryPointContainer(locationElement: PsiElement): KtDeclarationContainer? {
+        val psiFile = locationElement.containingFile
+        if (!(psiFile is KtFile && ProjectRootsUtil.isInProjectOrLibSource(psiFile))) return null
+
+        var currentElement = locationElement.declarationContainer(false)
+        while (currentElement != null) {
+            var entryPointContainer = currentElement
+            if (entryPointContainer is KtClass) {
+                entryPointContainer = entryPointContainer.companionObjects.singleOrNull()
+            }
+            if (entryPointContainer != null && hasMain(entryPointContainer.declarations)) return entryPointContainer
+            currentElement = (currentElement as PsiElement).declarationContainer(true)
+        }
+
+        return null
+    }
+
+    private fun PsiElement.declarationContainer(strict: Boolean): KtDeclarationContainer? {
+        val element = if (strict)
+            PsiTreeUtil.getParentOfType(this, KtClassOrObject::class.java, KtFile::class.java)
+        else
+            PsiTreeUtil.getNonStrictParentOfType(this, KtClassOrObject::class.java, KtFile::class.java)
+        return element
+    }
 }
