@@ -40,6 +40,7 @@ import com.intellij.refactoring.listeners.RefactoringElementAdapter
 import com.intellij.refactoring.listeners.RefactoringElementListener
 import com.intellij.util.PathUtil
 import org.jdom.Element
+import org.jetbrains.annotations.Nls
 import org.jetbrains.kotlin.asJava.classes.KtLightClassForSourceDeclaration
 import org.jetbrains.kotlin.asJava.elements.KtLightMethod
 import org.jetbrains.kotlin.idea.KotlinJvmBundle.message
@@ -285,7 +286,7 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
         private fun getClasspathType(configurationModule: RunConfigurationModule?): Int {
             val module = configurationModule!!.module ?: throw CantRunException.noModuleConfigured(configurationModule.moduleName)
             val runClass = myConfiguration.runClass
-                ?: throw CantRunException(String.format("Run class should be defined for configuration '%s'", myConfiguration.name))
+                ?: throw CantRunException(message("run.configuration.error.no.class.defined", myConfiguration.name))
 
             val psiClass = JavaExecutionUtil.findMainClass(module, runClass)
                 ?: throw CantRunException.classNotFound(runClass, module)
@@ -313,11 +314,14 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
             return JavaParameters.JDK_AND_CLASSES
         }
 
+        @Nls
         private fun noFunctionFoundMessage(psiClass: PsiClass): String {
             val classFqName = FqName(psiClass.qualifiedName!!)
             return if (psiClass is KtLightClassForSourceDeclaration) {
                 message("run.configuration.error.main.not.found", classFqName)
-            } else message("run.configuration.error.main.not.found.top.level", classFqName.parent())
+            } else {
+                message("run.configuration.error.main.not.found.top.level", classFqName.parent())
+            }
         }
 
         companion object {
