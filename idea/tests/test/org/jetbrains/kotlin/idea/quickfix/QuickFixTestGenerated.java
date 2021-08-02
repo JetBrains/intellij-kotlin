@@ -690,14 +690,24 @@ public abstract class QuickFixTestGenerated extends AbstractQuickFixTest {
             runTest("testData/quickfix/addExclExclCall/null.kt");
         }
 
-        @TestMetadata("nullExpression.kt")
-        public void testNullExpression() throws Exception {
-            runTest("testData/quickfix/addExclExclCall/nullExpression.kt");
+        @TestMetadata("nullInitializer.kt")
+        public void testNullInitializer() throws Exception {
+            runTest("testData/quickfix/addExclExclCall/nullInitializer.kt");
+        }
+
+        @TestMetadata("nullInitializerWithUnstableSmartcast.kt")
+        public void testNullInitializerWithUnstableSmartcast() throws Exception {
+            runTest("testData/quickfix/addExclExclCall/nullInitializerWithUnstableSmartcast.kt");
         }
 
         @TestMetadata("nullReceiver.kt")
         public void testNullReceiver() throws Exception {
             runTest("testData/quickfix/addExclExclCall/nullReceiver.kt");
+        }
+
+        @TestMetadata("nullReceiverWithUnstableSmartcast.kt")
+        public void testNullReceiverWithUnstableSmartcast() throws Exception {
+            runTest("testData/quickfix/addExclExclCall/nullReceiverWithUnstableSmartcast.kt");
         }
 
         @TestMetadata("operationBinary.kt")
@@ -782,9 +792,14 @@ public abstract class QuickFixTestGenerated extends AbstractQuickFixTest {
                 runTest("testData/quickfix/addExclExclCall/typeMismatch/removeNullabilityForSubclass.kt");
             }
 
-            @TestMetadata("whenSmartCastImpossible.kt")
-            public void testWhenSmartCastImpossible() throws Exception {
-                runTest("testData/quickfix/addExclExclCall/typeMismatch/whenSmartCastImpossible.kt");
+            @TestMetadata("smartcastImpossibleForArgument.kt")
+            public void testSmartcastImpossibleForArgument() throws Exception {
+                runTest("testData/quickfix/addExclExclCall/typeMismatch/smartcastImpossibleForArgument.kt");
+            }
+
+            @TestMetadata("smartcastImpossibleForReceiver.kt")
+            public void testSmartcastImpossibleForReceiver() throws Exception {
+                runTest("testData/quickfix/addExclExclCall/typeMismatch/smartcastImpossibleForReceiver.kt");
             }
         }
     }
