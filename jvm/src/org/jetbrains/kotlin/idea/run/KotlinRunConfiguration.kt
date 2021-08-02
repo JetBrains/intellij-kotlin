@@ -55,8 +55,8 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 
-open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRunConfigurationModule, factory: ConfigurationFactory?) :
-    ModuleBasedConfiguration<JavaRunConfigurationModule?, Element?>(name, runConfigurationModule, factory!!),
+open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRunConfigurationModule, factory: ConfigurationFactory) :
+    ModuleBasedConfiguration<JavaRunConfigurationModule, Element?>(name, runConfigurationModule, factory),
     CommonJavaRunConfigurationParameters, RefactoringListenerProvider, InputRedirectAware {
 
     init {
@@ -91,7 +91,7 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
     }
 
     override fun setWorkingDirectory(value: String?) {
-        val normalizedValue = if (StringUtil.isEmptyOrSpaces(value)) null else value!!.trim { it <= ' ' }
+        val normalizedValue = if (value.isNullOrBlank()) null else value.trim { it <= ' ' }
         val independentValue = PathUtil.toSystemIndependentName(normalizedValue)
         options.workingDirectory = independentValue?.takeIf { it != defaultWorkingDirectory() }
     }
@@ -166,20 +166,20 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
     @Throws(RuntimeConfigurationException::class)
     override fun checkConfiguration() {
         JavaParametersUtil.checkAlternativeJRE(this)
-        ProgramParametersUtil.checkWorkingDirectoryExist(this, project, configurationModule!!.module)
+        ProgramParametersUtil.checkWorkingDirectoryExist(this, project, configurationModule.module)
         checkConfigurationIsValid(this)
-        val module = configurationModule!!.module
+        val module = configurationModule.module
             ?: throw RuntimeConfigurationError(message("run.configuration.error.no.module"))
         val mainClassName = options.mainClassName
-        if (StringUtil.isEmpty(mainClassName)) {
+        if (mainClassName.isNullOrEmpty()) {
             throw RuntimeConfigurationError(message("run.configuration.error.no.main.class"))
         }
 
         val psiClass = JavaExecutionUtil.findMainClass(module, mainClassName)
         if (psiClass == null) {
-            val moduleName = configurationModule!!.moduleName
+            val moduleName = configurationModule.moduleName
             throw RuntimeConfigurationWarning(
-                message("run.configuration.error.class.not.found", mainClassName!!, moduleName)
+                message("run.configuration.error.class.not.found", mainClassName, moduleName)
             )
         }
 
@@ -187,7 +187,7 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
             throw RuntimeConfigurationWarning(
                 message(
                     "run.configuration.error.class.no.main.method",
-                    mainClassName!!
+                    mainClassName
                 )
             )
         }
@@ -199,13 +199,10 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
     }
 
     override fun getRefactoringElementListener(element: PsiElement): RefactoringElementListener? {
-        val fqNameBeingRenamed: String?
-        fqNameBeingRenamed = if (element is KtDeclarationContainer) {
-            getStartClassFqName((element as KtDeclarationContainer))
-        } else if (element is PsiPackage) {
-            element.qualifiedName
-        } else {
-            null
+        val fqNameBeingRenamed = when (element) {
+            is KtDeclarationContainer -> getStartClassFqName(element)
+            is PsiPackage -> element.qualifiedName
+            else -> null
         }
         val mainClassName = options.mainClassName
         if (mainClassName == null ||
@@ -252,10 +249,10 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
 
     override fun suggestedName(): String? {
         val runClass = runClass
-        if (StringUtil.isEmpty(runClass)) {
+        if (runClass.isNullOrEmpty()) {
             return null
         }
-        val parts = StringUtil.split(runClass!!, ".")
+        val parts = StringUtil.split(runClass, ".")
         return if (parts.isEmpty()) {
             runClass
         } else parts[parts.size - 1]
@@ -271,7 +268,7 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
         override fun createJavaParameters(): JavaParameters {
             val params = JavaParameters()
             val module = myConfiguration.configurationModule
-            val classPathType = DumbService.getInstance(module!!.project).computeWithAlternativeResolveEnabled<Int, Exception> {
+            val classPathType = DumbService.getInstance(module.project).computeWithAlternativeResolveEnabled<Int, Exception> {
                 getClasspathType(module)
             }
             val jreHome = if (myConfiguration.isAlternativeJrePathEnabled) myConfiguration.alternativeJrePath else null
@@ -283,8 +280,8 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
             return params
         }
 
-        private fun getClasspathType(configurationModule: RunConfigurationModule?): Int {
-            val module = configurationModule!!.module ?: throw CantRunException.noModuleConfigured(configurationModule.moduleName)
+        private fun getClasspathType(configurationModule: RunConfigurationModule): Int {
+            val module = configurationModule.module ?: throw CantRunException.noModuleConfigured(configurationModule.moduleName)
             val runClass = myConfiguration.runClass
                 ?: throw CantRunException(message("run.configuration.error.no.class.defined", myConfiguration.name))
 
@@ -325,9 +322,9 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
         }
 
         companion object {
-            private fun setupModulePath(params: JavaParameters, module: JavaRunConfigurationModule?) {
+            private fun setupModulePath(params: JavaParameters, module: JavaRunConfigurationModule) {
                 if (JavaSdkUtil.isJdkAtLeast(params.jdk, JavaSdkVersion.JDK_1_9)) {
-                    DumbService.getInstance(module!!.project).computeWithAlternativeResolveEnabled<PsiJavaModule?, Exception> {
+                    DumbService.getInstance(module.project).computeWithAlternativeResolveEnabled<PsiJavaModule?, Exception> {
                         JavaModuleGraphUtil.findDescriptorByElement(module.findClass(params.mainClass))
                     }?.let { mainModule ->
                         params.moduleName = mainModule.name
