@@ -156,7 +156,7 @@ class ConvertFunctionTypeReceiverToParameterIntention : SelfTargetingRangeIntent
     private inner class Converter(
         private val data: ConversionData,
         project: Project,
-    ) : CallableRefactoring<CallableDescriptor>(project, editor, data.functionDescriptor, text) {
+    ) : CallableRefactoring<CallableDescriptor>(project, data.functionDescriptor, text) {
         override fun performRefactoring(descriptorsForChange: Collection<CallableDescriptor>) {
             val callables = getAffectedCallables(project, descriptorsForChange)
 
