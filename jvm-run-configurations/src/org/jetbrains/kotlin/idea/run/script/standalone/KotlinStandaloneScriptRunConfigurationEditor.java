@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2018 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -21,7 +21,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.PanelWithAnchor;
 import com.intellij.util.ui.UIUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.kotlin.idea.KotlinJvmBundle;
+import org.jetbrains.kotlin.idea.KotlinRunConfigurationsBundle;
 import org.jetbrains.kotlin.parsing.KotlinParserDefinition;
 
 import javax.swing.*;
@@ -51,7 +51,7 @@ public class KotlinStandaloneScriptRunConfigurationEditor extends SettingsEditor
                 .withTreeRootVisible(true);
 
         chooseScriptFileTextField.addBrowseFolderListener(
-                KotlinJvmBundle.message("script.choose.file"),
+                KotlinRunConfigurationsBundle.message("script.choose.file"),
                 null, project, descriptor, TextComponentAccessor.TEXT_FIELD_WHOLE_TEXT
         );
     }
