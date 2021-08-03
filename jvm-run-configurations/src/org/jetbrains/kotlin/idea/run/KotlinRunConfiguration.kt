@@ -40,7 +40,7 @@ import com.intellij.util.PathUtil
 import org.jdom.Element
 import org.jetbrains.annotations.Nls
 import org.jetbrains.kotlin.asJava.classes.KtLightClassForSourceDeclaration
-import org.jetbrains.kotlin.idea.KotlinJvmBundle.message
+import org.jetbrains.kotlin.idea.KotlinRunConfigurationsBundle.message
 import org.jetbrains.kotlin.idea.core.isInTestSourceContentKotlinAware
 import org.jetbrains.kotlin.idea.run.KotlinRunConfigurationProducer.Companion.getStartClassFqName
 import org.jetbrains.kotlin.name.FqName

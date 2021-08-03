@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2020 JetBrains s.r.o. and Kotlin Programming Language contributors.
+ * Copyright 2010-2021 JetBrains s.r.o. and Kotlin Programming Language contributors.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the license/LICENSE.txt file.
  */
 
@@ -7,13 +7,11 @@ package org.jetbrains.kotlin.idea.run.script.standalone
 
 import com.intellij.execution.*
 import com.intellij.execution.application.BaseJavaApplicationCommandLineState
-import com.intellij.execution.configuration.EnvironmentVariablesComponent
 import com.intellij.execution.configurations.*
 import com.intellij.execution.runners.ExecutionEnvironment
 import com.intellij.execution.util.JavaParametersUtil
 import com.intellij.execution.util.ProgramParametersUtil
 import com.intellij.ide.projectView.impl.ProjectRootsUtil
-import com.intellij.openapi.components.PathMacroManager
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ModuleUtilCore
 import com.intellij.openapi.options.SettingsEditor
@@ -28,7 +26,7 @@ import com.intellij.refactoring.listeners.RefactoringElementAdapter
 import com.intellij.refactoring.listeners.RefactoringElementListener
 import com.intellij.util.PathUtil
 import org.jdom.Element
-import org.jetbrains.kotlin.idea.KotlinJvmBundle
+import org.jetbrains.kotlin.idea.KotlinRunConfigurationsBundle
 import org.jetbrains.kotlin.idea.artifacts.KotlinArtifacts
 import org.jetbrains.kotlin.idea.core.script.ScriptConfigurationManager
 import org.jetbrains.kotlin.idea.run.KotlinRunConfiguration
@@ -36,7 +34,6 @@ import org.jetbrains.kotlin.idea.run.script.standalone.KotlinStandaloneScriptRun
 import org.jetbrains.kotlin.idea.util.ProjectRootsUtil.isProjectSourceFile
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
-import java.util.*
 
 class KotlinStandaloneScriptRunConfiguration(
     project: Project,
@@ -85,11 +82,11 @@ class KotlinStandaloneScriptRunConfiguration(
         JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this)
 
         if (filePath.isNullOrEmpty()) {
-            runtimeConfigurationWarning(KotlinJvmBundle.message("file.was.not.specified"))
+            runtimeConfigurationWarning(KotlinRunConfigurationsBundle.message("file.was.not.specified"))
         }
         val virtualFile = LocalFileSystem.getInstance().findFileByIoFile(File(filePath))
         if (virtualFile == null || virtualFile.isDirectory) {
-            runtimeConfigurationWarning(KotlinJvmBundle.message("could.not.find.script.file.0", filePath.toString()))
+            runtimeConfigurationWarning(KotlinRunConfigurationsBundle.message("could.not.find.script.file.0", filePath.toString()))
         }
     }
 

@@ -902,6 +902,7 @@
       <module fileurl="file://$PROJECT_DIR$/jps/jps-common/kotlin.jps-common.iml" filepath="$PROJECT_DIR$/jps/jps-common/kotlin.jps-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/jps/jps-plugin/kotlin.jps-plugin.iml" filepath="$PROJECT_DIR$/jps/jps-plugin/kotlin.jps-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/jvm/kotlin.jvm.iml" filepath="$PROJECT_DIR$/jvm/kotlin.jvm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jvm-run-configurations/kotlin.jvm-run-configurations.iml" filepath="$PROJECT_DIR$/jvm-run-configurations/kotlin.jvm-run-configurations.iml" />
       <module fileurl="file://$PROJECT_DIR$/jvm-debugger/core/kotlin.jvm-debugger.core.iml" filepath="$PROJECT_DIR$/jvm-debugger/core/kotlin.jvm-debugger.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/jvm-debugger/coroutines/kotlin.jvm-debugger.coroutines.iml" filepath="$PROJECT_DIR$/jvm-debugger/coroutines/kotlin.jvm-debugger.coroutines.iml" />
       <module fileurl="file://$PROJECT_DIR$/jvm-debugger/evaluation/kotlin.jvm-debugger.evaluation.iml" filepath="$PROJECT_DIR$/jvm-debugger/evaluation/kotlin.jvm-debugger.evaluation.iml" />
