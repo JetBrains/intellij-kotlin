@@ -122,7 +122,7 @@ object AdditionalKotlinArtifacts {
         )
         lazyUnpackJar(
             testDataJar,
-            File(PathManager.getHomePath(), "out").resolve("kotlinc-testdata"),
+            KotlinRoot.DIR.resolve("out").resolve("kotlinc-testdata"),
             "testData"
         )
     }
