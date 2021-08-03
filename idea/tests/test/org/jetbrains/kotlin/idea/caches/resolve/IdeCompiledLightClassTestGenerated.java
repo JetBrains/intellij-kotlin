@@ -21,7 +21,7 @@ import static org.jetbrains.kotlin.idea.artifacts.AdditionalKotlinArtifacts.comp
 @TestRoot("idea/tests")
 @TestDataPath("$CONTENT_ROOT")
 @RunWith(JUnit3RunnerWithInners.class)
-@TestMetadata("../../../intellij/out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses")
+@TestMetadata("../../out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses")
 public class IdeCompiledLightClassTestGenerated extends AbstractIdeCompiledLightClassTest {
     private void runTest(String testDataFilePath) throws Exception {
         KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
@@ -179,7 +179,7 @@ public class IdeCompiledLightClassTestGenerated extends AbstractIdeCompiledLight
     }
 
     @RunWith(JUnit3RunnerWithInners.class)
-    @TestMetadata("../../../intellij/out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/delegation")
+    @TestMetadata("../../out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/delegation")
     public static class Delegation extends AbstractIdeCompiledLightClassTest {
         private void runTest(String testDataFilePath) throws Exception {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
@@ -203,7 +203,7 @@ public class IdeCompiledLightClassTestGenerated extends AbstractIdeCompiledLight
     }
 
     @RunWith(JUnit3RunnerWithInners.class)
-    @TestMetadata("../../../intellij/out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/facades")
+    @TestMetadata("../../out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/facades")
     public static class Facades extends AbstractIdeCompiledLightClassTest {
         private void runTest(String testDataFilePath) throws Exception {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
@@ -237,7 +237,7 @@ public class IdeCompiledLightClassTestGenerated extends AbstractIdeCompiledLight
     }
 
     @RunWith(JUnit3RunnerWithInners.class)
-    @TestMetadata("../../../intellij/out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/nullabilityAnnotations")
+    @TestMetadata("../../out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/nullabilityAnnotations")
     public static class NullabilityAnnotations extends AbstractIdeCompiledLightClassTest {
         private void runTest(String testDataFilePath) throws Exception {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
@@ -341,7 +341,7 @@ public class IdeCompiledLightClassTestGenerated extends AbstractIdeCompiledLight
     }
 
     @RunWith(JUnit3RunnerWithInners.class)
-    @TestMetadata("../../../intellij/out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/object")
+    @TestMetadata("../../out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/object")
     public static class Object extends AbstractIdeCompiledLightClassTest {
         private void runTest(String testDataFilePath) throws Exception {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
@@ -360,7 +360,7 @@ public class IdeCompiledLightClassTestGenerated extends AbstractIdeCompiledLight
     }
 
     @RunWith(JUnit3RunnerWithInners.class)
-    @TestMetadata("../../../intellij/out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/publicField")
+    @TestMetadata("../../out/kotlinc-testdata/testData/compiler/testData/asJava/lightClasses/publicField")
     public static class PublicField extends AbstractIdeCompiledLightClassTest {
         private void runTest(String testDataFilePath) throws Exception {
             KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
