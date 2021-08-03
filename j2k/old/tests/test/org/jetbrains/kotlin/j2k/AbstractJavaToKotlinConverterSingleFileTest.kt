@@ -72,7 +72,7 @@ abstract class AbstractJavaToKotlinConverterSingleFileTest : AbstractJavaToKotli
 
         if (prefix == "file") {
             actual = createKotlinFile(actual)
-                .dumpTextWithErrors(setOf(element = ErrorsJvm.INTERFACE_STATIC_METHOD_CALL_FROM_JAVA6_TARGET_ERROR))
+                .dumpTextWithErrors(setOf(element = ErrorsJvm.INTERFACE_STATIC_METHOD_CALL_FROM_JAVA6_TARGET.errorFactory))
         }
 
 
