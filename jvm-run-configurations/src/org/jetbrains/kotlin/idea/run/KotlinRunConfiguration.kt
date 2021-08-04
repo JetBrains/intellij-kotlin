@@ -174,7 +174,7 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
             )
         }
 
-        if (KotlinMainFunctionLocatingService.findMainInClass(psiClass) == null) {
+        if (findMainInClass(psiClass) == null) {
             throw RuntimeConfigurationWarning(
                 message(
                     "run.configuration.error.class.no.main.method",
@@ -225,7 +225,7 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
     }
 
     private fun updateMainClassName(element: PsiElement) {
-        val container = KotlinMainFunctionLocatingService.getEntryPointContainer(element) ?: return
+        val container = EntryPointContainerFinder.find(element) ?: return
         val name = getStartClassFqName(container)
         if (name != null) {
             runClass = name
@@ -278,7 +278,7 @@ open class KotlinRunConfiguration(name: String?, runConfigurationModule: JavaRun
 
             val psiClass = JavaExecutionUtil.findMainClass(module, runClass)
                 ?: throw CantRunException.classNotFound(runClass, module)
-            val mainFun = KotlinMainFunctionLocatingService.findMainInClass(psiClass)
+            val mainFun = findMainInClass(psiClass)
                 ?: throw CantRunException(noFunctionFoundMessage(psiClass))
 
             var classModule = ModuleUtilCore.findModuleForPsiElement(mainFun)
