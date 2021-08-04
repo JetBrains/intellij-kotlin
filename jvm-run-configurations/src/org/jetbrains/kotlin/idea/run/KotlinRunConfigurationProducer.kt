@@ -51,7 +51,7 @@ class KotlinRunConfigurationProducer : LazyRunConfigurationProducer<KotlinRunCon
         if (location == null) return null
         if (DumbService.getInstance(location.project).isDumb) return null
 
-        return KotlinMainFunctionLocatingService.getEntryPointContainer(location.psiElement)
+        return EntryPointContainerFinder.find(location.psiElement)
     }
 
     override fun isConfigurationFromContext(configuration: KotlinRunConfiguration, context: ConfigurationContext): Boolean {
