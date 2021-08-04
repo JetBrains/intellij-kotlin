@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
+import org.jetbrains.uast.UastCallKind
 
 interface BaseKotlinUastResolveProviderService {
     fun isJvmElement(psiElement: PsiElement): Boolean
@@ -26,8 +27,6 @@ interface BaseKotlinUastResolveProviderService {
 
     fun convertParent(uElement: UElement, parent: PsiElement?): UElement?
 
-    fun getReferenceVariants(ktExpression: KtExpression, nameHint: String): Sequence<PsiElement>
-
     fun getArgumentForParameter(ktCallElement: KtCallElement, index: Int, parent: UElement): UExpression?
 
     fun getImplicitReturn(ktLambdaExpression: KtLambdaExpression, parent: UElement): KotlinUImplicitReturnExpression?
@@ -38,7 +37,17 @@ interface BaseKotlinUastResolveProviderService {
     // Resolution
     // ----------
 
+    fun getReferenceVariants(ktExpression: KtExpression, nameHint: String): Sequence<PsiElement>
+
     fun resolveCall(ktElement: KtElement): PsiMethod?
+
+    fun isResolvedToExtension(ktCallElement: KtCallElement): Boolean
+
+    fun resolvedFunctionName(ktCallElement: KtCallElement): String?
+
+    fun callKind(ktCallElement: KtCallElement): UastCallKind
+
+    fun resolveToClassIfConstructorCall(ktCallElement: KtCallElement, source: UElement): PsiElement?
 
     fun resolveToDeclaration(ktExpression: KtExpression): PsiElement?
 
@@ -47,6 +56,8 @@ interface BaseKotlinUastResolveProviderService {
     // ----------
     // Types
     // ----------
+
+    fun getReceiverType(ktCallElement: KtCallElement, source: UElement): PsiType?
 
     fun getDoubleColonReceiverType(ktDoubleColonExpression: KtDoubleColonExpression, source: UElement): PsiType?
 

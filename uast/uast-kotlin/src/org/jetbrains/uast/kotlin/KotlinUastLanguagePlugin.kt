@@ -23,10 +23,6 @@ import org.jetbrains.kotlin.asJava.classes.KtLightClassForFacade
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.idea.KotlinLanguage
-import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
-import org.jetbrains.kotlin.kdoc.psi.impl.KDocName
-import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
-import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
@@ -39,7 +35,6 @@ import org.jetbrains.uast.util.ClassSetsWrapper
 
 class KotlinUastLanguagePlugin : UastLanguagePlugin {
     override val priority = 10
-
 
     override val language: Language
         get() = KotlinLanguage.INSTANCE
@@ -82,7 +77,7 @@ class KotlinUastLanguagePlugin : UastLanguagePlugin {
         val parent = element.parent
         val parentUElement = convertElementWithParent(parent, null) ?: return null
 
-        val uExpression = KotlinUFunctionCallExpression(element, parentUElement, resolvedCall)
+        val uExpression = KotlinUFunctionCallExpression(element, parentUElement)
         val method = uExpression.resolve() ?: return null
         if (method.name != methodName) return null
         return UastLanguagePlugin.ResolvedMethod(uExpression, method)
@@ -104,7 +99,7 @@ class KotlinUastLanguagePlugin : UastLanguagePlugin {
         val parent = KotlinConverter.unwrapElements(element.parent) ?: return null
         val parentUElement = convertElementWithParent(parent, null) ?: return null
 
-        val uExpression = KotlinUFunctionCallExpression(element, parentUElement, resolvedCall)
+        val uExpression = KotlinUFunctionCallExpression(element, parentUElement)
         val method = uExpression.resolve() ?: return null
         val containingClass = method.containingClass ?: return null
         return UastLanguagePlugin.ResolvedConstructor(uExpression, method, containingClass)

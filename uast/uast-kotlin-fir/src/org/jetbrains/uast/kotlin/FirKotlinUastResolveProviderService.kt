@@ -10,6 +10,8 @@ import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiType
 import org.jetbrains.kotlin.idea.frontend.api.KtTypeArgumentWithVariance
 import org.jetbrains.kotlin.idea.frontend.api.analyseForUast
+import org.jetbrains.kotlin.idea.frontend.api.symbols.KtConstructorSymbol
+import org.jetbrains.kotlin.idea.frontend.api.symbols.markers.KtNamedSymbol
 import org.jetbrains.kotlin.idea.frontend.api.types.*
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.load.kotlin.TypeMappingMode
@@ -18,6 +20,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
+import org.jetbrains.uast.UastCallKind
 import org.jetbrains.uast.UastErrorType
 import org.jetbrains.uast.kotlin.internal.toPsiMethod
 import org.jetbrains.uast.kotlin.psi.UastKotlinPsiParameterBase
@@ -78,6 +81,11 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
 
     override fun resolveCall(ktElement: KtElement): PsiMethod? {
         when (ktElement) {
+            is KtCallElement -> {
+                analyseForUast(ktElement) {
+                    return ktElement.resolveCall()?.toPsiMethod()
+                }
+            }
             is KtBinaryExpression -> {
                 analyseForUast(ktElement) {
                     return ktElement.resolveCall()?.toPsiMethod()
@@ -90,6 +98,43 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
             }
             else ->
                 return null
+        }
+    }
+
+    override fun isResolvedToExtension(ktCallElement: KtCallElement): Boolean {
+        analyseForUast(ktCallElement) {
+            val resolvedFunctionLikeSymbol = ktCallElement.resolveCall()?.targetFunction?.candidates?.singleOrNull() ?: return false
+            return resolvedFunctionLikeSymbol.isExtension
+        }
+    }
+
+    override fun resolvedFunctionName(ktCallElement: KtCallElement): String? {
+        analyseForUast(ktCallElement) {
+            val resolvedFunctionLikeSymbol = ktCallElement.resolveCall()?.targetFunction?.candidates?.singleOrNull() ?: return null
+            return (resolvedFunctionLikeSymbol as? KtNamedSymbol)?.name?.identifierOrNullIfSpecial
+        }
+    }
+
+    override fun callKind(ktCallElement: KtCallElement): UastCallKind {
+        analyseForUast(ktCallElement) {
+            val resolvedFunctionLikeSymbol =
+                ktCallElement.resolveCall()?.targetFunction?.candidates?.singleOrNull() ?: return UastCallKind.METHOD_CALL
+            return when (resolvedFunctionLikeSymbol) {
+                is KtConstructorSymbol -> UastCallKind.CONSTRUCTOR_CALL
+                // TODO: NESTED_ARRAY_INITIALIZER
+                else -> UastCallKind.METHOD_CALL
+            }
+        }
+    }
+
+    override fun resolveToClassIfConstructorCall(ktCallElement: KtCallElement, source: UElement): PsiElement? {
+        analyseForUast(ktCallElement) {
+            val resolvedFunctionLikeSymbol = ktCallElement.resolveCall()?.targetFunction?.candidates?.singleOrNull() ?: return null
+            return when (resolvedFunctionLikeSymbol) {
+                is KtConstructorSymbol -> null // TODO: PsiClass for the containing class
+                // TODO: SAM constructor
+                else -> null
+            }
         }
     }
 
@@ -115,6 +160,14 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
             val ktType = ktTypeReference.getKtType()
             if (ktType is KtClassErrorType) return null
             return ktType.asPsiType(ktTypeReference, TypeMappingMode.DEFAULT_UAST)
+        }
+    }
+
+    override fun getReceiverType(ktCallElement: KtCallElement, source: UElement): PsiType? {
+        analyseForUast(ktCallElement) {
+            val ktType = ktCallElement.resolveCall()?.targetFunction?.candidates?.singleOrNull()?.receiverType?.type ?: return null
+            if (ktType is KtClassErrorType) return null
+            return ktType.asPsiType(ktCallElement, TypeMappingMode.DEFAULT_UAST)
         }
     }
 

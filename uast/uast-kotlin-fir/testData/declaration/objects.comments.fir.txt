@@ -1,35 +1,35 @@
 KotlinUFile(
     UComment(// file comment)
-    FirKotlinUClass(
+    KotlinUClass(
         KotlinUField(
             UComment(// Single-line comment bound to top-level property)
             KotlinUAnonymousClass(
-                FirKotlinUMethod(
+                KotlinUMethod(
                 )
             )
         )
-        FirKotlinUMethod(
+        KotlinUMethod(
             UComment(// Single-line comment bound to top-level property)
         )
-        FirKotlinUMethod(
+        KotlinUMethod(
         )
     )
-    FirKotlinUClass(
+    KotlinUClass(
         UComment(// Single-line comment bound to object)
         KotlinUField(
             UComment(// Single-line comment bound to object)
         )
         KotlinUField(
         )
-        FirKotlinConstructorUMethod(
+        KotlinConstructorUMethod(
         )
-        FirKotlinUMethod(
+        KotlinUMethod(
         )
-        FirKotlinUMethod(
+        KotlinUMethod(
             KotlinUParameter(
             )
         )
-        FirKotlinUMethod(
+        KotlinUMethod(
         )
     )
 )

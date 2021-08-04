@@ -5,9 +5,10 @@
 
 package org.jetbrains.uast.kotlin
 
-import com.intellij.openapi.components.ServiceManager
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiEnumConstant
+import com.intellij.psi.PsiField
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.asJava.LightClassUtil
 import org.jetbrains.kotlin.asJava.classes.KtLightClass
@@ -71,6 +72,12 @@ internal object FirKotlinConverter : BaseKotlinConverter {
             ctor(original as P, ktElement, givenParent)
         }
 
+        fun Array<out Class<out UElement>>.convertToUField(original: PsiField, kotlinOrigin: KtElement?): UElement? =
+            if (original is PsiEnumConstant)
+                el<UEnumConstant>(buildKtOpt(kotlinOrigin, ::KotlinUEnumConstant))
+            else
+                el<UField>(buildKtOpt(kotlinOrigin, ::KotlinUField))
+
         return with(requiredTypes) {
             when (original) {
                 is KtFile -> {
@@ -81,17 +88,28 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 }
 
                 is KtLightClass -> {
-                    // TODO: differentiate enum entry
-                    el<UClass> { FirKotlinUClass.create(original, givenParent) }
+                    when (original.kotlinOrigin) {
+                        is KtEnumEntry -> el<UEnumConstant> {
+                            convertEnumEntry(original.kotlinOrigin as KtEnumEntry, givenParent)
+                        }
+                        else -> el<UClass> { KotlinUClass.create(original, givenParent) }
+                    }
                 }
                 is KtClassOrObject -> {
                     convertClassOrObject(original, givenParent, requiredTypes).firstOrNull()
                 }
-                // TODO: KtEnumEntry
+                is KtEnumEntry -> {
+                    el<UEnumConstant> {
+                        convertEnumEntry(original, givenParent)
+                    }
+                }
 
                 is KtLightField -> {
-                    // TODO: differentiate enum constant
-                    el<UField>(buildKtOpt(original.kotlinOrigin, ::KotlinUField))
+                    convertToUField(original, original.kotlinOrigin)
+                }
+                is KtLightFieldForSourceDeclarationSupport -> {
+                    // KtLightFieldForDecompiledDeclaration is not a KtLightField
+                    convertToUField(original, original.kotlinOrigin)
                 }
                 is UastKotlinPsiVariable -> {
                     el<ULocalVariable>(buildKt(original.ktElement, ::KotlinULocalVariable))
@@ -116,12 +134,12 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                     }
                 }
                 is KtPropertyAccessor -> {
-                    el<UMethod> { FirKotlinUMethod.create(original, givenParent) }
+                    el<UMethod> { KotlinUMethod.create(original, givenParent) }
                 }
 
                 is KtLightMethod -> {
                     // .Companion is needed because of KT-13934
-                    el<UMethod>(build(FirKotlinUMethod.Companion::create))
+                    el<UMethod>(build(KotlinUMethod.Companion::create))
                 }
                 is KtFunction -> {
                     if (original.isLocal) {
@@ -142,7 +160,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                             }
                         }
                     } else {
-                        el<UMethod> { FirKotlinUMethod.create(original, givenParent) }
+                        el<UMethod> { KotlinUMethod.create(original, givenParent) }
                     }
                 }
 
@@ -167,7 +185,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
             // File
           alternative { KotlinUFile(element, firKotlinUastPlugin) },
             // Facade
-          alternative { element.findFacadeClass()?.let { FirKotlinUClass.create(it, givenParent) } }
+          alternative { element.findFacadeClass()?.let { KotlinUClass.create(it, givenParent) } }
         )
     }
 
@@ -177,7 +195,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
         requiredTypes: Array<out Class<out UElement>>
     ): Sequence<UElement> {
         val ktLightClass = element.toLightClass() ?: return emptySequence()
-        val uClass = FirKotlinUClass.create(ktLightClass, givenParent)
+        val uClass = KotlinUClass.create(ktLightClass, givenParent)
         return requiredTypes.accommodate(
             // Class
             alternative { uClass },
@@ -282,6 +300,14 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                         alternative { KotlinUTypeReferenceExpression(element, givenParent) },
                         alternative { convertReceiverParameter(element) }
                     ).firstOrNull()
+                is KtConstructorDelegationCall ->
+                    el<UCallExpression> { KotlinUFunctionCallExpression(element, givenParent) }
+                is KtSuperTypeCallEntry ->
+                    el<UExpression> {
+                        (element.getParentOfType<KtClassOrObject>(true)?.parent as? KtObjectLiteralExpression)
+                            ?.toUElementOfType<UExpression>()
+                            ?: KotlinUFunctionCallExpression(element, givenParent)
+                    }
                 is KtImportDirective -> {
                     el<UImportStatement>(build(::KotlinUImportStatement))
                 }
@@ -363,7 +389,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                             expr<ULiteralExpression> { KotlinStringULiteralExpression(expression, givenParent, "") }
                         }
                         expression.entries.size == 1 -> {
-                            convertEntry(expression.entries[0], givenParent, requiredTypes)
+                            convertStringTemplateEntry(expression.entries[0], givenParent, requiredTypes)
                         }
                         else -> {
                             expr<KotlinStringTemplateUPolyadicExpression> {
@@ -413,6 +439,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 is KtDotQualifiedExpression -> expr<UQualifiedReferenceExpression>(build(::KotlinUQualifiedReferenceExpression))
                 is KtSafeQualifiedExpression -> expr<UQualifiedReferenceExpression>(build(::KotlinUSafeQualifiedExpression))
                 is KtSimpleNameExpression -> expr<USimpleNameReferenceExpression>(build(::FirKotlinUSimpleReferenceExpression))
+                is KtCallExpression -> expr<UCallExpression>(build(::KotlinUFunctionCallExpression))
 
                 is KtBinaryExpression -> {
                     if (expression.operationToken == KtTokens.ELVIS) {
@@ -427,7 +454,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
                 is KtClassOrObject -> expr<UDeclarationsExpression> {
                     expression.toLightClass()?.let { lightClass ->
                         KotlinUDeclarationsExpression(givenParent).apply {
-                            declarations = listOf(FirKotlinUClass.create(lightClass, this))
+                            declarations = listOf(KotlinUClass.create(lightClass, this))
                         }
                     } ?: UastEmptyExpression(givenParent)
                 }

@@ -12,9 +12,12 @@ import org.jetbrains.kotlin.builtins.createFunctionType
 import org.jetbrains.kotlin.codegen.state.KotlinTypeMapper
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.CompileTimeConstantUtils
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsResultOfLambda
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.callUtil.getType
@@ -30,6 +33,7 @@ import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.kotlin.types.typeUtil.nullability
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
+import org.jetbrains.uast.UastCallKind
 import org.jetbrains.uast.UastSpecialExpressionKind
 import org.jetbrains.uast.kotlin.psi.UastKotlinPsiParameterBase
 
@@ -115,6 +119,44 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
         return resolveToPsiMethod(ktElement)
     }
 
+    override fun isResolvedToExtension(ktCallElement: KtCallElement): Boolean {
+        val resolvedCall = ktCallElement.getResolvedCall(ktCallElement.analyze()) ?: return false
+        return resolvedCall.extensionReceiver != null
+    }
+
+    override fun resolvedFunctionName(ktCallElement: KtCallElement): String? {
+        val resolvedCall = ktCallElement.getResolvedCall(ktCallElement.analyze()) ?: return null
+        return resolvedCall.resultingDescriptor.name.asString()
+    }
+
+    override fun callKind(ktCallElement: KtCallElement): UastCallKind {
+        val resolvedCall = ktCallElement.getResolvedCall(ktCallElement.analyze()) ?: return UastCallKind.METHOD_CALL
+        return when {
+            resolvedCall.resultingDescriptor is ConstructorDescriptor -> UastCallKind.CONSTRUCTOR_CALL
+            isAnnotationArgumentArrayInitializer(ktCallElement, resolvedCall) -> UastCallKind.NESTED_ARRAY_INITIALIZER
+            else -> UastCallKind.METHOD_CALL
+        }
+    }
+
+    private fun isAnnotationArgumentArrayInitializer(
+        ktCallElement: KtCallElement,
+        resolvedCall: ResolvedCall<out CallableDescriptor>
+    ): Boolean {
+        // KtAnnotationEntry (or KtCallExpression when annotation is nested) -> KtValueArgumentList -> KtValueArgument -> arrayOf call
+        val isAnnotationArgument = when (val elementAt2 = ktCallElement.parents.elementAtOrNull(2)) {
+            is KtAnnotationEntry -> true
+            is KtCallExpression -> elementAt2.getParentOfType<KtAnnotationEntry>(true, KtDeclaration::class.java) != null
+            else -> false
+        }
+        if (!isAnnotationArgument) return false
+
+        return CompileTimeConstantUtils.isArrayFunctionCall(resolvedCall)
+    }
+
+    override fun resolveToClassIfConstructorCall(ktCallElement: KtCallElement, source: UElement): PsiElement? {
+        return resolveToClassIfConstructorCallImpl(ktCallElement, source)
+    }
+
     override fun resolveToDeclaration(ktExpression: KtExpression): PsiElement? {
         if (ktExpression is KtExpressionWithLabel) {
             return ktExpression.analyze()[BindingContext.LABEL_TARGET, ktExpression.getTargetLabel()]
@@ -124,6 +166,12 @@ interface KotlinUastResolveProviderService : BaseKotlinUastResolveProviderServic
 
     override fun resolveToType(ktTypeReference: KtTypeReference, source: UElement): PsiType? {
         return ktTypeReference.toPsiType(source)
+    }
+
+    override fun getReceiverType(ktCallElement: KtCallElement, source: UElement): PsiType? {
+        val resolvedCall = ktCallElement.getResolvedCall(ktCallElement.analyze()) ?: return null
+        val receiver = resolvedCall.dispatchReceiver ?: resolvedCall.extensionReceiver ?: return null
+        return receiver.type.toPsiType(source, ktCallElement, boxed = true)
     }
 
     override fun getDoubleColonReceiverType(ktDoubleColonExpression: KtDoubleColonExpression, source: UElement): PsiType? {
