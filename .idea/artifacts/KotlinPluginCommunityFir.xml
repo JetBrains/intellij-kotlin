@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <component name="ArtifactManager">
   <artifact name="KotlinPluginCommunityFir">
     <output-path>$PROJECT_DIR$/out/artifacts/KotlinPluginCommunityFir</output-path>
@@ -206,6 +207,9 @@
         </element>
         <element id="archive" name="uast-kotlin-fir.jar">
           <element id="module-output" name="kotlin.uast.uast-kotlin-fir" />
+        </element>
+        <element id="archive" name="kotlin-jvm-run-configurations.jar">
+          <element id="module-output" name="kotlin.jvm-run-configurations" />
         </element>
         <element id="archive" name="uast-kotlin-base.jar">
           <element id="module-output" name="kotlin.uast.uast-kotlin-base" />
