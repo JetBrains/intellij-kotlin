@@ -193,7 +193,7 @@ internal object FirKotlinConverter : BaseKotlinConverter {
             *convertToPropertyAlternatives(LightClassUtil.getLightClassPropertyMethods(element), givenParent)
         )
 
-    var forceUInjectionHost = Registry.`is`("kotlin.uast.force.uinjectionhost", false)
+    var forceUInjectionHost = Registry.`is`("kotlin.fir.uast.force.uinjectionhost", false)
         @TestOnly
         set(value) {
             field = value
