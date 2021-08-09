@@ -52,7 +52,6 @@ class ComposeAndroidTemplate : Template() {
     ) = irsList {
         +GradleOnlyPluginByNameIR("org.jetbrains.compose", version = Versions.JETBRAINS_COMPOSE)
         +RepositoryIR(Repositories.JETBRAINS_COMPOSE_DEV)
-        +RepositoryIR(DefaultRepository.JCENTER)
         +RepositoryIR(DefaultRepository.GOOGLE)
         +Dependencies.ACTIVITY_COMPOSE
     }
@@ -76,7 +75,7 @@ class ComposeAndroidTemplate : Template() {
     }
 
     override fun Writer.runArbitratyTask(module: ModuleIR): TaskResult<Unit> = compute {
-        BuildSystemPlugin.pluginRepositoreis.addValues(Repositories.JETBRAINS_COMPOSE_DEV).ensure()
+        BuildSystemPlugin.pluginRepositoreis.addValues(Repositories.JETBRAINS_COMPOSE_DEV, DefaultRepository.GOOGLE).ensure()
 
         //TODO hacky!
         TemplatesPlugin.fileTemplatesToRender.update { templates ->
