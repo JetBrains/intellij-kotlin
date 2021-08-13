@@ -9,6 +9,7 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.psi.SmartPsiElementPointer
 import org.jetbrains.kotlin.idea.KotlinBundle
+import org.jetbrains.kotlin.idea.core.ShortenReferences
 import org.jetbrains.kotlin.idea.util.addAnnotation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -45,6 +46,7 @@ open class AddAnnotationFix(
             val psiFactory = KtPsiFactory(declaration)
             annotationEntry.valueArgumentList?.addArgument(psiFactory.createArgument(annotationInnerText))
                 ?: annotationEntry.addAfter(psiFactory.createCallArguments("($annotationInnerText)"), annotationEntry.lastChild)
+            ShortenReferences.DEFAULT.process(annotationEntry)
         } else {
             declaration.addAnnotation(annotationFqName, annotationInnerText)
         }
