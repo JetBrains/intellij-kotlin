@@ -157,7 +157,7 @@ internal open class FirCallableCompletionContributor(
         extensionChecker: ExtensionApplicabilityChecker,
         visibilityChecker: CompletionVisibilityChecker,
     ) {
-        val typeOfPossibleReceiver = explicitReceiver.getKtType()
+        val typeOfPossibleReceiver = explicitReceiver.getKtType() ?: return
         val possibleReceiverScope = typeOfPossibleReceiver.getTypeScope() ?: return
 
         val nonExtensionMembers = collectNonExtensions(possibleReceiverScope, visibilityChecker)
