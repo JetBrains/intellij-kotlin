@@ -54,7 +54,7 @@ class HLConvertToBlockBodyIntention :
         fun KtAnalysisSession.createInputForDeclaration(declaration: KtDeclarationWithBody, reformat: Boolean): Input? {
             val body = declaration.bodyExpression ?: return null
             val returnType = declaration.getReturnKtType().approximateToSuperPublicDenotableOrSelf()
-            val bodyType = body.getKtType()
+            val bodyType = body.getKtType() ?: return null
             return Input(
                 returnType.isUnit,
                 returnType.isNothing,

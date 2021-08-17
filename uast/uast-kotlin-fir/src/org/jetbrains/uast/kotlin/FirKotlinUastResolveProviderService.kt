@@ -77,7 +77,7 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
     override fun getExpressionType(uExpression: UExpression): PsiType? {
         val ktExpression = uExpression.sourcePsi as? KtExpression ?: return null
         analyseForUast(ktExpression) {
-            return ktExpression.getKtType().asPsiType(ktExpression, TypeMappingMode.DEFAULT_UAST)
+            return ktExpression.getKtType()?.asPsiType(ktExpression, TypeMappingMode.DEFAULT_UAST)
         }
     }
 
