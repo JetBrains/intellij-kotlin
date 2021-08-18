@@ -6,14 +6,14 @@ import com.intellij.codeInsight.intention.LowPriorityAction
 import com.intellij.openapi.editor.Editor
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.idea.KotlinBundle
-import org.jetbrains.kotlin.idea.core.receiverType
-import org.jetbrains.kotlin.idea.inspections.dfa.getKotlinType
+import org.jetbrains.kotlin.idea.caches.resolve.analyze
+import org.jetbrains.kotlin.idea.debugger.sequence.psi.receiverType
 import org.jetbrains.kotlin.idea.inspections.findExistingEditor
 import org.jetbrains.kotlin.idea.intentions.loopToCallChain.isConstant
 import org.jetbrains.kotlin.idea.refactoring.fqName.fqName
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
+import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
@@ -235,6 +235,8 @@ class ConvertArgumentToSetIntention : SelfTargetingIntention<KtExpression>(
         private fun KotlinType.hasMatchingSupertype(predicate: (KotlinType) -> Boolean): Boolean {
             return predicate(this) || constructor.supertypes.any { it.hasMatchingSupertype(predicate) }
         }
+
+        private fun KtExpression.getKotlinType(): KotlinType? = analyze(BodyResolveMode.PARTIAL).getType(this)
     }
 }
 

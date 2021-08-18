@@ -8,6 +8,7 @@ package org.jetbrains.uast.kotlin
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiType
 import org.jetbrains.kotlin.idea.frontend.api.analyseForUast
+import org.jetbrains.kotlin.idea.frontend.api.types.KtClassErrorType
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.load.kotlin.TypeMappingMode
 import org.jetbrains.kotlin.psi.*
@@ -41,20 +42,22 @@ interface FirKotlinUastResolveProviderService : BaseKotlinUastResolveProviderSer
 
     override fun resolveToType(ktTypeReference: KtTypeReference, source: UElement): PsiType? {
         analyseForUast(ktTypeReference) {
-            return ktTypeReference.getPsiType(TypeMappingMode.DEFAULT_UAST)
+            val ktType = ktTypeReference.getKtType()
+            if (ktType is KtClassErrorType) return null
+            return ktType.asPsiType(ktTypeReference, TypeMappingMode.DEFAULT_UAST)
         }
     }
 
     override fun getDoubleColonReceiverType(ktDoubleColonExpression: KtDoubleColonExpression, source: UElement): PsiType? {
         analyseForUast(ktDoubleColonExpression) {
-            return ktDoubleColonExpression.getReceiverPsiType(TypeMappingMode.DEFAULT_UAST)
+            return ktDoubleColonExpression.getReceiverKtType()?.asPsiType(ktDoubleColonExpression, TypeMappingMode.DEFAULT_UAST)
         }
     }
 
     override fun getExpressionType(uExpression: UExpression): PsiType? {
         val ktExpression = uExpression.sourcePsi as? KtExpression ?: return null
         analyseForUast(ktExpression) {
-            return ktExpression.getPsiType(TypeMappingMode.DEFAULT_UAST)
+            return ktExpression.getKtType().asPsiType(ktExpression, TypeMappingMode.DEFAULT_UAST)
         }
     }
 
