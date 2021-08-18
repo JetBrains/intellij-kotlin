@@ -34,6 +34,10 @@ import java.util.*
 // TODO: see DescriptorRendererOptions.excludedTypeAnnotationClasses for decompiler
 private val ANNOTATIONS_NOT_LOADED_FOR_TYPES = setOf(StandardNames.FqNames.parameterName)
 
+// TODO: drop experimental coroutines
+private val CONTINUATION_INTERFACE_FQ_NAME_EXPERIMENTAL =
+    StandardNames.COROUTINES_PACKAGE_FQ_NAME.child(Name.identifier("experimental")).child(Name.identifier("Continuation"))
+
 class TypeClsStubBuilder(private val c: ClsStubBuilderContext) {
     fun createTypeReferenceStub(
         parent: StubElement<out PsiElement>,
@@ -201,8 +205,8 @@ class TypeClsStubBuilder(private val c: ClsStubBuilderContext) {
                     val classId = c.nameResolver.getClassId(parameterType.className)
                     val fqName = classId.asSingleFqName()
                     assert(
-                        fqName == StandardNames.CONTINUATION_INTERFACE_FQ_NAME_EXPERIMENTAL
-                                || fqName == StandardNames.CONTINUATION_INTERFACE_FQ_NAME_RELEASE
+                        fqName == CONTINUATION_INTERFACE_FQ_NAME_EXPERIMENTAL
+                                || fqName == StandardNames.CONTINUATION_INTERFACE_FQ_NAME
                     ) {
                         "Last parameter type of suspend function must be Continuation, but it is $fqName"
                     }

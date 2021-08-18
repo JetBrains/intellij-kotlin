@@ -21,7 +21,7 @@ import com.intellij.debugger.engine.BreakpointStepMethodFilter
 import com.intellij.debugger.engine.DebugProcessImpl
 import com.intellij.util.Range
 import com.sun.jdi.Location
-import org.jetbrains.kotlin.codegen.coroutines.isResumeImplMethodNameFromAnyLanguageSettings
+import org.jetbrains.kotlin.codegen.coroutines.INVOKE_SUSPEND_METHOD_NAME
 import org.jetbrains.kotlin.idea.core.util.isMultiLine
 import org.jetbrains.kotlin.idea.debugger.isInsideInlineArgument
 import org.jetbrains.kotlin.idea.debugger.safeMethod
@@ -29,6 +29,11 @@ import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.psiUtil.createSmartPointer
 import org.jetbrains.kotlin.util.OperatorNameConventions
+
+// todo remove obsolete coroutines support
+private const val DO_RESUME_METHOD_NAME = "doResume"
+private fun isResumeImplMethodNameFromAnyLanguageSettings(name: String) = name == INVOKE_SUSPEND_METHOD_NAME || name == DO_RESUME_METHOD_NAME
+
 
 class KotlinLambdaMethodFilter(target: KotlinLambdaSmartStepTarget) : BreakpointStepMethodFilter {
     private val lambdaPtr = target.getLambda().createSmartPointer()
