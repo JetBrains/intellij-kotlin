@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.*
 import org.jetbrains.kotlin.renderer.render
-import org.jetbrains.kotlin.resolve.ModifierCheckerCore
+import org.jetbrains.kotlin.resolve.*
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 
 /**
@@ -119,7 +119,8 @@ class KeywordCompletion(private val languageVersionSettingProvider: LanguageVers
 
     fun complete(position: PsiElement, prefixMatcher: PrefixMatcher, isJvmModule: Boolean, consumer: (LookupElement) -> Unit) {
         if (!GENERAL_FILTER.isAcceptable(position, position)) return
-        val sealedInterfacesEnabled = languageVersionSettingProvider.getLanguageVersionSetting(position).supportsFeature(LanguageFeature.SealedInterfaces)
+        val sealedInterfacesEnabled =
+            languageVersionSettingProvider.getLanguageVersionSetting(position).supportsFeature(LanguageFeature.SealedInterfaces)
 
         val parserFilter = buildFilter(position)
         for (keywordToken in ALL_KEYWORDS) {
@@ -474,7 +475,7 @@ class KeywordCompletion(private val languageVersionSettingProvider: LanguageVers
 
                         else -> listOf()
                     }
-                    val modifierTargets = ModifierCheckerCore.possibleTargetMap[keywordTokenType]?.intersect(possibleTargets)
+                    val modifierTargets = possibleTargetMap[keywordTokenType]?.intersect(possibleTargets)
                     if (modifierTargets != null && possibleTargets.isNotEmpty() &&
                         modifierTargets.none {
                             isModifierTargetSupportedAtLanguageLevel(keywordTokenType, it, languageVersionSettings)
@@ -498,7 +499,7 @@ class KeywordCompletion(private val languageVersionSettingProvider: LanguageVers
                         else -> return keywordTokenType != CONST_KEYWORD
                     }
 
-                    if (!ModifierCheckerCore.isPossibleParentTarget(keywordTokenType, parentTarget, languageVersionSettings)) return false
+                    if (!isPossibleParentTarget(keywordTokenType, parentTarget, languageVersionSettings)) return false
 
                     if (keywordTokenType == CONST_KEYWORD) {
                         return when (parentTarget) {
@@ -635,4 +636,21 @@ class KeywordCompletion(private val languageVersionSettingProvider: LanguageVers
             else -> it.parent
         }
     }
+
+    private fun isPossibleParentTarget(
+        modifier: KtModifierKeywordToken,
+        parentTarget: KotlinTarget,
+        languageVersionSettings: LanguageVersionSettings
+    ): Boolean {
+        deprecatedParentTargetMap[modifier]?.let {
+            if (parentTarget in it) return false
+        }
+
+        possibleParentTargetPredicateMap[modifier]?.let {
+            return it.isAllowed(parentTarget, languageVersionSettings)
+        }
+
+        return true
+    }
+
 }
