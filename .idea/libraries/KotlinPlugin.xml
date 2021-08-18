@@ -52,7 +52,6 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-project-wizard-idea.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-reflect.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-repl.jar!/" />
-      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-resources-descriptors.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-script-runtime.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-script-util.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-scripting-common.jar!/" />
@@ -79,6 +78,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/noarg-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/parcelize-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/sam-with-receiver-compiler-plugin-for-ide.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/uast-kotlin-idea-base.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
@@ -133,7 +133,6 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-project-wizard-idea.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-reflect.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-repl.jar!/" />
-      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-resources-descriptors.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-script-runtime.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-script-util.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/kotlin-scripting-common.jar!/" />
@@ -160,6 +159,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/noarg-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/parcelize-compiler-plugin-for-ide.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/sam-with-receiver-compiler-plugin-for-ide.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPlugin/lib/uast-kotlin-idea-base.jar!/" />
     </excluded>
   </library>
 </component>
