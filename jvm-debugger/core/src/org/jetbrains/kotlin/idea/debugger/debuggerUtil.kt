@@ -14,10 +14,11 @@ import com.intellij.debugger.impl.DebuggerContextImpl
 import com.intellij.debugger.jdi.StackFrameProxyImpl
 import com.intellij.psi.PsiElement
 import com.sun.jdi.*
-import org.jetbrains.kotlin.codegen.coroutines.DO_RESUME_METHOD_NAME
+import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.codegen.coroutines.INVOKE_SUSPEND_METHOD_NAME
-import org.jetbrains.kotlin.codegen.coroutines.continuationAsmTypes
 import org.jetbrains.kotlin.codegen.inline.KOTLIN_STRATA_NAME
+import org.jetbrains.kotlin.codegen.topLevelClassAsmType
+import org.jetbrains.kotlin.config.*
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.idea.core.KotlinFileTypeFactoryUtils
 import org.jetbrains.kotlin.idea.core.util.CodeInsightUtils
@@ -26,11 +27,42 @@ import org.jetbrains.kotlin.idea.core.util.getLineStartOffset
 import org.jetbrains.kotlin.idea.util.application.runReadAction
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.load.java.JvmAbi
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.inline.InlineUtil
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import java.util.*
+
+// TODO: remove obsolete experimental coroutines
+private const val DO_RESUME_METHOD_NAME = "doResume"
+private val CONTINUATION_INTERFACE_FQ_NAME_EXPERIMENTAL =
+    StandardNames.COROUTINES_PACKAGE_FQ_NAME.child(Name.identifier("experimental")).child(Name.identifier("Continuation"))
+
+fun LanguageVersionSettings.coroutinesPackageFqName(): FqName {
+    return coroutinesPackageFqName(isReleaseCoroutines())
+}
+
+fun LanguageVersionSettings.isReleaseCoroutines() = supportsFeature(LanguageFeature.ReleaseCoroutines)
+
+private fun coroutinesPackageFqName(isReleaseCoroutines: Boolean): FqName {
+    return if (isReleaseCoroutines)
+        StandardNames.COROUTINES_PACKAGE_FQ_NAME
+    else
+        CONTINUATION_INTERFACE_FQ_NAME_EXPERIMENTAL
+}
+
+fun LanguageVersionSettings.continuationInterfaceFqName() =
+    coroutinesPackageFqName().child(Name.identifier("Continuation"))
+
+fun LanguageVersionSettings.continuationAsmType() =
+    continuationInterfaceFqName().topLevelClassAsmType()
+
+fun continuationAsmTypes() = listOf(
+    LanguageVersionSettingsImpl(LanguageVersion.KOTLIN_1_3, ApiVersion.KOTLIN_1_3).continuationAsmType(),
+    LanguageVersionSettingsImpl(LanguageVersion.KOTLIN_1_2, ApiVersion.KOTLIN_1_2).continuationAsmType()
+)
 
 fun Location.isInKotlinSources(): Boolean {
     return declaringType().isInKotlinSources()
