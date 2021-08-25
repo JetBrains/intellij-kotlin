@@ -620,6 +620,11 @@ class QuickFixRegistrar : QuickFixContributor {
         OPT_IN_OVERRIDE.registerFactory(ExperimentalFixesFactory)
         OPT_IN_OVERRIDE_ERROR.registerFactory(ExperimentalFixesFactory)
         OPT_IN_IS_NOT_ENABLED.registerFactory(MakeModuleExperimentalFix)
+        OPT_IN_MARKER_ON_WRONG_TARGET.registerFactory(ExperimentalAnnotationWrongTargetFixesFactory)
+        OPT_IN_MARKER_WITH_WRONG_TARGET.registerFactory(RemoveWrongOptInAnnotationTargetFactory)
+        OPT_IN_MARKER_ON_OVERRIDE.registerFactory(RemoveAnnotationFix)
+        OPT_IN_MARKER_ON_OVERRIDE_WARNING.registerFactory(RemoveAnnotationFix)
+
 
         TYPE_VARIANCE_CONFLICT.registerFactory(RemoveTypeVarianceFix)
 
