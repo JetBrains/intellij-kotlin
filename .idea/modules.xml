@@ -883,10 +883,6 @@
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/scripting-ide-services/kotlin.compiler-plugins.scripting-ide-services.iml" filepath="$PROJECT_DIR$/compiler-plugins/scripting-ide-services/kotlin.compiler-plugins.scripting-ide-services.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/kotlin.core.iml" filepath="$PROJECT_DIR$/core/kotlin.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/jvm-debugger/eval4j/kotlin.eval4j.iml" filepath="$PROJECT_DIR$/jvm-debugger/eval4j/kotlin.eval4j.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fir/kotlin.fir.iml" filepath="$PROJECT_DIR$/fir/kotlin.fir.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.fir-all-tests/kotlin.fir-all-tests.iml" filepath="$PROJECT_DIR$/kotlin.fir-all-tests/kotlin.fir-all-tests.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fir-fe10-binding/kotlin.fir.fir-fe10-binding.iml" filepath="$PROJECT_DIR$/fir-fe10-binding/kotlin.fir.fir-fe10-binding.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fir-low-level-api-ide-impl/kotlin.fir.fir-low-level-api-ide-impl.iml" filepath="$PROJECT_DIR$/fir-low-level-api-ide-impl/kotlin.fir.fir-low-level-api-ide-impl.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend-independent/kotlin.fir.frontend-independent.iml" filepath="$PROJECT_DIR$/frontend-independent/kotlin.fir.frontend-independent.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend-independent/tests/kotlin.fir.frontend-independent.tests.iml" filepath="$PROJECT_DIR$/frontend-independent/tests/kotlin.fir.frontend-independent.tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/formatter/kotlin.formatter.iml" filepath="$PROJECT_DIR$/formatter/kotlin.formatter.iml" />
@@ -921,16 +917,13 @@
       <module fileurl="file://$PROJECT_DIR$/project-wizard/idea/kotlin.project-wizard.idea.iml" filepath="$PROJECT_DIR$/project-wizard/idea/kotlin.project-wizard.idea.iml" />
       <module fileurl="file://$PROJECT_DIR$/repl/kotlin.repl.iml" filepath="$PROJECT_DIR$/repl/kotlin.repl.iml" />
       <module fileurl="file://$PROJECT_DIR$/resources-fe10/kotlin.resources-fe10.iml" filepath="$PROJECT_DIR$/resources-fe10/kotlin.resources-fe10.iml" />
-      <module fileurl="file://$PROJECT_DIR$/resources-fir/kotlin.resources-fir.iml" filepath="$PROJECT_DIR$/resources-fir/kotlin.resources-fir.iml" />
       <module fileurl="file://$PROJECT_DIR$/scripting/kotlin.scripting.iml" filepath="$PROJECT_DIR$/scripting/kotlin.scripting.iml" />
       <module fileurl="file://$PROJECT_DIR$/scripting-support/kotlin.scripting-support.iml" filepath="$PROJECT_DIR$/scripting-support/kotlin.scripting-support.iml" />
       <module fileurl="file://$PROJECT_DIR$/test-framework/kotlin.test-framework.iml" filepath="$PROJECT_DIR$/test-framework/kotlin.test-framework.iml" />
       <module fileurl="file://$PROJECT_DIR$/tests-common/kotlin.tests-common.iml" filepath="$PROJECT_DIR$/tests-common/kotlin.tests-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/uast/uast-kotlin/kotlin.uast.uast-kotlin.iml" filepath="$PROJECT_DIR$/uast/uast-kotlin/kotlin.uast.uast-kotlin.iml" />
       <module fileurl="file://$PROJECT_DIR$/uast/uast-kotlin-base/kotlin.uast.uast-kotlin-base.iml" filepath="$PROJECT_DIR$/uast/uast-kotlin-base/kotlin.uast.uast-kotlin-base.iml" />
-      <module fileurl="file://$PROJECT_DIR$/uast/uast-kotlin-fir/kotlin.uast.uast-kotlin-fir.iml" filepath="$PROJECT_DIR$/uast/uast-kotlin-fir/kotlin.uast.uast-kotlin-fir.iml" />
       <module fileurl="file://$PROJECT_DIR$/uast/uast-kotlin-idea/kotlin.uast.uast-kotlin-idea.iml" filepath="$PROJECT_DIR$/uast/uast-kotlin-idea/kotlin.uast.uast-kotlin-idea.iml" />
-      <module fileurl="file://$PROJECT_DIR$/uast/uast-kotlin-idea-fir/kotlin.uast.uast-kotlin-idea-fir.iml" filepath="$PROJECT_DIR$/uast/uast-kotlin-idea-fir/kotlin.uast.uast-kotlin-idea-fir.iml" />
       <module fileurl="file://$PROJECT_DIR$/uast/uast-kotlin-idea-base/kotlin.uast.uast-kotlin-idea-base.iml" filepath="$PROJECT_DIR$/uast/uast-kotlin-idea-base/kotlin.uast.uast-kotlin-idea-base.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin-compiler-classpath/kotlin.util.compiler-classpath.iml" filepath="$PROJECT_DIR$/kotlin-compiler-classpath/kotlin.util.compiler-classpath.iml" />
       <module fileurl="file://$PROJECT_DIR$/kotlin.intellij-kotlin.iml" filepath="$PROJECT_DIR$/kotlin.intellij-kotlin.iml" />
