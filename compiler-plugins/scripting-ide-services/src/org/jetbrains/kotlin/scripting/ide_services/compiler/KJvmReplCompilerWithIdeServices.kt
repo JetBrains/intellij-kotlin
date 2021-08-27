@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.renderer.DescriptorRenderer
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.scripting.compiler.plugin.impl.*
+import org.jetbrains.kotlin.scripting.compiler.plugin.repl.JvmReplCompilerState
 import org.jetbrains.kotlin.scripting.ide_services.compiler.impl.*
 import kotlin.script.experimental.api.*
 import kotlin.script.experimental.host.ScriptingHostConfiguration
@@ -19,9 +20,7 @@ import kotlin.script.experimental.jvm.defaultJvmScriptingHostConfiguration
 import kotlin.script.experimental.jvm.util.calcAbsolute
 
 class KJvmReplCompilerWithIdeServices(hostConfiguration: ScriptingHostConfiguration = defaultJvmScriptingHostConfiguration) :
-    KJvmReplCompilerBase<IdeLikeReplCodeAnalyzer>(hostConfiguration, { sharedScriptCompilationContext, scopeProcessor ->
-        IdeLikeReplCodeAnalyzer(sharedScriptCompilationContext.environment, scopeProcessor)
-    }),
+    KJvmReplCompilerBase<IdeLikeReplCodeAnalyzer>(hostConfiguration, /*TODO what should be here?*/),
     ReplCompleter, ReplCodeAnalyzer {
 
     override suspend fun complete(
