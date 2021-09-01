@@ -624,6 +624,7 @@ class QuickFixRegistrar : QuickFixContributor {
         OPT_IN_MARKER_WITH_WRONG_TARGET.registerFactory(RemoveWrongOptInAnnotationTargetFactory)
         OPT_IN_MARKER_ON_OVERRIDE.registerFactory(RemoveAnnotationFix)
         OPT_IN_MARKER_ON_OVERRIDE_WARNING.registerFactory(RemoveAnnotationFix)
+        OPT_IN_WITHOUT_ARGUMENTS.registerFactory(RemoveAnnotationFix)
 
 
         TYPE_VARIANCE_CONFLICT.registerFactory(RemoveTypeVarianceFix)
