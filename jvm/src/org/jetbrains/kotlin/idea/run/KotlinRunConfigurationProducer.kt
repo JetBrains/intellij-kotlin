@@ -89,6 +89,15 @@ class KotlinRunConfigurationProducer : LazyRunConfigurationProducer<KotlinRunCon
             return null
         }
 
+        // Copy-pasted from https://github.com/JetBrains/kotlin/commit/5ddf0cc7b2faba62b6685cb70799035625a96772
+        fun MainFunctionDetector.hasMain(declarations: List<KtDeclaration>): Boolean {
+            return findMainFunction(declarations) != null
+        }
+
+        // Copy-pasted from https://github.com/JetBrains/kotlin/commit/5ddf0cc7b2faba62b6685cb70799035625a96772
+        private fun MainFunctionDetector.findMainFunction(declarations: List<KtDeclaration>) =
+            declarations.filterIsInstance<KtNamedFunction>().find { isMain(it) }
+
         fun getStartClassFqName(container: KtDeclarationContainer): String? = when (container) {
             is KtFile -> container.javaFileFacadeFqName.asString()
             is KtClassOrObject -> {
