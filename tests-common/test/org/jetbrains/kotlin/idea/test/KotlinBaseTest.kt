@@ -221,13 +221,6 @@ abstract class KotlinBaseTest<F : KotlinBaseTest.TestFile> : KtUsefulTestCase() 
                     tryApplyBooleanFlag(configuration, flag, flagEnabled, flagNamespace, flagName)
                     continue
                 }
-                m = CONSTRUCTOR_CALL_NORMALIZATION_MODE_FLAG_PATTERN.matcher(flag)
-                if (m.matches()) {
-                    val flagValueString = m.group(1)
-                    val mode = JVMConstructorCallNormalizationMode.fromStringOrNull(flagValueString)
-                        ?: error("Wrong CONSTRUCTOR_CALL_NORMALIZATION_MODE value: $flagValueString")
-                    configuration.put(JVMConfigurationKeys.CONSTRUCTOR_CALL_NORMALIZATION_MODE, mode)
-                }
                 m = ASSERTIONS_MODE_FLAG_PATTERN.matcher(flag)
                 if (m.matches()) {
                     val flagValueString = m.group(1)
