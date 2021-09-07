@@ -10,12 +10,10 @@ package test
 annotation class MyExperimentalAPI
 
 @MyExperimentalAPI
-class Some {
-    fun foo() {}
-}
+class Some
 
 class Bar {
     fun bar() {
-        Some().foo<caret>()
+        <caret>Some()
     }
 }

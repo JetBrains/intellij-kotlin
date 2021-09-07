@@ -9,13 +9,11 @@ package a.b
 annotation class MyExperimentalAPI
 
 @MyExperimentalAPI
-class Some {
-    fun foo() {}
-}
+class Some
 
 class Bar {
     @OptIn(MyExperimentalAPI::class)
     fun bar() {
-        Some().foo()
+        Some()
     }
 }
