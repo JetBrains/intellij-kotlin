@@ -30,10 +30,6 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.psiUtil.createSmartPointer
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
-// todo remove obsolete coroutines support
-private const val DO_RESUME_METHOD_NAME = "doResume"
-private fun isResumeImplMethodNameFromAnyLanguageSettings(name: String) = name == INVOKE_SUSPEND_METHOD_NAME || name == DO_RESUME_METHOD_NAME
-
 
 class KotlinLambdaMethodFilter(target: KotlinLambdaSmartStepTarget) : BreakpointStepMethodFilter {
     private val lambdaPtr = target.getLambda().createSmartPointer()
@@ -84,9 +80,8 @@ class KotlinLambdaMethodFilter(target: KotlinLambdaSmartStepTarget) : Breakpoint
 
     private fun isLambdaName(name: String?): Boolean {
         if (isSuspend && name != null) {
-            return isResumeImplMethodNameFromAnyLanguageSettings(name)
+            return name == INVOKE_SUSPEND_METHOD_NAME
         }
-
         return name == OperatorNameConventions.INVOKE.asString()
     }
 
