@@ -7,10 +7,7 @@ package org.jetbrains.kotlin.idea.debugger.evaluate.compilation
 
 import com.intellij.debugger.engine.evaluation.EvaluateExceptionUtil
 import com.intellij.psi.PsiElement
-import com.intellij.psi.util.parentsOfType
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.builtins.StandardNames
-import org.jetbrains.kotlin.builtins.isExtensionFunctionType
 import org.jetbrains.kotlin.codegen.AsmUtil
 import org.jetbrains.kotlin.codegen.getCallLabelForLambdaArgument
 import org.jetbrains.kotlin.descriptors.*
@@ -22,14 +19,12 @@ import org.jetbrains.kotlin.idea.debugger.evaluate.compilation.CodeFragmentParam
 import org.jetbrains.kotlin.idea.debugger.safeLocation
 import org.jetbrains.kotlin.idea.debugger.safeMethod
 import org.jetbrains.kotlin.idea.util.application.runReadAction
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isAncestor
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.builtIns
@@ -40,10 +35,7 @@ import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitReceiver
 import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.expressions.createFunctionType
-
-// TODO: remove coroutines support
-val COROUTINE_CONTEXT_1_3_FQ_NAME =
-    StandardNames.COROUTINES_PACKAGE_FQ_NAME.child(Name.identifier("coroutineContext"))
+import org.jetbrains.kotlin.resolve.calls.checkers.COROUTINE_CONTEXT_FQ_NAME
 
 class CodeFragmentParameterInfo(
     val parameters: List<Smart>,
@@ -350,7 +342,7 @@ class CodeFragmentParameterAnalyzer(
     }
 
     private fun processCoroutineContextCall(target: DeclarationDescriptor): Smart? {
-        if (target is PropertyDescriptor && target.fqNameSafe == COROUTINE_CONTEXT_1_3_FQ_NAME) {
+        if (target is PropertyDescriptor && target.fqNameSafe == COROUTINE_CONTEXT_FQ_NAME) {
             return parameters.getOrPut(target) {
                 Smart(Dumb(Kind.COROUTINE_CONTEXT, ""), target.type, target)
             }
