@@ -29,16 +29,10 @@ import org.jetbrains.kotlin.idea.caches.resolve.LightClassLazinessChecker.Tracke
 import org.jetbrains.kotlin.idea.completion.test.withServiceRegistered
 import org.jetbrains.kotlin.idea.core.script.ScriptConfigurationManager
 import org.jetbrains.kotlin.idea.perf.forceUsingOldLightClassesForTest
-import org.jetbrains.kotlin.idea.test.CompilerTestDirectives
-import org.jetbrains.kotlin.idea.test.KotlinLightCodeInsightFixtureTestCase
-import org.jetbrains.kotlin.idea.test.KotlinWithJdkAndRuntimeLightProjectDescriptor
-import org.jetbrains.kotlin.idea.test.withCustomCompilerOptions
+import org.jetbrains.kotlin.idea.test.*
 import org.jetbrains.kotlin.load.java.JvmAnnotationNames
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.idea.test.KotlinCompilerStandalone
-import org.jetbrains.kotlin.idea.test.KotlinTestUtils
-import org.jetbrains.kotlin.idea.test.TestMetadataUtil
 import org.jetbrains.kotlin.utils.keysToMap
 import org.jetbrains.plugins.groovy.lang.psi.impl.stringValue
 import java.io.File
@@ -55,7 +49,12 @@ abstract class AbstractIdeLightClassTest : KotlinLightCodeInsightFixtureTestCase
             else -> error("Invalid test data extension")
         }
 
-        withCustomCompilerOptions(File(testDataPath, fileName).readText(), project, module) {
+        val fileText = File(testDataPath, fileName).readText()
+        if (InTextDirectivesUtils.isDirectiveDefined(fileText, "SKIP_IDE_TEST")) {
+            return
+        }
+
+        withCustomCompilerOptions(fileText, project, module) {
             val testFiles = if (File(testDataPath, extraFilePath).isFile) listOf(fileName, extraFilePath) else listOf(fileName)
             val lazinessMode = lazinessModeByFileText()
             myFixture.configureByFiles(*testFiles.toTypedArray())
