@@ -12,6 +12,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.testFramework.fixtures.JavaCodeInsightTestFixture
 import org.jetbrains.kotlin.idea.caches.resolve.analyzeWithContent
 import org.jetbrains.kotlin.idea.completion.test.ExpectedCompletionUtils
+import org.jetbrains.kotlin.idea.core.util.CodeFragmentUtils
 import org.jetbrains.kotlin.idea.debugger.getContextElement
 import org.jetbrains.kotlin.psi.KtCodeFragment
 import org.jetbrains.kotlin.psi.KtElement
@@ -43,7 +44,7 @@ internal fun JavaCodeInsightTestFixture.configureByCodeFragment(filePath: String
 
     val typeStr = InTextDirectivesUtils.findStringWithPrefixes(getFile().text, "// ${ExpectedCompletionUtils.RUNTIME_TYPE} ")
     if (typeStr != null) {
-        file.putCopyableUserData(KtCodeFragment.RUNTIME_TYPE_EVALUATOR) {
+        file.putCopyableUserData(CodeFragmentUtils.RUNTIME_TYPE_EVALUATOR) {
             val codeFragment = KtPsiFactory(project).createBlockCodeFragment(
                 "val xxx: $typeStr",
                 PsiTreeUtil.getParentOfType(elementAt, KtElement::class.java)

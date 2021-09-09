@@ -34,6 +34,7 @@ import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.resolve.lazy.ResolveSession
 import org.jetbrains.kotlin.resolve.scopes.*
 import org.jetbrains.kotlin.resolve.scopes.utils.addImportingScopes
+import org.jetbrains.kotlin.idea.core.util.externalDescriptors
 import javax.inject.Inject
 
 class CodeFragmentAnalyzer(
