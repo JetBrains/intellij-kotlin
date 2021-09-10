@@ -594,11 +594,11 @@ class QuickFixRegistrar : QuickFixContributor {
         JVM_DEFAULT_REQUIRED_FOR_OVERRIDE.registerFactory(AddJvmDefaultAnnotation)
         NON_JVM_DEFAULT_OVERRIDES_JAVA_DEFAULT.registerFactory(AddJvmDefaultAnnotation)
 
-        EXPERIMENTAL_API_USAGE.registerFactory(ExperimentalFixesFactory)
-        EXPERIMENTAL_API_USAGE_ERROR.registerFactory(ExperimentalFixesFactory)
-        EXPERIMENTAL_OVERRIDE.registerFactory(ExperimentalFixesFactory)
-        EXPERIMENTAL_OVERRIDE_ERROR.registerFactory(ExperimentalFixesFactory)
-        EXPERIMENTAL_IS_NOT_ENABLED.registerFactory(MakeModuleExperimentalFix)
+        OPT_IN_USAGE.registerFactory(ExperimentalFixesFactory)
+        OPT_IN_USAGE_ERROR.registerFactory(ExperimentalFixesFactory)
+        OPT_IN_OVERRIDE.registerFactory(ExperimentalFixesFactory)
+        OPT_IN_OVERRIDE_ERROR.registerFactory(ExperimentalFixesFactory)
+        OPT_IN_IS_NOT_ENABLED.registerFactory(MakeModuleExperimentalFix)
 
         TYPE_VARIANCE_CONFLICT.registerFactory(RemoveTypeVarianceFix)
 
