@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.tools.projectWizard.moduleConfigurators.JvmSinglePla
 import org.jetbrains.kotlin.tools.projectWizard.plugins.StructurePlugin
 import org.jetbrains.kotlin.tools.projectWizard.plugins.buildSystem.gradle.GradlePlugin
 import org.jetbrains.kotlin.tools.projectWizard.templates.compose.ComposeAndroidTemplate
+import org.jetbrains.kotlin.tools.projectWizard.templates.compose.ComposeCommonAndroidTemplate
 import org.jetbrains.kotlin.tools.projectWizard.templates.compose.ComposeJvmDesktopTemplate
 import org.jetbrains.kotlin.tools.projectWizard.templates.compose.ComposeMppModuleTemplate
 import org.jetbrains.kotlin.tools.projectWizard.templates.mpp.MobileMppTemplate
@@ -498,7 +499,7 @@ object ComposeMultiplatformApplicationProjectTemplate : ProjectTemplate() {
                     Module(
                         "android",
                         AndroidTargetConfigurator,
-                        template = null,
+                        template = ComposeCommonAndroidTemplate(),
                         sourcesets = createDefaultSourcesets(),
                         subModules = emptyList()
                     ).withConfiguratorSettings(AndroidTargetConfigurator) {
