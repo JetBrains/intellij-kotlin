@@ -30,4 +30,3 @@ fun some() {
 // EXIST: when
 // EXIST: while
 
-// NOTHING_ELSE

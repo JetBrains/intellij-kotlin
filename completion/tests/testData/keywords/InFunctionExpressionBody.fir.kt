@@ -13,4 +13,3 @@ fun foo() = <caret>
 // EXIST: try
 // EXIST: when
 // EXIST: while
-// NOTHING_ELSE

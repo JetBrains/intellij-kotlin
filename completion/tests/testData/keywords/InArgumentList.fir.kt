@@ -19,4 +19,3 @@ fun foo(p: Int) {
 // EXIST: try
 // EXIST: when
 // EXIST: while
-// NOTHING_ELSE

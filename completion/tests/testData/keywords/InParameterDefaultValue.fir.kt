@@ -14,4 +14,3 @@ fun foo(p: Int = <caret>)
 // EXIST: try
 // EXIST: when
 // EXIST: while
-// NOTHING_ELSE
