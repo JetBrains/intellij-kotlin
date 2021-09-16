@@ -28,5 +28,3 @@ fun some() {
 // EXIST: var
 // EXIST: when
 // EXIST: while
-
-// NOTHING_ELSE

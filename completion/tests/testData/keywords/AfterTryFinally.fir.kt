@@ -27,4 +27,3 @@ fun foo() {
 // EXIST: when
 // EXIST: while
 // EXIST:  typealias
-// NOTHING_ELSE

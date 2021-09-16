@@ -13,4 +13,3 @@ var a : Int = <caret>
 // EXIST: try
 // EXIST: when
 // EXIST: while
-// NOTHING_ELSE

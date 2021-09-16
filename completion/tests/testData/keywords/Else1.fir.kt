@@ -26,4 +26,3 @@ fun foo(p: Int) {
 // EXIST: while
 // EXIST: typealias
 // EXIST: as
-// NOTHING_ELSE
