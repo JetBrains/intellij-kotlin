@@ -16,11 +16,11 @@ class DClass: SealedDeclarationClass() {
     }
 }
 
-fun checkWhenNone(value: SealedDeclarationInterface): Int = <error descr="[NO_ELSE_IN_WHEN] 'when' expression must be exhaustive, add necessary 'is A', 'is B', 'is C', 'is D', 'is E', 'is F' branches or 'else' branch instead">when</error> (<warning descr="[UNUSED_EXPRESSION] The expression is unused">value</warning>) {
-}
+fun checkWhenNone(value: SealedDeclarationInterface): Int = <error descr="[TYPE_MISMATCH] Type mismatch: inferred type is Unit but Int was expected"><error descr="[NO_ELSE_IN_WHEN] 'when' expression must be exhaustive, add necessary 'is A', 'is B', 'is C', 'is D', 'is E', 'is F' branches or 'else' branch instead">when</error> (value) {
+}</error>
 
-fun checkWhenNone(value: SealedDeclarationClass): Int = <error descr="[NO_ELSE_IN_WHEN] 'when' expression must be exhaustive, add necessary 'is AClass', 'is BClass', 'is CClass', 'is DClass', 'is EClass', 'is FClass' branches or 'else' branch instead">when</error> (<warning descr="[UNUSED_EXPRESSION] The expression is unused">value</warning>) {
-}
+fun checkWhenNone(value: SealedDeclarationClass): Int = <error descr="[TYPE_MISMATCH] Type mismatch: inferred type is Unit but Int was expected"><error descr="[NO_ELSE_IN_WHEN] 'when' expression must be exhaustive, add necessary 'is AClass', 'is BClass', 'is CClass', 'is DClass', 'is EClass', 'is FClass' branches or 'else' branch instead">when</error> (value) {
+}</error>
 
 fun checkWhenOneMissing(value: SealedDeclarationInterface): Int = <error descr="[NO_ELSE_IN_WHEN] 'when' expression must be exhaustive, add necessary 'is D', 'is E', 'is F' branches or 'else' branch instead">when</error> (value) {
     is SealedDeclarationInterface.A -> 1
