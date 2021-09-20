@@ -6,11 +6,13 @@
 package org.jetbrains.kotlin.checkers
 
 import com.intellij.testFramework.LightProjectDescriptor
+import org.jetbrains.kotlin.idea.test.TestRoot
 import org.jetbrains.kotlin.test.TestMetadata
 import org.junit.internal.runners.JUnit38ClassRunner
 import org.junit.runner.RunWith
 
-@TestMetadata("idea/testData/checker/sealed")
+@TestRoot("idea")
+@TestMetadata("tests/testData/checker/sealed")
 @RunWith(JUnit38ClassRunner::class)
 class PsiCheckerSealedTest : AbstractPsiCheckerTest() {
 
