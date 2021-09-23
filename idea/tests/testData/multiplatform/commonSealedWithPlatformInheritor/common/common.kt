@@ -1,6 +1,6 @@
 // ISSUE: KT-45848
 
-sealed class <!LINE_MARKER("descr='Is subclassed by Derived PlatfromDerived  Click or press ... to navigate'")!>Base<!>
+sealed class <!LINE_MARKER("descr='Is subclassed by Derived PlatfromDerived'")!>Base<!>
 
 class Derived : Base()
 

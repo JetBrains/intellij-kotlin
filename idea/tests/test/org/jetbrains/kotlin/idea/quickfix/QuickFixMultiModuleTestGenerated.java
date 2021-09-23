@@ -379,6 +379,11 @@ public abstract class QuickFixMultiModuleTestGenerated extends AbstractQuickFixM
             runTest("testData/multiModuleQuickFix/createActual/enum/");
         }
 
+        @TestMetadata("expectSealedInCommonWhen")
+        public void testExpectSealedInCommonWhen() throws Exception {
+            runTest("testData/multiModuleQuickFix/createActual/expectSealedInCommonWhen/");
+        }
+
         @TestMetadata("function")
         public void testFunction() throws Exception {
             runTest("testData/multiModuleQuickFix/createActual/function/");
@@ -439,9 +444,19 @@ public abstract class QuickFixMultiModuleTestGenerated extends AbstractQuickFixM
             runTest("testData/multiModuleQuickFix/createActual/sealed/");
         }
 
+        @TestMetadata("sealedInCommonWhen")
+        public void testSealedInCommonWhen() throws Exception {
+            runTest("testData/multiModuleQuickFix/createActual/sealedInCommonWhen/");
+        }
+
         @TestMetadata("sealedSubclass")
         public void testSealedSubclass() throws Exception {
             runTest("testData/multiModuleQuickFix/createActual/sealedSubclass/");
+        }
+
+        @TestMetadata("valueClass")
+        public void testValueClass() throws Exception {
+            runTest("testData/multiModuleQuickFix/createActual/valueClass/");
         }
 
         @TestMetadata("withFakeJvm")
@@ -864,6 +879,29 @@ public abstract class QuickFixMultiModuleTestGenerated extends AbstractQuickFixM
         @TestMetadata("property")
         public void testProperty() throws Exception {
             runTest("testData/multiModuleQuickFix/functionTypeReceiverToParameter/property/");
+        }
+    }
+
+    @RunWith(JUnit3RunnerWithInners.class)
+    @TestMetadata("testData/multiModuleQuickFix/inlineToValue")
+    public static class InlineToValue extends AbstractQuickFixMultiModuleTest {
+        private void runTest(String testDataFilePath) throws Exception {
+            KotlinTestUtils.runTest(this::doTest, this, testDataFilePath);
+        }
+
+        @TestMetadata("commonWithJvm")
+        public void testCommonWithJvm() throws Exception {
+            runTest("testData/multiModuleQuickFix/inlineToValue/commonWithJvm/");
+        }
+
+        @TestMetadata("JS")
+        public void testJS() throws Exception {
+            runTest("testData/multiModuleQuickFix/inlineToValue/JS/");
+        }
+
+        @TestMetadata("JVM")
+        public void testJVM() throws Exception {
+            runTest("testData/multiModuleQuickFix/inlineToValue/JVM/");
         }
     }
 

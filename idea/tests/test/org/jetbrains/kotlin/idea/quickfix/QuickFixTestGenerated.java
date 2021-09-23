@@ -7193,6 +7193,11 @@ public abstract class QuickFixTestGenerated extends AbstractQuickFixTest {
             runTest("testData/quickfix/expressions/unnecessarySafeCall1.kt");
         }
 
+        @TestMetadata("unnecessarySafeCall2.kt")
+        public void testUnnecessarySafeCall2() throws Exception {
+            runTest("testData/quickfix/expressions/unnecessarySafeCall2.kt");
+        }
+
         @TestMetadata("unsafeCall1.kt")
         public void testUnsafeCall1() throws Exception {
             runTest("testData/quickfix/expressions/unsafeCall1.kt");
