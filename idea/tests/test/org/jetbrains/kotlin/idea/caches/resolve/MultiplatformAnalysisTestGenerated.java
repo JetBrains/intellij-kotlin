@@ -46,6 +46,11 @@ public class MultiplatformAnalysisTestGenerated extends AbstractMultiplatformAna
         runTest("testData/multiplatform/chainedTypeAliasRefinement/");
     }
 
+    @TestMetadata("commonSealedWithPlatformInheritor")
+    public void testCommonSealedWithPlatformInheritor() throws Exception {
+        runTest("testData/multiplatform/commonSealedWithPlatformInheritor/");
+    }
+
     @TestMetadata("constructorsOfExpect")
     public void testConstructorsOfExpect() throws Exception {
         runTest("testData/multiplatform/constructorsOfExpect/");
@@ -234,6 +239,16 @@ public class MultiplatformAnalysisTestGenerated extends AbstractMultiplatformAna
     @TestMetadata("recursiveTypes")
     public void testRecursiveTypes() throws Exception {
         runTest("testData/multiplatform/recursiveTypes/");
+    }
+
+    @TestMetadata("sealedInheritorsInComplexModuleStructure1")
+    public void testSealedInheritorsInComplexModuleStructure1() throws Exception {
+        runTest("testData/multiplatform/sealedInheritorsInComplexModuleStructure1/");
+    }
+
+    @TestMetadata("sealedInheritorsInComplexModuleStructure2")
+    public void testSealedInheritorsInComplexModuleStructure2() throws Exception {
+        runTest("testData/multiplatform/sealedInheritorsInComplexModuleStructure2/");
     }
 
     @TestMetadata("simple")
