@@ -430,7 +430,7 @@ class KeywordCompletion(private val languageVersionSettingProvider: LanguageVers
 
                 isErrorElementBefore(elementAt) -> return false
 
-                !isModifierSupportedAtLanguageLevel(keywordTokenType, languageVersionSettings) -> return false
+                !isModifierSupportedAtLanguageLevel(elementAt, keywordTokenType, languageVersionSettings) -> return false
 
                 keywordTokenType !is KtModifierKeywordToken -> return true
 
@@ -548,12 +548,21 @@ class KeywordCompletion(private val languageVersionSettingProvider: LanguageVers
         }
     }
 
-    private fun isModifierSupportedAtLanguageLevel(keyword: KtKeywordToken, languageVersionSettings: LanguageVersionSettings): Boolean {
+    private fun isModifierSupportedAtLanguageLevel(
+        position: PsiElement,
+        keyword: KtKeywordToken,
+        languageVersionSettings: LanguageVersionSettings
+    ): Boolean {
         val feature = when (keyword) {
             TYPE_ALIAS_KEYWORD -> LanguageFeature.TypeAliases
             HEADER_KEYWORD, IMPL_KEYWORD -> return false
             EXPECT_KEYWORD, ACTUAL_KEYWORD -> LanguageFeature.MultiPlatformProjects
             SUSPEND_KEYWORD -> LanguageFeature.Coroutines
+            FIELD_KEYWORD -> {
+                if (!position.isExplicitBackingFieldDeclaration) return true
+
+                LanguageFeature.ExplicitBackingFields
+            }
             else -> return true
         }
         return languageVersionSettings.supportsFeature(feature)
@@ -652,5 +661,8 @@ class KeywordCompletion(private val languageVersionSettingProvider: LanguageVers
 
         return true
     }
+
+    private val PsiElement.isExplicitBackingFieldDeclaration
+        get() = parent is KtBackingField
 
 }
