@@ -12,6 +12,7 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.intellij.psi.impl.source.PostprocessReformattingAspect
+import com.intellij.testFramework.LightProjectDescriptor
 import org.jetbrains.kotlin.idea.j2k.IdeaJavaToKotlinServices
 import org.jetbrains.kotlin.idea.j2k.J2kPostProcessor
 import org.jetbrains.kotlin.idea.test.KotlinWithJdkAndRuntimeLightProjectDescriptor
@@ -140,7 +141,7 @@ abstract class AbstractJavaToKotlinConverterSingleFileTest : AbstractJavaToKotli
                 .trim()
     }
 
-    override fun getProjectDescriptor(): KotlinWithJdkAndRuntimeLightProjectDescriptor {
+    override fun getProjectDescriptor(): LightProjectDescriptor {
         val testName = getTestName(false)
         return if (testName.contains("WithFullJdk") || testName.contains("withFullJdk"))
             KotlinWithJdkAndRuntimeLightProjectDescriptor.INSTANCE_FULL_JDK
