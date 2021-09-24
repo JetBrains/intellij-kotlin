@@ -15,7 +15,6 @@ import org.jetbrains.kotlin.SpecialJvmAnnotations
 import org.jetbrains.kotlin.descriptors.SourceElement
 import org.jetbrains.kotlin.idea.caches.IDEKotlinBinaryClassCache
 import org.jetbrains.kotlin.idea.decompiler.stubBuilder.*
-import org.jetbrains.kotlin.load.java.JvmAbi
 import org.jetbrains.kotlin.load.kotlin.*
 import org.jetbrains.kotlin.load.kotlin.header.KotlinClassHeader
 import org.jetbrains.kotlin.metadata.ProtoBuf
@@ -158,7 +157,7 @@ class AnnotationLoaderForClassFileStubBuilder(
             }
 
             override fun visitEnd() {
-                if (!isRepeatableWithImplicitContainer(arguments)) {
+                if (!isRepeatableWithImplicitContainer(annotationClassId, arguments)) {
                     result.add(annotationClassId)
                 }
             }
@@ -168,15 +167,5 @@ class AnnotationLoaderForClassFileStubBuilder(
             override fun visitArray(name: Name): KotlinJvmBinaryClass.AnnotationArrayArgumentVisitor? = null
             override fun visitAnnotation(name: Name, classId: ClassId): KotlinJvmBinaryClass.AnnotationArgumentVisitor? = null
         }
-    }
-
-    private fun isRepeatableWithImplicitContainer(arguments: Map<Name, ConstantValue<*>>): Boolean {
-        val containerKClassValue = arguments[Name.identifier("value")] as? KClassValue ?: return false
-        val normalClass = containerKClassValue.value as? KClassValue.Value.NormalClass ?: return false
-        val classId = normalClass.classId
-        if (classId.outerClassId == null || classId.shortClassName.asString() != JvmAbi.REPEATABLE_ANNOTATION_CONTAINER_NAME) return false
-
-        val klass = kotlinClassFinder.findKotlinClass(classId)
-        return klass != null && SpecialJvmAnnotations.isAnnotatedWithContainerMetaAnnotation(klass)
     }
 }
