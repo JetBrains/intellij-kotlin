@@ -7,10 +7,13 @@ package org.jetbrains.kotlin.checkers
 
 import com.intellij.testFramework.LightProjectDescriptor
 import org.jetbrains.kotlin.idea.test.JUnit3RunnerWithInners
+import org.jetbrains.kotlin.idea.test.TestRoot
 import org.jetbrains.kotlin.test.TestMetadata
 import org.junit.runner.RunWith
 
-@TestMetadata("idea/testData/checker/sealed")
+
+@TestRoot("idea/tests")
+@TestMetadata("testData/checker/sealed")
 @RunWith(JUnit3RunnerWithInners::class)
 class KotlinHighlightingPassSealedTest : AbstractKotlinHighlightingPassTest() {
 
