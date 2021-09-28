@@ -66,12 +66,12 @@ fun t5() : Int {
     return 1
     <warning>2</warning>
   }
-  while (<warning>1 > 2</warning>)
+  while (<warning descr="[NON_TRIVIAL_BOOLEAN_CONSTANT] Compiler wont reduce this expression to {0} in future. Please replace it with boolean literal"><warning descr="[UNREACHABLE_CODE] Unreachable code">1 > 2</warning></warning>)
   <warning>return 1</warning>
 }
 
 fun t6() : Int {
-  while (1 > 2) {
+  while (<warning descr="[NON_TRIVIAL_BOOLEAN_CONSTANT] Compiler wont reduce this expression to {0} in future. Please replace it with boolean literal">1 > 2</warning>) {
     return 1
     <warning>2</warning>
   }
@@ -79,7 +79,7 @@ fun t6() : Int {
 }
 
 fun t6break() : Int {
-  while (1 > 2) {
+  while (<warning descr="[NON_TRIVIAL_BOOLEAN_CONSTANT] Compiler wont reduce this expression to {0} in future. Please replace it with boolean literal">1 > 2</warning>) {
     break
     <warning>2</warning>
   }
