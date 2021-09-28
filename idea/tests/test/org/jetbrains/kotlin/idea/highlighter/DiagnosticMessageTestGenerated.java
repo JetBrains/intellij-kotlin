@@ -156,11 +156,6 @@ public class DiagnosticMessageTestGenerated extends AbstractDiagnosticMessageTes
         runTest("testData/diagnosticMessage/noneApplicable.kt");
     }
 
-    @TestMetadata("noneApplicableCallableReference.kt")
-    public void testNoneApplicableCallableReference() throws Exception {
-        runTest("testData/diagnosticMessage/noneApplicableCallableReference.kt");
-    }
-
     @TestMetadata("noneApplicableConstructor.kt")
     public void testNoneApplicableConstructor() throws Exception {
         runTest("testData/diagnosticMessage/noneApplicableConstructor.kt");
@@ -284,10 +279,5 @@ public class DiagnosticMessageTestGenerated extends AbstractDiagnosticMessageTes
     @TestMetadata("upperBoundViolatedInTypeAliasConstructorCall.kt")
     public void testUpperBoundViolatedInTypeAliasConstructorCall() throws Exception {
         runTest("testData/diagnosticMessage/upperBoundViolatedInTypeAliasConstructorCall.kt");
-    }
-
-    @TestMetadata("urlRender.kt")
-    public void testUrlRender() throws Exception {
-        runTest("testData/diagnosticMessage/urlRender.kt");
     }
 }
