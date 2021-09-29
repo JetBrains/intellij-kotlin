@@ -20,6 +20,6 @@ abstract class AbstractJvmBasicCompletionTest : KotlinFixtureCompletionBaseTestC
         override fun getSdk(): Sdk = IdeaTestUtil.getMockJdk16()
     }
 
-    override fun getPlatform() = JvmPlatforms.jvm16
+    override fun getPlatform() = JvmPlatforms.jvm6
     override fun defaultCompletionType() = CompletionType.BASIC
 }

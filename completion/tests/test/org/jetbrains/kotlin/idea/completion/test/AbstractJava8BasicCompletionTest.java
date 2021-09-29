@@ -21,6 +21,6 @@ public abstract class AbstractJava8BasicCompletionTest extends AbstractJvmBasicC
     @NotNull
     @Override
     public TargetPlatform getPlatform() {
-        return JvmPlatforms.INSTANCE.getJvm18();
+        return JvmPlatforms.INSTANCE.getJvm8();
     }
 }

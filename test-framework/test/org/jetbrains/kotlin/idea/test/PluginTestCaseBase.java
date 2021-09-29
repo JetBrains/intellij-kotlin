@@ -71,9 +71,11 @@ public class PluginTestCaseBase {
         switch (kind) {
             case MOCK_JDK:
                 return IdeaTestUtil.getMockJdk18();
-            case FULL_JDK_9:
+            case FULL_JDK_11:
                 String jre9 = KotlinTestUtils.getAtLeastJdk9Home().getPath();
                 return getSdk(jre9, "Full JDK 9");
+            case FULL_JDK_17:
+                return IdeaTestUtil.getMockJdk(LanguageLevel.JDK_X.toJavaVersion());
             case FULL_JDK:
                 return fullJdk();
             default:
@@ -86,8 +88,10 @@ public class PluginTestCaseBase {
         switch (kind) {
             case MOCK_JDK:
                 return LanguageLevel.JDK_1_8;
-            case FULL_JDK_9:
-                return LanguageLevel.JDK_1_9;
+            case FULL_JDK_11:
+                return LanguageLevel.JDK_11;
+            case FULL_JDK_17:
+                return LanguageLevel.JDK_X;
             case FULL_JDK:
                 return LanguageLevel.JDK_1_8;
             default:
