@@ -1141,7 +1141,7 @@ class KotlinMavenImporterTest : MavenImportingTestCase() {
         assertModules("project")
         assertImporterStatePresent()
 
-        Assert.assertEquals(JvmPlatforms.jvm16, facetSettings.targetPlatform)
+        Assert.assertEquals(JvmPlatforms.jvm6, facetSettings.targetPlatform)
 
         assertContentFolders("project", JavaSourceRootType.SOURCE, "src/main/kotlin")
         assertContentFolders("project", JavaSourceRootType.TEST_SOURCE, "src/test/java")
@@ -1196,7 +1196,7 @@ class KotlinMavenImporterTest : MavenImportingTestCase() {
         assertModules("project")
         assertImporterStatePresent()
 
-        Assert.assertEquals(JvmPlatforms.jvm16, facetSettings.targetPlatform)
+        Assert.assertEquals(JvmPlatforms.jvm6, facetSettings.targetPlatform)
     }
 
     fun testJvmDetectionByGoalWithCommonStdlib() {
@@ -1246,7 +1246,7 @@ class KotlinMavenImporterTest : MavenImportingTestCase() {
         assertModules("project")
         assertImporterStatePresent()
 
-        Assert.assertEquals(JvmPlatforms.jvm16, facetSettings.targetPlatform)
+        Assert.assertEquals(JvmPlatforms.jvm6, facetSettings.targetPlatform)
 
         assertContentFolders("project", JavaSourceRootType.SOURCE, "src/main/kotlin")
         assertContentFolders("project", JavaSourceRootType.TEST_SOURCE, "src/test/java")
@@ -1694,7 +1694,7 @@ class KotlinMavenImporterTest : MavenImportingTestCase() {
         assertModules("project")
         assertImporterStatePresent()
 
-        Assert.assertEquals(JvmPlatforms.jvm16, facetSettings.targetPlatform)
+        Assert.assertEquals(JvmPlatforms.jvm6, facetSettings.targetPlatform)
 
         assertContentFolders("project", SourceKotlinRootType, "src/main/kotlin")
         assertContentFolders("project", TestSourceKotlinRootType, "src/test/java")
@@ -2510,7 +2510,7 @@ class KotlinMavenImporterTest : MavenImportingTestCase() {
         }
 
         with(facetSettings("my-jvm-module")) {
-            Assert.assertEquals(JvmPlatforms.jvm16, targetPlatform)
+            Assert.assertEquals(JvmPlatforms.jvm6, targetPlatform)
             Assert.assertEquals(listOf("my-common-module1", "my-common-module2"), implementedModuleNames)
         }
 
