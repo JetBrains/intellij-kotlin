@@ -1140,7 +1140,7 @@ class KotlinMavenImporterTest : KotlinMavenImportingTestCase() {
         assertModules("project")
         assertImporterStatePresent()
 
-        Assert.assertEquals(JvmPlatforms.jvm16, facetSettings.targetPlatform)
+        Assert.assertEquals(JvmPlatforms.jvm6, facetSettings.targetPlatform)
 
         assertSources("project", "src/main/kotlin")
         assertTestSources("project", "src/test/java")
@@ -1195,7 +1195,7 @@ class KotlinMavenImporterTest : KotlinMavenImportingTestCase() {
         assertModules("project")
         assertImporterStatePresent()
 
-        Assert.assertEquals(JvmPlatforms.jvm16, facetSettings.targetPlatform)
+        Assert.assertEquals(JvmPlatforms.jvm6, facetSettings.targetPlatform)
     }
 
     fun testJvmDetectionByGoalWithCommonStdlib() {
@@ -1245,7 +1245,7 @@ class KotlinMavenImporterTest : KotlinMavenImportingTestCase() {
         assertModules("project")
         assertImporterStatePresent()
 
-        Assert.assertEquals(JvmPlatforms.jvm16, facetSettings.targetPlatform)
+        Assert.assertEquals(JvmPlatforms.jvm6, facetSettings.targetPlatform)
 
         assertSources("project", "src/main/kotlin")
         assertTestSources("project", "src/test/java")
@@ -1693,7 +1693,7 @@ class KotlinMavenImporterTest : KotlinMavenImportingTestCase() {
         assertModules("project")
         assertImporterStatePresent()
 
-        Assert.assertEquals(JvmPlatforms.jvm16, facetSettings.targetPlatform)
+        Assert.assertEquals(JvmPlatforms.jvm6, facetSettings.targetPlatform)
 
         assertKotlinSources("project", "src/main/kotlin")
         assertKotlinTestSources("project", "src/test/java")
@@ -2509,7 +2509,7 @@ class KotlinMavenImporterTest : KotlinMavenImportingTestCase() {
         }
 
         with(facetSettings("my-jvm-module")) {
-            Assert.assertEquals(JvmPlatforms.jvm16, targetPlatform)
+            Assert.assertEquals(JvmPlatforms.jvm6, targetPlatform)
             Assert.assertEquals(listOf("my-common-module1", "my-common-module2"), implementedModuleNames)
         }
 
