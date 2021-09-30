@@ -863,8 +863,6 @@
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/scripting-ide-services/kotlin.compiler-plugins.scripting-ide-services.iml" filepath="$PROJECT_DIR$/compiler-plugins/scripting-ide-services/kotlin.compiler-plugins.scripting-ide-services.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/kotlin.core.iml" filepath="$PROJECT_DIR$/core/kotlin.core.iml" />
       <module fileurl="file://$PROJECT_DIR$/jvm-debugger/eval4j/kotlin.eval4j.iml" filepath="$PROJECT_DIR$/jvm-debugger/eval4j/kotlin.eval4j.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fir/kotlin.fir.iml" filepath="$PROJECT_DIR$/fir/kotlin.fir.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kotlin.fir-all-tests/kotlin.fir-all-tests.iml" filepath="$PROJECT_DIR$/kotlin.fir-all-tests/kotlin.fir-all-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend-independent/kotlin.fir.frontend-independent.iml" filepath="$PROJECT_DIR$/frontend-independent/kotlin.fir.frontend-independent.iml" />
       <module fileurl="file://$PROJECT_DIR$/frontend-independent/tests/kotlin.fir.frontend-independent.tests.iml" filepath="$PROJECT_DIR$/frontend-independent/tests/kotlin.fir.frontend-independent.tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/formatter/kotlin.formatter.iml" filepath="$PROJECT_DIR$/formatter/kotlin.formatter.iml" />
