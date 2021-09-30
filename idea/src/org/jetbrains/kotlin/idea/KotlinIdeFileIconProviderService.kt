@@ -5,7 +5,6 @@
 
 package org.jetbrains.kotlin.idea
 
-import com.intellij.openapi.util.IconLoader
 import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.impl.ElementPresentationUtil
 import com.intellij.ui.IconManager
@@ -13,7 +12,7 @@ import com.intellij.util.PlatformIcons
 import javax.swing.Icon
 
 class KotlinIdeFileIconProviderService : KotlinIconProviderService() {
-    override fun getFileIcon(): Icon = KOTLIN_FILE
+    override fun getFileIcon(): Icon = KotlinIcons.FILE
 
     override fun getLightVariableIcon(element: PsiModifierListOwner, flags: Int): Icon {
         val iconManager = IconManager.getInstance()
@@ -22,7 +21,4 @@ class KotlinIdeFileIconProviderService : KotlinIconProviderService() {
         return ElementPresentationUtil.addVisibilityIcon(element, flags, baseIcon)
     }
 
-    companion object {
-        private val KOTLIN_FILE = IconLoader.getIcon("/org/jetbrains/kotlin/idea/icons/kotlin_file.svg")
-    }
 }
