@@ -38,6 +38,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm-debugger-evaluation.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm-debugger-sequence.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm-debugger-util.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm-run-configurations.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-line-indent-provider.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-maven.jar!/" />
@@ -116,6 +117,7 @@
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm-debugger-evaluation.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm-debugger-sequence.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm-debugger-util.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm-run-configurations.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-jvm.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-line-indent-provider.jar!/" />
       <root url="jar://$PROJECT_DIR$/out/artifacts/KotlinPluginCommunity/lib/kotlin-maven.jar!/" />

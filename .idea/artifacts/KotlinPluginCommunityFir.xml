@@ -208,6 +208,9 @@
         <element id="archive" name="uast-kotlin-fir">
           <element id="module-output" name="kotlin.uast.uast-kotlin-fir" />
         </element>
+        <element id="archive" name="kotlin-jvm-run-configurations.jar">
+          <element id="module-output" name="kotlin.jvm-run-configurations" />
+        </element>
       </element>
       <element id="directory" name="kotlinc">
         <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-dist-for-ide/1.6.0-dev-3158/kotlin-dist-for-ide-1.6.0-dev-3158.jar" path-in-jar="/" />
