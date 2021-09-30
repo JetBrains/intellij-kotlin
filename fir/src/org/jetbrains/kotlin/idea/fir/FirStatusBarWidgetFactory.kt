@@ -14,7 +14,7 @@ import com.intellij.openapi.wm.StatusBar
 import com.intellij.openapi.wm.StatusBarWidget
 import com.intellij.openapi.wm.StatusBarWidgetFactory
 import com.intellij.util.Consumer
-import org.jetbrains.kotlin.idea.KotlinIconsIndependent
+import org.jetbrains.kotlin.idea.KotlinIcons
 import java.awt.event.MouseEvent
 import javax.swing.Icon
 
@@ -40,7 +40,7 @@ private class Widget : StatusBarWidget, StatusBarWidget.IconPresentation {
     override fun getPresentation(): StatusBarWidget.WidgetPresentation = this
     override fun ID(): String = FirStatusBarWidgetFactory.ID
     override fun getTooltipText(): String = "FIR IDE"
-    override fun getIcon(): Icon = KotlinIconsIndependent.FIR
+    override fun getIcon(): Icon = KotlinIcons.FIR
 
     override fun dispose() {}
     override fun install(statusBar: StatusBar) {}
