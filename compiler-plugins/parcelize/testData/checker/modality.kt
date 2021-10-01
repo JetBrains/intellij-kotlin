@@ -27,5 +27,5 @@ fun foo() {
     <error descr="[PARCELABLE_CANT_BE_LOCAL_CLASS] 'Parcelable' can't be a local class">object</error> : Parcelable {}
 
     @Parcelize
-    class <error descr="[PARCELABLE_CANT_BE_LOCAL_CLASS] 'Parcelable' can't be a local class"><error descr="[NO_PARCELABLE_SUPERTYPE] No 'Parcelable' supertype">Local</error></error> {}
+    class <error descr="[NO_PARCELABLE_SUPERTYPE] No 'Parcelable' supertype"><error descr="[PARCELABLE_CANT_BE_LOCAL_CLASS] 'Parcelable' can't be a local class">Local</error></error> {}
 }
