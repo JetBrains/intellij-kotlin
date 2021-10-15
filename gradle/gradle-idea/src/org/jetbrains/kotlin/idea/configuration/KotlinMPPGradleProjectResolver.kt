@@ -497,7 +497,7 @@ open class KotlinMPPGradleProjectResolver : AbstractProjectResolverExtension() {
                         .map {
                             ExternalSystemTestRunTask(
                                 it.taskName,
-                                getKotlinModuleId(gradleModule, compilation, resolverCtx),
+                                gradleModule.gradleProject.path,
                                 target.name
                             )
                         }
