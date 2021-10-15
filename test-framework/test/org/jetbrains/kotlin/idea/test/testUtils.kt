@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.idea.test
 
 import com.intellij.lang.annotation.HighlightSeverity
+import com.intellij.openapi.diagnostic.ControlFlowException
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.projectRoots.Sdk
@@ -22,8 +23,10 @@ import org.jetbrains.kotlin.idea.caches.resolve.analyzeWithContent
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.idea.test.InTextDirectivesUtils
+import org.jetbrains.kotlin.resolve.diagnostics.Diagnostics
 import org.jetbrains.kotlin.test.KotlinRoot
 import java.io.File
+import java.util.*
 
 @JvmField
 val IDEA_TEST_DATA_DIR = File(KotlinRoot.DIR, "idea/tests/testData")
@@ -31,7 +34,23 @@ val IDEA_TEST_DATA_DIR = File(KotlinRoot.DIR, "idea/tests/testData")
 fun KtFile.dumpTextWithErrors(ignoreErrors: Set<DiagnosticFactory<*>> = emptySet()): String {
     val text = text
     if (InTextDirectivesUtils.isDirectiveDefined(text, "// DISABLE-ERRORS")) return text
-    val diagnostics = analyzeWithContent().diagnostics
+    val diagnostics = kotlin.run {
+        var lastException: Exception? = null
+        for (attempt in 0 until 2) {
+            try {
+                analyzeWithContent().diagnostics.let {
+                    return@run it
+                }
+            } catch (e: Exception) {
+                if (e is ControlFlowException) {
+                    lastException = e.cause as? Exception ?: e
+                    continue
+                }
+                lastException = e
+            }
+        }
+        throw lastException ?: IllegalStateException()
+    }
     val errors = diagnostics.filter { diagnostic ->
         diagnostic.severity == Severity.ERROR && diagnostic.factory !in ignoreErrors
     }
