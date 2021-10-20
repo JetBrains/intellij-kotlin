@@ -468,6 +468,12 @@ abstract class DefaultScriptingSupportBase(val manager: CompositeScriptConfigura
         }
     }
 
+    fun isLoadedFromCache(file: KtFile): Boolean {
+        if (!ScriptDefinitionsManager.getInstance(project).isReady()) return false
+
+        return file.originalFile.virtualFile?.let { cache[it] != null } ?: true
+    }
+
     /**
      * Ensure that any configuration for [files] is loaded from cache
      */
