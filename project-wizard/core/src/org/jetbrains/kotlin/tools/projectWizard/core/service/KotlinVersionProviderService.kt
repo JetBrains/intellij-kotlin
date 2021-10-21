@@ -5,8 +5,6 @@
 
 package org.jetbrains.kotlin.tools.projectWizard.core.service
 
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser.parseString
 import org.jetbrains.annotations.NonNls
 import org.jetbrains.kotlin.tools.projectWizard.Versions
 import org.jetbrains.kotlin.tools.projectWizard.core.TaskResult
@@ -99,25 +97,10 @@ val KotlinVersionKind.isStable
     get() = this == KotlinVersionKind.STABLE
 
 object EapVersionDownloader {
-    fun getLatestEapVersion() = downloadVersionFromMavenCentral(EAP_URL).firstOrNull()
+    fun getLatestEapVersion() = downloadVersions(EAP_URL).firstOrNull()
 
     private fun downloadPage(url: String): TaskResult<String> = safe {
         BufferedReader(InputStreamReader(URL(url).openStream())).lines().collect(Collectors.joining("\n"))
-    }
-
-    @Suppress("SameParameterValue")
-    private fun downloadVersionFromMavenCentral(url: String) = compute {
-        val (text) = downloadPage(url)
-        val (versionString) = parseLatestVersionFromJson(text)
-        if (versionString.isNotEmpty())
-            listOf(Version.fromString(versionString))
-        else
-            emptyList()
-    }.asNullable.orEmpty()
-
-    private fun parseLatestVersionFromJson(text: String) = safe {
-        val json = parseString(text) as JsonObject
-        json.get("response").asJsonObject.get("docs").asJsonArray.get(0).asJsonObject.get("latestVersion").asString
     }
 
     @Suppress("SameParameterValue")
@@ -132,7 +115,7 @@ object EapVersionDownloader {
     }.asNullable.orEmpty()
 
     @NonNls
-    private val EAP_URL = "https://search.maven.org/solrsearch/select?q=g:org.jetbrains.kotlin%20AND%20a:kotlin-gradle-plugin"
+    private val EAP_URL = "https://plugins.gradle.org/m2/org/jetbrains/kotlin/jvm/org.jetbrains.kotlin.jvm.gradle.plugin/"
 
     @NonNls
     private val versionRegexp = """href="([^"\\]+)"""".toRegex()
