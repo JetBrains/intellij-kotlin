@@ -12,7 +12,8 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.isInImportDirective
 import org.jetbrains.kotlin.resolve.source.getPsi
-import org.jetbrains.kotlin.synthetic.JavaSyntheticPropertiesScope
+import org.jetbrains.kotlin.load.java.possibleGetMethodNames
+import org.jetbrains.kotlin.load.java.setMethodName
 
 internal class IncompatibleAPIKotlinVisitor(
     private val holder: ProblemsHolder,
@@ -31,12 +32,12 @@ internal class IncompatibleAPIKotlinVisitor(
         val names = HashSet<String>()
         names.add(nameStr)
 
-        val gettersNames = JavaSyntheticPropertiesScope.possibleGetMethodNames(
+        val gettersNames = possibleGetMethodNames(
             Name.identifier(nameStr)
         )
         if (!gettersNames.isEmpty()) {
             names.addAll(gettersNames.map { it.identifier })
-            names.add(JavaSyntheticPropertiesScope.setMethodName(gettersNames.first()).identifier)
+            names.add(setMethodName(gettersNames.first()).identifier)
         }
 
         if (names.none { name -> problemsCache.containsWord(name) }) {
