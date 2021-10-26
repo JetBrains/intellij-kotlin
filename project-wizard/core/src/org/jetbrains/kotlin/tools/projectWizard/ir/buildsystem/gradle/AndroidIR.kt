@@ -14,10 +14,11 @@ data class AndroidConfigIR(
     val newManifestPath: Path?,
     val printVersionCode: Boolean,
     val printBuildTypes: Boolean,
+    var androidSdkVersion: String = "29"
 ) : AndroidIR, FreeIR {
     override fun GradlePrinter.renderGradle() {
         sectionCall("android", needIndent = true) {
-            call("compileSdkVersion") { +"29" }; nlIndented() // TODO dehardcode
+            call("compileSdkVersion") { +androidSdkVersion }; nlIndented() // TODO dehardcode
             if (newManifestPath != null) {
                 when (dsl) {
                     GradlePrinter.GradleDsl.KOTLIN -> {
@@ -34,7 +35,7 @@ data class AndroidConfigIR(
                     assignmentOrCall("applicationId") { +javaPackage.asCodePackage().quotified }; nlIndented()
                 }
                 call("minSdkVersion") { +"24" }; nlIndented()  // TODO dehardcode
-                call("targetSdkVersion") { +"29" };// TODO dehardcode
+                call("targetSdkVersion") { +androidSdkVersion };// TODO dehardcode
                 if (printVersionCode) {
                     nlIndented()
                     assignmentOrCall("versionCode") { +"1" }; nlIndented()
