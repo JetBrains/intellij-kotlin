@@ -16,6 +16,8 @@
 
 package org.jetbrains.kotlin.idea;
 
+import com.intellij.ide.plugins.DynamicPluginListener;
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.ProjectTopics;
 import com.intellij.openapi.diagnostic.Logger;
@@ -25,6 +27,7 @@ import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.roots.ModuleRootListener;
 import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.updateSettings.impl.UpdateChecker;
+import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory;
 import org.jetbrains.kotlin.diagnostics.Errors;
@@ -44,12 +47,36 @@ public class PluginStartupActivity implements StartupActivity {
         StartupKt.runActivity(project);
         PluginStartupService.Companion.getInstance(project).register(project);
 
-        project.getMessageBus().connect().subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootListener() {
+        MessageBusConnection connection = project.getMessageBus().connect();
+        connection.subscribe(ProjectTopics.PROJECT_ROOTS, new ModuleRootListener() {
             @Override
             public void rootsChanged(@NotNull ModuleRootEvent event) {
                 KotlinJavaPsiFacade.getInstance(project).clearPackageCaches();
             }
         });
+
+        connection.subscribe(
+                DynamicPluginListener.TOPIC,
+                new DynamicPluginListener() {
+                    @Override
+                    public void beforePluginUnload(@NotNull IdeaPluginDescriptor pluginDescriptor, boolean isUpdate) {
+                        clearPackageCaches();
+                    }
+
+                    @Override
+                    public void pluginUnloaded(@NotNull IdeaPluginDescriptor pluginDescriptor, boolean isUpdate) {
+                        clearPackageCaches();
+                    }
+
+                    @Override
+                    public void pluginLoaded(@NotNull IdeaPluginDescriptor pluginDescriptor) {
+                        clearPackageCaches();
+                    }
+
+                    private void clearPackageCaches() {
+                        KotlinJavaPsiFacade.getInstance(project).clearPackageCaches();
+                    }
+                });
 
         initializeDiagnostics();
 
