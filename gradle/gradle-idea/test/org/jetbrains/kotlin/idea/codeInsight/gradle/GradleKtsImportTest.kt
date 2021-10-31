@@ -93,7 +93,6 @@ class GradleKtsImportTest : KotlinGradleImportingTestCase() {
         assert(result is AssertionFailedError) { "Exception should be thrown" }
         assertNotNull(context)
         assert(context?.cancellationTokenSource?.token()?.isCancellationRequested == true)
-        checkConfiguration("build.gradle.kts")
         val errors = events.filterIsInstance<MessageEventImpl>().filter { it.kind == MessageEvent.Kind.ERROR }
         val buildScriptErrors = errors.filter { it.group == build_script_errors_group }
         assertTrue(
