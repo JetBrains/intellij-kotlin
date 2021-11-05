@@ -7,7 +7,7 @@ package org.jetbrains.kotlin.idea.core
 
 import org.jetbrains.kotlin.builtins.jvm.JavaToKotlinClassMap
 import org.jetbrains.kotlin.idea.util.ImportInsertHelper
-import org.jetbrains.kotlin.load.java.components.JavaAnnotationMapper
+import org.jetbrains.kotlin.load.java.javaToKotlinNameMap
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.ImportPath
@@ -80,4 +80,4 @@ class ImportableFqNameClassifier(private val file: KtFile) {
 }
 
 fun isJavaClassNotToBeUsedInKotlin(fqName: FqName): Boolean =
-    JavaToKotlinClassMap.isJavaPlatformClass(fqName) || JavaAnnotationMapper.javaToKotlinNameMap[fqName] != null
+    JavaToKotlinClassMap.isJavaPlatformClass(fqName) || javaToKotlinNameMap[fqName] != null
