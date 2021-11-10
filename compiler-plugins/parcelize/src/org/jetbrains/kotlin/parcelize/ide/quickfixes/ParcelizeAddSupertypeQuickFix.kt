@@ -16,8 +16,8 @@
 
 package org.jetbrains.kotlin.parcelize.ide.quickfixes
 
-import org.jetbrains.kotlin.parcelize.ANDROID_PARCELABLE_CLASS_FQNAME
 import org.jetbrains.kotlin.parcelize.ide.KotlinParcelizeBundle
+import org.jetbrains.kotlin.parcelize.ParcelizeNames
 import org.jetbrains.kotlin.psi.*
 
 class ParcelizeAddSupertypeQuickFix(clazz: KtClassOrObject) : AbstractParcelizeQuickFix<KtClassOrObject>(clazz) {
@@ -26,7 +26,7 @@ class ParcelizeAddSupertypeQuickFix(clazz: KtClassOrObject) : AbstractParcelizeQ
     override fun getText() = KotlinParcelizeBundle.message("parcelize.fix.add.parcelable.supertype")
 
     override fun invoke(ktPsiFactory: KtPsiFactory, element: KtClassOrObject) {
-        val supertypeName = ANDROID_PARCELABLE_CLASS_FQNAME.asString()
+        val supertypeName = ParcelizeNames.PARCEL_ID.asFqNameString()
         element.addSuperTypeListEntry(ktPsiFactory.createSuperTypeEntry(supertypeName)).shortenReferences()
     }
 }
