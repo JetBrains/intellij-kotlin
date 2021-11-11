@@ -11,9 +11,9 @@ group = "me.user"
 version = "1.0"
 
 repositories {
+    google()
     mavenCentral()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
-    google()
 }
 
 dependencies {
