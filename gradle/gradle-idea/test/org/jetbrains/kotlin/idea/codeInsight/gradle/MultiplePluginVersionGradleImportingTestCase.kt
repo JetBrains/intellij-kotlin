@@ -45,6 +45,7 @@ abstract class MultiplePluginVersionGradleImportingTestCase : KotlinGradleImport
             "mavenCentral()",
             "mavenLocal()",
             "google()",
+            "gradlePluginPortal()",
             "jcenter()"
         ).joinToString("\n")
     }
