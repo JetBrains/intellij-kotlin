@@ -13,7 +13,7 @@ import org.junit.internal.runners.JUnit38ClassRunner
 import org.junit.runner.RunWith
 
 @TestRoot("idea")
-@TestMetadata("testData/checker/custom")
+@TestMetadata("tests/testData/checker/custom")
 @RunWith(JUnit38ClassRunner::class)
 class KotlinHighlightingPassCustomTest : AbstractKotlinHighlightingPassTest() {
 
