@@ -40,7 +40,7 @@ class B : A {
 }""".trimIndent()
         )
 
-        doTestAndCheck("B", "foo", 1)
+        doTestAndCheck("B", "foo", 0)
     }
 
     fun testJvmSynthetic() {
