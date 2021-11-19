@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.search.LocalSearchScope
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.builtins.isExtensionFunctionType
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
 import org.jetbrains.kotlin.idea.caches.resolve.getResolutionFacade
@@ -26,7 +27,6 @@ import org.jetbrains.kotlin.idea.refactoring.inline.KotlinInlineAnonymousFunctio
 import org.jetbrains.kotlin.idea.search.usagesSearch.descriptor
 import org.jetbrains.kotlin.idea.util.*
 import org.jetbrains.kotlin.idea.intentions.isInvokeOperator
-import org.jetbrains.kotlin.idea.resolve.getLanguageVersionSettings
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.*
@@ -46,6 +46,7 @@ import org.jetbrains.kotlin.utils.addIfNotNull
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 class CodeInliner<TCallElement : KtElement>(
+    private val languageVersionSettings: LanguageVersionSettings,
     private val usageExpression: KtSimpleNameExpression?,
     private val bindingContext: BindingContext,
     private val resolvedCall: ResolvedCall<out CallableDescriptor>,
@@ -204,7 +205,6 @@ class CodeInliner<TCallElement : KtElement>(
         lexicalScope: LexicalScope,
         endOfScope: Int,
     ) {
-        val languageVersionSettings =  declarations.first().getResolutionFacade().getLanguageVersionSettings()
         val validator = CollectingNameValidator { !it.nameHasConflictsInScope(lexicalScope, languageVersionSettings) }
         for (declaration in declarations) {
             val oldName = declaration.name

@@ -18,8 +18,10 @@ package org.jetbrains.kotlin.idea.codeInliner
 
 import com.intellij.openapi.diagnostic.Logger
 import org.jetbrains.kotlin.idea.caches.resolve.analyze
+import org.jetbrains.kotlin.idea.caches.resolve.getResolutionFacade
 import org.jetbrains.kotlin.idea.intentions.OperatorToFunctionIntention
 import org.jetbrains.kotlin.idea.intentions.isInvokeOperator
+import org.jetbrains.kotlin.idea.resolve.getLanguageVersionSettings
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getElementTextWithContext
@@ -56,6 +58,7 @@ class CallableUsageReplacementStrategy(
 
         if (!CodeInliner.canBeReplaced(callElement)) return null
 
+        val languageVersionSettings = usage.getResolutionFacade().getLanguageVersionSettings()
         //TODO: precheck pattern correctness for annotation entry
 
         return when {
@@ -73,7 +76,7 @@ class CallableUsageReplacementStrategy(
             }
             usage is KtSimpleNameExpression -> {
                 {
-                    CodeInliner(usage, bindingContext, resolvedCall, callElement, inlineSetter, replacement).doInline()
+                    CodeInliner(languageVersionSettings, usage, bindingContext, resolvedCall, callElement, inlineSetter, replacement).doInline()
                 }
             }
             else -> {
