@@ -72,7 +72,15 @@ public class BuiltInsReferenceResolverTest extends KotlinLightCodeInsightFixture
         doTest();
     }
 
-    public void testAllReferencesResolved() {
+    /**
+     * This test is ignored in kt-211-* branches, because it isn't properly configured.
+     * DefaultBuiltIns.getInstance() loads built-ins from current class loader, and the classloader for all tests is module kotlin.all-tests
+     * So the stdlib in classpath for this test is kotlin.all-tests -> intellij.platform.core -> kotlin-stdlib-jdk8 = 1.4.32
+     *
+     * But Sources for this test is used from ProjectDescriptorWithStdlibSources.INSTANCE -> KotlinArtifacts#getKotlinStdlibSources()
+     * And it is the sources from compiler dependencies, i.e. it is something like 1.6.20-dev or 1.7.0-dev in master
+     */
+    public void ignoredTestAllReferencesResolved() {
         for (DeclarationDescriptor descriptor : getAllStandardDescriptors()) {
             assertNotNull("Can't resolve " + descriptor, DescriptorToSourceUtilsIde.INSTANCE.getAnyDeclaration(getProject(), descriptor));
         }
