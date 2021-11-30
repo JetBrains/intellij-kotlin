@@ -31,13 +31,11 @@ import org.jetbrains.kotlin.idea.refactoring.CompositeRefactoringRunner
 import org.jetbrains.kotlin.idea.refactoring.changeSignature.*
 import org.jetbrains.kotlin.idea.util.application.runWriteAction
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
-import org.jetbrains.kotlin.psi.psiUtil.createSmartPointer
-import org.jetbrains.kotlin.psi.psiUtil.endOffset
-import org.jetbrains.kotlin.psi.psiUtil.startOffset
+import org.jetbrains.kotlin.psi.psiUtil.*
 import org.jetbrains.kotlin.resolve.descriptorUtil.secondaryConstructors
 import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
 import org.jetbrains.kotlin.resolve.source.getPsi
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 object InitializePropertyQuickFixFactory : KotlinIntentionActionsFactory() {
     class AddInitializerFix(property: KtProperty) : KotlinQuickFixAction<KtProperty>(property) {
@@ -220,11 +218,15 @@ object InitializePropertyQuickFixFactory : KotlinIntentionActionsFactory() {
 
         actions.add(AddInitializerFix(property))
 
-        (property.containingClassOrObject as? KtClass)?.let { klass ->
+        property.containingClassOrObject.safeAs<KtClass>()?.let { klass ->
             if (klass.isAnnotation() || klass.isInterface()) return@let
+            if (klass.primaryConstructor?.hasActualModifier() == true) return@let
 
-            if (property.accessors.isNotEmpty() || klass.secondaryConstructors.any { !it.getDelegationCall().isCallToThis }) {
-                actions.add(InitializeWithConstructorParameter(property))
+            val secondaryConstructors by lazy { klass.secondaryConstructors.filter { it.getDelegationCallOrNull()?.isCallToThis != true } }
+            if (property.accessors.isNotEmpty() || secondaryConstructors.isNotEmpty()) {
+                if (secondaryConstructors.none { it.hasActualModifier() }) {
+                    actions.add(InitializeWithConstructorParameter(property))
+                }
             } else {
                 actions.add(MoveToConstructorParameters(property))
             }
