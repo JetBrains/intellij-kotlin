@@ -58,7 +58,7 @@ class ComposeAndroidTemplate : Template() {
     override fun Reader.updateBuildFileIRs(irs: List<BuildSystemIR>): List<BuildSystemIR> {
         val androidIR = irs.filterIsInstance<AndroidConfigIR>().firstOrNull()
         if (androidIR != null) {
-            androidIR.androidSdkVersion = "30"
+            androidIR.androidSdkVersion = "31"
         }
         return irs.filterNot {
             it.safeAs<GradleOnlyPluginByNameIR>()?.pluginId == AndroidModuleConfigurator.DEPENDENCIES.KOTLIN_ANDROID_EXTENSIONS_NAME
@@ -139,7 +139,7 @@ class ComposeCommonAndroidTemplate : Template() {
     override fun Reader.updateBuildFileIRs(irs: List<BuildSystemIR>): List<BuildSystemIR> {
         val androidIR = irs.filterIsInstance<AndroidConfigIR>().firstOrNull()
         if (androidIR != null) {
-            androidIR.androidSdkVersion = "30"
+            androidIR.androidSdkVersion = "31"
         }
         return irs.filterNot {
             it.safeAs<GradleOnlyPluginByNameIR>()?.pluginId == AndroidModuleConfigurator.DEPENDENCIES.KOTLIN_ANDROID_EXTENSIONS_NAME
