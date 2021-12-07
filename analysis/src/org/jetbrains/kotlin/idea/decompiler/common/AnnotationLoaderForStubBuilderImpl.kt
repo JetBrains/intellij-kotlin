@@ -81,4 +81,6 @@ class AnnotationLoaderForStubBuilderImpl(
         expectedType: KotlinType
     ) {
     }
+
+    override fun loadAnnotationDefaultValue(container: ProtoContainer, proto: ProtoBuf.Property, expectedType: KotlinType): Unit? = null
 }
