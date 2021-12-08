@@ -1009,21 +1009,6 @@ public abstract class IncrementalJvmJpsTestGenerated extends AbstractIncremental
                     KotlinTestUtils.runTest(this::doTest, this, TargetBackend.JVM_IR, testDataFilePath);
                 }
 
-                @TestMetadata("methodAddDefault")
-                public void testMethodAddDefault() throws Exception {
-                    runTest("testData/incremental/withJava/javaUsedInKotlin/samConversions/methodAddDefault/");
-                }
-
-                @TestMetadata("methodAdded")
-                public void testMethodAdded() throws Exception {
-                    runTest("testData/incremental/withJava/javaUsedInKotlin/samConversions/methodAdded/");
-                }
-
-                @TestMetadata("methodAddedSamAdapter")
-                public void testMethodAddedSamAdapter() throws Exception {
-                    runTest("testData/incremental/withJava/javaUsedInKotlin/samConversions/methodAddedSamAdapter/");
-                }
-
                 @TestMetadata("methodSignatureChanged")
                 public void testMethodSignatureChanged() throws Exception {
                     runTest("testData/incremental/withJava/javaUsedInKotlin/samConversions/methodSignatureChanged/");
