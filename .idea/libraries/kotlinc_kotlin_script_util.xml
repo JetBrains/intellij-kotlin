@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="libraryTable">
   <library name="kotlinc.kotlin-script-util" type="repository">
-    <properties include-transitive-deps="false" maven-id="org.jetbrains.kotlin:kotlin-script-util:1.6.20-dev-5963" />
+    <properties include-transitive-deps="false" maven-id="org.jetbrains.kotlin:kotlin-script-util:1.6.20-dev-6927" />
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-script-util/1.6.20-dev-5963/kotlin-script-util-1.6.20-dev-5963.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-script-util/1.6.20-dev-6927/kotlin-script-util-1.6.20-dev-6927.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-script-util/1.6.20-dev-5963/kotlin-script-util-1.6.20-dev-5963-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-script-util/1.6.20-dev-6927/kotlin-script-util-1.6.20-dev-6927-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
