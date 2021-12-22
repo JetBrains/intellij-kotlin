@@ -157,6 +157,9 @@ val ModuleDescriptor.implementingDescriptors: List<ModuleDescriptor>
         return implementingModuleInfos.mapNotNull { it.toDescriptor() }
     }
 
+val ModuleDescriptor.allImplementingDescriptors: Collection<ModuleDescriptor>
+    get() = implementingDescriptors.closure(true) { it.implementingDescriptors }
+
 fun Module.toInfo(type: SourceType): ModuleSourceInfo? = when (type) {
     PRODUCTION -> productionSourceInfo()
     TEST -> testSourceInfo()
