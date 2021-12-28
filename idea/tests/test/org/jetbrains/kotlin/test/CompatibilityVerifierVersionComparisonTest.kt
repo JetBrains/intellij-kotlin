@@ -94,6 +94,17 @@ class CompatibilityVerifierVersionComparisonTest : LightPlatformTestCase() {
         assertEquals("1", version.patchNumber)
     }
 
+    fun testKotlinVersionVerbose() {
+        assertKotlinVersionVerbose("1.5.0")
+        assertKotlinVersionVerbose("1.3.10-M1-8132")
+        assertKotlinVersionVerbose("1.4.32-release")
+        assertKotlinVersionVerbose("1.4.32-dev-333")
+    }
+
+    private fun assertKotlinVersionVerbose(version: String, expected: String = version) {
+        assertEquals(expected, KotlinVersionVerbose.parse(version)?.toString())
+    }
+
     private fun testVersion(
         version: String,
         expectedKotlinVersion: String,

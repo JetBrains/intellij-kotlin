@@ -59,6 +59,19 @@ data class KotlinVersionVerbose(val plainVersion: KotlinVersion, val milestone: 
             return KotlinVersionVerbose(KotlinVersion(major.toInt(), minor.toInt(), patch.toInt()), enumMilestone, intBuildNumber)
         }
     }
+
+    override fun toString(): String = buildString {
+        append(plainVersion)
+        milestone?.let {
+            append('-')
+            append(it.name)
+        }
+
+        buildNumber?.let {
+            append('-')
+            append(it)
+        }
+    }
 }
 
 /**
