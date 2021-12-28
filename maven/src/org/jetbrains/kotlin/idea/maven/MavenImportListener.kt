@@ -12,7 +12,6 @@ import org.jetbrains.idea.maven.project.MavenImportListener
 import org.jetbrains.idea.maven.project.MavenProject
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.kotlin.idea.configuration.KotlinMigrationProjectService
-import org.jetbrains.kotlin.idea.configuration.notifyOutdatedBundledCompilerIfNecessary
 import org.jetbrains.kotlin.idea.core.KotlinPluginDisposable
 import org.jetbrains.kotlin.idea.util.ProgressIndicatorUtils.runUnderDisposeAwareIndicator
 
@@ -25,7 +24,6 @@ class MavenImportListener : StartupActivity {
             MavenImportListener.TOPIC,
             MavenImportListener { _: Collection<MavenProject>, _: List<Module> ->
                 runUnderDisposeAwareIndicator(parentDisposable) {
-                    notifyOutdatedBundledCompilerIfNecessary(project)
                     KotlinMigrationProjectService.getInstance(project).onImportFinished()
                 }
             }
