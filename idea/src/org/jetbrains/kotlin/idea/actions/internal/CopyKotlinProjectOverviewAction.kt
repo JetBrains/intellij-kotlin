@@ -21,6 +21,11 @@ import org.jetbrains.kotlin.idea.KotlinBundle
 import org.jetbrains.kotlin.idea.KotlinPluginUtil
 import org.jetbrains.kotlin.idea.configuration.*
 import org.jetbrains.kotlin.idea.util.buildNumber
+import org.jetbrains.kotlin.idea.configuration.findExternalKotlinCompilerVersion
+import org.jetbrains.kotlin.idea.configuration.getBuildSystemType
+import org.jetbrains.kotlin.idea.configuration.hasKotlinFilesInSources
+import org.jetbrains.kotlin.idea.configuration.hasKotlinFilesOnlyInTests
+import org.jetbrains.kotlin.idea.util.application.isApplicationInternalMode
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 
@@ -97,16 +102,10 @@ class CopyKotlinProjectOverviewAction : AnAction() {
 
     private fun getModuleBuildVersions(project: Project): Sequence<String?> {
         val modules = ModuleManager.getInstance(project).modules
-
         return sequence {
             for (module in modules) {
-                val compilerVersion = if (module.getBuildSystemType() == BuildSystemType.JPS) {
-                    buildNumber
-                } else {
-                    module.externalCompilerVersion
-                }
-
-                yield(compilerVersion)
+                val compilerVersion = module.findExternalKotlinCompilerVersion()
+                yield(compilerVersion?.toString())
             }
         }
     }
