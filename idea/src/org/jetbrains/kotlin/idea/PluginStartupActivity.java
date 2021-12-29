@@ -32,7 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory;
 import org.jetbrains.kotlin.diagnostics.Errors;
 import org.jetbrains.kotlin.idea.configuration.ui.notifications.LegacyIsResolveModulePerSourceSetNotificationKt;
-import org.jetbrains.kotlin.idea.configuration.ui.notifications.NewCodeStyleNotificationKt;
+import org.jetbrains.kotlin.idea.configuration.notifications.NewCodeStyleNotificationKt;
 import org.jetbrains.kotlin.idea.reporter.KotlinReportSubmitter;
 import org.jetbrains.kotlin.js.resolve.diagnostics.ErrorsJs;
 import org.jetbrains.kotlin.resolve.jvm.KotlinJavaPsiFacade;
