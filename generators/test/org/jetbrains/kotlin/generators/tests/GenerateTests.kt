@@ -758,9 +758,6 @@ private fun assembleWorkspace(): TWorkspace = workspace {
             model("decompiler/decompiledTextJs", pattern = Patterns.forRegex("""^([^\.]+)$"""), targetBackend = TargetBackend.JS)
         }
 
-        testClass<AbstractClsStubBuilderTest> {
-            model("decompiler/stubBuilder", pattern = DIRECTORY, isRecursive = false)
-        }
 
         testClass<AbstractJvmOptimizeImportsTest> {
             model("editor/optimizeImports/jvm", pattern = KT_OR_KTS_WITHOUT_DOTS)

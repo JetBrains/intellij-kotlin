@@ -14,7 +14,7 @@ import com.intellij.psi.search.EverythingGlobalScope
 import com.intellij.util.indexing.*
 import com.intellij.util.io.DataExternalizer
 import com.intellij.util.io.EnumDataDescriptor
-import org.jetbrains.kotlin.idea.caches.FileAttributeService
+import org.jetbrains.kotlin.analysis.decompiler.stub.file.FileAttributeService
 import org.jetbrains.kotlin.serialization.deserialization.MetadataPackageFragment
 
 enum class KnownLibraryKindForIndex {
