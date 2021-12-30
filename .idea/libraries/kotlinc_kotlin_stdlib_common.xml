@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="libraryTable">
   <library name="kotlinc.kotlin-stdlib-common" type="repository">
-    <properties include-transitive-deps="false" maven-id="org.jetbrains.kotlin:kotlin-stdlib-common:1.6.20-dev-6927" />
+    <properties include-transitive-deps="false" maven-id="org.jetbrains.kotlin:kotlin-stdlib-common:1.6.20-M1-34" />
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-common/1.6.20-dev-6927/kotlin-stdlib-common-1.6.20-dev-6927.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-common/1.6.20-M1-34/kotlin-stdlib-common-1.6.20-M1-34.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-common/1.6.20-dev-6927/kotlin-stdlib-common-1.6.20-dev-6927-sources.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-common/1.6.20-M1-34/kotlin-stdlib-common-1.6.20-M1-34-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
