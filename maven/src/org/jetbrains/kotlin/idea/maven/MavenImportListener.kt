@@ -12,6 +12,7 @@ import org.jetbrains.idea.maven.project.MavenImportListener
 import org.jetbrains.idea.maven.project.MavenProject
 import org.jetbrains.idea.maven.project.MavenProjectsManager
 import org.jetbrains.kotlin.idea.configuration.KotlinMigrationProjectService
+import org.jetbrains.kotlin.idea.configuration.notifications.checkExternalKotlinCompilerVersion
 import org.jetbrains.kotlin.idea.core.KotlinPluginDisposable
 import org.jetbrains.kotlin.idea.util.ProgressIndicatorUtils.runUnderDisposeAwareIndicator
 
@@ -25,6 +26,7 @@ class MavenImportListener : StartupActivity {
             MavenImportListener { _: Collection<MavenProject>, _: List<Module> ->
                 runUnderDisposeAwareIndicator(parentDisposable) {
                     KotlinMigrationProjectService.getInstance(project).onImportFinished()
+                    checkExternalKotlinCompilerVersion(project)
                 }
             }
         )

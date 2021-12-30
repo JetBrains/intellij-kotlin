@@ -22,6 +22,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.ProjectTopics;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.extensions.PluginId;
+import com.intellij.openapi.externalSystem.service.project.manage.ProjectDataImportListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootEvent;
 import com.intellij.openapi.roots.ModuleRootListener;
@@ -29,6 +30,7 @@ import com.intellij.openapi.startup.StartupActivity;
 import com.intellij.openapi.updateSettings.impl.UpdateChecker;
 import com.intellij.util.messages.MessageBusConnection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.diagnostics.DiagnosticFactory;
 import org.jetbrains.kotlin.diagnostics.Errors;
 import org.jetbrains.kotlin.idea.configuration.ui.notifications.LegacyIsResolveModulePerSourceSetNotificationKt;
@@ -38,6 +40,8 @@ import org.jetbrains.kotlin.js.resolve.diagnostics.ErrorsJs;
 import org.jetbrains.kotlin.resolve.jvm.KotlinJavaPsiFacade;
 import org.jetbrains.kotlin.resolve.jvm.diagnostics.ErrorsJvm;
 import org.jetbrains.kotlin.resolve.konan.diagnostics.ErrorsNative;
+
+import static org.jetbrains.kotlin.idea.configuration.notifications.NewExternalKotlinCompilerNotificationKt.checkExternalKotlinCompilerVersion;
 
 public class PluginStartupActivity implements StartupActivity {
     private static final Logger LOG = Logger.getInstance(PluginStartupActivity.class);
@@ -75,6 +79,15 @@ public class PluginStartupActivity implements StartupActivity {
 
                     private void clearPackageCaches() {
                         KotlinJavaPsiFacade.getInstance(project).clearPackageCaches();
+                    }
+                });
+
+        connection.subscribe(
+                ProjectDataImportListener.TOPIC,
+                new ProjectDataImportListener() {
+                    @Override
+                    public void onImportFinished(@Nullable String projectPath) {
+                        checkExternalKotlinCompilerVersion(project);
                     }
                 });
 
