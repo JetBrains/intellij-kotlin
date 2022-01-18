@@ -12,7 +12,12 @@ import org.jetbrains.kotlin.asJava.classes.KtLightClass
 import org.jetbrains.kotlin.asJava.elements.FakeFileForLightClass
 import org.jetbrains.kotlin.asJava.elements.KtLightElement
 import org.jetbrains.kotlin.asJava.elements.KtLightMember
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.psiUtil.getAssignmentByLHS
+import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
+import org.jetbrains.kotlin.resolve.references.ReferenceAccess
+import org.jetbrains.kotlin.utils.addToStdlib.constant
 import org.jetbrains.uast.UDeclaration
 import org.jetbrains.uast.UElement
 import java.util.function.Supplier
@@ -46,6 +51,30 @@ fun KtExpression.unwrapBlockOrParenthesis(): KtExpression {
         return KtPsiUtil.safeDeparenthesize(statement)
     }
     return innerExpression
+}
+
+fun KtExpression.readWriteAccess(): ReferenceAccess {
+    var expression = getQualifiedExpressionForSelectorOrThis()
+    loop@ while (true) {
+        val parent = expression.parent
+        when (parent) {
+            is KtParenthesizedExpression, is KtAnnotatedExpression, is KtLabeledExpression -> expression = parent as KtExpression
+            else -> break@loop
+        }
+    }
+
+    val assignment = expression.getAssignmentByLHS()
+    if (assignment != null) {
+        return when (assignment.operationToken) {
+            KtTokens.EQ -> ReferenceAccess.WRITE
+            else -> ReferenceAccess.READ_WRITE
+        }
+    }
+
+    return if ((expression.parent as? KtUnaryExpression)?.operationToken in constant { setOf(KtTokens.PLUSPLUS, KtTokens.MINUSMINUS) })
+        ReferenceAccess.READ_WRITE
+    else
+        ReferenceAccess.READ
 }
 
 fun KtElement.canAnalyze(): Boolean {

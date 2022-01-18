@@ -32,7 +32,6 @@ import org.jetbrains.kotlin.codegen.signature.BothSignatureWriter
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.descriptors.synthetic.SyntheticMemberDescriptor
 import org.jetbrains.kotlin.idea.KotlinLanguage
-import org.jetbrains.kotlin.idea.references.readWriteAccess
 import org.jetbrains.kotlin.load.java.lazy.descriptors.LazyJavaPackageFragment
 import org.jetbrains.kotlin.load.java.sam.SamAdapterDescriptor
 import org.jetbrains.kotlin.load.kotlin.KotlinJvmBinaryPackageSourceElement
@@ -279,7 +278,7 @@ fun resolveToDeclarationImpl(sourcePsi: KtExpression, declarationDescriptor: Dec
         declarationDescriptor = declarationDescriptor.callableFromObject
     }
     if (declarationDescriptor is SyntheticJavaPropertyDescriptor) {
-        declarationDescriptor = when (sourcePsi.readWriteAccess(useResolveForReadWrite = false)) {
+        declarationDescriptor = when (sourcePsi.readWriteAccess()) {
             ReferenceAccess.WRITE, ReferenceAccess.READ_WRITE ->
                 declarationDescriptor.setMethod ?: declarationDescriptor.getMethod
             ReferenceAccess.READ -> declarationDescriptor.getMethod
@@ -310,7 +309,7 @@ fun resolveToDeclarationImpl(sourcePsi: KtExpression, declarationDescriptor: Dec
             ?.let { return it }
     }
 
-    resolveDeserialized(sourcePsi, declarationDescriptor, sourcePsi.readWriteAccess(useResolveForReadWrite = false))?.let { return it }
+    resolveDeserialized(sourcePsi, declarationDescriptor, sourcePsi.readWriteAccess())?.let { return it }
 
     return null
 }
@@ -459,7 +458,7 @@ private fun KotlinType.containsLocalTypes(): Boolean {
 }
 
 private fun PsiElement.getMaybeLightElement(sourcePsi: KtExpression? = null): PsiElement? {
-    if (this is KtProperty && sourcePsi?.readWriteAccess(useResolveForReadWrite = false)?.isWrite == true) {
+    if (this is KtProperty && sourcePsi?.readWriteAccess()?.isWrite == true) {
         with(getAccessorLightMethods()) {
             (setter ?: backingField)?.let { return it } // backingField is for val property assignments in init blocks
         }
