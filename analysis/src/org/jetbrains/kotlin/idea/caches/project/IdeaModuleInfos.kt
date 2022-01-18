@@ -641,3 +641,32 @@ enum class SourceType {
 }
 
 internal val ModuleSourceInfo.sourceType get() = if (this is ModuleTestSourceInfo) SourceType.TEST else SourceType.PRODUCTION
+
+/**
+ * Filter for dependencies on source modules.
+ * This shall act as last line of defense for catastrophic misconfiguration of order entries.
+ * Generally, we do trust Gradle/Import/Users to select only 'reasonable' dependencies for source modules.
+ * However: Passing dependencies produced by one Kotlin backend into analysis of another platform might have unpredictable/unwanted
+ * consequences and is forbidden under the implementations rules (even if users added those order entries themselves explicitly)
+ */
+internal interface SourceModuleDependenciesFilter {
+    fun isSupportedDependency(dependency: IdeaModuleInfo): Boolean
+}
+
+internal class NonHmppSourceModuleDependenciesFilter(
+    private val dependeePlatform: TargetPlatform
+) : SourceModuleDependenciesFilter {
+    override fun isSupportedDependency(dependency: IdeaModuleInfo): Boolean {
+        /* Filter only acts on LibraryInfo */
+        return if (dependency is LibraryInfo) {
+            isSupportedDependency(dependency.platform)
+        } else true
+    }
+
+    private fun isSupportedDependency(dependencyPlatform: TargetPlatform): Boolean {
+        return dependeePlatform.isJvm() && dependencyPlatform.isJvm() ||
+                dependeePlatform.isJs() && dependencyPlatform.isJs() ||
+                dependeePlatform.isNative() && dependencyPlatform.isNative() ||
+                dependeePlatform.isCommon() && dependencyPlatform.isCommon()
+    }
+}
