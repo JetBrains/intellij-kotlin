@@ -24,8 +24,7 @@
         </element>
         <element id="directory" name="jps">
           <element id="archive" name="kotlin-jps-plugin.jar">
-            <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/compiler-components-for-jps/1.6.20-dev-6927/compiler-components-for-jps-1.6.20-dev-6927.jar" path-in-jar="/" />
-            <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-jps-common-for-ide/1.6.20-dev-6927/kotlin-jps-common-for-ide-1.6.20-dev-6927.jar" path-in-jar="/" />
+            <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-jps-plugin-classpath/1.6.20-dev-6927/kotlin-jps-plugin-classpath-1.6.20-dev-6927.jar" path-in-jar="/" />
           </element>
         </element>
         <element id="archive" name="kotlin-compiler-plugins-allopen.jar">
@@ -138,7 +137,7 @@
           <element id="module-output" name="kotlin.resources-fe10" />
         </element>
         <element id="archive" name="kotlin-jps-common.jar">
-          <element id="module-output" name="kotlin.jps-common" />
+          <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-jps-common-for-ide/1.6.20-dev-6927/kotlin-jps-common-for-ide-1.6.20-dev-6927.jar" path-in-jar="/" />
         </element>
         <element id="archive" name="kotlin-jvm.jar">
           <element id="module-output" name="kotlin.jvm" />
