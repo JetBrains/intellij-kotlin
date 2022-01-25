@@ -61,7 +61,7 @@ abstract class AbstractBuildFileGenerationTest : UsefulTestCase() {
                     KotlinVersionProviderTestWizardService.KOTLIN_DEV_BINTRAY_WITH_CACHE_REDIRECTOR.url,
                 ),
                 KOTLIN_REPO_PLACEHOLDER
-            )
+            ).replace("gradle-${Versions.GRADLE.text}-bin.zip", "gradle-GRADLE_VERSION-bin.zip")
         }
     }
 
