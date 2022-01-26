@@ -15,6 +15,7 @@ import com.intellij.psi.PsiNamedElement
 import org.jetbrains.kotlin.analyzer.AnalysisResult
 import org.jetbrains.kotlin.analyzer.ModuleInfo
 import org.jetbrains.kotlin.analyzer.ResolverForProject
+import org.jetbrains.kotlin.caches.resolve.PlatformAnalysisSettings
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.idea.FrontendInternals
@@ -22,7 +23,6 @@ import org.jetbrains.kotlin.diagnostics.DiagnosticSink
 import org.jetbrains.kotlin.idea.caches.project.IdeaModuleInfo
 import org.jetbrains.kotlin.idea.caches.project.getNullableModuleInfo
 import org.jetbrains.kotlin.idea.resolve.ResolutionFacade
-import org.jetbrains.kotlin.platform.TargetPlatform
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
@@ -146,7 +146,7 @@ private class KotlinIdeaResolutionException(
 private class CreationPlace(
     private val elements: Collection<KtElement>,
     private val moduleInfo: ModuleInfo?,
-    private val platform: TargetPlatform?
+    private val settings: PlatformAnalysisSettings?
 ) {
     fun description() = buildString {
         appendLine("Resolver created for:")
@@ -156,8 +156,8 @@ private class CreationPlace(
         if (moduleInfo != null) {
             appendLine("Provided module info: $moduleInfo")
         }
-        if (platform != null) {
-            appendLine("Provided platform: $platform")
+        if (settings != null) {
+            appendLine("Provided settings: $settings")
         }
     }
 }
@@ -239,7 +239,7 @@ private fun <T> ifIndexReady(body: () -> T): IndexResult<T>? = try {
 internal fun ResolutionFacade.createdFor(
     files: Collection<KtFile>,
     moduleInfo: ModuleInfo?,
-    platform: TargetPlatform? = null
+    settings: PlatformAnalysisSettings
 ): ResolutionFacade {
-    return ResolutionFacadeWithDebugInfo(this, CreationPlace(files, moduleInfo, platform))
+    return ResolutionFacadeWithDebugInfo(this, CreationPlace(files, moduleInfo, settings))
 }
