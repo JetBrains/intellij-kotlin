@@ -872,6 +872,7 @@
       <module fileurl="file://$PROJECT_DIR$/kotlin.all-tests/kotlin.all-tests.iml" filepath="$PROJECT_DIR$/kotlin.all-tests/kotlin.all-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/kotlin.common.iml" filepath="$PROJECT_DIR$/common/kotlin.common.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/allopen/kotlin.compiler-plugins.allopen.iml" filepath="$PROJECT_DIR$/compiler-plugins/allopen/kotlin.compiler-plugins.allopen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/compiler-plugins/android-extensions-stubs/kotlin.compiler-plugins.android-extensions-stubs.iml" filepath="$PROJECT_DIR$/compiler-plugins/android-extensions-stubs/kotlin.compiler-plugins.android-extensions-stubs.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/annotation-based-compiler-support/kotlin.compiler-plugins.annotation-based-compiler-support.iml" filepath="$PROJECT_DIR$/compiler-plugins/annotation-based-compiler-support/kotlin.compiler-plugins.annotation-based-compiler-support.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/base-compiler-plugins-ide-support/kotlin.compiler-plugins.base-compiler-plugins-ide-support.iml" filepath="$PROJECT_DIR$/compiler-plugins/base-compiler-plugins-ide-support/kotlin.compiler-plugins.base-compiler-plugins-ide-support.iml" />
       <module fileurl="file://$PROJECT_DIR$/compiler-plugins/kapt/kotlin.compiler-plugins.kapt.iml" filepath="$PROJECT_DIR$/compiler-plugins/kapt/kotlin.compiler-plugins.kapt.iml" />
