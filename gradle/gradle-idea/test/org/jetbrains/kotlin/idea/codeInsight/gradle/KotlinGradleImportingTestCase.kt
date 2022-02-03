@@ -1,5 +1,6 @@
 package org.jetbrains.kotlin.idea.codeInsight.gradle
 
+import com.intellij.openapi.externalSystem.service.notification.ExternalSystemProgressNotificationManager
 import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.fileEditor.impl.LoadTextUtil
 import com.intellij.openapi.module.Module
@@ -33,6 +34,8 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
         val baseDir = IDEA_TEST_DATA_DIR.resolve("gradle/${testDataDirName()}")
         return File(baseDir, getTestName(true).substringBefore("_").substringBefore(" "))
     }
+
+    protected val importStatusCollector = ImportStatusCollector()
 
     protected fun configureKotlinVersionAndProperties(text: String, properties: Map<String, String>? = null): String {
         var result = text
@@ -122,6 +125,24 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
         Assume.assumeFalse(AndroidStudioTestUtils.skipIncompatibleTestAgainstAndroidStudio())
         super.setUp()
         GradleProcessOutputInterceptor.install(testRootDisposable)
+        setUpImportStatusCollector()
+    }
+
+    override fun tearDown() {
+        tearDownImportStatusCollector()
+        super.tearDown()
+    }
+
+    protected open fun setUpImportStatusCollector() {
+        ExternalSystemProgressNotificationManager
+            .getInstance()
+            .addNotificationListener(importStatusCollector)
+    }
+
+    protected open fun tearDownImportStatusCollector() {
+        ExternalSystemProgressNotificationManager
+            .getInstance()
+            .removeNotificationListener(importStatusCollector)
     }
 
     override fun handleImportFailure(errorMessage: String, errorDetails: String?) {
@@ -148,6 +169,10 @@ abstract class KotlinGradleImportingTestCase : GradleImportingTestCase() {
             append("Gradle process output (END)")
         }
         fail(failureMessage)
+    }
+
+    protected open fun assertNoBuildErrorEventsReported() {
+        assertEmpty("No error events was expected to be reported", importStatusCollector.buildErrors)
     }
 
     protected open fun assertNoModuleDepForModule(moduleName: String, depName: String) {
