@@ -9,7 +9,6 @@
  */
 package org.jetbrains.kotlin.idea.codeInsight.gradle
 
-import com.intellij.openapi.vfs.VirtualFile
 import org.jetbrains.kotlin.gradle.ProjectInfo
 import org.junit.Rule
 import org.junit.runners.Parameterized
@@ -22,15 +21,18 @@ abstract class MultiplePluginVersionGradleImportingTestCase : KotlinGradleImport
 
     @JvmField
     @Parameterized.Parameter(1)
-    var gradleKotlinPluginVersion: String = ""
+    var gradleKotlinPluginVersionParameter: String = ""
 
+    val gradleKotlinPluginVersion: String get() = gradleKotlinPluginVersionParameter
+        .takeUnless { it == "master" }
+        ?: masterKotlinPluginVersion
 
     companion object {
         val masterKotlinPluginVersion: String = System.getenv("KOTLIN_GRADLE_PLUGIN_VERSION") ?: "1.6.255-SNAPSHOT"
 
         fun masterKotlinPluginVersionParameters() = listOf<Array<Any>>(
-            arrayOf("6.8.2", masterKotlinPluginVersion),
-            arrayOf("7.0.2", masterKotlinPluginVersion)
+            arrayOf("6.8.2", "master"),
+            arrayOf("7.0.2", "master")
         )
 
         @JvmStatic
