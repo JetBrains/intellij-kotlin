@@ -235,7 +235,7 @@ private fun Module.computeLanguageVersionSettings(): LanguageVersionSettings {
 
 private fun MutableMap<AnalysisFlag<*>, Any>.initIDESpecificAnalysisSettings(project: Project) {
     if (KotlinMultiplatformAnalysisModeComponent.getMode(project) == KotlinMultiplatformAnalysisModeComponent.Mode.COMPOSITE) {
-        //put(AnalysisFlags.useTypeRefinement, true)
+        put(AnalysisFlags.useTypeRefinement, true)
     }
     if (KotlinLibraryToSourceAnalysisComponent.isEnabled(project)) {
         put(AnalysisFlags.libraryToSourceAnalysis, true)
