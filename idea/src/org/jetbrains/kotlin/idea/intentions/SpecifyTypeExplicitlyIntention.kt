@@ -35,6 +35,8 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
 import org.jetbrains.kotlin.types.*
+import org.jetbrains.kotlin.types.error.ErrorUtils
+import org.jetbrains.kotlin.types.error.ErrorTypeKind
 import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 import org.jetbrains.kotlin.utils.ifEmpty
 
@@ -117,10 +119,10 @@ class SpecifyTypeExplicitlyIntention : SelfTargetingRangeIntention<KtCallableDec
             }
 
             if (type != null && type.isError && descriptor is PropertyDescriptor) {
-                return descriptor.setterType ?: ErrorUtils.createErrorType("null type")
+                return descriptor.setterType ?: ErrorUtils.createErrorType(ErrorTypeKind.NOT_FOUND_DESCRIPTOR_FOR_FUNCTION, declaration.text)
             }
 
-            return type ?: ErrorUtils.createErrorType("null type")
+            return type ?: ErrorUtils.createErrorType(ErrorTypeKind.NOT_FOUND_DESCRIPTOR_FOR_FUNCTION, declaration.text)
         }
 
         fun createTypeExpressionForTemplate(

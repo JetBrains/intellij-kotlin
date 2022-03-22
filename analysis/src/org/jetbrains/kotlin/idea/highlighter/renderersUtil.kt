@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.resolve.calls.util.hasTypeMismatchErrorOnParameter
 import org.jetbrains.kotlin.resolve.calls.util.hasUnmappedArguments
 import org.jetbrains.kotlin.resolve.calls.components.hasDefaultValue
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
-import org.jetbrains.kotlin.types.ErrorUtils
+import org.jetbrains.kotlin.types.error.ErrorUtils
 
 private const val RED_TEMPLATE = "<font color=red><b>%s</b></font>"
 private const val STRONG_TEMPLATE = "<b>%s</b>"
@@ -62,7 +62,7 @@ fun renderResolvedCall(resolvedCall: ResolvedCall<*>, context: RenderingContext)
         val parametersToArgumentsMap = resolvedCall.typeArguments
         fun TypeParameterDescriptor.isInferred(): Boolean {
             val typeArgument = parametersToArgumentsMap[this] ?: return false
-            return !ErrorUtils.isUninferredParameter(typeArgument)
+            return !ErrorUtils.isUninferredTypeVariable(typeArgument)
         }
 
         val typeParameters = resolvedCall.candidateDescriptor.typeParameters

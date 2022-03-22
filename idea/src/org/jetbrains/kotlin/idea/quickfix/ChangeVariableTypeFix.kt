@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorToSourceUtils
 import org.jetbrains.kotlin.resolve.lazy.BodyResolveMode
-import org.jetbrains.kotlin.types.ErrorUtils
+import org.jetbrains.kotlin.types.error.ErrorUtils
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.checker.KotlinTypeChecker
 import org.jetbrains.kotlin.types.typeUtil.makeNullable

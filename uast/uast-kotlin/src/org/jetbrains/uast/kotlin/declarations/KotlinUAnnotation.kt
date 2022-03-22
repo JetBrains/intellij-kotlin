@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.annotationClass
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameUnsafe
 import org.jetbrains.kotlin.resolve.source.getPsi
-import org.jetbrains.kotlin.types.ErrorUtils
+import org.jetbrains.kotlin.types.error.ErrorUtils
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 import org.jetbrains.uast.*
