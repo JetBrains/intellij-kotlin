@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="libraryTable">
   <library name="kotlinc.kotlin-compiler-testdata" type="repository">
-    <properties include-transitive-deps="false" maven-id="org.jetbrains.kotlin:kotlin-compiler-testdata-for-ide:1.7.0-dev-1904" />
+    <properties include-transitive-deps="false" maven-id="org.jetbrains.kotlin:kotlin-compiler-testdata-for-ide:1.7.0-dev-3005" />
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-compiler-testdata-for-ide/1.7.0-dev-1904/kotlin-compiler-testdata-for-ide-1.7.0-dev-1904.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-compiler-testdata-for-ide/1.7.0-dev-3005/kotlin-compiler-testdata-for-ide-1.7.0-dev-3005.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
