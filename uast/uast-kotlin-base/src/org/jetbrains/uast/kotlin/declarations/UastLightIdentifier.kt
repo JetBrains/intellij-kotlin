@@ -7,19 +7,13 @@ package org.jetbrains.uast.kotlin
 
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiNameIdentifierOwner
-import org.jetbrains.kotlin.asJava.elements.KtLightIdentifier
-import org.jetbrains.kotlin.kdoc.psi.impl.KDocName
-import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
-import org.jetbrains.uast.UElement
-import org.jetbrains.uast.UIdentifier
-import org.jetbrains.uast.kotlin.createKDocNameSimpleNameReference
-import org.jetbrains.uast.toUElement
+import org.jetbrains.kotlin.asJava.elements.KtLightIdentifierWithOrigin
+import org.jetbrains.kotlin.psi.KtDeclaration
 
 class UastLightIdentifier(
     lightOwner: PsiNameIdentifierOwner,
     ktDeclaration: KtDeclaration?
-) : KtLightIdentifier(lightOwner, ktDeclaration) {
+) : KtLightIdentifierWithOrigin(lightOwner, ktDeclaration) {
     override fun getContainingFile(): PsiFile {
         return unwrapFakeFileForLightClass(super.getContainingFile())
     }
