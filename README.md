@@ -1,3 +1,8 @@
+# Repository status
+
+As of Intellij IDEA 2021.2, the Kotlin plugin sources have been merged into [Intellij](https://github.com/JetBrains/intellij-community) repository.
+This repository is now archived, see the repository from [Intellij Community](https://github.com/JetBrains/intellij-community/tree/master/plugins/kotlin) for the up-to-date version.
+
 # Kotlin plugin [![official JetBrains project](http://jb.gg/badges/official.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 
 Kotlin plugin is an IntelliJ IDEA plugin for the [Kotlin programming language](https://kotlinlang.org/).
